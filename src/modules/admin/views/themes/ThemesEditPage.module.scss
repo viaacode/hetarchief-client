@@ -1,0 +1,59 @@
+@use "src/styles/abstracts" as *;
+
+$component: "p-admin-themes-edit";
+
+.#{$component} {
+	display: flex;
+	flex-direction: column;
+	gap: $spacer-md;
+
+	&__back {
+		align-self: flex-start;
+	}
+
+	&__box {
+		padding: $spacer-md;
+
+		// Match the row height of the admin overviews (see pages/admin/_themes.scss)
+		tr {
+			td,
+			th {
+				padding-top: 2rem;
+				padding-bottom: 2rem;
+			}
+		}
+	}
+
+	&__subtitle {
+		color: $neutral;
+		margin-bottom: $spacer-md;
+	}
+
+	&__divider {
+		border: none;
+		border-top: $divider-grey;
+		margin: $spacer-md 0;
+	}
+
+	&__form-control {
+		margin-bottom: $spacer-md;
+		max-width: 60rem;
+	}
+
+	&__add-objects {
+		display: flex;
+		align-items: flex-start;
+		gap: 0.8rem;
+
+		> :first-child {
+			flex-grow: 1;
+		}
+	}
+
+	&__add-results {
+		list-style: none;
+		padding: 0;
+		margin: 0.8rem 0 0;
+		color: $neutral;
+	}
+}

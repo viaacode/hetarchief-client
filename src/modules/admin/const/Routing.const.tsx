@@ -27,6 +27,11 @@ export const ADMIN_NAVIGATION_LINKS = (locale: Locale): AdminNavigationLink[] =>
 		href: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].contentPageLabels}`,
 	},
 	{
+		id: 'themes-admin',
+		label: tText('modules/admin/const/routing___themas'),
+		href: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].themes}`,
+	},
+	{
 		id: 'navigation-admin',
 		label: tText('modules/admin/const/routing___navigatie'),
 		href: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].navigation}`,

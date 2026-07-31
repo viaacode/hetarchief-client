@@ -1,0 +1,25 @@
+@use "src/styles/abstracts" as *;
+
+$page: "p-admin-themes";
+
+.#{$page} {
+	&__header {
+		display: flex;
+		margin-bottom: $spacer-md;
+	}
+
+	&__search {
+		@media (min-width: $breakpoint-md) {
+			flex-basis: 34.1rem;
+		}
+	}
+
+	// Match the row height of the other admin overviews (see p-admin-visitors)
+	tr {
+		td,
+		th {
+			padding-top: 2rem;
+			padding-bottom: 2rem;
+		}
+	}
+}

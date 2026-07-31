@@ -1,0 +1,53 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-theme-thumbnail-input";
+
+.#{$component} {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 1.6rem;
+
+	&__dropzone {
+		// The preview is always 16:9, regardless of the ratio of the uploaded image, so an admin
+		// sees exactly how content blocks will crop it
+		aspect-ratio: 16 / 9;
+		width: 100%;
+		max-width: 40rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		cursor: pointer;
+		background-color: $platinum;
+		border: dashed 1px $neutral;
+		border-radius: 0.4rem;
+		transition: border-color 0.2s ease, background-color 0.2s ease;
+
+		&--dragged-over {
+			border-color: $teal;
+			background-color: $silver;
+		}
+
+		&--has-image {
+			border-style: solid;
+			border-color: $silver;
+		}
+	}
+
+	&__preview {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+	}
+
+	&__placeholder {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.8rem;
+		padding: 1.6rem;
+		text-align: center;
+		color: $neutral;
+	}
+}
