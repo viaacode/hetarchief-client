@@ -63,5 +63,7 @@ tmp/
 # ignore Claude AI files
 .claude/
 AGENTS.md
+CLAUDE.md
+.mcp.json
 
 *.log
