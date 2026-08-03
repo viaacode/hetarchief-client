@@ -13,6 +13,7 @@ import type { MetadataItem } from '@ie-objects/components/Metadata/Metadata.type
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
 import type { ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
 import { ObjectDetailPageMetadataRights } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadataRights';
+import { ObjectDetailPageMetadataThemes } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadataThemes';
 import { SearchLinkTag } from '@ie-objects/components/SearchLinkTag/SearchLinkTag';
 import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/use-get-ie-object-previous-next-ids';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/use-get-is-public-newspaper';
@@ -223,6 +224,14 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		isLoggedOutUser: !user,
 	});
 	const canDownloadMetadata: boolean = ieObjectPermissions.canExportMetadata;
+
+	// Themes are shown for publicly disclosed objects that belong to at least one theme, to every
+	// user including logged out ones, but never to kiosk visitors. See ARC-3826.
+	const themes = mediaInfo?.themes ?? [];
+	const showThemes: boolean =
+		!isKiosk &&
+		!!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
+		themes.length > 0;
 
 	// You need the permission or not to be logged in to download the newspaper
 	// https://meemoo.atlassian.net/browse/ARC-2617
@@ -1320,6 +1329,16 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								onZoomToMention={handleZoomToMention}
 							/>
 						</Metadata>
+					)}
+
+					{showThemes && (
+						<ObjectDetailPageMetadataThemes
+							title={tHtml(
+								'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata-themes___themas'
+							)}
+							themes={themes}
+							locale={locale}
+						/>
 					)}
 
 					{!!mediaInfo.keywords?.length && (
