@@ -4,6 +4,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { Locale } from '@shared/utils/i18n';
+import clsx from 'clsx';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 
@@ -40,7 +41,10 @@ export function ObjectDetailPageMetadataThemes({
 		return (
 			<Link
 				href={path}
-				className={`${styles['c-object-detail-page-metadata-themes__name']} ${styles['c-object-detail-page-metadata-themes__name--link']}`}
+				className={clsx(
+					styles['c-object-detail-page-metadata-themes__name'],
+					styles['c-object-detail-page-metadata-themes__name--link']
+				)}
 			>
 				{name}
 			</Link>
@@ -56,11 +60,7 @@ export function ObjectDetailPageMetadataThemes({
 						{/* TODO ARC-3797: link the counter to a search filtered on this theme once the
 						    theme filter exists. Until then it is plain text. */}
 						<span className={styles['c-object-detail-page-metadata-themes__count']}>
-							<Icon
-								className={styles['c-object-detail-page-metadata-themes__count-icon']}
-								name={IconNamesLight.RelatedObjects}
-								aria-hidden
-							/>
+							<Icon name={IconNamesLight.RelatedObjects} aria-hidden />
 							{/* The bare number carries no meaning on its own, so screen readers get the
 							    spelled out label instead */}
 							<span aria-hidden>{theme.ieObjectCount}</span>

@@ -22,8 +22,6 @@
 	}
 
 	&__name {
-		color: inherit;
-
 		&--link {
 			text-decoration: underline;
 			text-underline-offset: 0.2rem;
@@ -35,6 +33,14 @@
 		flex-shrink: 0;
 		align-items: center;
 		gap: abstracts.$spacer-xxs;
+
+		// Keeps the counter against the right edge once a long theme name pushes it onto its own row
+		margin-left: auto;
+
+		@include abstracts.module-class-selector("Icon", "c-icon") {
+			font-size: abstracts.$font-size-1xl;
+			line-height: 1;
+		}
 	}
 
 	// Visible to screen readers only: spells out what the bare counter means
@@ -47,14 +53,4 @@
 		white-space: nowrap;
 	}
 
-	&__count-icon {
-		display: inline-flex;
-		align-items: center;
-		line-height: 1;
-
-		:global([class*="c-icon"]) {
-			font-size: abstracts.$font-size-1xl;
-			line-height: 1;
-		}
-	}
 }
