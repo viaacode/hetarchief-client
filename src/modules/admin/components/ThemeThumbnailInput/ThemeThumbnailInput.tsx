@@ -2,6 +2,7 @@ import FileInput from '@shared/components/FileInput/FileInput';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { DEFAULT_ALLOWED_MIME_TYPES } from '@shared/helpers/validate-file';
 import clsx from 'clsx';
 import { type DragEvent, type FC, useRef, useState } from 'react';
 
@@ -84,7 +85,8 @@ export const ThemeThumbnailInput: FC<ThemeThumbnailInputProps> = ({
 				ref={fileInputRef}
 				className={styles['c-theme-thumbnail-input__button']}
 				hasFile={!!imageUrl}
-				accept="image/jpeg,image/png"
+				// Same list validateFile() enforces, so the picker cannot offer a file it would reject
+				accept={DEFAULT_ALLOWED_MIME_TYPES.join(',')}
 				onChange={(event) => {
 					const file = event.currentTarget?.files?.[0];
 					if (file) {

@@ -37,4 +37,18 @@ describe('validateFile()', () => {
 		// tests, so the messages are indistinguishable here
 		expect(validateFile(makeFile(600, 'image/gif'))).toHaveProperty('file');
 	});
+
+	it('honours an overridden size limit', () => {
+		expect(validateFile(makeFile(900, 'image/png'), { maxFileSizeKb: 1000 })).toBeNull();
+		expect(validateFile(makeFile(300, 'image/png'), { maxFileSizeKb: 100 })).toHaveProperty('file');
+	});
+
+	it('honours an overridden mime type list', () => {
+		expect(
+			validateFile(makeFile(10, 'image/webp'), { allowedMimeTypes: ['image/webp'] })
+		).toBeNull();
+		expect(
+			validateFile(makeFile(10, 'image/png'), { allowedMimeTypes: ['image/webp'] })
+		).toHaveProperty('file');
+	});
 });
