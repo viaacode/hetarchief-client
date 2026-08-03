@@ -1,15 +1,19 @@
 @use "src/styles/abstracts" as *;
 
-$page: "p-admin-themes";
-
-.#{$page} {
+.p-admin-themes {
 	&__header {
 		display: flex;
 		margin-bottom: $spacer-md;
 	}
 
 	&__search {
+		// The search box is the only item in the header, so let it fill the row on phones instead of
+		// falling back to the intrinsic width of the input
+		flex-grow: 1;
+
 		@media (min-width: $breakpoint-md) {
+			// Same search width as every other admin and cp overview, see p-admin-visitors
+			flex-grow: 0;
 			flex-basis: 34.1rem;
 		}
 	}

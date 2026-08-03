@@ -1,18 +1,21 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "p-admin-themes-edit";
-
-.#{$component} {
+.p-admin-themes-edit {
 	display: flex;
 	flex-direction: column;
-	gap: $spacer-md;
+	gap: abstracts.$spacer-md;
 
 	&__back {
 		align-self: flex-start;
 	}
 
 	&__box {
-		padding: $spacer-md;
+		// Same padding ramp as the other admin form pages, see VisitorSpaceSettings
+		padding: abstracts.$spacer-sm;
+
+		@media (min-width: abstracts.$breakpoint-md) {
+			padding: abstracts.$spacer-md;
+		}
 
 		// Match the row height of the admin overviews (see pages/admin/_themes.scss)
 		tr {
@@ -25,35 +28,43 @@ $component: "p-admin-themes-edit";
 	}
 
 	&__subtitle {
-		color: $neutral;
-		margin-bottom: $spacer-md;
+		color: abstracts.$neutral;
+		margin-bottom: abstracts.$spacer-md;
 	}
 
 	&__divider {
 		border: none;
-		border-top: $divider-grey;
-		margin: $spacer-md 0;
+		border-top: abstracts.$divider-grey;
+		margin: abstracts.$spacer-md 0;
 	}
 
 	&__form-control {
-		margin-bottom: $spacer-md;
+		margin-bottom: abstracts.$spacer-md;
+
+		// The admin layout is full width, so cap a single-line field at a readable length instead of
+		// letting it stretch across the whole viewport
 		max-width: 60rem;
 	}
 
 	&__add-objects {
 		display: flex;
 		align-items: flex-start;
-		gap: 0.8rem;
+		gap: abstracts.$spacer-xs;
+
+		// The identifier field and its button sit side by side, but drop onto two rows once the
+		// field would become too narrow to read what you typed
+		flex-wrap: wrap;
 
 		> :first-child {
 			flex-grow: 1;
+			min-width: 20rem;
 		}
 	}
 
 	&__add-results {
 		list-style: none;
 		padding: 0;
-		margin: 0.8rem 0 0;
-		color: $neutral;
+		margin: abstracts.$spacer-xs 0 0;
+		color: abstracts.$neutral;
 	}
 }

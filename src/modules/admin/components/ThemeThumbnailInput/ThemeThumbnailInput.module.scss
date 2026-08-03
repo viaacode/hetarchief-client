@@ -1,37 +1,38 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-theme-thumbnail-input";
-
-.#{$component} {
+.c-theme-thumbnail-input {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	gap: 1.6rem;
+	gap: abstracts.$spacer-sm;
 
 	&__dropzone {
 		// The preview is always 16:9, regardless of the ratio of the uploaded image, so an admin
 		// sees exactly how content blocks will crop it
 		aspect-ratio: 16 / 9;
 		width: 100%;
+
+		// Caps the preview at the recommended source width of 640 px, so it never scales up past
+		// the resolution the suffix asks admins to upload
 		max-width: 40rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		overflow: hidden;
 		cursor: pointer;
-		background-color: $platinum;
-		border: dashed 1px $neutral;
+		background-color: abstracts.$platinum;
+		border: dashed 1px abstracts.$neutral;
 		border-radius: 0.4rem;
 		transition: border-color 0.2s ease, background-color 0.2s ease;
 
 		&--dragged-over {
-			border-color: $teal;
-			background-color: $silver;
+			border-color: abstracts.$teal;
+			background-color: abstracts.$silver;
 		}
 
 		&--has-image {
 			border-style: solid;
-			border-color: $silver;
+			border-color: abstracts.$silver;
 		}
 	}
 
@@ -45,9 +46,9 @@ $component: "c-theme-thumbnail-input";
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		gap: 0.8rem;
-		padding: 1.6rem;
+		gap: abstracts.$spacer-xs;
+		padding: abstracts.$spacer-sm;
 		text-align: center;
-		color: $neutral;
+		color: abstracts.$neutral;
 	}
 }
