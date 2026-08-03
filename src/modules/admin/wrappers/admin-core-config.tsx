@@ -90,7 +90,7 @@ export function getAdminCoreConfig(
 		},
 		navigationBars: {
 			enableIcons: true,
-			customNavigationElements: [NAVIGATION_DROPDOWN.VISITOR_SPACES],
+			customNavigationElements: [NAVIGATION_DROPDOWN.VISITOR_SPACES, NAVIGATION_DROPDOWN.SEARCH],
 		},
 		icon: {
 			component: ({ name }: { name: string }) => <Icon name={name as IconName} />,

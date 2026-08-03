@@ -85,6 +85,7 @@ const NavigationList: FC<NavigationListProps> = ({ items, onOpenDropdowns }) => 
 									isOpen={openDropdownId === item.id}
 									lockScroll={openDropdownId === item.id}
 									items={item.children}
+									placement={item.dropdownPlacement}
 									trigger={renderTrigger(
 										item,
 										openDropdownId === item.id ? IconNamesLight.AngleUp : IconNamesLight.AngleDown

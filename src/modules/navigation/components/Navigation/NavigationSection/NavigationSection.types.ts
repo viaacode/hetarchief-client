@@ -1,3 +1,4 @@
+import type { Placement } from '@floating-ui/react';
 import type { IconName } from '@shared/components/Icon';
 import type { ReactNode } from 'react';
 
@@ -14,6 +15,8 @@ export interface NavigationItem {
 	activeMobile?: boolean;
 	isDivider?: boolean | 'md';
 	children?: NavigationItem[];
+	/** Where the dropdown flyout of this item opens, defaults to 'bottom-end' */
+	dropdownPlacement?: Placement;
 }
 
 export interface NavigationSectionProps {

@@ -1,3 +1,4 @@
+import type { Placement } from '@floating-ui/react';
 import type { NavigationItem } from '@navigation/components/Navigation/NavigationSection/NavigationSection.types';
 import type { ReactNode } from 'react';
 
@@ -11,6 +12,7 @@ export interface NavigationDropdownProps {
 	lockScroll?: boolean;
 	className?: string;
 	flyoutClassName?: string;
+	placement?: Placement;
 	onOpen?: (id: string) => void;
 	onClose?: (id?: string) => void;
 }
