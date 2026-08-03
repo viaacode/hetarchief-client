@@ -24,6 +24,12 @@ const INTERNAL_PATH_REGEX = /^\/[^\s]*$/;
 
 export const THEME_VALIDATION_SCHEMA = (): Schema<Partial<ThemeFormValues>> =>
 	object({
+		// A thumbnail is required: it is the fallback image wherever a theme is rendered, such as the
+		// theme reels. Validating imageUrl covers both an already stored thumbnail and a freshly
+		// picked file, since picking one sets imageUrl to a local preview url.
+		imageUrl: string().required(
+			tText('modules/admin/const/themes___een-standaard-thumbnail-is-verplicht')
+		),
 		slug: string()
 			.strict()
 			.matches(/^[a-z0-9-]+$/, {

@@ -141,7 +141,7 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 			setFormErrors((previous) => ({ ...previous, file: fileError.file }));
 			return;
 		}
-		setFormErrors((previous) => ({ ...previous, file: undefined }));
+		setFormErrors((previous) => ({ ...previous, file: undefined, imageUrl: undefined }));
 		setFormValues((previous) => ({
 			...previous,
 			file,
@@ -417,7 +417,13 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 						<Box className={styles['p-admin-themes-edit__box']}>
 							<FormControl
 								className={styles['p-admin-themes-edit__form-control']}
-								errors={[<RedFormWarning error={formErrors.file} key="form-error--file" />]}
+								// A rejected file reports on `file`, a missing thumbnail on `imageUrl`
+								errors={[
+									<RedFormWarning
+										error={formErrors.file || formErrors.imageUrl}
+										key="form-error--file"
+									/>,
+								]}
 								id={labelKeys.file}
 								label={tHtml('modules/admin/views/themes/themes-edit-page___standaard-thumbnail')}
 								suffix={tText(

@@ -10,6 +10,7 @@ const validTheme = {
 	descriptionEn: null,
 	contentPagePathNl: null,
 	contentPagePathEn: null,
+	imageUrl: 'https://media.hetarchief.be/thumbnails/culture-society.jpg',
 };
 
 const validate = (overrides: Record<string, unknown> = {}) =>
@@ -56,6 +57,15 @@ describe('THEME_VALIDATION_SCHEMA', () => {
 			'nameNl',
 			'slug',
 		]);
+	});
+
+	it('requires a thumbnail, since it is the fallback image wherever a theme is rendered', async () => {
+		expect(await validate({ imageUrl: null })).toHaveProperty('imageUrl');
+		expect(await validate({ imageUrl: '' })).toHaveProperty('imageUrl');
+	});
+
+	it('accepts the local preview url of a freshly picked thumbnail', async () => {
+		expect(await validate({ imageUrl: 'blob:http://localhost:3200/8f1e-4a2b' })).toBeNull();
 	});
 
 	it('rejects a slug with uppercase, spaces or other characters', async () => {
