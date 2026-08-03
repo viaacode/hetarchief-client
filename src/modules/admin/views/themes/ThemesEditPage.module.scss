@@ -40,10 +40,6 @@
 
 	&__form-control {
 		margin-bottom: abstracts.$spacer-md;
-
-		// The admin layout is full width, so cap a single-line field at a readable length instead of
-		// letting it stretch across the whole viewport
-		max-width: 60rem;
 	}
 
 	&__add-objects {
