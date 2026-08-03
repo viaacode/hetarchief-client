@@ -106,9 +106,9 @@ export const ThemeIeObjectsTableColumns = (
 
 export const ADMIN_THEMES_QUERY_PARAM_CONFIG = {
 	[QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: withDefault(StringParam, undefined),
-	page: withDefault(NumberParam, 1),
-	orderProp: withDefault(StringParam, ThemeOrderProp.slug),
-	orderDirection: withDefault(SortDirectionParam, AvoSearchOrderDirection.ASC),
+	[QUERY_PARAM_KEY.PAGE]: withDefault(NumberParam, 1),
+	[QUERY_PARAM_KEY.ORDER_PROP]: withDefault(StringParam, ThemeOrderProp.slug),
+	[QUERY_PARAM_KEY.ORDER_DIRECTION]: withDefault(SortDirectionParam, AvoSearchOrderDirection.ASC),
 };
 
 export const ThemesTableColumns = (

@@ -29,7 +29,7 @@ export const ADMIN_NAVIGATION_LINKS = (locale: Locale): AdminNavigationLink[] =>
 	{
 		id: 'themes-admin',
 		label: tText('modules/admin/const/routing___themas'),
-		href: `/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].themes}`,
+		href: ROUTES_BY_LOCALE[locale].adminThemes,
 	},
 	{
 		id: 'navigation-admin',
