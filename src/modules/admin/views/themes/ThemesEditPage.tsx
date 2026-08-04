@@ -41,7 +41,7 @@ import {
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { useRouter } from 'next/router';
-import React, { type FC, useEffect, useState } from 'react';
+import React, { type FC, useEffect, useRef, useState } from 'react';
 
 import styles from './ThemesEditPage.module.scss';
 
@@ -108,12 +108,20 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 		!isCreate
 	);
 
-	// Hydrate the form once the theme is loaded. Only the persisted fields are copied, so a locally
-	// picked file survives a background refetch.
+	/**
+	 * Hydrate the form exactly once per theme, guarded by the id.
+	 *
+	 * The query behind `theme` refetches on every page change of the linked objects table, after
+	 * linking or unlinking an object and on window focus. Without this guard each of those would
+	 * copy the stored values back over whatever the admin had typed but not saved yet.
+	 */
+	const hydratedThemeIdRef = useRef<string | null>(null);
+
 	useEffect(() => {
-		if (!theme) {
+		if (!theme || hydratedThemeIdRef.current === theme.id) {
 			return;
 		}
+		hydratedThemeIdRef.current = theme.id;
 		setFormValues((previous) => ({
 			...previous,
 			slug: theme.slug ?? '',
@@ -177,8 +185,14 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 			}
 
 			await ThemesService.update(id as string, formValues);
-			await refetchTheme();
-			setFormValues((previous) => ({ ...previous, file: null }));
+			// The form no longer re-hydrates on a refetch, so swap the local preview for the hosted
+			// url the proxy just returned
+			const { data: saved } = await refetchTheme();
+			setFormValues((previous) => ({
+				...previous,
+				file: null,
+				imageUrl: saved?.imageUrl ?? previous.imageUrl,
+			}));
 			toastService.notify({
 				title: tHtml(
 					'modules/admin/views/themes/themes-edit-page___de-aanpassingen-zijn-opgeslagen'
@@ -497,7 +511,7 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 				description={tText(
 					'modules/admin/views/themes/themes-edit-page___beheer-de-gegevens-en-gekoppelde-objecten-van-een-thema'
 				)}
-				imgUrl={undefined}
+				imgUrl={theme?.imageUrl ?? undefined}
 				translatedPages={[]}
 				relativeUrl={url}
 				canonicalUrl={canonicalUrl}

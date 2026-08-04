@@ -61,7 +61,7 @@ export const ThemeThumbnailInput: FC<ThemeThumbnailInputProps> = ({
 				aria-hidden
 			>
 				{imageUrl ? (
-					// biome-ignore lint/performance/noImgElement: src is a blob: object url for a freshly picked file, or an arbitrary external host (existing thumbnails point at commons.wikimedia.org); next/image handles neither without per-host remotePatterns config, and this admin-only preview is never above the fold
+					// biome-ignore lint/performance/noImgElement: src is a blob: object url as soon as the admin picks a file, which next/image cannot render at all. Stored thumbnails will live on the asset server, which remotePatterns already covers, but the blob case remains either way, and this admin-only preview is never above the fold
 					<img
 						className={styles['c-theme-thumbnail-input__preview']}
 						src={imageUrl}
