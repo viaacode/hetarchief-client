@@ -30,6 +30,23 @@ export interface IsPartOfCollection {
 	publisher?: any;
 }
 
+/**
+ * A theme this object belongs to, shown in the metadata panel of the detail page. See ARC-3826.
+ * Names and content page paths come in both languages; pick the one matching the UI language.
+ */
+export interface IeObjectTheme {
+	id: string;
+	/** Only used in content management, never shown in the front end */
+	slug: string;
+	nameNl: string;
+	nameEn: string;
+	/** Internal path on hetarchief.be to the theme detail page, null when not configured */
+	contentPagePathNl: string | null;
+	contentPagePathEn: string | null;
+	/** Total number of objects linked to this theme */
+	ieObjectCount: number;
+}
+
 export interface IeObject {
 	dctermsAvailable: string;
 	dctermsFormat: IeObjectType;
@@ -108,6 +125,8 @@ export interface IeObject {
 	digitizationDate?: string;
 	children?: number;
 	rightsInfo?: IeObjectRightsInfo | null;
+	/** Sorted by ieObjectCount descending by the proxy */
+	themes?: IeObjectTheme[];
 	pages?: IeObjectPage[];
 	mentions?: Mention[];
 }
