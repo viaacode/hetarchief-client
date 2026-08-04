@@ -7,7 +7,7 @@
 		width: 100% !important;
 	}
 
-	.c-block-het-archief-image-text-background__image-wrapper {
+	.c-block-het-archief-image-text-background__image-wrapper > .c-image {
 		@media (max-width: $breakpoint-md) {
 			height: 21.7rem; // Default height of the images used on the homepage of hetarchief
 		}
