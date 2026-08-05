@@ -1,5 +1,16 @@
 @use "src/styles/abstracts" as abstracts;
 
+$search-height-mobile: abstracts.$button-height;
+$search-height-desktop: 6.4rem;
+$search-radius-mobile: 1.6rem;
+$search-radius-desktop: 3.2rem;
+
+// .c-content-block clips overflow globally (see _content-pages.scss), which cuts off the
+// dropdown's options list since it opens below the block's bounds.
+.c-content-block__hetarchief-header-search {
+	overflow: visible;
+}
+
 .c-block-het-archief-header-search {
 	display: flex;
 	flex-direction: column;
@@ -10,17 +21,18 @@
 		flex-direction: column;
 	}
 
-	div:first-child {
+	> div:first-child {
 		h1,
 		> ul > li {
 			text-align: center;
 			width: 100%;
 			font-size: abstracts.$font-size-4xl;
-			line-height: abstracts.$line-height-base;
+			line-height: abstracts.$line-height-lg;
 			font-weight: 800;
 
 			@media (max-width: abstracts.$breakpoint-md) {
 				font-size: abstracts.$font-size-2xl;
+				line-height: abstracts.$line-height-md;
 			}
 		}
 
@@ -41,6 +53,12 @@
 				font-size: abstracts.$font-size-2xl;
 				line-height: abstracts.$line-height-md;
 
+				@media (max-width: abstracts.$breakpoint-md) {
+					font-size: abstracts.$font-size-1xl;
+					line-height: abstracts.$line-height-2xl;
+					top: abstracts.$spacer-xs;
+				}
+
 				&.current {
 					opacity: 0;
 				}
@@ -52,7 +70,7 @@
 		}
 	}
 
-	div:last-child {
+	> div:last-child {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
@@ -61,8 +79,47 @@
 			border-radius: 4rem;
 		}
 
+		.c-block-het-archief-header-search__searchbar {
+			display: flex;
+			flex-direction: column;
+
+			@media (min-width: abstracts.$breakpoint-md) {
+				flex-direction: row;
+				align-items: stretch;
+			}
+
+			&.c-block-het-archief-header-search__searchbar--has-dropdown .c-input input {
+				border-radius: 0 0 $search-radius-mobile $search-radius-mobile;
+				border-top: none;
+
+				@media (min-width: abstracts.$breakpoint-md) {
+					border-radius: 0 $search-radius-desktop $search-radius-desktop 0;
+					border-top: 1px solid abstracts.$zinc;
+					border-left: none;
+				}
+			}
+		}
+
 		.c-input {
+			flex: 1;
+
+			.c-input__field {
+				height: $search-height-mobile;
+				padding-left: abstracts.$spacer-md;
+				font-size: abstracts.$font-size-base;
+				line-height: 2rem;
+				overflow: hidden;
+				white-space: nowrap;
+				text-overflow: ellipsis;
+
+				@media (min-width: abstracts.$breakpoint-md) {
+					height: $search-height-desktop;
+					font-size: abstracts.$font-size-md;
+				}
+			}
+
 			.c-input__icon {
+				right: abstracts.$spacer-md;
 				pointer-events: auto;
 				cursor: pointer;
 			}
@@ -70,10 +127,14 @@
 			button {
 				background-color: transparent;
 				border: none;
-				font-size: abstracts.$font-size-lg;
 				color: abstracts.$neutral;
-				line-height: abstracts.$font-size-lg;
 				padding: 0;
+				font-size: abstracts.$font-size-base;
+				line-height: abstracts.$font-size-lg;
+
+				@media (min-width: abstracts.$breakpoint-md) {
+					font-size: abstracts.$font-size-lg;
+				}
 
 				@include abstracts.module-class-selector("Icon", "c-icon") {
 					padding-top: 0.5rem;
@@ -81,9 +142,129 @@
 			}
 		}
 
-		p {
+		> p {
 			text-align: right;
 			margin-top: abstracts.$spacer-md;
+		}
+	}
+
+	.c-search-dropdown {
+		position: relative;
+		width: 100%;
+
+		@media (min-width: abstracts.$breakpoint-md) {
+			width: 26.5rem;
+		}
+
+		&__active {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: abstracts.$spacer-sm;
+			height: $search-height-mobile;
+			padding: abstracts.$spacer-sm abstracts.$spacer-md abstracts.$spacer-sm abstracts.$spacer-lg;
+			background-color: abstracts.$black;
+			color: abstracts.$white;
+			border: 1px solid abstracts.$white;
+			border-bottom: none;
+			border-radius: $search-radius-mobile $search-radius-mobile 0 0;
+			transition: border-radius abstracts.$animate-default;
+
+			@media (min-width: abstracts.$breakpoint-md) {
+				height: $search-height-desktop;
+				border-radius: $search-radius-desktop 0 0 $search-radius-desktop;
+				border-bottom: 1px solid abstracts.$white;
+				border-right: none;
+			}
+
+			&:focus,
+			&:focus-within {
+				outline: 0.2rem solid abstracts.$teal;
+				outline-offset: -0.2rem;
+			}
+
+			&-content {
+				overflow: hidden;
+			}
+
+			&-label {
+				font-family: abstracts.$font-family-primary;
+				font-size: abstracts.$font-size-md;
+				font-style: normal;
+				font-weight: 800;
+				line-height: 2rem;
+				color: abstracts.$white;
+			}
+
+			&-icon {
+				font-family: abstracts.$font-family-primary;
+				font-size: abstracts.$font-size-md;
+				font-weight: 400;
+				transform: rotate(0);
+				transition: transform abstracts.$animate-default;
+			}
+		}
+
+		&__list {
+			position: absolute;
+			top: 100%;
+			left: 0;
+			width: 100%;
+			background-color: abstracts.$white;
+			opacity: 0;
+			box-shadow: abstracts.$shadow-24-black-12;
+			transition: opacity abstracts.$animate-default;
+			pointer-events: none;
+			z-index: abstracts.get-z-layer("dropdown");
+		}
+
+		&__option {
+			width: 100%;
+
+			&-label {
+				padding: 1.2rem abstracts.$spacer-lg;
+				overflow: hidden;
+				font-size: abstracts.$font-size-base;
+				color: abstracts.$black;
+			}
+
+			&:hover,
+			&:active,
+			&:focus {
+				background-color: abstracts.$platinum;
+			}
+
+			&:focus,
+			&:focus-within {
+				outline: 0.2rem solid abstracts.$teal;
+			}
+		}
+
+		&--open {
+			.c-search-dropdown {
+				&__list {
+					opacity: 1;
+					pointer-events: all;
+				}
+
+				&__active {
+					border-radius: $search-radius-mobile $search-radius-mobile 0 0;
+
+					@media (min-width: abstracts.$breakpoint-md) {
+						border-radius: $search-radius-desktop 0 0 0;
+					}
+
+					&-icon {
+						transform: rotate(-180deg);
+					}
+				}
+			}
+		}
+
+		&--selectable {
+			&:hover {
+				cursor: pointer;
+			}
 		}
 	}
 }
