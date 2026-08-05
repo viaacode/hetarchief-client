@@ -2,9 +2,9 @@
 
 .c-block-het-archief-header-search {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	justify-content: space-between;
-	gap: abstracts.$spacer-1xl;
+	gap: abstracts.$spacer-1xl + abstracts.$spacer-xs;
 
 	@media (max-width: abstracts.$breakpoint-md) {
 		flex-direction: column;
@@ -13,8 +13,11 @@
 	div:first-child {
 		h1,
 		> ul > li {
-			font-size: abstracts.$font-size-3xl;
-			font-weight: abstracts.$font-weight-bold;
+			text-align: center;
+			width: 100%;
+			font-size: abstracts.$font-size-4xl;
+			line-height: abstracts.$line-height-base;
+			font-weight: 800;
 
 			@media (max-width: abstracts.$breakpoint-md) {
 				font-size: abstracts.$font-size-2xl;
@@ -35,6 +38,8 @@
 				left: 0;
 				opacity: 0;
 				transition: opacity 300ms ease-in-out;
+				font-size: abstracts.$font-size-2xl;
+				line-height: abstracts.$line-height-md;
 
 				&.current {
 					opacity: 0;
@@ -51,10 +56,6 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-
-		@media (min-width: abstracts.$breakpoint-md) {
-			max-width: 42%;
-		}
 
 		input {
 			border-radius: 4rem;
