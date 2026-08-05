@@ -23,6 +23,7 @@ import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import type { Locale } from '@shared/utils/i18n';
 import { AvoCoreDatabaseType, type AvoUserCommonUser } from '@viaa/avo2-types';
+import { clientSearchUrlToApiSearchUrl } from '@visitor-space/utils/search-url-to-api-url/client-search-url-to-api-search-url';
 import Link from 'next/link';
 import type { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
@@ -31,13 +32,15 @@ import type { FunctionComponent } from 'react';
 const { publicRuntimeConfig } = getConfig();
 
 const InternalLink = (linkInfo: LinkInfo) => {
-	const { to, ...rest } = linkInfo;
+	const { to, onKeyUp, ...rest } = linkInfo;
 
 	if (!to) {
-		return <p {...rest} />;
+		// biome-ignore lint/suspicious/noExplicitAny: todo figure out why event handlers do not match
+		return <p {...rest} onKeyUp={(evt) => onKeyUp?.(evt as any)} />;
 	}
 
-	return <Link href={to} passHref {...rest} />;
+	// biome-ignore lint/suspicious/noExplicitAny: todo figure out why event handlers do not match
+	return <Link href={to} passHref {...rest} onKeyUp={(evt) => onKeyUp?.(evt as any)} />;
 };
 
 // When a content page is saved, for clear the Next.js cache
@@ -84,6 +87,7 @@ export function getAdminCoreConfig(
 				ContentBlockType.OverviewNewspaperTitles,
 				ContentBlockType.ContentEncloseGrid,
 				ContentBlockType.Breadcrumbs,
+				ContentBlockType.OverviewWithCarousel,
 			],
 			defaultPageWidth: ContentPageWidth.LARGE,
 			onSaveContentPage,
@@ -93,7 +97,9 @@ export function getAdminCoreConfig(
 			customNavigationElements: [NAVIGATION_DROPDOWN.VISITOR_SPACES, NAVIGATION_DROPDOWN.SEARCH],
 		},
 		icon: {
-			component: ({ name }: { name: string }) => <Icon name={name as IconName} />,
+			component: ({ name, className }: { name: string; className?: string }) => (
+				<Icon name={name as IconName} className={className} />
+			),
 			componentProps: {
 				add: { name: IconNamesLight.Plus },
 				angleDown: { name: IconNamesLight.AngleDown },
@@ -102,6 +108,7 @@ export function getAdminCoreConfig(
 				angleUp: { name: IconNamesLight.AngleUp },
 				anglesLeft: { name: IconNamesLight.ChevronsLeft },
 				anglesRight: { name: IconNamesLight.ChevronsRight },
+				arrowLeft: { name: IconNamesLight.ArrowLeft },
 				arrowDown: { name: IconNamesLight.ArrowDown },
 				arrowRight: { name: IconNamesLight.ArrowRight },
 				arrowUp: { name: IconNamesLight.ArrowUp },
@@ -206,6 +213,9 @@ export function getAdminCoreConfig(
 				clear: async (_key: string) => Promise.resolve(),
 			},
 			getContentPageByLanguageAndPathEndpoint: null,
+			search: {
+				clientSearchUrlToApiSearchUrl,
+			},
 		},
 		database: {
 			proxyUrl: publicRuntimeConfig.PROXY_URL,
