@@ -1,0 +1,66 @@
+@use "src/styles/abstracts" as abstracts;
+
+.p-admin-themes-edit {
+	display: flex;
+	flex-direction: column;
+	gap: abstracts.$spacer-md;
+
+	&__back {
+		align-self: flex-start;
+	}
+
+	&__box {
+		// Same padding ramp as the other admin form pages, see VisitorSpaceSettings
+		padding: abstracts.$spacer-sm;
+
+		@media (min-width: abstracts.$breakpoint-md) {
+			padding: abstracts.$spacer-md;
+		}
+
+		// Match the row height of the admin overviews (see pages/admin/_themes.scss)
+		tr {
+			td,
+			th {
+				padding-top: 2rem;
+				padding-bottom: 2rem;
+			}
+		}
+	}
+
+	&__subtitle {
+		color: abstracts.$neutral;
+		margin-bottom: abstracts.$spacer-md;
+	}
+
+	&__divider {
+		border: none;
+		border-top: abstracts.$divider-grey;
+		margin: abstracts.$spacer-md 0;
+	}
+
+	&__form-control {
+		margin-bottom: abstracts.$spacer-md;
+	}
+
+	&__add-objects {
+		display: flex;
+		align-items: flex-start;
+		gap: abstracts.$spacer-xs;
+
+		// The identifier field and its button sit side by side, but drop onto two rows once the
+		// field would become too narrow to read what you typed
+		flex-wrap: wrap;
+
+		> :first-child {
+			flex-grow: 1;
+			min-width: 20rem;
+		}
+	}
+
+	&__add-results {
+		list-style: none;
+		padding: 0;
+		margin: abstracts.$spacer-xs 0 0;
+		color: abstracts.$neutral;
+	}
+}

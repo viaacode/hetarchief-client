@@ -2,6 +2,7 @@ import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
+import { isFileTypeAllowed, isSizeWithinLimit } from '@shared/helpers/validate-file';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
 import { sumBy } from 'es-toolkit/compat';
@@ -15,7 +16,7 @@ interface MessageFileUploadProps {
 	selectedFiles: File[];
 }
 
-const MAX_FILE_SIZE_TOTAL = 25 * 1024 * 1024; // 25MB in bytes
+const MAX_FILE_SIZE_TOTAL_KB = 25 * 1024; // 25MB in kilobytes
 const ALLOWED_FILE_TYPES = [
 	'.pdf',
 	'.doc',
@@ -54,13 +55,14 @@ const MessageFileUpload: FC<MessageFileUploadProps> = ({
 			const file = files[i];
 			sizeToCheck += file.size;
 
-			if (sizeToCheck > MAX_FILE_SIZE_TOTAL) {
+			// The limit is a budget across all attachments, so it is checked against the running
+			// total rather than against this file on its own
+			if (!isSizeWithinLimit(sizeToCheck, MAX_FILE_SIZE_TOTAL_KB)) {
 				hasInvalidFiles = true;
 				continue;
 			}
 
-			const fileExtension = `.${file.name.split('.').pop()?.toLowerCase()}`;
-			if (!ALLOWED_FILE_TYPES.includes(fileExtension)) {
+			if (!isFileTypeAllowed(file, { allowedExtensions: ALLOWED_FILE_TYPES })) {
 				hasInvalidFiles = true;
 				continue;
 			}
