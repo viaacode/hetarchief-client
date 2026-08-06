@@ -9,7 +9,7 @@ COPY . .
 ARG DEBUG_TOOLS=false
 RUN echo debug is set $DEBUG_TOOLS
 RUN npm pkg delete scripts.prepare
-RUN npm ci
+RUN npm ci --include=dev
 RUN npm run build
 
 RUN addgroup -g 1001 -S nodejs
