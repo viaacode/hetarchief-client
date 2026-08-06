@@ -90,6 +90,7 @@ export function getAdminCoreConfig(
 				ContentBlockType.OverviewWithCarousel,
 				ContentBlockType.HomepageBanner,
 				ContentBlockType.HighlightText,
+				ContentBlockType.ThemeReels,
 			],
 			defaultPageWidth: ContentPageWidth.LARGE,
 			onSaveContentPage,

@@ -352,8 +352,8 @@ const ROUTES_EN: Record<RouteKey, string> = {
 	visit: `/${ROUTE_PARTS_EN.visit}`,
 	visitRequested: `/${ROUTE_PARTS_EN.visit}/:slug/${ROUTE_PARTS_EN.accessRequested}`,
 	visitorSpaceManagement: `/${ROUTE_PARTS_EN.admin}/${ROUTE_PARTS_EN.visitorSpaceManagement}`,
-	permalink: `/${ROUTE_PARTS_NL.pid}/:pid`,
-	detailPage: `/${ROUTE_PARTS_NL.search}/:maintainerSlug/:pid`,
+	permalink: `/${ROUTE_PARTS_EN.pid}/:pid`,
+	detailPage: `/${ROUTE_PARTS_EN.search}/:maintainerSlug/:pid`,
 } as const;
 
 const ADMIN_CORE_ROUTES_NL: AdminConfig['routes'] = {
