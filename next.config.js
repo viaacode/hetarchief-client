@@ -34,7 +34,7 @@ module.exports = {
 		 * Ignore warnings about big page data, since we load translations like that
 		 * https://meemoo.atlassian.net/browse/ARC-1932
 		 */
-		largePageDataBytes: 300 * 1000,
+		largePageDataBytes: 400 * 1000,
 
 		// Attempt to improve css loading
 		// https://meemoo.atlassian.net/browse/ARC-2913
