@@ -1,6 +1,6 @@
 @use "src/styles/abstracts" as abstracts;
 
-.c-translations-overview {
+:global(.p-admin-vertalingen) .c-translations-overview {
 	:global(.c-input) {
 		padding: 0;
 		background-color: transparent;
