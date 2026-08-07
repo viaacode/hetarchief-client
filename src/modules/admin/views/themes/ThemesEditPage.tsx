@@ -41,6 +41,7 @@ import {
 } from '@shared/services/themes-service';
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { kebabCase } from 'es-toolkit/compat';
 import { useRouter } from 'next/router';
 import React, { type FC, useEffect, useRef, useState } from 'react';
 
@@ -139,7 +140,21 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 		key: K,
 		value: ThemeFormValues[K]
 	): void => {
-		setFormValues((previous) => ({ ...previous, [key]: value }));
+		let slug = '';
+
+		if (formValues.slug) {
+			slug = formValues.slug;
+		} else if (key === 'nameNl' && value) {
+			slug = kebabCase(value as string);
+		} else if (formValues?.nameNl) {
+			slug = kebabCase(formValues.nameNl);
+		}
+
+		setFormValues((previous) => ({
+			...previous,
+			slug,
+			[key]: value,
+		}));
 		setFormErrors((previous) => ({ ...previous, [key]: undefined }));
 	};
 
@@ -472,19 +487,19 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 							<hr className={styles['p-admin-themes-edit__divider']} />
 
 							{renderTextField(
-								'slug',
-								tText('modules/admin/views/themes/themes-edit-page___slug'),
-								tText(
-									'modules/admin/views/themes/themes-edit-page___uniek-kleine-letters-koppeltekens-gebruikt-in-urls'
-								)
-							)}
-							{renderTextField(
 								'nameNl',
 								tText('modules/admin/views/themes/themes-edit-page___nl-benaming')
 							)}
 							{renderTextField(
 								'nameEn',
 								tText('modules/admin/views/themes/themes-edit-page___en-benaming')
+							)}
+							{renderTextField(
+								'slug',
+								tText('modules/admin/views/themes/themes-edit-page___slug'),
+								tText(
+									'modules/admin/views/themes/themes-edit-page___uniek-kleine-letters-koppeltekens-gebruikt-in-urls'
+								)
 							)}
 							{renderDescriptionField(
 								'descriptionNl',
