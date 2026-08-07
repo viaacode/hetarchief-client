@@ -66,9 +66,11 @@
 	}
 
 	&__add-results {
-		list-style: none;
-		padding: 0;
-		margin: abstracts.$spacer-xs 0 0;
-		color: abstracts.$neutral;
+		max-width: 60rem;
+		white-space: nowrap;
+
+		ul {
+			padding-left: abstracts.$spacer-sm;
+		}
 	}
 }

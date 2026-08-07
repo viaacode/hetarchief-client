@@ -92,7 +92,6 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 
 	const [ieObjectsPage, setIeObjectsPage] = useState<number>(1);
 	const [identifiersInput, setIdentifiersInput] = useState<string>('');
-	const [addResults, setAddResults] = useState<AddIeObjectsResultItem[]>([]);
 	const [ieObjectToRemove, setIeObjectToRemove] = useState<ThemeIeObject | null>(null);
 
 	// There is no GET /themes/:id; this endpoint returns the theme plus a page of its objects
@@ -215,6 +214,28 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 		}
 	};
 
+	const getResultMessage = ({ schemaIdentifier, result }: AddIeObjectsResultItem) => {
+		const messages = {
+			[AddIeObjectResult.added]: tText('modules/admin/views/themes/themes-edit-page___toegevoegd', {
+				objectId: schemaIdentifier,
+			}),
+			[AddIeObjectResult.alreadyLinked]: tText(
+				'modules/admin/views/themes/themes-edit-page___was-al-gekoppeld',
+				{
+					objectId: schemaIdentifier,
+				}
+			),
+			[AddIeObjectResult.notFound]: tText(
+				'modules/admin/views/themes/themes-edit-page___niet-gevonden',
+				{
+					objectId: schemaIdentifier,
+				}
+			),
+		};
+
+		return <li key={`add-result--${schemaIdentifier}--${result}`}>{messages[result]}</li>;
+	};
+
 	const onAddIeObjects = async (): Promise<void> => {
 		const schemaIdentifiers = parseSchemaIdentifiers(identifiersInput);
 		if (!schemaIdentifiers.length) {
@@ -223,8 +244,22 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 
 		try {
 			const results = await ThemesService.addIeObjects(id as string, schemaIdentifiers);
-			setAddResults(results);
 			setIdentifiersInput('');
+
+			toastService.notify(
+				{
+					title: tHtml('modules/admin/views/themes/themes-edit-page___success'),
+					description: <ul>{results.map(getResultMessage)}</ul>,
+					maxLines: -1,
+					className: styles['p-admin-themes-edit__add-results'],
+				},
+				{
+					autoClose: false,
+					style: {
+						width: '65rem',
+					},
+				}
+			);
 			await refetchTheme();
 		} catch (err) {
 			console.error(err);
@@ -246,6 +281,12 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 		try {
 			await ThemesService.deleteIeObject(id as string, ieObjectToRemove.schemaIdentifier);
 			setIeObjectToRemove(null);
+			toastService.notify({
+				title: tHtml('modules/admin/views/themes/themes-edit-page___success'),
+				description: tHtml(
+					'modules/admin/views/themes/themes-edit-page___het-loskoppelen-van-het-object-is-geslaagd'
+				),
+			});
 			await refetchTheme();
 		} catch (err) {
 			console.error(err);
@@ -257,24 +298,6 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 				),
 			});
 		}
-	};
-
-	const renderAddResult = ({ schemaIdentifier, result }: AddIeObjectsResultItem) => {
-		const message = {
-			[AddIeObjectResult.added]: tText('modules/admin/views/themes/themes-edit-page___toegevoegd'),
-			[AddIeObjectResult.alreadyLinked]: tText(
-				'modules/admin/views/themes/themes-edit-page___was-al-gekoppeld'
-			),
-			[AddIeObjectResult.notFound]: tText(
-				'modules/admin/views/themes/themes-edit-page___niet-gevonden'
-			),
-		}[result];
-
-		return (
-			<li key={`add-result--${schemaIdentifier}--${result}`}>
-				<code>{schemaIdentifier}</code> — {message}
-			</li>
-		);
 	};
 
 	const renderTextField = (
@@ -351,12 +374,6 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 						/>
 					</div>
 				</FormControl>
-
-				{!!addResults.length && (
-					<ul className={styles['p-admin-themes-edit__add-results']}>
-						{addResults.map(renderAddResult)}
-					</ul>
-				)}
 
 				<Table<ThemeIeObject>
 					className="u-mt-24"
