@@ -131,6 +131,10 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		return getValidStartAndEnd(cueStart, cueEnd, mediaDuration);
 	};
 
+	// For main ie objects, the representation thumbnail is always null
+	// For cut fragments, the representation thumbnail is defined
+	const thumbnailUrl = representation?.thumbnailUrl || currentPlayableFile?.thumbnailUrl;
+
 	const [start, end]: [number | null, number | null] = getStartAndEnd();
 	const shared: Partial<FlowPlayerProps> = {
 		className,
@@ -160,7 +164,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				key={`${flowPlayerKey}__${currentPlayableFile.id}`}
 				type="video"
 				src={playableUrl as string}
-				poster={poster || currentPlayableFile.thumbnailUrl}
+				poster={poster || thumbnailUrl}
 				renderLoader={() => <Loading locationId="flowplayer suspense" fullscreen mode="light" />}
 				preload="metadata"
 				{...shared}

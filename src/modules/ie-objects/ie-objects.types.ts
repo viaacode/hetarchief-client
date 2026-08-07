@@ -193,6 +193,7 @@ export interface IeObjectRepresentation {
 	edmIsNextInSequence: string;
 	updatedAt: string;
 	isMediaFragmentOf: string;
+	thumbnailUrl: string | null;
 	files: IeObjectFile[];
 }
 
