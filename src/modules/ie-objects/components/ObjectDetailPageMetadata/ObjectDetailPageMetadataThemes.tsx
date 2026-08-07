@@ -60,7 +60,11 @@ export function ObjectDetailPageMetadataThemes({
 						{/* TODO ARC-3797: link the counter to a search filtered on this theme once the
 						    theme filter exists. Until then it is plain text. */}
 						<span className={styles['c-object-detail-page-metadata-themes__count']}>
-							<Icon name={IconNamesLight.RelatedObjects} aria-hidden />
+							<Icon
+								className={styles['c-object-detail-page-metadata-themes__count-icon']}
+								name={IconNamesLight.RelatedObjects}
+								aria-hidden
+							/>
 							{/* The bare number carries no meaning on its own, so screen readers get the
 							    spelled out label instead */}
 							<span aria-hidden>{theme.ieObjectCount}</span>
