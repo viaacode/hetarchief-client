@@ -1,22 +1,23 @@
 @use "src/styles/abstracts" as abstracts;
 
 .c-object-detail-page-metadata-themes {
+	// Grid instead of flex: a shared "count" column means its width is driven by the
+	// widest count across every row, so the icon starts at the same x-position on every
+	// row no matter how many digits an individual count has (1 vs. 16 vs. 1000, ...).
 	&__list {
-		display: flex;
-		flex-direction: column;
-		gap: abstracts.$spacer-sm;
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) max-content;
+		align-items: center;
+		gap: abstracts.$spacer-sm abstracts.$spacer-xs;
 		margin: 0;
 		padding: 0;
 		list-style: none;
 	}
 
-	// Name on the left, counter pushed to the right edge of the metadata panel
+	// `display: contents` lets the name and counter below become direct children of the
+	// list's grid, instead of being sized as their own independent row.
 	&__item {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: space-between;
-		gap: abstracts.$spacer-xs;
+		display: contents;
 		font-size: abstracts.$font-size-base;
 		line-height: abstracts.$line-height-1xl;
 	}
@@ -30,12 +31,12 @@
 
 	&__count {
 		display: inline-flex;
-		flex-shrink: 0;
-		align-items: center;
 		gap: abstracts.$spacer-xxs;
+		height: 100%;
 
-		// Keeps the counter against the right edge once a long theme name pushes it onto its own row
-		margin-left: auto;
+		:first-child.c-object-detail-page-metadata-themes__count-icon {
+			font-size: abstracts.$font-size-lg;
+		}
 
 		@include abstracts.module-class-selector("Icon", "c-icon") {
 			font-size: abstracts.$font-size-1xl;
