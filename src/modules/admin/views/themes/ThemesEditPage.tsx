@@ -24,6 +24,7 @@ import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/P
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { sortingIcons } from '@shared/components/Table';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-fallback';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -366,6 +367,7 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 							pagination: { pageIndex: 0, pageSize: ThemeIeObjectsTablePageSize },
 						},
 					}}
+					sortingIcons={sortingIcons}
 					showTable={!!ieObjects.length}
 					pagination={(table) => (
 						<PaginationBar
