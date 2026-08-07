@@ -17,6 +17,10 @@
 			padding: abstracts.$spacer-md;
 		}
 
+		h3 {
+			padding-bottom: abstracts.$spacer-sm;
+		}
+
 		// Match the row height of the admin overviews (see pages/admin/_themes.scss)
 		tr {
 			td,
@@ -40,6 +44,10 @@
 
 	&__form-control {
 		margin-bottom: abstracts.$spacer-md;
+
+		:global(.c-input__field) {
+			border-radius: abstracts.$input-border-radius;
+		}
 	}
 
 	&__add-objects {
