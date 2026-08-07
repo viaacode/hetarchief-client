@@ -157,16 +157,16 @@ const getSearchDropdown = (
 		iconName: IconName;
 	}[] = [
 		{
-			id: 'search-audio',
-			label: tText('modules/navigation/components/navigation/navigation___audio'),
-			mediaType: SearchPageMediaType.Audio,
-			iconName: IconNamesLight.Audio,
-		},
-		{
 			id: 'search-video',
 			label: tText('modules/navigation/components/navigation/navigation___video'),
 			mediaType: SearchPageMediaType.Video,
 			iconName: IconNamesLight.Video,
+		},
+		{
+			id: 'search-audio',
+			label: tText('modules/navigation/components/navigation/navigation___audio'),
+			mediaType: SearchPageMediaType.Audio,
+			iconName: IconNamesLight.Audio,
 		},
 		{
 			id: 'search-newspapers',
@@ -193,6 +193,18 @@ const getSearchDropdown = (
 		// The flyout lines up with the left edge of the trigger, see design
 		dropdownPlacement: 'bottom-start',
 		children: [
+			{
+				node: renderSearchLink(
+					tText('modules/navigation/components/navigation/navigation___zoek-alles'),
+					searchPath,
+					IconNamesLight.Search
+				),
+				id: 'search-all',
+				path: searchPath,
+				activeDesktop: activeMediaType === SearchPageMediaType.All,
+				activeMobile: activeMediaType === SearchPageMediaType.All,
+				isDivider: 'md',
+			},
 			...mediaTypeItems.map(({ id, label, mediaType, iconName }, index): NavigationItem => {
 				const searchRouteForMediaType = stringifyUrl({
 					url: searchPath,
@@ -205,21 +217,8 @@ const getSearchDropdown = (
 					path: searchRouteForMediaType,
 					activeDesktop: activeMediaType === mediaType,
 					activeMobile: activeMediaType === mediaType,
-					// Divider between the media types and "search everything", only on desktop
-					isDivider: index === mediaTypeItems.length - 1 ? 'md' : undefined,
 				};
 			}),
-			{
-				node: renderSearchLink(
-					tText('modules/navigation/components/navigation/navigation___zoek-alles'),
-					searchPath,
-					IconNamesLight.Search
-				),
-				id: 'search-all',
-				path: searchPath,
-				activeDesktop: activeMediaType === SearchPageMediaType.All,
-				activeMobile: activeMediaType === SearchPageMediaType.All,
-			},
 		],
 	};
 };
