@@ -12,6 +12,19 @@ const path = require('node:path');
  */
 process.env.CRITTERS_LOG_LEVEL = process.env.CRITTERS_LOG_LEVEL || 'error';
 
+// Single source of truth for module aliases needed by both bundlers, so a new entry
+// only has to be added here. Turbopack's resolveAlias needs relative-path strings;
+// webpack's resolve.alias needs absolute paths (resolved from these below).
+const SHARED_RESOLVE_ALIASES = {
+	'@tanstack/react-query': './node_modules/@tanstack/react-query',
+	'use-query-params': './node_modules/use-query-params',
+	'react-select': './node_modules/react-select',
+	'react-select/creatable': './node_modules/react-select/creatable',
+	'react-select/async': './node_modules/react-select/async',
+	'react-hook-form': './node_modules/react-hook-form',
+	'react-datepicker': './node_modules/react-datepicker',
+};
+
 /** @type {import("next").NextConfig} */
 module.exports = {
 	transpilePackages: ['ky-universal', '@viaa/avo2-components', '@meemoo/react-components'],
@@ -34,7 +47,7 @@ module.exports = {
 		 * Ignore warnings about big page data, since we load translations like that
 		 * https://meemoo.atlassian.net/browse/ARC-1932
 		 */
-		largePageDataBytes: 300 * 1000,
+		largePageDataBytes: 400 * 1000,
 
 		// Attempt to improve css loading
 		// https://meemoo.atlassian.net/browse/ARC-2913
@@ -47,15 +60,29 @@ module.exports = {
 	// https://github.com/TanStack/query/issues/3595#issuecomment-1276468579
 	serverExternalPackages: ['@tanstack/react-query', 'use-query-params'],
 	turbopack: {
-		resolveAlias: {
-			'@tanstack/react-query': './node_modules/@tanstack/react-query',
-			'use-query-params': './node_modules/use-query-params',
-			'react-select': './node_modules/react-select',
-			'react-select/creatable': './node_modules/react-select/creatable',
-			'react-select/async': './node_modules/react-select/async',
-			'react-hook-form': './node_modules/react-hook-form',
-			'react-datepicker': './node_modules/react-datepicker',
-		},
+		resolveAlias: SHARED_RESOLVE_ALIASES,
+	},
+	webpack: (config) => {
+		config.mode = 'production';
+
+		// Required for ky-universal top level await used in admin core inside the api service
+		config.experiments = { topLevelAwait: true, layers: true };
+
+		// https://stackoverflow.com/a/68098547/373207
+		config.resolve.fallback = { fs: false, path: false };
+
+		// Ensure certain packages are always resolved to one version instead of other versions from admin-core or component libraries
+		config.resolve.alias = {
+			...config.resolve.alias,
+			...Object.fromEntries(
+				Object.entries(SHARED_RESOLVE_ALIASES).map(([name, relativePath]) => [
+					name,
+					path.resolve(relativePath),
+				])
+			),
+		};
+
+		return config;
 	},
 	images: {
 		unoptimized: true,
