@@ -144,9 +144,9 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 
 		if (formValues.slug) {
 			slug = formValues.slug;
-		} else if (!formValues.slug && key === 'nameNl' && value) {
+		} else if (key === 'nameNl' && value) {
 			slug = kebabCase(value as string);
-		} else if (!formValues.slug && formValues?.nameNl) {
+		} else if (formValues?.nameNl) {
 			slug = kebabCase(formValues.nameNl);
 		}
 
