@@ -205,7 +205,7 @@ const getSearchDropdown = (
 				activeMobile: activeMediaType === SearchPageMediaType.All,
 				isDivider: 'md',
 			},
-			...mediaTypeItems.map(({ id, label, mediaType, iconName }, index): NavigationItem => {
+			...mediaTypeItems.map(({ id, label, mediaType, iconName }): NavigationItem => {
 				const searchRouteForMediaType = stringifyUrl({
 					url: searchPath,
 					query: { [SearchFilterId.Format]: mediaType },

@@ -426,6 +426,8 @@
   "modules/admin/views/themes/themes-edit-page___nl-beschrijving": "Nl beschrijving",
   "modules/admin/views/themes/themes-edit-page___objecten-toevoegen": "Objecten toevoegen",
   "modules/admin/views/themes/themes-edit-page___opslaan": "Opslaan",
+  "modules/admin/views/themes/themes-edit-page___selecteer-een-en-content-pagina": "Selecteer een en content pagina",
+  "modules/admin/views/themes/themes-edit-page___selecteer-een-nl-content-pagina": "Selecteer een nl content pagina",
   "modules/admin/views/themes/themes-edit-page___slug": "Slug",
   "modules/admin/views/themes/themes-edit-page___standaard-thumbnail": "Standaard thumbnail",
   "modules/admin/views/themes/themes-edit-page___success": "Success",
