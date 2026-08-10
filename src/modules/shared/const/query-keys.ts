@@ -17,6 +17,8 @@ export enum QUERY_KEYS {
 	getVisitAccessStatus = 'getVisitAccessStatus',
 	getVisitRequests = 'getVisitRequests',
 	getContentPage = 'getContentPage',
+	getThemes = 'getThemes',
+	getThemeIeObjects = 'getThemeIeObjects',
 	getContentPartners = 'getContentPartners',
 	getMaterialRequests = 'getMaterialRequests',
 	getMaterialRequestsDuplicates = 'getMaterialRequestsDuplicates',

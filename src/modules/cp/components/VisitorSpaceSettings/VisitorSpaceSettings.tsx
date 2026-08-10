@@ -1,6 +1,5 @@
 import { Permission } from '@account/const';
 import { VISITOR_SPACE_VALIDATION_SCHEMA } from '@cp/components/VisitorSpaceSettings/VisitorSpaceSettings.const';
-import { validateFile } from '@cp/components/VisitorSpaceSettings/VisitorSpaceSettings.utils';
 import {
 	Box,
 	Button,
@@ -19,6 +18,7 @@ import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { globalLabelKeys, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { validateFile } from '@shared/helpers/validate-file';
 import { validateForm } from '@shared/helpers/validate-form';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';

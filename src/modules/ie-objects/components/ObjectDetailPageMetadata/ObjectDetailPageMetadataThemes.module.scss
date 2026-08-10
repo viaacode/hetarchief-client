@@ -1,0 +1,57 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-object-detail-page-metadata-themes {
+	// Grid instead of flex: a shared "count" column means its width is driven by the
+	// widest count across every row, so the icon starts at the same x-position on every
+	// row no matter how many digits an individual count has (1 vs. 16 vs. 1000, ...).
+	&__list {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) max-content;
+		align-items: center;
+		gap: abstracts.$spacer-sm abstracts.$spacer-xs;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	// `display: contents` lets the name and counter below become direct children of the
+	// list's grid, instead of being sized as their own independent row.
+	&__item {
+		display: contents;
+		font-size: abstracts.$font-size-base;
+		line-height: abstracts.$line-height-1xl;
+	}
+
+	&__name {
+		&--link {
+			text-decoration: underline;
+			text-underline-offset: 0.2rem;
+		}
+	}
+
+	&__count {
+		display: inline-flex;
+		gap: abstracts.$spacer-xxs;
+		height: 100%;
+
+		:first-child.c-object-detail-page-metadata-themes__count-icon {
+			font-size: abstracts.$font-size-lg;
+		}
+
+		@include abstracts.module-class-selector("Icon", "c-icon") {
+			font-size: abstracts.$font-size-1xl;
+			line-height: 1;
+		}
+	}
+
+	// Visible to screen readers only: spells out what the bare counter means
+	&__count-label {
+		position: absolute;
+		overflow: hidden;
+		clip-path: inset(50%);
+		width: 1px;
+		height: 1px;
+		white-space: nowrap;
+	}
+
+}
