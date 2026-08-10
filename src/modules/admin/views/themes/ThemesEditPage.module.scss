@@ -71,13 +71,22 @@
 				border-color abstracts.$animate-default;
 		}
 
-		:global(.c-select__control--is-focused) {
+		// avo2-components styles the focused control through
+		// `.c-select .c-select__control.c-select__control--is-focused`, giving it a blue border, an
+		// inset ring and a blue outer glow. That selector is three classes, so it outranks the
+		// two-class rule above and the glow survives there. Matching the focused container instead
+		// lands on four and wins, leaving the same border-only focus mark the text inputs use.
+		:global(.c-select):focus-within :global(.c-select__control) {
 			border-color: abstracts.$teal;
+			box-shadow: none;
 		}
 
 		// A subtle ring while hovering an unfocused field, matching how the react-select-base mixin
-		// in styles/abstracts/_mixins.scss treats the app's other selects
+		// in styles/abstracts/_mixins.scss treats the app's other selects. The border is pinned
+		// because avo2-components recolours it on hover through `.c-select .c-select__control:hover`,
+		// which outranks the base rule above; the text inputs keep a steady border on hover.
 		:global(.c-select):not(:focus-within):hover :global(.c-select__control) {
+			border-color: abstracts.$zinc;
 			outline-color: abstracts.$zinc;
 		}
 
