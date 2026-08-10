@@ -87,6 +87,15 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		text-decoration: none;
 		font-weight: abstracts.$font-weight-normal;
 		color: abstracts.$black;
+
+		&:active {
+			.c-navigation__dropdown-icon {
+				&--start,
+				&--end {
+					color: abstracts.$white;
+				}
+			}
+		}
 	}
 
 	.c-navigation__dropdown {
