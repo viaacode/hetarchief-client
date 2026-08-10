@@ -149,11 +149,18 @@ $search-radius-desktop: 3.2rem;
 	}
 
 	.c-search-dropdown {
-		position: relative;
 		width: 100%;
 
 		@media (min-width: abstracts.$breakpoint-md) {
-			width: 26.5rem;
+			width: 26.5rem; // Same width as on search page
+		}
+
+		&__trigger {
+			width: 100%;
+
+			&:hover {
+				cursor: pointer;
+			}
 		}
 
 		&__active {
@@ -161,10 +168,12 @@ $search-radius-desktop: 3.2rem;
 			align-items: center;
 			justify-content: space-between;
 			gap: abstracts.$spacer-sm;
+			width: 100%;
 			height: $search-height-mobile;
 			padding: abstracts.$spacer-sm abstracts.$spacer-md abstracts.$spacer-sm abstracts.$spacer-lg;
 			background-color: abstracts.$black;
 			color: abstracts.$white;
+			font: inherit;
 			border: 1px solid abstracts.$white;
 			border-bottom: none;
 			border-radius: $search-radius-mobile $search-radius-mobile 0 0;
@@ -197,24 +206,29 @@ $search-radius-desktop: 3.2rem;
 			}
 
 			&-icon {
-				font-family: abstracts.$font-family-primary;
 				font-size: abstracts.$font-size-md;
 				font-weight: 400;
 				transform: rotate(0);
 				transition: transform abstracts.$animate-default;
+
+				&--open {
+					transform: rotate(-180deg);
+				}
+			}
+
+			&--open {
+				border-radius: $search-radius-mobile $search-radius-mobile 0 0;
+
+				@media (min-width: abstracts.$breakpoint-md) {
+					border-radius: $search-radius-desktop 0 0 0;
+				}
 			}
 		}
 
 		&__list {
-			position: absolute;
-			top: 100%;
-			left: 0;
 			width: 100%;
 			background-color: abstracts.$white;
-			opacity: 0;
 			box-shadow: abstracts.$shadow-24-black-12;
-			transition: opacity abstracts.$animate-default;
-			pointer-events: none;
 			z-index: abstracts.get-z-layer("dropdown");
 		}
 
@@ -232,6 +246,7 @@ $search-radius-desktop: 3.2rem;
 			&:active,
 			&:focus {
 				background-color: abstracts.$platinum;
+				cursor: pointer;
 			}
 
 			&:focus,
@@ -240,30 +255,11 @@ $search-radius-desktop: 3.2rem;
 			}
 		}
 
-		&--open {
-			.c-search-dropdown {
-				&__list {
-					opacity: 1;
-					pointer-events: all;
-				}
-
-				&__active {
-					border-radius: $search-radius-mobile $search-radius-mobile 0 0;
-
-					@media (min-width: abstracts.$breakpoint-md) {
-						border-radius: $search-radius-desktop 0 0 0;
-					}
-
-					&-icon {
-						transform: rotate(-180deg);
-					}
-				}
-			}
-		}
-
-		&--selectable {
-			&:hover {
-				cursor: pointer;
+		&__flyout {
+			.c-menu {
+				transition:
+					opacity abstracts.$animate-default,
+					visibility abstracts.$animate-default;
 			}
 		}
 	}
