@@ -48,6 +48,63 @@
 		:global(.c-input__field) {
 			border-radius: abstracts.$input-border-radius;
 		}
+
+		// The two theme detail page fields are a ContentPicker, which renders a react-select: its box
+		// is a .c-select__control, not a .c-input__field, and react-select ships its own sizing and
+		// focus ring. These rules mirror .c-input__field from styles/components/_input.scss so the
+		// pickers read as the same kind of field as the text inputs above them.
+		:global(.c-select__control) {
+			// react-select sets its own min-height, so both are needed to land on the input height
+			min-height: abstracts.$button-height;
+			height: abstracts.$button-height;
+			padding: 0;
+			border: 1px solid abstracts.$zinc;
+			border-radius: abstracts.$input-border-radius;
+			background-color: abstracts.$white;
+			font-size: abstracts.$font-size-base;
+
+			// Transparent by default so the hover ring below can colour it without shifting layout,
+			// the same trick .c-input__field uses
+			outline: 1px solid transparent;
+
+			// The inputs mark focus with a border colour only, react-select adds a box-shadow ring
+			box-shadow: none;
+			transition:
+				outline-color abstracts.$animate-default,
+				border-color abstracts.$animate-default;
+		}
+
+		:global(.c-select__control--is-focused) {
+			border-color: abstracts.$teal;
+		}
+
+		// A subtle ring while hovering an unfocused field, matching how the react-select-base mixin
+		// in styles/abstracts/_mixins.scss treats the app's other selects
+		:global(.c-select):not(:focus-within):hover :global(.c-select__control) {
+			outline-color: abstracts.$zinc;
+		}
+
+		// Line the text up with the 1.6rem horizontal padding of .c-input__field
+		:global(.c-select__value-container) {
+			padding-left: abstracts.$spacer-sm;
+			padding-right: abstracts.$spacer-sm;
+		}
+
+		// Same muted grey as .c-input__icon
+		:global(.c-select__placeholder) {
+			color: abstracts.$neutral;
+		}
+
+		:global(.c-select__indicator) svg {
+			color: abstracts.$neutral;
+		}
+
+		// react-select marks the active option with --is-focused, while the global .c-select rules in
+		// styles/admin-core/_content-pages-elements.scss only override :hover. That leaves the
+		// keyboard/just-opened highlight on react-select's own blue, so match their :hover grey.
+		:global(.c-select__option--is-focused) {
+			background-color: abstracts.$silver;
+		}
 	}
 
 	&__add-objects {
