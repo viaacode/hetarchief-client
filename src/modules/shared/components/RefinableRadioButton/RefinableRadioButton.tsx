@@ -56,6 +56,7 @@ export const RefinableRadioButton: FC<RefinableRadioButtonProps> = ({
 				<Dropdown
 					variants="bordered"
 					isDisabled={isDisabled}
+					menuClassName={styles['c-refinable-radio-button__dropdown-root']}
 					className={styles['c-refinable-radio-button__dropdown']}
 					label={label}
 					isOpen={isDropdownOpen}

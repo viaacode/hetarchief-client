@@ -96,10 +96,12 @@ export function getAdminCoreConfig(
 		},
 		navigationBars: {
 			enableIcons: true,
-			customNavigationElements: [NAVIGATION_DROPDOWN.VISITOR_SPACES],
+			customNavigationElements: [NAVIGATION_DROPDOWN.VISITOR_SPACES, NAVIGATION_DROPDOWN.SEARCH],
 		},
 		icon: {
-			component: ({ name }: { name: string }) => <Icon name={name as IconName} />,
+			component: ({ name, className }: { name: string; className?: string }) => (
+				<Icon name={name as IconName} className={className} />
+			),
 			componentProps: {
 				add: { name: IconNamesLight.Plus },
 				angleDown: { name: IconNamesLight.AngleDown },
@@ -213,6 +215,11 @@ export function getAdminCoreConfig(
 				clear: async (_key: string) => Promise.resolve(),
 			},
 			getContentPageByLanguageAndPathEndpoint: null,
+			/*
+			search: {
+				clientSearchUrlToApiSearchUrl,
+			},
+			 */
 		},
 		database: {
 			proxyUrl: publicRuntimeConfig.PROXY_URL,

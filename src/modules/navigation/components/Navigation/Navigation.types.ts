@@ -22,4 +22,5 @@ export interface NavigationCenterProps {
 
 export enum NAVIGATION_DROPDOWN {
 	VISITOR_SPACES = '<BEZOEKERRUIMTES_DROPDOWN>',
+	SEARCH = '<ZOEKEN_DROPDOWN>',
 }

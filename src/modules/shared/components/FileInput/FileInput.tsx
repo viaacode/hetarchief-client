@@ -6,10 +6,13 @@ import styles from './FileInput.module.scss';
 import type { FileInputProps } from './FileInput.types';
 
 const FileInput = forwardRef<HTMLInputElement, FileInputProps>(
-	({ className, onChange, hasFile }, ref) => {
+	({ className, onChange, hasFile, children, ...inputProps }, ref) => {
 		return (
 			<label className={clsx(className, 'c-button c-button--outline', styles['c-file-input'])}>
+				{/* Remaining props (id, accept, disabled, ...) belong on the input, not the label:
+				    FileInputProps extends InputHTMLAttributes, so callers rightly expect them to apply */}
 				<input
+					{...inputProps}
 					ref={ref}
 					type="file"
 					onChange={(e) => {

@@ -36,6 +36,10 @@
 		grid-row: 2;
 		width: 100%;
 
+		&-root {
+			position: relative;
+		}
+
 		button {
 			div {
 				max-width: 310px;

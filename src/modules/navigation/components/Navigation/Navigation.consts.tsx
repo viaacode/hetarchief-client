@@ -17,6 +17,7 @@ import {
 } from '@shared/const/routes';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
+import { SearchPageMediaType } from '@shared/types/ie-objects';
 import type { VisitRequest } from '@shared/types/visit-request';
 import type { Locale } from '@shared/utils/i18n';
 import { type AvoUserCommonUser, PermissionName } from '@viaa/avo2-types';
@@ -24,7 +25,7 @@ import { SearchFilterId, type VisitorSpaceInfo } from '@visitor-space/types';
 import clsx from 'clsx';
 import { groupBy, intersection, isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
-import { stringifyUrl } from 'query-string';
+import { parseUrl, stringifyUrl } from 'query-string';
 import type { MouseEventHandler, ReactNode } from 'react';
 
 const linkCls = (...classNames: string[]) => {
@@ -103,6 +104,125 @@ const renderLink = (
 	);
 };
 
+const renderDropdownIcon = (name: IconName, side: 'start' | 'end'): ReactNode => (
+	<Icon
+		className={clsx(
+			'u-font-size-24',
+			'u-text-left',
+			styles['c-navigation__dropdown-icon'],
+			styles[`c-navigation__dropdown-icon--${side}`]
+		)}
+		name={name}
+		aria-hidden
+	/>
+);
+
+const getSearchDropdown = (
+	navigationLabel: string,
+	currentPath: string,
+	locale: Locale
+): NavigationItem => {
+	const searchPath = ROUTES_BY_LOCALE[locale].search;
+
+	// currentPath is router.asPath, so compare the parsed format param instead of the raw string:
+	// the query can hold other params (zoekterm, aanbieder, ...) in any order
+	const { url: currentPathname, query: currentQuery } = parseUrl(currentPath);
+	const activeMediaType =
+		currentPathname === searchPath
+			? ((currentQuery[SearchFilterId.Format] as SearchPageMediaType) ?? SearchPageMediaType.All)
+			: null;
+
+	const renderSearchLink = (
+		label: string,
+		href: string,
+		iconName: IconName
+	): NavigationItem['node'] => {
+		return ({ closeDropdowns }) =>
+			renderLink(label, href, {
+				iconStart: renderDropdownIcon(iconName, 'start'),
+				iconEnd: renderDropdownIcon(IconNamesLight.AngleRight, 'end'),
+				className: dropdownCls(),
+				onClick: () => {
+					if (currentPath === href) {
+						closeDropdowns?.();
+					}
+				},
+			});
+	};
+
+	const mediaTypeItems: {
+		id: string;
+		label: string;
+		mediaType: SearchPageMediaType;
+		iconName: IconName;
+	}[] = [
+		{
+			id: 'search-video',
+			label: tText('modules/navigation/components/navigation/navigation___video'),
+			mediaType: SearchPageMediaType.Video,
+			iconName: IconNamesLight.Video,
+		},
+		{
+			id: 'search-audio',
+			label: tText('modules/navigation/components/navigation/navigation___audio'),
+			mediaType: SearchPageMediaType.Audio,
+			iconName: IconNamesLight.Audio,
+		},
+		{
+			id: 'search-newspapers',
+			label: tText('modules/navigation/components/navigation/navigation___kranten'),
+			mediaType: SearchPageMediaType.Newspaper,
+			iconName: IconNamesLight.Newspaper,
+		},
+	];
+
+	return {
+		node: renderLink(navigationLabel, searchPath, {
+			className: linkClasses,
+			// Make link clickable in hamburger menu, on desktop the label only opens the dropdown
+			onClick: (e) => {
+				if (window.innerWidth > Breakpoints.xxl) {
+					e.preventDefault();
+				}
+			},
+		}),
+		id: 'search',
+		path: searchPath,
+		activeDesktop: currentPath.startsWith(searchPath),
+		activeMobile: currentPath.startsWith(searchPath),
+		// The flyout lines up with the left edge of the trigger, see design
+		dropdownPlacement: 'bottom-start',
+		children: [
+			{
+				node: renderSearchLink(
+					tText('modules/navigation/components/navigation/navigation___zoek-alles'),
+					searchPath,
+					IconNamesLight.Search
+				),
+				id: 'search-all',
+				path: searchPath,
+				activeDesktop: activeMediaType === SearchPageMediaType.All,
+				activeMobile: activeMediaType === SearchPageMediaType.All,
+				isDivider: 'md',
+			},
+			...mediaTypeItems.map(({ id, label, mediaType, iconName }, index): NavigationItem => {
+				const searchRouteForMediaType = stringifyUrl({
+					url: searchPath,
+					query: { [SearchFilterId.Format]: mediaType },
+				});
+
+				return {
+					node: renderSearchLink(label, searchRouteForMediaType, iconName),
+					id,
+					path: searchRouteForMediaType,
+					activeDesktop: activeMediaType === mediaType,
+					activeMobile: activeMediaType === mediaType,
+				};
+			}),
+		],
+	};
+};
+
 const getVisitorSpacesDropdown = (
 	navigationLabel: string,
 	currentPath: string,
@@ -179,16 +299,7 @@ const getVisitorSpacesDropdown = (
 								tText('modules/navigation/components/navigation/navigation___bezoekersruimte'),
 							searchRouteForSpace,
 							{
-								iconEnd: (
-									<Icon
-										className={clsx(
-											'u-font-size-24',
-											'u-text-left',
-											styles['c-navigation__dropdown-icon--end']
-										)}
-										name={IconNamesLight.AngleRight}
-									/>
-								),
+								iconEnd: renderDropdownIcon(IconNamesLight.AngleRight, 'end'),
 								className: dropdownCls(),
 								onClick: () => {
 									if (currentPath === searchRouteForSpace) {
@@ -245,6 +356,10 @@ const getDynamicHeaderLinks = (
 					isSearchNavItem && hasActiveVisits && !isMeemooAdmin
 						? `${ROUTES_BY_LOCALE[locale].search}?aanbieder=${activeVisits[0].spaceSlug}`
 						: contentPath;
+
+				if (contentPath === NAVIGATION_DROPDOWN.SEARCH) {
+					return getSearchDropdown(label, currentPath, locale);
+				}
 
 				if (contentPath === NAVIGATION_DROPDOWN.VISITOR_SPACES) {
 					return getVisitorSpacesDropdown(
