@@ -7,6 +7,7 @@ import {
 	ThemeIeObjectsTablePageSize,
 } from '@admin/const/Themes.const';
 import { AdminLayout } from '@admin/layouts';
+import { ContentPicker, type PickerItem } from '@meemoo/admin-core-ui/admin';
 import {
 	Box,
 	Button,
@@ -41,6 +42,7 @@ import {
 } from '@shared/services/themes-service';
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { AvoCoreContentPickerType } from '@viaa/avo2-types';
 import { kebabCase } from 'es-toolkit/compat';
 import { useRouter } from 'next/router';
 import React, { type FC, useEffect, useRef, useState } from 'react';
@@ -72,6 +74,14 @@ const labelKeys = {
 };
 
 type ThemeFormErrors = Partial<Record<keyof ThemeFormValues, string | undefined>>;
+
+/**
+ * A theme detail page is stored as the bare content page path, which is all the ContentPicker needs
+ * to preselect it. The path doubles as the label: the stored theme carries no page title, so until
+ * the admin opens the dropdown the path itself is the only thing we can show.
+ */
+const asPickerItem = (path: string | null): PickerItem | null =>
+	path ? { type: AvoCoreContentPickerType.CONTENT_PAGE, value: path, label: path } : null;
 
 interface ThemesEditPageProps {
 	/** Undefined when creating a new theme */
@@ -315,11 +325,7 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 		}
 	};
 
-	const renderTextField = (
-		key: 'slug' | 'nameNl' | 'nameEn' | 'contentPagePathNl' | 'contentPagePathEn',
-		label: string,
-		suffix?: string
-	) => (
+	const renderTextField = (key: 'slug' | 'nameNl' | 'nameEn', label: string, suffix?: string) => (
 		<FormControl
 			className={styles['p-admin-themes-edit__form-control']}
 			errors={[<RedFormWarning error={formErrors[key]} key={`form-error--${key}`} />]}
@@ -348,6 +354,35 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 				ariaLabel={label}
 				value={formValues[key] ?? ''}
 				onChange={(event) => updateValue(key, event.currentTarget.value)}
+			/>
+		</FormControl>
+	);
+
+	const renderContentPagePathField = (
+		key: 'contentPagePathNl' | 'contentPagePathEn',
+		label: string,
+		placeholder: string
+	) => (
+		<FormControl
+			className={styles['p-admin-themes-edit__form-control']}
+			errors={[<RedFormWarning error={formErrors[key]} key={`form-error--${key}`} />]}
+			id={labelKeys[key]}
+			label={label}
+		>
+			<ContentPicker
+				// A theme detail page is always a content page, so the type dropdown would only ever
+				// hold one option. The target switch is equally moot: the link is internal and opens
+				// in the same tab.
+				allowedTypes={[AvoCoreContentPickerType.CONTENT_PAGE]}
+				hideTypeDropdown
+				hideTargetSwitch
+				value={asPickerItem(formValues[key])}
+				// ContentPicker takes no id or aria-label and reuses its placeholder as the select's
+				// accessible name, so this doubles as both. The NL and EN placeholders differ on
+				// purpose: two comboboxes sharing one name is ambiguous for screen readers.
+				placeholder={placeholder}
+				// Only the path is stored; clearing the picker empties the field
+				onChange={(item) => updateValue(key, item?.value ?? '')}
 			/>
 		</FormControl>
 	);
@@ -509,13 +544,19 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 								'descriptionEn',
 								tText('modules/admin/views/themes/themes-edit-page___en-beschrijving')
 							)}
-							{renderTextField(
+							{renderContentPagePathField(
 								'contentPagePathNl',
-								tText('modules/admin/views/themes/themes-edit-page___url-themadetailpagina-nl')
+								tText('modules/admin/views/themes/themes-edit-page___url-themadetailpagina-nl'),
+								tText(
+									'modules/admin/views/themes/themes-edit-page___selecteer-een-nl-content-pagina'
+								)
 							)}
-							{renderTextField(
+							{renderContentPagePathField(
 								'contentPagePathEn',
-								tText('modules/admin/views/themes/themes-edit-page___url-themadetailpagina-en')
+								tText('modules/admin/views/themes/themes-edit-page___url-themadetailpagina-en'),
+								tText(
+									'modules/admin/views/themes/themes-edit-page___selecteer-een-en-content-pagina'
+								)
 							)}
 						</Box>
 
