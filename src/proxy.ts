@@ -19,7 +19,7 @@ export async function proxy(request: NextRequest) {
 					headers[key] = value;
 				}
 			});
-			console.log('request headers: ', headers);
+			// console.log('request headers: ', headers);
 		}
 
 		// https://meemoo.atlassian.net/browse/ARC-3185

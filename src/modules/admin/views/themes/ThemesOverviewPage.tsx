@@ -31,7 +31,7 @@ export const ThemesOverviewPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) =>
 	const router = useRouter();
 
 	const [filters, setFilters] = useQueryParams(ADMIN_THEMES_QUERY_PARAM_CONFIG);
-	const [search, setSearch] = useState<string>('');
+	const [search, setSearch] = useState<string>(filters[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || '');
 	const [themeToDelete, setThemeToDelete] = useState<Theme | null>(null);
 
 	const {

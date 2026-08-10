@@ -53,9 +53,12 @@
     "cross-env": "7.0.3",
     "date-fns": "4.1.0",
     "dotenv-cli": "7.4.2",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "typescript": "4.5.2",
     "npx": "^10.2.2",
     "uuid": "^10.0.0"
+  },
+  "allowScripts": {
+    "fsevents@2.3.2": true
   }
 }

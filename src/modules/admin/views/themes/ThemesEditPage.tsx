@@ -25,6 +25,7 @@ import { getDefaultPaginationBarProps } from '@shared/components/PaginationBar/P
 import PermissionsCheck from '@shared/components/PermissionsCheck/PermissionsCheck';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { sortingIcons } from '@shared/components/Table';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { goBrowserBackWithFallback } from '@shared/helpers/go-browser-back-with-fallback';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -42,6 +43,7 @@ import {
 import { toastService } from '@shared/services/toast-service';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { AvoCoreContentPickerType } from '@viaa/avo2-types';
+import { kebabCase } from 'es-toolkit/compat';
 import { useRouter } from 'next/router';
 import React, { type FC, useEffect, useRef, useState } from 'react';
 
@@ -101,7 +103,6 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 
 	const [ieObjectsPage, setIeObjectsPage] = useState<number>(1);
 	const [identifiersInput, setIdentifiersInput] = useState<string>('');
-	const [addResults, setAddResults] = useState<AddIeObjectsResultItem[]>([]);
 	const [ieObjectToRemove, setIeObjectToRemove] = useState<ThemeIeObject | null>(null);
 
 	// There is no GET /themes/:id; this endpoint returns the theme plus a page of its objects
@@ -149,7 +150,21 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 		key: K,
 		value: ThemeFormValues[K]
 	): void => {
-		setFormValues((previous) => ({ ...previous, [key]: value }));
+		let slug = '';
+
+		if (formValues.slug) {
+			slug = formValues.slug;
+		} else if (key === 'nameNl' && value) {
+			slug = kebabCase(value as string);
+		} else if (formValues?.nameNl) {
+			slug = kebabCase(formValues.nameNl);
+		}
+
+		setFormValues((previous) => ({
+			...previous,
+			slug,
+			[key]: value,
+		}));
 		setFormErrors((previous) => ({ ...previous, [key]: undefined }));
 	};
 
@@ -224,6 +239,28 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 		}
 	};
 
+	const getResultMessage = ({ schemaIdentifier, result }: AddIeObjectsResultItem) => {
+		const messages = {
+			[AddIeObjectResult.added]: tText('modules/admin/views/themes/themes-edit-page___toegevoegd', {
+				objectId: schemaIdentifier,
+			}),
+			[AddIeObjectResult.alreadyLinked]: tText(
+				'modules/admin/views/themes/themes-edit-page___was-al-gekoppeld',
+				{
+					objectId: schemaIdentifier,
+				}
+			),
+			[AddIeObjectResult.notFound]: tText(
+				'modules/admin/views/themes/themes-edit-page___niet-gevonden',
+				{
+					objectId: schemaIdentifier,
+				}
+			),
+		};
+
+		return <li key={`add-result--${schemaIdentifier}--${result}`}>{messages[result]}</li>;
+	};
+
 	const onAddIeObjects = async (): Promise<void> => {
 		const schemaIdentifiers = parseSchemaIdentifiers(identifiersInput);
 		if (!schemaIdentifiers.length) {
@@ -232,8 +269,22 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 
 		try {
 			const results = await ThemesService.addIeObjects(id as string, schemaIdentifiers);
-			setAddResults(results);
 			setIdentifiersInput('');
+
+			toastService.notify(
+				{
+					title: tHtml('modules/admin/views/themes/themes-edit-page___success'),
+					description: <ul>{results.map(getResultMessage)}</ul>,
+					maxLines: -1,
+					className: styles['p-admin-themes-edit__add-results'],
+				},
+				{
+					autoClose: false,
+					style: {
+						width: '65rem',
+					},
+				}
+			);
 			await refetchTheme();
 		} catch (err) {
 			console.error(err);
@@ -255,6 +306,12 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 		try {
 			await ThemesService.deleteIeObject(id as string, ieObjectToRemove.schemaIdentifier);
 			setIeObjectToRemove(null);
+			toastService.notify({
+				title: tHtml('modules/admin/views/themes/themes-edit-page___success'),
+				description: tHtml(
+					'modules/admin/views/themes/themes-edit-page___het-loskoppelen-van-het-object-is-geslaagd'
+				),
+			});
 			await refetchTheme();
 		} catch (err) {
 			console.error(err);
@@ -266,24 +323,6 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 				),
 			});
 		}
-	};
-
-	const renderAddResult = ({ schemaIdentifier, result }: AddIeObjectsResultItem) => {
-		const message = {
-			[AddIeObjectResult.added]: tText('modules/admin/views/themes/themes-edit-page___toegevoegd'),
-			[AddIeObjectResult.alreadyLinked]: tText(
-				'modules/admin/views/themes/themes-edit-page___was-al-gekoppeld'
-			),
-			[AddIeObjectResult.notFound]: tText(
-				'modules/admin/views/themes/themes-edit-page___niet-gevonden'
-			),
-		}[result];
-
-		return (
-			<li key={`add-result--${schemaIdentifier}--${result}`}>
-				<code>{schemaIdentifier}</code> — {message}
-			</li>
-		);
 	};
 
 	const renderTextField = (key: 'slug' | 'nameNl' | 'nameEn', label: string, suffix?: string) => (
@@ -386,12 +425,6 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 					</div>
 				</FormControl>
 
-				{!!addResults.length && (
-					<ul className={styles['p-admin-themes-edit__add-results']}>
-						{addResults.map(renderAddResult)}
-					</ul>
-				)}
-
 				<Table<ThemeIeObject>
 					className="u-mt-24"
 					options={{
@@ -401,6 +434,7 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 							pagination: { pageIndex: 0, pageSize: ThemeIeObjectsTablePageSize },
 						},
 					}}
+					sortingIcons={sortingIcons}
 					showTable={!!ieObjects.length}
 					pagination={(table) => (
 						<PaginationBar
@@ -488,19 +522,19 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 							<hr className={styles['p-admin-themes-edit__divider']} />
 
 							{renderTextField(
-								'slug',
-								tText('modules/admin/views/themes/themes-edit-page___slug'),
-								tText(
-									'modules/admin/views/themes/themes-edit-page___uniek-kleine-letters-koppeltekens-gebruikt-in-urls'
-								)
-							)}
-							{renderTextField(
 								'nameNl',
 								tText('modules/admin/views/themes/themes-edit-page___nl-benaming')
 							)}
 							{renderTextField(
 								'nameEn',
 								tText('modules/admin/views/themes/themes-edit-page___en-benaming')
+							)}
+							{renderTextField(
+								'slug',
+								tText('modules/admin/views/themes/themes-edit-page___slug'),
+								tText(
+									'modules/admin/views/themes/themes-edit-page___uniek-kleine-letters-koppeltekens-gebruikt-in-urls'
+								)
 							)}
 							{renderDescriptionField(
 								'descriptionNl',
