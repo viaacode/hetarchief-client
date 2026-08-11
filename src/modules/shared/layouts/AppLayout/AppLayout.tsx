@@ -104,7 +104,10 @@ const AppLayout: FC<any> = ({ children }) => {
 	});
 	const { data: materialRequests } = useGetPendingMaterialRequests(
 		{},
-		{ enabled: shouldFetchMaterialRequests }
+		{
+			// only fetch material requests, when user is logged in
+			enabled: shouldFetchMaterialRequests && !!user,
+		}
 	);
 	const { data: navigationItems } = useGetNavigationItems(locale);
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
