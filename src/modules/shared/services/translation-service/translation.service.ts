@@ -1,5 +1,4 @@
 import getConfig from '@shared/config/public-runtime-config';
-import { ApiService } from '@shared/services/api-service';
 import type { LanguageInfo } from '@shared/services/translation-service/translation.types';
 import { Locale } from '@shared/utils/i18n';
 import { isServerSideRendering } from '@shared/utils/is-browser';
@@ -8,14 +7,21 @@ import { parseUrl } from 'query-string';
 const { publicRuntimeConfig } = getConfig();
 
 export class TranslationService {
-	private static baseUrl = 'admin/translations/languages';
-
+	/**
+	 * Gets all languages
+	 * This endpoint returns a hardcoded list, since this almost never changes and getting it from the db is expensive
+	 */
 	public static async getAll(): Promise<LanguageInfo[]> {
-		const response: LanguageInfo[] = await ApiService.getApi()
-			.get(TranslationService.baseUrl)
-			.json();
-
-		return response ?? {};
+		return [
+			{
+				languageCode: Locale.nl,
+				languageLabel: 'Nederlands',
+			},
+			{
+				languageCode: Locale.en,
+				languageLabel: 'English',
+			},
+		];
 	}
 
 	/**
