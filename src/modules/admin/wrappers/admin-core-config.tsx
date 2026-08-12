@@ -134,6 +134,7 @@ export function getAdminCoreConfig(
 				noAudio: { name: IconNamesLight.NoAudio },
 				noVideo: { name: IconNamesLight.NoVideo },
 				newspaper: { name: IconNamesLight.Newspaper },
+				arrowDownRight: { name: IconNamesLight.ArrowDownRight },
 			},
 			list: GET_ICON_LIST_CONFIG,
 			alerts: GET_ALERT_ICON_LIST_CONFIG,
