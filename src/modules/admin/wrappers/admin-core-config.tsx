@@ -90,6 +90,7 @@ export function getAdminCoreConfig(
 				ContentBlockType.HomepageBanner,
 				ContentBlockType.HighlightText,
 				ContentBlockType.ThemeReels,
+				ContentBlockType.DoubleBanner,
 			],
 			defaultPageWidth: ContentPageWidth.LARGE,
 			onSaveContentPage,
