@@ -65,10 +65,16 @@ export const AccountMyMaterialRequestsList: FC<DefaultSeoInfo> = ({ url, canonic
 		data: materialRequestsResponse,
 		isFetching,
 		refetch: refetchMaterialRequests,
-	} = useGetPendingMaterialRequests({
-		orderProp: MaterialRequestKeys.createdAt,
-		orderDirection: AvoSearchOrderDirection.DESC,
-	});
+	} = useGetPendingMaterialRequests(
+		{
+			orderProp: MaterialRequestKeys.createdAt,
+			orderDirection: AvoSearchOrderDirection.DESC,
+		},
+		{
+			// only fetch material requests, when user is logged in
+			enabled: !!user,
+		}
+	);
 
 	const noData = useMemo(
 		(): boolean => isEmpty(materialRequestsResponse?.items),

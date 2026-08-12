@@ -35,25 +35,27 @@ export abstract class MaterialRequestsService {
 		orderDirection,
 		isPersonal = false,
 	}: GetMaterialRequestsProps): Promise<IPagination<MaterialRequest>> {
+		const url = isPersonal
+			? `${MATERIAL_REQUESTS_SERVICE_BASE_URL}/personal`
+			: MATERIAL_REQUESTS_SERVICE_BASE_URL;
+		const query = {
+			...(search?.trim() ? { query: `%${search}%` } : {}),
+			...(type && { type }),
+			...(status && { status }),
+			...(hasDownloadUrl && isArchived !== true && { hasDownloadUrl }),
+			...(maintainerIds && { maintainerIds }),
+			...(!isNil(isPending) && { isPending }),
+			...(!isNil(isArchived) && { isArchived }),
+			...(page && { page }),
+			...(size && { size }),
+			...(orderProp && { orderProp }),
+			...(orderDirection && { orderDirection }),
+		};
 		const result = await ApiService.getApi()
 			.get(
 				stringifyUrl({
-					url: isPersonal
-						? `${MATERIAL_REQUESTS_SERVICE_BASE_URL}/personal`
-						: MATERIAL_REQUESTS_SERVICE_BASE_URL,
-					query: {
-						...(search?.trim() ? { query: `%${search}%` } : {}),
-						...(type && { type }),
-						...(status && { status }),
-						...(hasDownloadUrl && isArchived !== true && { hasDownloadUrl }),
-						...(maintainerIds && { maintainerIds }),
-						...(!isNil(isPending) && { isPending }),
-						...(!isNil(isArchived) && { isArchived }),
-						...(page && { page }),
-						...(size && { size }),
-						...(orderProp && { orderProp }),
-						...(orderDirection && { orderDirection }),
-					},
+					url,
+					query,
 				})
 			)
 			.json();
