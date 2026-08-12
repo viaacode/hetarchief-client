@@ -103,8 +103,8 @@ const MaterialRequestCenterBlade: FC<MaterialRequestCenterBladeProps> = ({ isOpe
 			orderDirection: AvoSearchOrderDirection.DESC,
 		},
 		{
-			// only fetch material requests, when user is logged in
-			enabled: shouldFetchMaterialRequests && !!user,
+			// only fetch material requests when user is logged in
+			enabled: shouldFetchMaterialRequests,
 		}
 	);
 	const materialRequests = materialRequestsResponse?.items as MaterialRequest[];

@@ -89,7 +89,7 @@ const AppLayout: FC<any> = ({ children }) => {
 	const isLoggedIn = useSelector(selectIsLoggedIn);
 	const user = useSelector(selectUser);
 	const commonUser = useSelector(selectCommonUser);
-	const shouldFetchMaterialRequests = user?.groupName !== GroupName.KIOSK_VISITOR;
+	const shouldFetchMaterialRequests = !!user && user?.groupName !== GroupName.KIOSK_VISITOR;
 	const sticky = useSelector(selectIsStickyLayout);
 	const showNavigationHeaderRight = useSelector(selectShowNavigationHeaderRight);
 	const showFooter = useSelector(selectShowFooter);
@@ -105,8 +105,7 @@ const AppLayout: FC<any> = ({ children }) => {
 	const { data: materialRequests } = useGetPendingMaterialRequests(
 		{},
 		{
-			// only fetch material requests, when user is logged in
-			enabled: shouldFetchMaterialRequests && !!user,
+			enabled: shouldFetchMaterialRequests,
 		}
 	);
 	const { data: navigationItems } = useGetNavigationItems(locale);
