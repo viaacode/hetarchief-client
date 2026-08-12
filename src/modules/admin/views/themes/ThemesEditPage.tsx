@@ -279,7 +279,6 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 					className: styles['p-admin-themes-edit__add-results'],
 				},
 				{
-					autoClose: false,
 					style: {
 						width: '65rem',
 					},
