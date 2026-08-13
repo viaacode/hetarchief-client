@@ -8,6 +8,7 @@ import {
 	type ToastInfo,
 } from '@meemoo/admin-core-ui/client';
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
+import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import {
 	GET_ALERT_ICON_LIST_CONFIG,
 	GET_ICON_LIST_CONFIG,
@@ -180,6 +181,7 @@ export function getAdminCoreConfig(
 					value: 'content-page-button--link',
 				},
 			],
+			audioOrVideoPlayer: AudioOrVideoPlayer,
 		},
 		content_blocks: {
 			CONTENT_ENCLOSE_GRID: BlockContentEnclose,
