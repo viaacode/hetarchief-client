@@ -150,19 +150,12 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 		key: K,
 		value: ThemeFormValues[K]
 	): void => {
-		let slug = '';
-
-		if (formValues.slug) {
-			slug = formValues.slug;
-		} else if (key === 'nameNl' && value) {
-			slug = kebabCase(value as string);
-		} else if (formValues?.nameNl) {
-			slug = kebabCase(formValues.nameNl);
-		}
-
 		setFormValues((previous) => ({
 			...previous,
-			slug,
+			slug:
+				key === 'nameNl' && (!previous.slug || previous.slug === kebabCase(previous.nameNl))
+					? kebabCase(value as string)
+					: previous.slug,
 			[key]: value,
 		}));
 		setFormErrors((previous) => ({ ...previous, [key]: undefined }));
