@@ -19,7 +19,7 @@ export const GET_PATH_FROM_NOTIFICATION_TYPE = (): Record<NotificationType, stri
 		[NotificationType.MAINTENANCE_ALERT]: null,
 
 		[NotificationType.NEW_VISIT_REQUEST]: `${ROUTES_BY_LOCALE[locale].cpAdminVisitRequests}?${VISIT_REQUEST_ID_QUERY_KEY}={visitRequestId}`,
-		[NotificationType.VISIT_REQUEST_APPROVED]: `/${ROUTES_BY_LOCALE[locale].visit}#aangevraagde-bezoeken`,
+		[NotificationType.VISIT_REQUEST_APPROVED]: `${ROUTES_BY_LOCALE[locale].visit}#aangevraagde-bezoeken`,
 		[NotificationType.VISIT_REQUEST_DENIED]: null,
 		[NotificationType.VISIT_REQUEST_CANCELLED]: null,
 
