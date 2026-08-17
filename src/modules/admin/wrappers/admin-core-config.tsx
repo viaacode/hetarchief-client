@@ -76,6 +76,8 @@ export function getAdminCoreConfig(
 				ContentBlockType.HetArchiefImageTextBackground,
 				ContentBlockType.Intro,
 				ContentBlockType.MaintainersGrid,
+				ContentBlockType.ObjectsGrid,
+				ContentBlockType.OverviewThemes,
 				ContentBlockType.PageOverview,
 				ContentBlockType.HetArchiefQuote,
 				ContentBlockType.RichText,
