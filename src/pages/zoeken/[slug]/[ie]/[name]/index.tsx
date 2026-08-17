@@ -71,9 +71,9 @@ export async function getServerSideProps(
 
 	return getDefaultStaticProps(context, context.resolvedUrl, {
 		queryClient: await prefetchDetailPageQueries(
-			newSchemaIdentifier,
-			ieObject?.maintainerId,
-			ieObject?.maintainerSlug
+			schemaIdentifier,
+			(context.query.slug as string) || null,
+			ieObject ?? null
 		),
 		schemaIdentifier: newSchemaIdentifier,
 		title: seoInfo?.name,

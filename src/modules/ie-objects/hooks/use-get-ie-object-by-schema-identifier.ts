@@ -60,7 +60,27 @@ export function makeServerSideRequestGetIeObjectInfo(
 				[schemaIdentifier],
 				resolveThumbnailUrl
 			);
+			if (!ieObjects[0]) {
+				// Returning undefined from a queryFn is an error in react-query v5,
+				// and would end up in the dehydrated state as a broken query
+				throw new Error(`404: IeObject not found: ${schemaIdentifier}`);
+			}
 			return ieObjects[0];
 		},
 	});
+}
+
+/**
+ * Store an ieObject that was already fetched during server side rendering in the query cache,
+ * so the client can render it immediately instead of waiting for the request to resolve in the browser.
+ * @param queryClient the query client that will be dehydrated and sent to the browser
+ * @param schemaIdentifier the identifier as it appears in the url, since that is what the client keys its query on
+ * @param ieObject the already fetched ieObject
+ */
+export function setServerSideIeObjectInfo(
+	queryClient: QueryClient,
+	schemaIdentifier: string,
+	ieObject: IeObject
+): void {
+	queryClient.setQueryData([QUERY_KEYS.getIeObjectsInfo, schemaIdentifier], ieObject);
 }
