@@ -28,6 +28,10 @@
 	.c-draggable-list .c-draggable-list__item__drag-handle {
 		padding: 1.8rem 1.8rem 1.2rem 1.2rem;
 	}
+
+	.c-content-block-form .o-form-group textarea.c-input {
+		height: auto;
+	}
 }
 
 // Hide export description field which is only used by AVO
