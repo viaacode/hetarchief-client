@@ -50,6 +50,7 @@ import { filterAltoBySearchTerms } from '@ie-objects/utils/filter-alto-by-search
 import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-terms-in-transcription';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
+import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
 import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination';
 import {
@@ -183,7 +184,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, []);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
-	const [similar, setSimilar] = useState<MediaObject[]>([]);
 	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
 	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
 	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
@@ -396,6 +396,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		mediaInfo?.schemaIdentifier,
 		isKiosk || userHasAccessToMaintainer ? (mediaInfo?.maintainerId ?? '') : '',
 		!!mediaInfo
+	);
+	// Derived instead of stored in state, so the cards also render during server side rendering
+	const similar: MediaObject[] = useMemo(
+		() => mapSimilarData(similarData?.items || []),
+		[similarData?.items]
 	);
 
 	// related
@@ -1013,32 +1018,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 	}, [mediaInfo]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: Set the similar ie objects mapped data when the similar items change from the api request
-	useEffect(() => {
-		similarData && setSimilar(mapSimilarData(similarData?.items));
-	}, [similarData]);
-
 	/**
 	 * Mapping
 	 */
-	const mapSimilarData = (data: Partial<IeObject>[]): MediaObject[] => {
-		return data.map((ieObject) => {
-			const date = ieObject.datePublished ?? ieObject.dateCreated ?? null;
-
-			return {
-				type: ieObject?.dctermsFormat || null,
-				title: ieObject?.name || '',
-				subtitle: isNil(date)
-					? `${ieObject?.maintainerName ?? ''}`
-					: `${ieObject?.maintainerName ?? ''} (${date})`,
-				description: ieObject?.description || '',
-				thumbnail: ieObject?.thumbnailUrl,
-				id: ieObject?.schemaIdentifier || '',
-				maintainer_id: ieObject?.maintainerId || '',
-			};
-		});
-	};
-
 	const mapRelatedIeObject = (
 		ieObject: Partial<RelatedIeObject> | undefined | null
 	): MediaObject | null => {
