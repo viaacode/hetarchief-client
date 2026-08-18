@@ -35,6 +35,8 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	locationId,
 	cuePoints,
 	poster,
+	startTime,
+	endTime,
 }) => {
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
 
@@ -56,7 +58,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		isLoading: isLoadingPlayableUrl,
 		isFetching: isFetchingPlayableUrl,
 		isError: isErrorPlayableUrl,
-	} = useGetIeObjectsTicketUrl(fileId, schemaIdentifier);
+	} = useGetIeObjectsTicketUrl(fileId, schemaIdentifier, true, startTime, endTime);
 
 	const {
 		data: mediaDuration,
