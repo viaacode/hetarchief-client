@@ -190,7 +190,8 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	const isNextDataReq = context.req.headers['x-nextjs-data'] === '1';
 	const isNextInternalPath =
-		typeof context.req.url === 'string' && context.req.url.startsWith('/_next/');
+		typeof context.req.url === 'string' &&
+		(context.req.url.startsWith('/_next/') || context.req.url.startsWith('.well-known/'));
 
 	const queryClient = new QueryClient();
 
@@ -222,8 +223,11 @@ export async function getServerSideProps(
 			title = contentPage?.title || null;
 			description = contentPage?.seoDescription || contentPage?.description || null;
 			image = contentPage?.thumbnailPath || null;
-		} catch (err) {
-			console.error(`Failed to fetch content page seo info by slug: ${path}`, err);
+			// biome-ignore lint/suspicious/noExplicitAny: errors can be any type
+		} catch (err: any) {
+			if (err?.additionalInfo?.statusCode !== 404) {
+				console.error(`Failed to fetch content page seo info by slug: ${path}`, err);
+			}
 		}
 
 		await Promise.all([

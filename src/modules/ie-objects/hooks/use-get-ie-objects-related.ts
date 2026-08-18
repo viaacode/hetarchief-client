@@ -37,12 +37,13 @@ export const useGetIeObjectsRelated = (
 
 export async function makeServerSideRequestGetIeObjectsRelated(
 	queryClient: QueryClient,
-	id: string,
-	maintainerId?: string,
-	meemooId?: string
+	ieObjectIri: string | undefined,
+	parentIeObjectIri: string | null
 ): Promise<void> {
+	// The query key has to match the one in useGetIeObjectsRelated exactly,
+	// otherwise the prefetched data is never picked up during hydration
 	await queryClient.prefetchQuery({
-		queryKey: [QUERY_KEYS.getIeObjectsRelated, id, maintainerId, meemooId],
-		queryFn: () => getIeObjectsRelated('', null),
+		queryKey: [QUERY_KEYS.getIeObjectsRelated, ieObjectIri, parentIeObjectIri],
+		queryFn: () => getIeObjectsRelated(ieObjectIri, parentIeObjectIri),
 	});
 }

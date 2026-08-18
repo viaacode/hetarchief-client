@@ -128,11 +128,18 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 	 */
 	const hydratedThemeIdRef = useRef<string | null>(null);
 
+	/**
+	 * A slug that is already stored, or that the admin typed in themselves, is never overwritten by
+	 * the name. Emptying the slug field hands control back to the name.
+	 */
+	const hasOwnSlugRef = useRef<boolean>(false);
+
 	useEffect(() => {
 		if (!theme || hydratedThemeIdRef.current === theme.id) {
 			return;
 		}
 		hydratedThemeIdRef.current = theme.id;
+		hasOwnSlugRef.current = Boolean(theme.slug);
 		setFormValues((previous) => ({
 			...previous,
 			slug: theme.slug ?? '',
@@ -150,19 +157,12 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 		key: K,
 		value: ThemeFormValues[K]
 	): void => {
-		let slug = '';
-
-		if (formValues.slug) {
-			slug = formValues.slug;
-		} else if (key === 'nameNl' && value) {
-			slug = kebabCase(value as string);
-		} else if (formValues?.nameNl) {
-			slug = kebabCase(formValues.nameNl);
+		if (key === 'slug') {
+			hasOwnSlugRef.current = Boolean(value);
 		}
-
 		setFormValues((previous) => ({
 			...previous,
-			slug,
+			slug: key === 'nameNl' && !hasOwnSlugRef.current ? kebabCase(value as string) : previous.slug,
 			[key]: value,
 		}));
 		setFormErrors((previous) => ({ ...previous, [key]: undefined }));
@@ -279,7 +279,6 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 					className: styles['p-admin-themes-edit__add-results'],
 				},
 				{
-					autoClose: false,
 					style: {
 						width: '65rem',
 					},
