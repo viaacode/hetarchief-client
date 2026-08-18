@@ -107,7 +107,7 @@ export const AccountMyMaterialRequestsList: FC<DefaultSeoInfo> = ({ url, canonic
 
 	const onSuccessRequest = () => {
 		void refetchMaterialRequests();
-		router.push(`/${ROUTES_BY_LOCALE[locale].accountMyApplicationListSent}`);
+		router.push(ROUTES_BY_LOCALE[locale].accountMyApplicationListSent);
 		dispatch(setShowFooter(true));
 	};
 

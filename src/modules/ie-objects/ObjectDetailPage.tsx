@@ -1702,7 +1702,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		return (
 			<Link
 				className={styles['p-object-detail__back']}
-				href={`/${ROUTES_BY_LOCALE[locale].search}?${lastSearchParams}`}
+				href={`${ROUTES_BY_LOCALE[locale].search}${lastSearchParams ? `?${lastSearchParams}` : ''}`}
 				aria-label={tText(
 					'modules/ie-objects/object-detail-page___ga-terug-naar-de-zoekresultaten-button-aria-label'
 				)}

@@ -34,7 +34,7 @@ export const NewsletterConfirmation: FC<DefaultSeoInfo> = ({ url, canonicalUrl }
 			return;
 		}
 
-		router.replace(`/${ROUTES_BY_LOCALE[locale].home}`);
+		router.replace(ROUTES_BY_LOCALE[locale].home);
 	}, [locale, router, triggerRedirect]);
 
 	return (

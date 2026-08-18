@@ -90,7 +90,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 		}
 		if (isAnonymous) {
 			const redirectAfterLoginUrl = stringifyUrl({
-				url: `/${ROUTES_BY_LOCALE[locale].visit}`,
+				url: ROUTES_BY_LOCALE[locale].visit,
 				query: { [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug.toLowerCase() },
 			});
 			return stringifyUrl({
@@ -102,7 +102,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 			});
 		}
 		return stringifyUrl({
-			url: `/${ROUTES_BY_LOCALE[locale].visit}`,
+			url: ROUTES_BY_LOCALE[locale].visit,
 			query: {
 				[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug.toLowerCase(),
 			},
