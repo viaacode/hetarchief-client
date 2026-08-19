@@ -8,6 +8,7 @@ import {
 	type ToastInfo,
 } from '@meemoo/admin-core-ui/client';
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
+import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import {
 	GET_ALERT_ICON_LIST_CONFIG,
 	GET_ICON_LIST_CONFIG,
@@ -94,6 +95,7 @@ export function getAdminCoreConfig(
 				ContentBlockType.HighlightText,
 				ContentBlockType.ThemeReels,
 				ContentBlockType.HeroCarousel,
+				ContentBlockType.Timeline,
 			],
 			defaultPageWidth: ContentPageWidth.LARGE,
 			onSaveContentPage,

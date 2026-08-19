@@ -127,4 +127,18 @@
 			}
 		}
 	}
+
+	// Place datepicker icon inside the date picker input field
+	.avo__c-datepicker {
+		.c-input-with-icon-right {
+			position: relative;
+		}
+
+		.o-svg-icon {
+			position: absolute;
+			right: 1rem;
+			top: 0.9rem;
+			z-index: 2;
+		}
+	}
 }
