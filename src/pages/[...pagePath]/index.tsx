@@ -191,7 +191,7 @@ export async function getServerSideProps(
 	const isNextDataReq = context.req.headers['x-nextjs-data'] === '1';
 	const isNextInternalPath =
 		typeof context.req.url === 'string' &&
-		(context.req.url.startsWith('/_next/') || context.req.url.startsWith('.well-known/'));
+		(context.req.url.startsWith('/_next/') || context.req.url.includes('.well-known/'));
 
 	const queryClient = new QueryClient();
 
