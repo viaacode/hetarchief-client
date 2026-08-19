@@ -2,6 +2,7 @@ import { Permission } from '@account/const';
 import ThemeThumbnailInput from '@admin/components/ThemeThumbnailInput/ThemeThumbnailInput';
 import {
 	parseSchemaIdentifiers,
+	THEME_DESCRIPTION_MAX_LENGTH,
 	THEME_VALIDATION_SCHEMA,
 	ThemeIeObjectsTableColumns,
 	ThemeIeObjectsTablePageSize,
@@ -346,12 +347,13 @@ export const ThemesEditPage: FC<DefaultSeoInfo & ThemesEditPageProps> = ({
 			className={styles['p-admin-themes-edit__form-control']}
 			errors={[<RedFormWarning error={formErrors[key]} key={`form-error--${key}`} />]}
 			id={labelKeys[key]}
-			label={label}
+			label={`${label} (${(formValues[key] ?? '').length} / ${THEME_DESCRIPTION_MAX_LENGTH})`}
 		>
 			<TextArea
 				id={labelKeys[key]}
 				ariaLabel={label}
 				value={formValues[key] ?? ''}
+				maxLength={THEME_DESCRIPTION_MAX_LENGTH}
 				onChange={(event) => updateValue(key, event.currentTarget.value)}
 			/>
 		</FormControl>
