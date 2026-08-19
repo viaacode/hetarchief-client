@@ -32,7 +32,9 @@ export const ContentPageAudioOrVideoPlayer: FC<AudioOrVideoPlayerWrapperProps> =
 		data: ieObject,
 		isLoading,
 		isError,
-	} = useGetIeObjectBySchemaIdentifier(schemaIdentifier, true, { enabled: !!schemaIdentifier });
+	} = useGetIeObjectBySchemaIdentifier(schemaIdentifier as string, true, {
+		enabled: !!schemaIdentifier,
+	});
 
 	if (isLoading) {
 		return <Loading locationId="content-page-video-block" mode="light" />;
