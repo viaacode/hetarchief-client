@@ -148,6 +148,7 @@
     "postcss-flexbugs-fixes": "5.0.2",
     "postcss-preset-env": "7.0.1",
     "sass": "1.93.3",
+    "source-map-loader": "5.0.0",
     "storybook": "10.4.6",
     "stylelint": "16.14.1",
     "stylelint-config-standard-scss": "14.0.0",

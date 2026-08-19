@@ -71,6 +71,17 @@ module.exports = {
 		// https://stackoverflow.com/a/68098547/373207
 		config.resolve.fallback = { fs: false, path: false };
 
+		// @meemoo/admin-core-ui ships a single pre-bundled file with its own source map.
+		// Webpack treats node_modules as opaque by default, so it maps stack frames back to
+		// that one bundled file and stops there. source-map-loader reads and chains the
+		// package's own map so DevTools can resolve all the way to the original source.
+		config.module.rules.push({
+			test: /\.js$/,
+			include: /node_modules[\\/]@meemoo[\\/]admin-core-ui/,
+			enforce: 'pre',
+			use: ['source-map-loader'],
+		});
+
 		// Ensure certain packages are always resolved to one version instead of other versions from admin-core or component libraries
 		config.resolve.alias = {
 			...config.resolve.alias,
