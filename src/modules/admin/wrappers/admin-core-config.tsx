@@ -1,4 +1,3 @@
-import { ContentPageAudioOrVideoPlayer } from '@admin/components/ContentPageAudioOrVideoPlayer';
 import { BlockContentEnclose } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose';
 import {
 	type AdminConfig,
@@ -154,10 +153,6 @@ export function getAdminCoreConfig(
 		},
 		components: {
 			defaultAudioStill: '/images/waveform.svg',
-			// Player for the "Videoblok" content block. The admin-core cannot resolve an ie-object to
-			// a playable file, so it renders whatever we register here.
-			// https://meemoo.atlassian.net/browse/ARC-3832
-			audioOrVideoPlayer: ContentPageAudioOrVideoPlayer,
 			loader: {
 				component: () => <Loading fullscreen locationId="admin-core-loader" />,
 			},
