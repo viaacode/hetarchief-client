@@ -94,6 +94,7 @@ export function getAdminCoreConfig(
 				ContentBlockType.ThemeReels,
 				ContentBlockType.HeroCarousel,
 				ContentBlockType.ImageCarousel,
+				ContentBlockType.TitleWithParallax,
 			],
 			defaultPageWidth: ContentPageWidth.LARGE,
 			onSaveContentPage,
