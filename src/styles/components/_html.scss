@@ -1,3 +1,29 @@
+@use "src/styles/abstracts" as abstracts;
+
 .c-html-wrapper {
 	overflow-wrap: break-word;
+
+	// Tables come from the rich text editor without any class, so they are styled by tag.
+	table {
+		display: block;
+		width: fit-content;
+		max-width: 100%;
+
+		// A table wider than the text column scrolls on its own instead of widening the page
+		overflow-x: auto;
+		border-collapse: collapse;
+		margin-bottom: abstracts.$spacer-sm;
+	}
+
+	th,
+	td {
+		padding: abstracts.$spacer-xs abstracts.$spacer-sm;
+		border: abstracts.$divider-grey;
+		text-align: left;
+		vertical-align: top;
+	}
+
+	th {
+		font-weight: abstracts.$font-weight-bold;
+	}
 }
