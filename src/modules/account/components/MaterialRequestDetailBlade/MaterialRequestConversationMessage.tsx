@@ -13,6 +13,7 @@ import { Button } from '@meemoo/react-components';
 import Html from '@shared/components/Html/Html';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { USER_CONTENT_SANITIZATION } from '@shared/const';
 import { getFileNameIcon } from '@shared/helpers/get-file-name-icon';
 import { tHtml, tText } from '@shared/helpers/translate';
 import {
@@ -97,6 +98,7 @@ export const MaterialRequestConversationMessage: FC<MaterialRequestConversationM
 				type={'div'}
 				className={clsx(styles['p-conversation-messages__message__body'])}
 				content={(message.body as MaterialRequestMessageBodyMessage).message}
+				sanitizePreset={USER_CONTENT_SANITIZATION}
 			/>
 		);
 	};

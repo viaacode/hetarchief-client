@@ -1,4 +1,4 @@
-import { RICH_TEXT_SANITIZATION } from '@shared/const';
+import { ADMIN_CONTENT_SANITIZATION } from '@shared/const';
 import clsx from 'clsx';
 import DOMPurify from 'isomorphic-dompurify';
 import React, { type FunctionComponent, type ReactNode } from 'react';
@@ -13,7 +13,7 @@ interface HtmlProps {
 
 const Html: FunctionComponent<HtmlProps> = ({
 	content,
-	sanitizePreset = RICH_TEXT_SANITIZATION,
+	sanitizePreset = ADMIN_CONTENT_SANITIZATION,
 	type = 'div',
 	className,
 }): ReactNode => {
