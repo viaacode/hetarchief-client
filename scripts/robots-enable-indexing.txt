@@ -1,4 +1,20 @@
+User-agent: Googlebot
+Crawl-delay: 1
+# Paths
+Disallow: /admin/
+Disallow: /beheer/
+Disallow: /account/
+Disallow: /kranten-op-hetarchief-be
+Disallow: /communiceren-over-je-kranten-op-hetarchief-be
+Disallow: /communiceren-over-ter-plaatse-raadplegen
+# Files
+Disallow: /images/
+
+User-agent: Yandex
+Disallow: /
+
 User-agent: *
+Crawl-delay: 10
 # Paths
 Disallow: /admin/
 Disallow: /beheer/
