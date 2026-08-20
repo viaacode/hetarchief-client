@@ -1,3 +1,4 @@
+@use "src/styles/abstracts" as *;
 @import "react-toastify/dist/ReactToastify.css";
 
 // Resets
@@ -9,9 +10,12 @@
 	padding: 0;
 
 	// react-toastify v11 forces every toast to a fixed 320px via --toastify-toast-width.
-	// Let the toast size to its content instead (the inner .c-toast keeps its own max-width).
+	// Let the toast size to its content instead, but never wider than the toast max-width,
+	// so a message with a long payload appended can not stretch across the screen.
 	// The mobile media query redefines this variable on .Toastify__toast, so full-width on mobile still wins.
 	--toastify-toast-width: fit-content;
+
+	max-width: min(#{$toast-max-width}, 100%);
 }
 
 .c-toast-container__toast {
