@@ -97,6 +97,7 @@ export function getAdminCoreConfig(
 				ContentBlockType.ImageCarousel,
 				ContentBlockType.TitleWithParallax,
 				ContentBlockType.Timeline,
+				ContentBlockType.DoubleBanner,
 			],
 			defaultPageWidth: ContentPageWidth.LARGE,
 			onSaveContentPage,
