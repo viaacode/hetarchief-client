@@ -23,6 +23,7 @@ import { ApiService } from '@shared/services/api-service';
 import { toastService } from '@shared/services/toast-service';
 import type { Locale } from '@shared/utils/i18n';
 import { AvoCoreDatabaseType, type AvoUserCommonUser } from '@viaa/avo2-types';
+import { clientSearchUrlToApiSearchUrl } from '@visitor-space/utils/search-url-to-api-url/client-search-url-to-api-search-url';
 import Link from 'next/link';
 import type { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
@@ -233,11 +234,9 @@ export function getAdminCoreConfig(
 				clear: async (_key: string) => Promise.resolve(),
 			},
 			getContentPageByLanguageAndPathEndpoint: null,
-			/*
 			search: {
 				clientSearchUrlToApiSearchUrl,
 			},
-			 */
 		},
 		database: {
 			proxyUrl: publicRuntimeConfig.PROXY_URL,
