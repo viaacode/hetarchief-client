@@ -3,6 +3,7 @@ import {
 	IeObjectAccessThrough,
 	type IeObjectRightsInfo,
 } from '@ie-objects/ie-objects.types';
+import { isAvIeObjectType } from '@ie-objects/utils/is-av-ie-object-type';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatDateTime } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
@@ -18,13 +19,6 @@ const ESSENCE_ACCESS_ROUTES = [
 	IeObjectAccessThrough.SECTOR,
 	IeObjectAccessThrough.VISITOR_SPACE_FULL,
 	IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
-];
-const AV_OBJECT_TYPES = [
-	IeObjectType.AUDIO,
-	IeObjectType.AUDIO_FRAGMENT,
-	IeObjectType.FILM,
-	IeObjectType.VIDEO,
-	IeObjectType.VIDEO_FRAGMENT,
 ];
 
 function splitNameList(value: string): string[] {
@@ -153,7 +147,7 @@ export function getIeObjectSourceAttribution(
 		? formatDateTime(preferredDate, locale, 'international', false)
 		: null;
 
-	if (AV_OBJECT_TYPES.includes(ieObject.dctermsFormat) && hasAvEssence(ieObject)) {
+	if (isAvIeObjectType(ieObject.dctermsFormat) && hasAvEssence(ieObject)) {
 		return buildAttribution([
 			formatSourceAttributionNames(getCreatorNames(ieObject, locale)),
 			ieObject.name,
