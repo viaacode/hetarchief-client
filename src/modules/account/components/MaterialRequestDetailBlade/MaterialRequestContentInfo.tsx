@@ -345,7 +345,7 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 				}
 				maintainerLogo={currentMaterialRequestDetail.maintainerLogo ?? undefined}
 				poster={objectThumbnailUrl}
-				paused={isMediaPaused}
+				isPaused={isMediaPaused}
 				onPlay={() => setIsMediaPaused(false)}
 				onPause={() => setIsMediaPaused(true)}
 				onMediaReady={noop}

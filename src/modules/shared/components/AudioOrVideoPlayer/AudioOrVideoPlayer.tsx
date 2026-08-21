@@ -23,7 +23,8 @@ const { publicRuntimeConfig } = getConfig();
 export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	className,
 	allowFullScreen = true,
-	paused,
+	isPaused,
+	autoplay,
 	onPlay,
 	onPause,
 	onMediaReady,
@@ -35,6 +36,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	locationId,
 	cuePoints,
 	poster,
+	onTimeUpdate,
 }) => {
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
 
@@ -45,7 +47,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		(mimeTypes: string[]): IeObjectFile[] => {
 			return representation?.files?.filter((file) => mimeTypes.includes(file.mimeType)) || [];
 		},
-		[representation]
+		[representation?.files]
 	);
 
 	const currentPlayableFile: IeObjectFile | null = allFilesToInRepresentation?.[0] || null;
@@ -136,7 +138,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		className,
 		title: currentPlayableFile?.name,
 		logo: maintainerLogo ?? undefined,
-		pause: paused,
+		pause: isPaused,
 		onPlay,
 		onPause,
 		token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
@@ -149,6 +151,8 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		peakHeightFactor: 0.6,
 		start,
 		end,
+		onTimeUpdate,
+		autoplay: autoplay || false,
 	};
 
 	if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {

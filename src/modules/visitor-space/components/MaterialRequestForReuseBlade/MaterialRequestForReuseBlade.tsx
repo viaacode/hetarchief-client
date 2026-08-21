@@ -508,7 +508,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 						}}
 						poster={materialRequest?.reuseForm?.thumbnailUrl || materialRequest.objectThumbnailUrl}
 						allowFullScreen={false}
-						paused={isMediaPaused}
+						isPaused={isMediaPaused}
 						onPlay={() => setIsMediaPaused(false)}
 						onPause={() => setIsMediaPaused(true)}
 						onMediaReady={(_, file) => {
