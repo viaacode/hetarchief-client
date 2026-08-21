@@ -142,9 +142,22 @@ export class IeObjectsService {
 			.json();
 	}
 
+	/**
+	 * @param fileId id of the file to play
+	 * @param schemaIdentifier pid of the ie-object the file belongs to
+	 * @param startTime optional start of the snippet to play, in seconds
+	 * @param endTime optional end of the snippet to play, in seconds
+	 *
+	 * The times must be passed together or not at all: the media service only cuts the delivered
+	 * media when it is given an end time, so half a pair would silently return the whole file.
+	 * The proxy rejects a half pair with a 400.
+	 * https://meemoo.atlassian.net/browse/ARC-3832
+	 */
 	public static async getPlayableUrl(
 		fileId: string | null,
-		schemaIdentifier: string
+		schemaIdentifier: string,
+		startTime?: number,
+		endTime?: number
 	): Promise<string | null> {
 		if (!fileId) {
 			return null;
@@ -152,13 +165,18 @@ export class IeObjectsService {
 
 		return await ApiService.getApi()
 			.get(
-				stringifyUrl({
-					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_TICKET_URL}`,
-					query: {
-						schemaIdentifier,
-						fileId,
+				stringifyUrl(
+					{
+						url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_TICKET_URL}`,
+						query: {
+							schemaIdentifier,
+							fileId,
+							startTime,
+							endTime,
+						},
 					},
-				})
+					{ skipNull: true, skipEmptyString: true }
+				)
 			)
 			.text();
 	}

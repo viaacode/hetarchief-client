@@ -21,4 +21,14 @@ export type AudioOrVideoPlayerProps = {
 	cuePoints: CuePoints | undefined;
 	locationId: string;
 	poster: string | undefined;
+	/**
+	 * Start and end of the snippet to play, in seconds. When given, they are sent along to the
+	 * player-ticket endpoint so the media service delivers only that part, rather than relying on
+	 * flowplayer cuepoints, which merely highlights the seek bar.
+	 *
+	 * Pass both or neither: the media service only cuts when it has an end time.
+	 * https://meemoo.atlassian.net/browse/ARC-3832
+	 */
+	startTime?: number;
+	endTime?: number;
 };
