@@ -8,7 +8,6 @@ import {
 	type ToastInfo,
 } from '@meemoo/admin-core-ui/client';
 import { NAVIGATION_DROPDOWN } from '@navigation/components/Navigation/Navigation.types';
-import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import {
 	GET_ALERT_ICON_LIST_CONFIG,
 	GET_ICON_LIST_CONFIG,
@@ -95,6 +94,8 @@ export function getAdminCoreConfig(
 				ContentBlockType.HighlightText,
 				ContentBlockType.ThemeReels,
 				ContentBlockType.HeroCarousel,
+				ContentBlockType.ImageCarousel,
+				ContentBlockType.TitleWithParallax,
 				ContentBlockType.Timeline,
 			],
 			defaultPageWidth: ContentPageWidth.LARGE,
@@ -149,6 +150,7 @@ export function getAdminCoreConfig(
 				arrowDownRight: { name: IconNamesLight.ArrowDownRight },
 				play: { name: IconNamesLight.Play },
 				pause: { name: IconNamesLight.Pause },
+				collection: { name: IconNamesLight.Collection },
 			},
 			list: GET_ICON_LIST_CONFIG,
 			alerts: GET_ALERT_ICON_LIST_CONFIG,
