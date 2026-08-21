@@ -22,6 +22,9 @@ export const ThemeIeObjectsTablePageSize = 20;
  */
 const INTERNAL_PATH_REGEX = /^\/[^\s]*$/;
 
+/** Matches the SEO description limit used in @meemoo/admin-core-ui's content edit form */
+export const THEME_DESCRIPTION_MAX_LENGTH = 300;
+
 export const THEME_VALIDATION_SCHEMA = (): Schema<Partial<ThemeFormValues>> =>
 	object({
 		// A thumbnail is required: it is the fallback image wherever a theme is rendered, such as the
@@ -40,8 +43,18 @@ export const THEME_VALIDATION_SCHEMA = (): Schema<Partial<ThemeFormValues>> =>
 			.required(tText('modules/admin/const/themes___slug-is-verplicht')),
 		nameNl: string().required(tText('modules/admin/const/themes___nl-benaming-is-verplicht')),
 		nameEn: string().required(tText('modules/admin/const/themes___en-benaming-is-verplicht')),
-		descriptionNl: string().nullable(),
-		descriptionEn: string().nullable(),
+		descriptionNl: string()
+			.nullable()
+			.max(
+				THEME_DESCRIPTION_MAX_LENGTH,
+				tText('modules/admin/const/themes___de-beschrijving-mag-maximaal-300-tekens-bevatten')
+			),
+		descriptionEn: string()
+			.nullable()
+			.max(
+				THEME_DESCRIPTION_MAX_LENGTH,
+				tText('modules/admin/const/themes___de-beschrijving-mag-maximaal-300-tekens-bevatten')
+			),
 		contentPagePathNl: string()
 			.nullable()
 			.matches(INTERNAL_PATH_REGEX, {

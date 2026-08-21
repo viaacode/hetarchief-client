@@ -93,7 +93,11 @@ $l-container-padding-xs: 2rem;
 	}
 
 	.c-content-block-preview > .o-container {
-		padding: 0 $spacer-sm;
+		padding: 0 ($spacer-1xl + $spacer-xs);
+
+		@media (max-width: $breakpoint-md) {
+			padding: 0 $spacer-1xl;
+		}
 	}
 
 	.c-content-block__meemoo-custom-background {

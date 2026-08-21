@@ -26,6 +26,7 @@ import { type PageInfo, SeoTags } from '@shared/components/SeoTags/SeoTags';
 import getConfig from '@shared/config/public-runtime-config';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import { getPagePath } from '@shared/helpers/get-page-path';
+import { isNextJsInternalPath } from '@shared/helpers/is-nextjs-internal-path';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useTriggerEventOnPageLoad } from '@shared/hooks/use-trigger-event-on-page-load/use-trigger-event-on-page-load';
@@ -190,8 +191,8 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	const isNextDataReq = context.req.headers['x-nextjs-data'] === '1';
 	const isNextInternalPath =
-		typeof context.req.url === 'string' &&
-		(context.req.url.startsWith('/_next/') || context.req.url.startsWith('.well-known/'));
+		isNextJsInternalPath(context.req.url as string) ||
+		isNextJsInternalPath(context.query.pagePath as string);
 
 	const queryClient = new QueryClient();
 

@@ -1,6 +1,6 @@
 {
   "name": "hetarchief-client",
-  "version": "4.3.5",
+  "version": "4.3.11",
   "private": true,
   "contributors": [
     "Bert Verhelst <bert.verhelst@studiohyperdrive.be>",
@@ -42,7 +42,7 @@
     "@floating-ui/react": "0.27.18",
     "@flowplayer/player": "3.32.1",
     "@hookform/resolvers": "2.9.11",
-    "@meemoo/admin-core-ui": "6.0.14",
+    "@meemoo/admin-core-ui": "6.0.24",
     "@meemoo/react-components": "6.0.9",
     "@popperjs/core": "2.11.6",
     "@react-hook/resize-observer": "1.2.5",
@@ -148,6 +148,7 @@
     "postcss-flexbugs-fixes": "5.0.2",
     "postcss-preset-env": "7.0.1",
     "sass": "1.93.3",
+    "source-map-loader": "5.0.0",
     "storybook": "10.4.6",
     "stylelint": "16.14.1",
     "stylelint-config-standard-scss": "14.0.0",

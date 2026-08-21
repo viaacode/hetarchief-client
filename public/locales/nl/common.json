@@ -353,6 +353,7 @@
   "modules/admin/const/spaces___telefoonnummer": "telefoonnummer",
   "modules/admin/const/spaces___terug-naar-in-aanvraag": "Terug naar in aanvraag",
   "modules/admin/const/themes___aangepast-op": "Aangepast op",
+  "modules/admin/const/themes___de-beschrijving-mag-maximaal-300-tekens-bevatten": "De beschrijving mag maximaal 300 tekens bevatten",
   "modules/admin/const/themes___een-standaard-thumbnail-is-verplicht": "Een standaard thumbnail is verplicht",
   "modules/admin/const/themes___en-benaming": "En benaming",
   "modules/admin/const/themes___en-benaming-is-verplicht": "En benaming is verplicht",
