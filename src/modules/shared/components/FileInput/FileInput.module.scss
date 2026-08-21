@@ -7,6 +7,9 @@
 	}
 
 	input[type="file"] {
-		width: 0; // Only hide element visually to keep keyboard a11y
+		// Only hide the element visually to keep keyboard a11y.
+		// Safari still paints the native file button at zero width, so hide it with opacity too.
+		width: 0;
+		opacity: 0;
 	}
 }
