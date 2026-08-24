@@ -97,6 +97,7 @@ import {
 } from '@visitor-space/const';
 import { SEARCH_PAGE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
+import { useGetThemeFilterOptions } from '@visitor-space/hooks/use-get-theme-filter-options';
 import {
 	type AdvancedFilter,
 	FilterProperty,
@@ -138,6 +139,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const locale = useLocale();
 
 	const { data: folders } = useGetFolders();
+	// Theme slugs are what live in the url, the names shown in the pills come from this lookup
+	const { labelsBySlug: themeLabelsBySlug } = useGetThemeFilterOptions();
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
@@ -648,7 +651,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const isLoadedWithResults = !!searchResults && searchResults?.items?.length > 0;
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
 	const showVisitorSpacesDropdown = isUserWithAccount && accessibleVisitorSpaceRequests.length > 0;
-	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
+	const activeFilters = useMemo(
+		() => mapFiltersToTags(query, { themeLabelsBySlug }),
+		[query, themeLabelsBySlug]
+	);
 
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {
 		return (searchResults?.items || []).map((item): IdentifiableMediaCard => {
