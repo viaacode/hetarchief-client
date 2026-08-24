@@ -65,7 +65,7 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 			<div className={styles['c-block-enclosed-content__header']}>
 				<div>
 					<HeadingType className={`c-heading c-${HeadingType}`}>{title}</HeadingType>
-					{description && <p>{description}</p>}
+					{description && <p className="u-background-text-primary">{description}</p>}
 				</div>
 				{buttonAction && (
 					<SmartLink action={buttonAction}>
