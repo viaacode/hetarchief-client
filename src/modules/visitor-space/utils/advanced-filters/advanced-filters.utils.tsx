@@ -1,6 +1,7 @@
 import { tText } from '@shared/helpers/translate';
 import {
 	ADVANCED_FILTERS,
+	type AdvancedFilterVisibilityContext,
 	FILTERS_OPTIONS_CONFIG,
 	type FilterConfig,
 	REGULAR_FILTERS,
@@ -25,14 +26,23 @@ export const getRegularProperties = (): PropertyOptions => {
 		(option) => option.label
 	);
 };
-export const getAdvancedProperties = (): PropertyOptions => {
+/**
+ * The properties a visitor can pick in the advanced filter form.
+ *
+ * Pass the active tab and who is looking to leave out the properties that do not apply to them.
+ * Called without a context nothing is left out, which is what labelling an already applied filter
+ * needs: its property should keep its label even where it can no longer be picked.
+ */
+export const getAdvancedProperties = (
+	context?: AdvancedFilterVisibilityContext
+): PropertyOptions => {
 	return sortBy(
-		ADVANCED_FILTERS.map((key) => {
-			return {
-				label: getFilterLabel(key as FilterProperty),
-				value: key as FilterProperty,
-			};
-		}),
+		ADVANCED_FILTERS.filter(({ isVisible }) => !context || !isVisible || isVisible(context)).map(
+			({ type }) => ({
+				label: getFilterLabel(type),
+				value: type,
+			})
+		),
 		(option) => option.label
 	);
 };
@@ -122,6 +132,9 @@ export const getFilterLabel = (prop: FilterProperty): string => {
 			),
 			[FilterProperty.TEMPORAL_COVERAGE]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___tijdsperiode-van-de-inhoud'
+			),
+			[FilterProperty.THEME]: tText(
+				'modules/visitor-space/utils/advanced-filters/metadata___thema'
 			),
 			[FilterProperty.OBJECT_TYPE]: tText(
 				'modules/visitor-space/utils/advanced-filters/metadata___object-type'
