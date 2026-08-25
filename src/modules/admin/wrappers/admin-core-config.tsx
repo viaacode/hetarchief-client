@@ -80,6 +80,7 @@ export function getAdminCoreConfig(
 				ContentBlockType.ObjectsGrid,
 				ContentBlockType.OverviewThemes,
 				ContentBlockType.PageOverview,
+				ContentBlockType.Quote,
 				ContentBlockType.HetArchiefQuote,
 				ContentBlockType.HetArchiefVideo,
 				ContentBlockType.RichText,
