@@ -31,8 +31,11 @@
 
 	&__count {
 		display: inline-flex;
+		align-items: center;
 		gap: abstracts.$spacer-xxs;
 		height: 100%;
+		color: abstracts.$black;
+		text-decoration: none;
 
 		:first-child.c-object-detail-page-metadata-themes__count-icon {
 			font-size: abstracts.$font-size-lg;
@@ -41,7 +44,13 @@
 		@include abstracts.module-class-selector("Icon", "c-icon") {
 			font-size: abstracts.$font-size-1xl;
 			line-height: 1;
+			color: abstracts.$black;
 		}
+	}
+
+	&__count-number {
+		text-decoration: underline;
+		text-underline-offset: 0.2rem;
 	}
 
 	// Visible to screen readers only: spells out what the bare counter means
