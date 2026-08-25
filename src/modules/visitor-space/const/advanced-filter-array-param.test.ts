@@ -23,4 +23,24 @@ describe('AdvancedFilterArrayParam', () => {
 			}),
 		]);
 	});
+
+	it('should encode and decode theme filters using the theme slug', () => {
+		const encoded = AdvancedFilterArrayParam.encode([
+			{
+				prop: FilterProperty.THEME,
+				op: Operator.EQUALS,
+				val: 'education-learning',
+				renderKey: 'theme-filter',
+			},
+		]);
+
+		expect(encoded).toBe('theqeducation-learning');
+		expect(AdvancedFilterArrayParam.decode(encoded)).toEqual([
+			expect.objectContaining({
+				prop: FilterProperty.THEME,
+				op: Operator.EQUALS,
+				val: 'education-learning',
+			}),
+		]);
+	});
 });

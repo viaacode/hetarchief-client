@@ -90,7 +90,12 @@ import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { EventsService, LogEventType } from '@shared/services/events-service';
+import {
+	EventsService,
+	LogEventType,
+	mapPlayEventData,
+	PlayEventPageType,
+} from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectLastSearchParams, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import type { IeObjectsSearchTermObject } from '@shared/types/api';
@@ -1137,12 +1142,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				// Skip triggering event on server side rendering since window is not available
 				if (!oldHasMediaPlayed && !isServerSideRendering()) {
 					const path = window.location.href;
-					const eventData = mapIeObjectToEventData();
+					// A play from this page is never a content block snippet: the object detail page
+					// always offers the whole object.
+					const playEventData = mapPlayEventData({
+						dctermsFormat: mediaInfo?.dctermsFormat,
+						schemaIdentifier: mediaInfo?.schemaIdentifier,
+						maintainerId: mediaInfo?.maintainerId,
+						pageType: PlayEventPageType.OBJECT_DETAIL,
+						isBlockSnippet: false,
+					});
 
 					if (hasAccessToVisitorSpaceOfObject) {
-						EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_PLAY, path, eventData).then(noop);
+						EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_PLAY, path, playEventData).then(
+							noop
+						);
 					} else {
-						EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, eventData).then(noop);
+						EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, playEventData).then(noop);
 					}
 				}
 

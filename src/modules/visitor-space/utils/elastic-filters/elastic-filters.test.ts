@@ -33,6 +33,25 @@ describe('mapFiltersToElastic()', () => {
 		});
 	});
 
+	it('should map an advanced theme filter to a theme filter carrying the slug', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Advanced]: [
+				{
+					prop: FilterProperty.THEME,
+					op: Operator.EQUALS,
+					val: 'education-learning',
+					renderKey: 'theme-filter',
+				},
+			],
+		} as SearchPageQueryParams);
+
+		expect(filters.find(({ field }) => field === IeObjectsSearchFilterField.THEME)).toEqual({
+			field: IeObjectsSearchFilterField.THEME,
+			operator: IeObjectsSearchOperator.IS,
+			value: 'education-learning',
+		});
+	});
+
 	it('should map advanced rights labels to the proxy rights filter contract', () => {
 		const filters = mapFiltersToElastic({
 			[SearchFilterId.Advanced]: [

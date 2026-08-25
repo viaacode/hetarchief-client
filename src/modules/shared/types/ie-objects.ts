@@ -36,6 +36,7 @@ export enum IeObjectsSearchFilterField {
 	KEYWORD = 'keyword',
 	LANGUAGE = 'language',
 	MEDIUM = 'medium',
+	THEME = 'theme',
 	NAME = 'name',
 	PUBLISHED = 'published',
 	PUBLISHER = 'publisher',

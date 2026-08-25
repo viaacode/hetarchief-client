@@ -1,9 +1,11 @@
+import { GroupName } from '@account/const';
 import { type ReactSelectProps, TextInput, type TextInputProps } from '@meemoo/react-components';
 import { tText } from '@shared/helpers/translate';
 import {
 	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
 	IeObjectsSearchOperator,
+	SearchPageMediaType,
 } from '@shared/types/ie-objects';
 import { AdvancedRightsSelect } from '@visitor-space/components/AdvancedRightsSelect/AdvancedRightsSelect';
 import AutocompleteFieldInput, {
@@ -17,6 +19,7 @@ import { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMe
 import { GenreSelect } from '@visitor-space/components/GenreSelect';
 import { LanguageSelect } from '@visitor-space/components/LanguageSelect/LanguageSelect';
 import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
+import { ThemeSelect } from '@visitor-space/components/ThemeSelect';
 import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
 import type { FC } from 'react';
 import DurationInput from '../components/DurationInput/DurationInput';
@@ -50,27 +53,52 @@ export type AdvancedFiltersConfig = {
 	[key in FilterProperty]?: OperatorAndFilterConfig;
 };
 
-export const ADVANCED_FILTERS: FilterProperty[] = [
+export interface AdvancedFilterVisibilityContext {
+	selectedTab: SearchPageMediaType;
+	userGroup: GroupName;
+}
+
+export interface AdvancedFilterOption {
+	type: FilterProperty;
+	/**
+	 * Whether the property can be picked in the advanced filter form.
+	 * Omit it for properties that are available to every user, on every tab.
+	 */
+	isVisible?: (context: AdvancedFilterVisibilityContext) => boolean;
+}
+
+export const ADVANCED_FILTERS: AdvancedFilterOption[] = [
 	// MetadataProp.Maintainers, // These are handled separately in VisitorSpaceFilterId
-	FilterProperty.DESCRIPTION,
-	FilterProperty.CAST,
-	FilterProperty.CREATED_AT,
-	FilterProperty.TEMPORAL_COVERAGE,
-	FilterProperty.DURATION,
-	FilterProperty.MEDIUM,
-	FilterProperty.GENRE,
-	FilterProperty.IDENTIFIER,
-	FilterProperty.SPACIAL_COVERAGE,
-	FilterProperty.CREATOR,
-	FilterProperty.MENTIONS,
-	FilterProperty.OBJECT_TYPE,
-	FilterProperty.LOCATION_CREATED,
-	FilterProperty.RIGHTS,
-	FilterProperty.PUBLISHED_AT,
-	FilterProperty.LANGUAGE,
-	FilterProperty.TITLE,
-	FilterProperty.KEYWORDS,
-	FilterProperty.PUBLISHER,
+	{ type: FilterProperty.DESCRIPTION },
+	{ type: FilterProperty.CAST },
+	{ type: FilterProperty.CREATED_AT },
+	{ type: FilterProperty.TEMPORAL_COVERAGE },
+	{
+		type: FilterProperty.THEME,
+		// Themes are only assigned to audio and video objects, not to newspapers, and are not
+		// offered to kiosk users: https://meemoo.atlassian.net/browse/ARC-3797
+		isVisible: ({ selectedTab, userGroup }) =>
+			selectedTab !== SearchPageMediaType.Newspaper && userGroup !== GroupName.KIOSK_VISITOR,
+	},
+	{
+		type: FilterProperty.DURATION,
+		// Newspapers have no duration
+		isVisible: ({ selectedTab }) => selectedTab !== SearchPageMediaType.Newspaper,
+	},
+	{ type: FilterProperty.MEDIUM },
+	{ type: FilterProperty.GENRE },
+	{ type: FilterProperty.IDENTIFIER },
+	{ type: FilterProperty.SPACIAL_COVERAGE },
+	{ type: FilterProperty.CREATOR },
+	{ type: FilterProperty.MENTIONS },
+	{ type: FilterProperty.OBJECT_TYPE },
+	{ type: FilterProperty.LOCATION_CREATED },
+	{ type: FilterProperty.RIGHTS },
+	{ type: FilterProperty.PUBLISHED_AT },
+	{ type: FilterProperty.LANGUAGE },
+	{ type: FilterProperty.TITLE },
+	{ type: FilterProperty.KEYWORDS },
+	{ type: FilterProperty.PUBLISHER },
 ];
 
 export const REGULAR_FILTERS: FilterProperty[] = [
@@ -394,6 +422,11 @@ export const FILTERS_OPTIONS_CONFIG = (): AdvancedFiltersConfig => {
 		[FilterProperty.MEDIUM]: {
 			...EQUALS(operatorLabels, IeObjectsSearchFilterField.MEDIUM, MediumSelect),
 			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.MEDIUM, MediumSelect),
+		},
+
+		[FilterProperty.THEME]: {
+			...EQUALS(operatorLabels, IeObjectsSearchFilterField.THEME, ThemeSelect),
+			...EQUALS_NOT(operatorLabels, IeObjectsSearchFilterField.THEME, ThemeSelect),
 		},
 
 		[FilterProperty.SPACIAL_COVERAGE]: {

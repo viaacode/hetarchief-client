@@ -1,0 +1,11 @@
+@use "src/styles/abstracts" as *;
+
+.c-block-homepage-banner {
+	 > .o-container {
+		padding: 0 ($spacer-1xl + $spacer-xs);
+
+		@media (max-width: $breakpoint-md) {
+			padding: 0 $spacer-1xl;
+		}
+	}
+}
