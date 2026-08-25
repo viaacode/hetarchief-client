@@ -7,6 +7,7 @@ import {
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
+import { ContextDisclaimer } from '@ie-objects/components/ContextDisclaimer/ContextDisclaimer';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import Metadata, {
@@ -49,6 +50,7 @@ import {
 import { filterAltoBySearchTerms } from '@ie-objects/utils/filter-alto-by-search-terms';
 import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-terms-in-transcription';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
+import { isAudioVideoIeObjectType } from '@ie-objects/utils/is-audio-video-ie-object-type';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
@@ -469,6 +471,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
 			IeObjectAccessThrough.VISITOR_SPACE_FULL,
 		]).length > 0;
+
+	// ARC-3824: warn the user that publicly available av content was made within a certain context
+	const showContextDisclaimer =
+		!!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
+		isAudioVideoIeObjectType(mediaInfo?.dctermsFormat) &&
+		!!isFlowPlayerMediaAvailable;
 
 	const showVisitButton =
 		isNil(mediaInfo?.thumbnailUrl) &&
@@ -1677,6 +1685,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : {}}
 					>
 						{renderMedia()}
+						{showContextDisclaimer && <ContextDisclaimer />}
 					</div>
 					{showFragmentSlider && (
 						<FragmentSlider
