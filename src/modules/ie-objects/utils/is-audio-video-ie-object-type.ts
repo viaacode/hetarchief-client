@@ -11,6 +11,6 @@ const AV_OBJECT_TYPES: IeObjectType[] = [
 /**
  * Tells whether an object plays in the audio or video player.
  */
-export function isAvIeObjectType(dctermsFormat: IeObjectType | null | undefined): boolean {
+export function isAudioVideoIeObjectType(dctermsFormat: IeObjectType | null | undefined): boolean {
 	return !!dctermsFormat && AV_OBJECT_TYPES.includes(dctermsFormat);
 }

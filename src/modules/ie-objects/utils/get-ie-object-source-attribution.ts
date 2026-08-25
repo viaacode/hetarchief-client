@@ -3,7 +3,7 @@ import {
 	IeObjectAccessThrough,
 	type IeObjectRightsInfo,
 } from '@ie-objects/ie-objects.types';
-import { isAvIeObjectType } from '@ie-objects/utils/is-av-ie-object-type';
+import { isAudioVideoIeObjectType } from '@ie-objects/utils/is-audio-video-ie-object-type';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatDateTime } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
@@ -147,7 +147,7 @@ export function getIeObjectSourceAttribution(
 		? formatDateTime(preferredDate, locale, 'international', false)
 		: null;
 
-	if (isAvIeObjectType(ieObject.dctermsFormat) && hasAvEssence(ieObject)) {
+	if (isAudioVideoIeObjectType(ieObject.dctermsFormat) && hasAvEssence(ieObject)) {
 		return buildAttribution([
 			formatSourceAttributionNames(getCreatorNames(ieObject, locale)),
 			ieObject.name,

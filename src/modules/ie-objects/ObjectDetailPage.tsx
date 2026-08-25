@@ -50,7 +50,7 @@ import {
 import { filterAltoBySearchTerms } from '@ie-objects/utils/filter-alto-by-search-terms';
 import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-terms-in-transcription';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
-import { isAvIeObjectType } from '@ie-objects/utils/is-av-ie-object-type';
+import { isAudioVideoIeObjectType } from '@ie-objects/utils/is-audio-video-ie-object-type';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
@@ -475,7 +475,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	// ARC-3824: warn the user that publicly available av content was made within a certain context
 	const showContextDisclaimer =
 		!!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
-		isAvIeObjectType(mediaInfo?.dctermsFormat) &&
+		isAudioVideoIeObjectType(mediaInfo?.dctermsFormat) &&
 		!!isFlowPlayerMediaAvailable;
 
 	const showVisitButton =

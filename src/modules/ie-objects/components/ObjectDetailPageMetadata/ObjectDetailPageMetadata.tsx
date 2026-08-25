@@ -59,7 +59,7 @@ import {
 import { getIeObjectProviderIdentifierLinkProps } from '@ie-objects/utils/get-ie-object-provider-identifier-link-props';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import { getIeObjectSourceAttribution } from '@ie-objects/utils/get-ie-object-source-attribution';
-import { isAvIeObjectType } from '@ie-objects/utils/is-av-ie-object-type';
+import { isAudioVideoIeObjectType } from '@ie-objects/utils/is-audio-video-ie-object-type';
 import {
 	mapArrayToMetadataData,
 	mapObjectOrArrayToMetadata,
@@ -870,7 +870,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	);
 
 	const getRightsInfoForAudioVideo = (mediaInfo: IeObject): IeObjectRightsInfo | null => {
-		const isAudioOrVideo = isAvIeObjectType(mediaInfo.dctermsFormat);
+		const isAudioOrVideo = isAudioVideoIeObjectType(mediaInfo.dctermsFormat);
 		return isAudioOrVideo ? mediaInfo.rightsInfo || null : null;
 	};
 
