@@ -976,6 +976,8 @@
   "modules/shared/components/media-card-list/media-card-list___teveel-resultaten": "Er zijn te veel resultaten bij deze zoekopdracht. Verfijn je vraag via de zoekbalk of de filters.",
   "modules/shared/components/media-card/media-card___afbeelding": "Afbeelding",
   "modules/shared/components/media-card/media-card___audio": "Audio",
+  "modules/shared/components/media-card/media-card___dit-item-is-een-onderdeel-van-een-ander-item": "Dit item is een onderdeel van een ander item",
+  "modules/shared/components/media-card/media-card___dit-object-heeft-childrencount-kind-objecten": "Dit object heeft {{childrenCount}} kind objecten",
   "modules/shared/components/media-card/media-card___enkel-ter-plaatse-beschikbaar": "Raadpleegbaar bij aanbieder",
   "modules/shared/components/media-card/media-card___er-ging-iets-mis": "Er ging iets mis",
   "modules/shared/components/media-card/media-card___er-ging-iets-mis-beschrijving": "Er ging iets mis bij het versturen van je aanvraag. Probeer het later opnieuw.",
