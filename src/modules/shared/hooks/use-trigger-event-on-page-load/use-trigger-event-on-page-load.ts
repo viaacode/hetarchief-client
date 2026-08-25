@@ -1,7 +1,6 @@
-import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { isContentPagePreview } from '@shared/helpers/is-content-page-preview';
 import { EventsService, type LogEventType } from '@shared/services/events-service';
 import { noop } from 'es-toolkit/compat';
-import { parse } from 'query-string';
 import { useEffect, useState } from 'react';
 
 interface UseTriggerEventOnPageLoadParams {
@@ -19,11 +18,7 @@ export function useTriggerEventOnPageLoad({
 	const [hasTriggeredForUrl, setHasTriggeredForUrl] = useState<Record<string, boolean>>({});
 
 	useEffect(() => {
-		if (
-			!shouldTrigger ||
-			hasTriggeredForUrl[window.location.href] ||
-			parse(window.location.search)[QUERY_PARAM_KEY.CONTENT_PAGE_PREVIEW]
-		) {
+		if (!shouldTrigger || hasTriggeredForUrl[window.location.href] || isContentPagePreview()) {
 			return;
 		}
 		EventsService.triggerEvent(eventType, window.location.href, eventData).then(noop);
