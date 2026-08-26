@@ -9,6 +9,7 @@ import {
 	type MaterialRequestSendAll,
 	MaterialRequestStatus,
 	type MaterialRequestStatuses,
+	type MaterialRequestUnreadSummary,
 	type MaterialRequestUpdate,
 } from '@material-requests/types';
 import { ApiService } from '@shared/services/api-service';
@@ -240,6 +241,10 @@ export abstract class MaterialRequestsService {
 		return ApiService.getApi()
 			.get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/messages/count-unread`)
 			.json();
+	}
+
+	public static getUnreadSummary(): Promise<MaterialRequestUnreadSummary> {
+		return ApiService.getApi().get(`${MATERIAL_REQUESTS_SERVICE_BASE_URL}/unread-summary`).json();
 	}
 
 	public static async addAdditionalConditions(

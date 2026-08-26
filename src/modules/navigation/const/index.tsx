@@ -9,6 +9,7 @@ import type {
 import type { NavigationInfo, NavigationPlacement } from '@navigation/services/navigation-service';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
+import { UnreadMaterialRequestIndicator } from '@shared/components/UnreadMaterialRequestIndicator';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import type { Locale } from '@shared/utils/i18n';
@@ -50,6 +51,8 @@ export const GET_NAV_ITEMS_RIGHT_LOGGED_IN = (
 	user: AvoUserCommonUser | null,
 	{
 		hasUnreadNotifications,
+		hasUnreadOutgoingMaterialRequestMessages,
+		hasUnreadIncomingMaterialRequestMessages,
 		notificationsOpen,
 		userName,
 		onLogOutClick,
@@ -90,9 +93,17 @@ export const GET_NAV_ITEMS_RIGHT_LOGGED_IN = (
 			id: 'user-menu',
 			path: '',
 			node: (
-				<Avatar variants="padded-y" text={userName}>
-					<Icon name={IconNamesSolid.User} aria-hidden />
-				</Avatar>
+				<span className={styles['c-navigation__avatar-wrapper']}>
+					<Avatar variants="padded-y" text={userName}>
+						<Icon name={IconNamesSolid.User} aria-hidden />
+						{(hasUnreadOutgoingMaterialRequestMessages ||
+							hasUnreadIncomingMaterialRequestMessages) && (
+							<UnreadMaterialRequestIndicator
+								className={styles['c-navigation__unread-dot--floating']}
+							/>
+						)}
+					</Avatar>
+				</span>
 			),
 			children: [
 				...getNavigationItemsProfileDropdown(
@@ -101,7 +112,9 @@ export const GET_NAV_ITEMS_RIGHT_LOGGED_IN = (
 					accessibleVisitorSpaces,
 					linkedSpaceSlug,
 					locale,
-					user
+					user,
+					hasUnreadOutgoingMaterialRequestMessages,
+					hasUnreadIncomingMaterialRequestMessages
 				),
 				{
 					id: 'log-out',

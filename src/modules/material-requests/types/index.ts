@@ -265,6 +265,12 @@ export interface MaterialRequestMaintainer {
 	name: string;
 }
 
+export interface MaterialRequestUnreadSummary {
+	hasUnreadOutgoingMessages: boolean;
+	hasUnreadIncomingMessages: boolean;
+	unreadCountsByMaterialRequestId: Record<string, number>;
+}
+
 export enum MaterialRequestKeys {
 	objectSchemaName = 'objectSchemaName',
 	maintainerName = 'maintainerName',

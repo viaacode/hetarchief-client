@@ -1,0 +1,32 @@
+@use "src/styles/abstracts" as abstracts;
+
+$dot-size: 1.25rem;
+
+.c-unread-material-request-indicator {
+	display: inline-block;
+	width: $dot-size;
+	height: $dot-size;
+	min-width: $dot-size;
+	min-height: $dot-size;
+	margin-left: auto;
+	border-radius: 50%;
+	background-color: abstracts.$cherry;
+	vertical-align: middle;
+	pointer-events: none;
+
+	&:global(.c-badge--error){
+		box-shadow: 0 0 abstracts.$spacer-xs 0 abstracts.$cherry;
+	}
+}
+
+// Wraps a label + UnreadDot pair: `gap` guarantees at least $spacer-xs between them (a floor
+// that always applies, since `auto` isn't a valid min()/max()/clamp() operand and can't express
+// "auto, but never less than X" on its own), while UnreadDot's own `margin-left: auto` still
+// pushes it flush to the end of this row when there's extra width to spare.
+.c-unread-material-request-indicator-row {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	gap: abstracts.$spacer-xs;
+	word-break: break-word;
+}
