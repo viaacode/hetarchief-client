@@ -14,10 +14,12 @@ import { selectCommonUser } from '@auth/store/user';
 import { getMaterialRequestTableColumnProps } from '@material-requests/const';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
+import { useGetMaterialRequestsUnreadSummary } from '@material-requests/hooks/get-material-requests-unread-summary';
 import { useRestoreFiltersOnNotificationOpen } from '@material-requests/hooks/use-restore-filters-on-notification-open';
 import {
 	type MaterialRequest,
 	MaterialRequestKeys,
+	type MaterialRequestOrderProp,
 	type MaterialRequestStatus,
 	type MaterialRequestType,
 } from '@material-requests/types';
@@ -105,7 +107,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 		size: ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
 		...(!isNil(filters.page) && { page: filters.page }),
 		...(!isNil(filters.orderProp) && {
-			orderProp: filters.orderProp as MaterialRequestKeys,
+			orderProp: filters.orderProp as MaterialRequestOrderProp,
 		}),
 		...(!isNil(filters.orderDirection) && {
 			orderDirection: filters.orderDirection as AvoSearchOrderDirection,
@@ -126,6 +128,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			isArchived: filters.isArchived === 'true',
 		}),
 	});
+	const { data: unreadSummary } = useGetMaterialRequestsUnreadSummary();
 	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useQueryParam(
 		QUERY_PARAM_KEY.MATERIAL_REQUEST,
 		StringParam
@@ -318,7 +321,11 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 				<Table<MaterialRequest>
 					className="u-mt-24 p-material-requests__table p-account-my-material-requests__table"
 					options={{
-						columns: getAccountMaterialRequestTableColumns(isComplexReuseFlow, isTabletPortrait),
+						columns: getAccountMaterialRequestTableColumns(
+							isComplexReuseFlow,
+							isTabletPortrait,
+							unreadSummary?.unreadCountsByMaterialRequestId
+						),
 						data: materialRequests?.items || [],
 						initialState: {
 							pagination: { pageIndex: 0, pageSize: ACCOUNT_MATERIAL_REQUESTS_TABLE_PAGE_SIZE },

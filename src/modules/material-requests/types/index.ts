@@ -273,6 +273,7 @@ export interface MaterialRequestUnreadSummary {
 
 export enum MaterialRequestKeys {
 	objectSchemaName = 'objectSchemaName',
+	unreadStatus = 'unreadStatus',
 	maintainerName = 'maintainerName',
 	type = 'type',
 	requestGroupName = 'requestGroupName',
@@ -283,6 +284,15 @@ export enum MaterialRequestKeys {
 	status = 'status',
 	downloadStatus = 'downloadStatus',
 }
+
+/**
+ * MaterialRequestKeys minus unreadStatus, which is a UI-only pseudo-column (its count comes from
+ * a separate unread-summary map, not from MaterialRequest) and isn't a valid backend sort field.
+ */
+export type MaterialRequestOrderProp = Exclude<
+	MaterialRequestKeys,
+	MaterialRequestKeys.unreadStatus
+>;
 
 export type MaterialRequestRow = { row: { original: MaterialRequest } };
 

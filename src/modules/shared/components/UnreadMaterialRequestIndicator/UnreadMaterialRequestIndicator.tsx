@@ -33,9 +33,9 @@ export const UnreadMaterialRequestIndicator: FC<UnreadMaterialRequestIndicatorPr
 	);
 
 /**
- * Flex row wrapper for a label + UnreadDot pair - only use this when a dot is actually being
- * rendered, since it's what gives UnreadDot's `margin-left: auto` real free space to push
- * against (see UnreadDot.module.scss for why a floor and `auto` can't be expressed as one value).
+ * Flex row wrapper for a label + UnreadMaterialRequestIndicator pair - only use this when a dot is actually being
+ * rendered, since it's what gives UnreadMaterialRequestIndicator's `margin-left: auto` real free space to push
+ * against (see UnreadMaterialRequestIndicator.module.scss for why a floor and `auto` can't be expressed as one value).
  */
 export const UnreadMaterialRequestIndicatorRow: FC<DefaultComponentProps> = ({
 	children,

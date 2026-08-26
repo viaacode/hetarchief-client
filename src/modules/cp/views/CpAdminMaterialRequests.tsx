@@ -15,10 +15,12 @@ import { CPAdminLayout } from '@cp/layouts';
 import { getMaterialRequestTableColumnProps } from '@material-requests/const';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
+import { useGetMaterialRequestsUnreadSummary } from '@material-requests/hooks/get-material-requests-unread-summary';
 import { useRestoreFiltersOnNotificationOpen } from '@material-requests/hooks/use-restore-filters-on-notification-open';
 import {
 	type MaterialRequest,
 	MaterialRequestKeys,
+	type MaterialRequestOrderProp,
 	type MaterialRequestStatus,
 	type MaterialRequestType,
 } from '@material-requests/types';
@@ -118,13 +120,14 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 		...(!isNil(filters.isArchived) && {
 			isArchived: filters.isArchived === 'true',
 		}),
-		orderProp: (filters.orderProp as MaterialRequestKeys) || 'requestedAt',
+		orderProp: (filters.orderProp as MaterialRequestOrderProp) || 'requestedAt',
 		orderDirection:
 			(filters.orderDirection as AvoSearchOrderDirection) || AvoSearchOrderDirection.DESC,
 		...(commonUser?.organisation?.or_id
 			? { maintainerIds: [commonUser?.organisation?.or_id] }
 			: {}),
 	});
+	const { data: unreadSummary } = useGetMaterialRequestsUnreadSummary();
 	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useQueryParam(
 		QUERY_PARAM_KEY.MATERIAL_REQUEST,
 		StringParam
@@ -317,7 +320,10 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 			<Table<MaterialRequest>
 				className="u-mt-24 p-material-requests__table"
 				options={{
-					columns: getMaterialRequestTableColumns(isTabletPortrait),
+					columns: getMaterialRequestTableColumns(
+						isTabletPortrait,
+						unreadSummary?.unreadCountsByMaterialRequestId
+					),
 					data: materialRequests?.items || [],
 					initialState: {
 						pagination: { pageIndex: 0, pageSize: CP_MATERIAL_REQUESTS_TABLE_PAGE_SIZE },

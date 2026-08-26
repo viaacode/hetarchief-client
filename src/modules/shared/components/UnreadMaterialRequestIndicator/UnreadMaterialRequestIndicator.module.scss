@@ -19,9 +19,9 @@ $dot-size: 1.25rem;
 	}
 }
 
-// Wraps a label + UnreadDot pair: `gap` guarantees at least $spacer-xs between them (a floor
+// Wraps a label + UnreadMaterialRequestIndicator pair: `gap` guarantees at least $spacer-xs between them (a floor
 // that always applies, since `auto` isn't a valid min()/max()/clamp() operand and can't express
-// "auto, but never less than X" on its own), while UnreadDot's own `margin-left: auto` still
+// "auto, but never less than X" on its own), while UnreadMaterialRequestIndicator's own `margin-left: auto` still
 // pushes it flush to the end of this row when there's extra width to spare.
 .c-unread-material-request-indicator-row {
 	display: flex;

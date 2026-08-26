@@ -99,7 +99,7 @@ export const GET_NAV_ITEMS_RIGHT_LOGGED_IN = (
 						{(hasUnreadOutgoingMaterialRequestMessages ||
 							hasUnreadIncomingMaterialRequestMessages) && (
 							<UnreadMaterialRequestIndicator
-								className={styles['c-navigation__unread-dot--floating']}
+								className={styles['c-navigation__avatar-unread-dot--floating']}
 							/>
 						)}
 					</Avatar>

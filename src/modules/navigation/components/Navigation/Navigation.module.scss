@@ -528,14 +528,14 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	}
 }
 
-// Positions the shared UnreadDot component (@shared/components/UnreadDot) as an overlay on the
+// Positions the shared UnreadMaterialRequestIndicator component (@shared/components/UnreadMaterialRequestIndicator) as an overlay on the
 // avatar - the dot's own look (size/shape/color) lives in that component, not here.
 .c-navigation__avatar-wrapper {
 	position: relative;
 	display: inline-flex;
 }
 
-.c-navigation__unread-dot--floating {
+.c-navigation__avatar-unread-dot--floating {
 	position: absolute;
 	top: 1.5em;
 	left: 0.75em;
