@@ -38,6 +38,14 @@ export const GET_PATH_FROM_NOTIFICATION_TYPE = (): Record<NotificationType, stri
 		[NotificationType.MATERIAL_REQUEST_DOWNLOAD_EXECUTED]: materialRequestCpAdminPath,
 		[NotificationType.MATERIAL_REQUEST_ADDITIONAL_CONDITIONS_SEND]: materialRequestRequesterPath,
 		[NotificationType.MATERIAL_REQUEST_ADDITIONAL_CONDITIONS_ACCEPTED]: materialRequestCpAdminPath,
+
+		// The daily unread-messages digest summarizes across every material request the user is
+		// involved in, not a single one - unlike the paths above, it links to the bare overview
+		// (no {materialRequestId} query param to substitute).
+		[NotificationType.MATERIAL_REQUEST_UNREAD_MESSAGES_OUTGOING]:
+			ROUTES_BY_LOCALE[locale].accountMyMaterialRequests,
+		[NotificationType.MATERIAL_REQUEST_UNREAD_MESSAGES_INCOMING]:
+			ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests,
 	};
 };
 
@@ -54,6 +62,8 @@ export const GET_TITLE_FROM_NOTIFICATION = (
 		case NotificationType.ACCESS_PERIOD_VISITOR_SPACE_STARTED:
 		case NotificationType.ACCESS_PERIOD_VISITOR_SPACE_END_WARNING:
 		case NotificationType.ACCESS_PERIOD_VISITOR_SPACE_ENDED:
+		case NotificationType.MATERIAL_REQUEST_UNREAD_MESSAGES_OUTGOING:
+		case NotificationType.MATERIAL_REQUEST_UNREAD_MESSAGES_INCOMING:
 			return notification.title as string;
 
 		case NotificationType.NEW_MATERIAL_REQUEST:
@@ -152,6 +162,8 @@ export const GET_DESCRIPTION_FROM_NOTIFICATION = (
 		case NotificationType.ACCESS_PERIOD_VISITOR_SPACE_STARTED:
 		case NotificationType.ACCESS_PERIOD_VISITOR_SPACE_END_WARNING:
 		case NotificationType.ACCESS_PERIOD_VISITOR_SPACE_ENDED:
+		case NotificationType.MATERIAL_REQUEST_UNREAD_MESSAGES_OUTGOING:
+		case NotificationType.MATERIAL_REQUEST_UNREAD_MESSAGES_INCOMING:
 			return notification.description as string;
 
 		case NotificationType.NEW_MATERIAL_REQUEST:
