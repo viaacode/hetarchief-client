@@ -1,3 +1,4 @@
+import { ContentPageIiifViewer } from '@admin/wrappers/ContentPageIiifViewer/ContentPageIiifViewer';
 import { BlockContentEnclose } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose';
 import {
 	type AdminConfig,
@@ -100,6 +101,7 @@ export function getAdminCoreConfig(
 				ContentBlockType.TitleWithParallax,
 				ContentBlockType.Timeline,
 				ContentBlockType.DoubleBanner,
+				ContentBlockType.Driekeuzespeler,
 			],
 			defaultPageWidth: ContentPageWidth.LARGE,
 			onSaveContentPage,
@@ -154,12 +156,17 @@ export function getAdminCoreConfig(
 				play: { name: IconNamesLight.Play },
 				pause: { name: IconNamesLight.Pause },
 				collection: { name: IconNamesLight.Collection },
+				collectionShuffle: { name: IconNamesLight.CollectionShuffle },
 			},
 			list: GET_ICON_LIST_CONFIG,
 			alerts: GET_ALERT_ICON_LIST_CONFIG,
 		},
 		components: {
 			defaultAudioStill: '/images/waveform.svg',
+			// A content block cannot resolve a newspaper's pages or their ticket-service tokens on its
+			// own, so the viewer is handed over ready to use.
+			// https://meemoo.atlassian.net/browse/ARC-3813
+			iiifViewer: ContentPageIiifViewer,
 			loader: {
 				component: () => <Loading fullscreen locationId="admin-core-loader" />,
 			},
