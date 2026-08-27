@@ -162,7 +162,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				key={`${flowPlayerKey}__${currentPlayableFile.id}`}
 				type="video"
 				src={playableUrl as string}
-				poster={poster || currentPlayableFile.thumbnailUrl}
+				poster={poster || representation?.thumbnailUrl || currentPlayableFile.thumbnailUrl}
 				renderLoader={() => <Loading locationId="flowplayer suspense" fullscreen mode="light" />}
 				preload="metadata"
 				{...shared}

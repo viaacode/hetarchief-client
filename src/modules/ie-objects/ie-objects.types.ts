@@ -193,6 +193,11 @@ export interface IeObjectRepresentation {
 	edmIsNextInSequence: string;
 	updatedAt: string;
 	isMediaFragmentOf: string;
+	/**
+	 * Thumbnail of this specific representation. For cut fragments this is the keyframe at the start
+	 * of the fragment, whereas the file thumbnail is the first keyframe of the full video. ARC-3690
+	 */
+	thumbnailUrl: string | null;
 	files: IeObjectFile[];
 }
 
