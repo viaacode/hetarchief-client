@@ -704,6 +704,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				link,
 				previousPage: ROUTES_BY_LOCALE[locale].search,
 				numOfChildren: item.children || 0,
+				isPartOfOtherItem: !!item.premisIsPartOf,
 			};
 		});
 	}, [isKioskUser, locale, isGlobalArchive, searchResults]);
