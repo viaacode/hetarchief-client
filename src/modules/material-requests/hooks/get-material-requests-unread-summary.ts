@@ -18,9 +18,9 @@ export const useGetMaterialRequestsUnreadSummary = (
 		queryKey: [QUERY_KEYS.getMaterialRequestsUnreadSummary],
 		queryFn: () => MaterialRequestsService.getUnreadSummary(),
 		placeholderData: keepPreviousData,
-		refetchOnMount: 'always',
 		refetchOnReconnect: true,
 		refetchOnWindowFocus: true,
 		enabled,
 		refetchInterval: 15_000,
+		staleTime: 15_000,
 	});

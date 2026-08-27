@@ -432,7 +432,7 @@ const getCpAdminManagementDropdown = (
 	if (
 		intersection(permissions, [
 			Permission.MANAGE_CP_VISIT_REQUESTS,
-			Permission.MANAGE_CP_VISIT_REQUESTS,
+			Permission.VIEW_ANY_MATERIAL_REQUESTS,
 			Permission.UPDATE_OWN_SPACE,
 		]).length === 0
 	) {

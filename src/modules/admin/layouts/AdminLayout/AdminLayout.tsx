@@ -43,9 +43,9 @@ const AdminLayout: AdminLayoutComponent = ({
 	const commonUser = useSelector(selectCommonUser);
 	const { data: unreadSummary } = useGetMaterialRequestsUnreadSummary();
 	const showMaterialRequestIndicator = useCallback(
-		(id: string, hasChildren: boolean) =>
-			showMaterialRequestUnreadIndicator(id, hasChildren, unreadSummary),
-		[unreadSummary]
+		(href: string, hasChildren: boolean) =>
+			showMaterialRequestUnreadIndicator(href, hasChildren, unreadSummary, locale),
+		[unreadSummary, locale]
 	);
 
 	const actions = useSlot(AdminActions, children);
@@ -77,7 +77,7 @@ const AdminLayout: AdminLayoutComponent = ({
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
 			ADMIN_NAVIGATION_LINKS(locale).map(({ id, label, href, children }) => {
-				const showIndicator = showMaterialRequestIndicator(id, !!children);
+				const showIndicator = showMaterialRequestIndicator(href, !!children);
 				return {
 					id,
 					node: ({ linkClassName }) => (
@@ -91,7 +91,7 @@ const AdminLayout: AdminLayoutComponent = ({
 					),
 					active: shouldBeActive(asPath, href),
 					children: children?.(locale).map(({ id, label, href }) => {
-						const showIndicator = showMaterialRequestIndicator(id, false);
+						const showIndicator = showMaterialRequestIndicator(href, false);
 						return {
 							id,
 							node: ({ linkClassName }) => (

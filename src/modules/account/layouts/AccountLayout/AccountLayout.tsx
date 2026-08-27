@@ -10,7 +10,7 @@ import SidebarLayout from '@shared/layouts/SidebarLayout/SidebarLayout';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { type FC, useCallback } from 'react';
+import { type FC, useCallback, useMemo } from 'react';
 
 import styles from './AccountLayout.module.scss';
 
@@ -19,9 +19,9 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 	const locale = useLocale();
 	const { data: unreadSummary } = useGetMaterialRequestsUnreadSummary();
 	const showMaterialRequestIndicator = useCallback(
-		(id: string, hasChildren: boolean) =>
-			showMaterialRequestUnreadIndicator(id, hasChildren, unreadSummary),
-		[unreadSummary]
+		(href: string, hasChildren: boolean) =>
+			showMaterialRequestUnreadIndicator(href, hasChildren, unreadSummary, locale),
+		[unreadSummary, locale]
 	);
 
 	const shouldBeActive = useCallback((currentPath: string, parentPath: string) => {
@@ -32,39 +32,44 @@ const AccountLayout: FC<AccountLayoutProps> = ({ children, className, pageTitle 
 		return basePath === parentPath || currentPath.startsWith(`${parentPath}/`);
 	}, []);
 
-	const sidebarLinks: ListNavigationItem[] = GET_ACCOUNT_NAVIGATION_LINKS(locale).map(
-		({ id, label, href, children }) => {
-			const showIndicator = showMaterialRequestIndicator(id, !!children?.length);
-			return {
-				id,
-				node: ({ linkClassName }) => (
-					<Link href={href} className={linkClassName} aria-label={label}>
-						{showIndicator ? (
-							<UnreadMaterialRequestIndicatorRow>{label}</UnreadMaterialRequestIndicatorRow>
-						) : (
-							label
-						)}
-					</Link>
-				),
-				active: shouldBeActive(asPath, href),
-				children: children?.map(({ id, label, href }) => {
-					const showIndicator = showMaterialRequestIndicator(id, false);
-					return {
-						id,
-						node: ({ linkClassName }) => (
-							<Link href={href} className={linkClassName} aria-label={label}>
-								{showIndicator ? (
-									<UnreadMaterialRequestIndicatorRow>{label}</UnreadMaterialRequestIndicatorRow>
-								) : (
-									label
-								)}
-							</Link>
-						),
-						active: shouldBeActive(asPath, href),
-					};
-				}),
-			};
-		}
+	// GET_ACCOUNT_NAVIGATION_LINKS calls hooks internally (useHasAnyPermission/useHasAnyGroup),
+	// so it must be called directly in the component body, not inside useMemo's factory.
+	const accountNavigationLinks = GET_ACCOUNT_NAVIGATION_LINKS(locale);
+	const sidebarLinks: ListNavigationItem[] = useMemo(
+		() =>
+			accountNavigationLinks.map(({ id, label, href, children }) => {
+				const showIndicator = showMaterialRequestIndicator(href, !!children?.length);
+				return {
+					id,
+					node: ({ linkClassName }) => (
+						<Link href={href} className={linkClassName} aria-label={label}>
+							{showIndicator ? (
+								<UnreadMaterialRequestIndicatorRow>{label}</UnreadMaterialRequestIndicatorRow>
+							) : (
+								label
+							)}
+						</Link>
+					),
+					active: shouldBeActive(asPath, href),
+					children: children?.map(({ id, label, href }) => {
+						const showIndicator = showMaterialRequestIndicator(href, false);
+						return {
+							id,
+							node: ({ linkClassName }) => (
+								<Link href={href} className={linkClassName} aria-label={label}>
+									{showIndicator ? (
+										<UnreadMaterialRequestIndicatorRow>{label}</UnreadMaterialRequestIndicatorRow>
+									) : (
+										label
+									)}
+								</Link>
+							),
+							active: shouldBeActive(asPath, href),
+						};
+					}),
+				};
+			}),
+		[accountNavigationLinks, asPath, shouldBeActive, showMaterialRequestIndicator]
 	);
 
 	return (

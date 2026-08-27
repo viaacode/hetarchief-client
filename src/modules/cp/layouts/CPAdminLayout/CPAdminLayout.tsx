@@ -32,9 +32,9 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 	const user = useSelector(selectUser);
 	const { data: unreadSummary } = useGetMaterialRequestsUnreadSummary();
 	const showMaterialRequestIndicator = useCallback(
-		(id: string, hasChildren: boolean) =>
-			showMaterialRequestUnreadIndicator(id, hasChildren, unreadSummary),
-		[unreadSummary]
+		(href: string, hasChildren: boolean) =>
+			showMaterialRequestUnreadIndicator(href, hasChildren, unreadSummary, locale),
+		[unreadSummary, locale]
 	);
 
 	const shouldBeActive = useCallback((currentPath: string, parentPath: string) => {
@@ -63,7 +63,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 								},
 							});
 
-				const showIndicator = showMaterialRequestIndicator(id, !!children?.length);
+				const showIndicator = showMaterialRequestIndicator(href, !!children?.length);
 				return {
 					id,
 					node: ({ linkClassName }) => (
@@ -81,7 +81,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 					),
 					active: shouldBeActive(asPath, url),
 					children: children?.map(({ id, label, href }) => {
-						const showIndicator = showMaterialRequestIndicator(id, false);
+						const showIndicator = showMaterialRequestIndicator(href, false);
 						return {
 							id,
 							node: ({ linkClassName }) => (
