@@ -201,6 +201,12 @@ const AppLayout: FC<any> = ({ children }) => {
 	}, []);
 
 	useEffect(() => {
+		// Give AuthService the app's real QueryClient, so logging out can actually clear the cache
+		// https://meemoo.atlassian.net/browse/ARC-1828
+		AuthService.setQueryClient(queryClient);
+	}, [queryClient]);
+
+	useEffect(() => {
 		if (router && user) {
 			NotificationsService.setQueryClient(queryClient);
 			NotificationsService.initPolling(router, setNotificationsOpen, setUnreadNotifications);

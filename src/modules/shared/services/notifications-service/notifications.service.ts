@@ -7,7 +7,7 @@ import { TranslationService } from '@shared/services/translation-service/transla
 import { asDate } from '@shared/utils/dates';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import type { IPagination } from '@studiohyperdrive/pagination';
-import { QueryClient } from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/react-query';
 import type { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 
@@ -31,7 +31,11 @@ export abstract class NotificationsService {
 	private static setHasUnreadNotifications: ((hasUnreadNotifications: boolean) => void) | null =
 		null;
 
-	private static queryClient = new QueryClient();
+	/**
+	 * Injected from AppLayout, always before initPolling(). Do NOT construct one here: a locally
+	 * created client has an empty cache of its own, so invalidating it does nothing.
+	 */
+	private static queryClient: QueryClient | null = null;
 
 	public static async setQueryClient(queryClient: QueryClient): Promise<void> {
 		NotificationsService.queryClient = queryClient;
@@ -109,7 +113,7 @@ export abstract class NotificationsService {
 				});
 
 				hasSpaceNotification &&
-					(await NotificationsService.queryClient.invalidateQueries({
+					(await NotificationsService.queryClient?.invalidateQueries({
 						queryKey: [QUERY_KEYS.getAccessibleVisitorSpaces],
 					}));
 
@@ -179,7 +183,7 @@ export abstract class NotificationsService {
 		NotificationsService.lastNotifications = notifications;
 		if (unreadNotifications.length > 0) {
 			NotificationsService.setHasUnreadNotifications?.(true);
-			await NotificationsService.queryClient.invalidateQueries({
+			await NotificationsService.queryClient?.invalidateQueries({
 				queryKey: [QUERY_KEYS.getNotifications],
 			});
 		}

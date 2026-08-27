@@ -16,7 +16,7 @@ import Icon from '@shared/components/Icon/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
-import { globalLabelKeys, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { globalLabelKeys, QUERY_KEYS, ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { validateFile } from '@shared/helpers/validate-file';
 import { validateForm } from '@shared/helpers/validate-form';
@@ -24,6 +24,7 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { Locale } from '@shared/utils/i18n';
+import { useQueryClient } from '@tanstack/react-query';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import { DEFAULT_VISITOR_SPACE_COLOR } from '@visitor-space/const';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
@@ -72,6 +73,7 @@ const labelKeys: Record<keyof CreateVisitorSpaceSettings, string> = {
 const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSpaceSlug }) => {
 	const router = useRouter();
 	const locale = useLocale();
+	const queryClient = useQueryClient();
 	const [descriptionEditLanguage, setDescriptionEditLanguage] = useState<Locale>(Locale.nl);
 	const [serviceDescriptionEditLanguage, setServiceDescriptionEditLanguage] = useState<Locale>(
 		Locale.nl
@@ -240,6 +242,11 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 						'modules/cp/components/visitor-space-settings/visitor-space-settings___de-bezoekersruimte-werd-succesvol-aangemaakt'
 					),
 				});
+				// The content partner now has a space, so it must no longer show up in the
+				// `hasSpace: false` list that this form offers when creating another space
+				await queryClient.invalidateQueries({
+					queryKey: [QUERY_KEYS.getContentPartners],
+				});
 				await refetchVisitorSpace();
 				await router.replace(
 					`/${ROUTE_PARTS_BY_LOCALE[locale].admin}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaceManagement}/${ROUTE_PARTS_BY_LOCALE[locale].visitorSpaces}/${formValues.slug}`
@@ -258,7 +265,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 				),
 			});
 		}
-	}, [formValues, locale, refetchVisitorSpace, router, validateFormValues]);
+	}, [formValues, locale, queryClient, refetchVisitorSpace, router, validateFormValues]);
 
 	const updateSpace = useCallback(
 		async (values: Partial<UpdateVisitorSpaceSettings>, afterSubmit?: () => void) => {
