@@ -1,7 +1,5 @@
-import { QUERY_KEYS } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
 import type { IPagination } from '@studiohyperdrive/pagination';
-import { QueryClient } from '@tanstack/react-query';
 import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { sortBy } from 'es-toolkit/compat';
 import { stringifyUrl } from 'query-string';
@@ -18,8 +16,6 @@ import {
 } from './visitor-space.service.types';
 
 export class VisitorSpaceService {
-	private static queryClient = new QueryClient();
-
 	public static async getAll(
 		searchInput = '',
 		status: VisitorSpaceStatus[] | undefined = undefined,
@@ -113,9 +109,6 @@ export class VisitorSpaceService {
 		const response: VisitorSpaceInfo = await ApiService.getApi()
 			.post(VISITOR_SPACE_SERVICE_BASE_URL, { body: formData, headers })
 			.json();
-		await VisitorSpaceService.queryClient.invalidateQueries({
-			queryKey: [QUERY_KEYS.getContentPartners],
-		});
 
 		return response;
 	}

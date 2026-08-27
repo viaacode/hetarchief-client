@@ -4,7 +4,7 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ApiService } from '@shared/services/api-service';
 import { TranslationService } from '@shared/services/translation-service/translation.service';
 import { Locale } from '@shared/utils/i18n';
-import { QueryClient } from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/react-query';
 import { omit, trimEnd } from 'es-toolkit/compat';
 import type { Options } from 'ky/distribution/types/options';
 import type { NextRouter } from 'next/router';
@@ -15,6 +15,18 @@ import type { CheckLoginResponse } from './auth.service.types';
 const { publicRuntimeConfig } = getConfig();
 
 export class AuthService {
+	/**
+	 * The QueryClient that backs the app (see src/pages/_app.tsx), injected from AppLayout.
+	 * Do NOT construct one here: a locally created client has an empty cache of its own, so
+	 * clearing it does nothing, and a module-level singleton would be shared across all SSR
+	 * requests on the server.
+	 */
+	private static queryClient: QueryClient | null = null;
+
+	public static setQueryClient(queryClient: QueryClient): void {
+		AuthService.queryClient = queryClient;
+	}
+
 	public static async checkLogin(options: Options = {}): Promise<CheckLoginResponse> {
 		const response = await ApiService.getApi().get('auth/check-login', options).json();
 		return response as CheckLoginResponse;
@@ -119,9 +131,10 @@ export class AuthService {
 
 		// Clear react-query cache to avoid any pages still being accessible using the browser back button
 		// https://meemoo.atlassian.net/browse/ARC-1828
-		const queryClient = new QueryClient();
-		await queryClient.invalidateQueries();
-		queryClient.clear();
+		if (AuthService.queryClient) {
+			await AuthService.queryClient.invalidateQueries();
+			AuthService.queryClient.clear();
+		}
 
 		window.location.href = stringifyUrl({
 			url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,
