@@ -15,7 +15,7 @@ import HttpApi from 'i18next-http-backend';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { appWithTranslation } from 'next-i18next/pages';
-import React, { type ReactElement, useEffect } from 'react';
+import React, { type ReactElement, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
 import pkg from '../../package.json';
@@ -32,22 +32,29 @@ setDefaultOptions({ locale: nlBE } as any);
 
 const { publicRuntimeConfig } = getConfig();
 
-const queryClient = new QueryClient({
-	defaultOptions: {
-		queries: {
-			refetchOnWindowFocus: false,
-			retry: false,
-			refetchInterval: false,
-			refetchIntervalInBackground: false,
+// Must NOT be a module-level singleton: on the server that cache would be shared by all SSR
+// requests (and never garbage-collected, since gcTime defaults to Infinity there). A pre-existing
+// entry makes HydrationBoundary defer hydration to a useEffect that never runs while rendering on
+// the server, so prefetched data stops showing up in the SSR html, and cached data can leak
+// between users. Create one client per request on the server, one per session in the browser.
+const makeQueryClient = (): QueryClient =>
+	new QueryClient({
+		defaultOptions: {
+			queries: {
+				refetchOnWindowFocus: false,
+				retry: false,
+				refetchInterval: false,
+				refetchIntervalInBackground: false,
+			},
 		},
-	},
-});
+	});
 
 // Temp version with undefined router and nl locale
 AdminConfigManager.setConfig(getAdminCoreConfig(null, Locale.nl, null));
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 	const { store, props } = wrapper.useWrappedStore(pageProps);
+	const [queryClient] = useState(makeQueryClient);
 
 	useEffect(() => {
 		console.log(`[PERFORMANCE] ${new Date().toISOString()} init hetarchief client`);
