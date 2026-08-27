@@ -285,8 +285,8 @@ const MediaCard: FC<MediaCardProps> = ({
 					>
 						{numOfChildren}{' '}
 						{numOfChildren > 1
-							? tText('modules/shared/components/media-card/media-card___items')
-							: tText('modules/shared/components/media-card/media-card___item')}
+							? tText('modules/shared/components/media-card/media-card___num-of-children-items')
+							: tText('modules/shared/components/media-card/media-card___1-item')}
 					</div>
 				)}
 			</div>
