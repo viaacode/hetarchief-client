@@ -3,10 +3,11 @@ import { IeObjectsService } from '@ie-objects/services';
 import { AdminConfigManager, fetchWithLogoutJson } from '@meemoo/admin-core-ui/client';
 import getConfig from '@shared/config/public-runtime-config';
 import { QUERY_KEYS } from '@shared/const';
+import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
 import { Locale } from '@shared/utils/i18n';
 import { keepPreviousData, useQueries } from '@tanstack/react-query';
 import type { AvoCorePickerItem } from '@viaa/avo2-types';
-import { compact, kebabCase } from 'es-toolkit/compat';
+import { compact } from 'es-toolkit/compat';
 import { stringifyUrl } from 'query-string';
 import { stripHtml } from 'string-strip-html';
 import type { MappedElement } from '../BlockContentEnclose.types';
@@ -76,7 +77,12 @@ export const useGetContentBlockEncloseContent = (
 							objectType: item.dctermsFormat,
 							identifier: item.schemaIdentifier,
 							pid: item.schemaIdentifier,
-							link: `/zoeken/${item.maintainerSlug}/${item.schemaIdentifier}/${kebabCase(item.name)}`,
+							link: getIeObjectDetailPath(
+								(AdminConfigManager.getConfig().locale as unknown as Locale) || Locale.nl,
+								item.maintainerSlug,
+								item.schemaIdentifier,
+								item.name
+							),
 							type: 'IE_OBJECT' as const,
 						};
 					});

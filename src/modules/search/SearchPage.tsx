@@ -46,6 +46,7 @@ import {
 } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { numberWithCommas } from '@shared/helpers';
+import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -108,7 +109,7 @@ import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/util
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
-import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'es-toolkit/compat';
+import { intersection, isEmpty, isNil, sortBy, sum } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -676,7 +677,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				: '';
 
 			const link: string | undefined = stringifyUrl({
-				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${item.maintainerSlug}/${item.schemaIdentifier}/${kebabCase(item.name) || 'titel'}`,
+				url: getIeObjectDetailPath(locale, item.maintainerSlug, item.schemaIdentifier, item.name),
 				query: {
 					[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: plainTextSearchTerms,
 				},
