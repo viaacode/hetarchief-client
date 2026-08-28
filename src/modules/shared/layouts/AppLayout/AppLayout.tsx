@@ -66,6 +66,7 @@ import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useQueryClient } from '@tanstack/react-query';
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
+import { VisitorSpaceService } from '@visitor-space/services';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -199,6 +200,14 @@ const AppLayout: FC<any> = ({ children }) => {
 		// Set the build version on the window object
 		(window as unknown as Record<string, unknown>).HETARCHIEF_VERSION = packageJson.version;
 	}, []);
+
+	useEffect(() => {
+		// Give services that live outside of React the app's real QueryClient, so they can
+		// invalidate/clear the cache the app actually reads from
+		// https://meemoo.atlassian.net/browse/ARC-1828
+		AuthService.setQueryClient(queryClient);
+		VisitorSpaceService.setQueryClient(queryClient);
+	}, [queryClient]);
 
 	useEffect(() => {
 		if (router && user) {
