@@ -27,11 +27,7 @@ const SpacePreview: FC<SpacePreviewProps> = ({
 				serviceDescriptionNl.length > 0 &&
 				serviceDescriptionNl !== '<p></p>' &&
 				canPreview && (
-					<Html
-						className="u-mb-40 u-color-neutral c-content"
-						content={serviceDescriptionNl}
-						type="div"
-					/>
+					<Html className="u-mb-40 u-color-neutral" content={serviceDescriptionNl} type="div" />
 				)}
 
 			{locale === Locale.en &&
@@ -39,11 +35,7 @@ const SpacePreview: FC<SpacePreviewProps> = ({
 				serviceDescriptionEn.length > 0 &&
 				serviceDescriptionEn !== '<p></p>' &&
 				canPreview && (
-					<Html
-						className="u-mb-40 u-color-neutral c-content"
-						content={serviceDescriptionEn}
-						type="div"
-					/>
+					<Html className="u-mb-40 u-color-neutral" content={serviceDescriptionEn} type="div" />
 				)}
 		</div>
 	);

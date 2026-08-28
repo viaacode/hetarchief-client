@@ -58,7 +58,7 @@ const WaitingPage: FC<WaitingPageProps> = ({ visitorSpace, backLink }) => {
 								{locale === Locale.nl && visitorSpace.descriptionNl && (
 									<Html
 										type="div"
-										className="p-visit-requested__description u-mt-32 c-content u-padding-top-l"
+										className="p-visit-requested__description u-mt-32 u-padding-top-l"
 										content={visitorSpace.descriptionNl}
 									/>
 								)}
@@ -66,7 +66,7 @@ const WaitingPage: FC<WaitingPageProps> = ({ visitorSpace, backLink }) => {
 								{locale === Locale.en && visitorSpace.descriptionEn && (
 									<Html
 										type="div"
-										className="p-visit-requested__description u-mt-32 c-content u-padding-top-l"
+										className="p-visit-requested__description u-mt-32 u-padding-top-l"
 										content={visitorSpace.descriptionEn}
 									/>
 								)}
