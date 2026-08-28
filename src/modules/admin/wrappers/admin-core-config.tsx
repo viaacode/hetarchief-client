@@ -1,4 +1,4 @@
-import { ContentPageIiifViewer } from '@admin/wrappers/ContentPageIiifViewer/ContentPageIiifViewer';
+import { IiifViewerWrapper } from '@admin/wrappers/IiifViewerWrapper/IiifViewerWrapper';
 import { BlockContentEnclose } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose';
 import {
 	type AdminConfig,
@@ -166,7 +166,7 @@ export function getAdminCoreConfig(
 			// A content block cannot resolve a newspaper's pages or their ticket-service tokens on its
 			// own, so the viewer is handed over ready to use.
 			// https://meemoo.atlassian.net/browse/ARC-3813
-			iiifViewer: ContentPageIiifViewer,
+			iiifViewer: IiifViewerWrapper,
 			loader: {
 				component: () => <Loading fullscreen locationId="admin-core-loader" />,
 			},

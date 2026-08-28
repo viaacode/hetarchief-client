@@ -1,23 +1,33 @@
 import { useGetIeObjectBySchemaIdentifier } from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
 import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/use-get-ie-object-ticket-service-tokens';
-import {
-	IMAGE_API_FORMATS,
-	IMAGE_BROWSE_COPY_FORMATS,
-	XML_FORMATS,
-} from '@ie-objects/ie-objects.consts';
 import { IiifViewer } from '@iiif-viewer/IiifViewer';
-import type { ImageInfo, ImageInfoWithToken } from '@iiif-viewer/IiifViewer.types';
-import { compact } from 'es-toolkit/compat';
+import type { ImageInfoWithToken } from '@iiif-viewer/IiifViewer.types';
 import type { FC } from 'react';
 import { useMemo, useState } from 'react';
+import {
+	type IiifViewerWrapperPage,
+	mapGivenPagesToImageInfos,
+	mapIeObjectPagesToImageInfos,
+} from './IiifViewerWrapper.helpers';
 
-export interface ContentPageIiifViewerProps {
+export interface IiifViewerWrapperProps {
 	schemaIdentifier: string;
 	title?: string;
+	/**
+	 * The object's pages, when the caller already has them (e.g. the driekeuzespeler's own
+	 * proactive fetch) -- same shape playable-display-data's `pages` field returns. Given this,
+	 * the wrapper skips useGetIeObjectBySchemaIdentifier entirely: the one thing it still has to
+	 * resolve itself is a ticket-service token per image, since a ticket is short-lived and
+	 * access-checked at request time, so it can never travel with a prefetched page list. Omit it
+	 * and the wrapper falls back to resolving the full object (and its page list) itself, exactly
+	 * as it always has, for a caller that has only an id.
+	 */
+	pages?: IiifViewerWrapperPage[];
 }
 
 /**
- * The IIIF viewer as a content block can use it: hand it an object id and it resolves the rest.
+ * The IIIF viewer as a content block can use it: hand it an object id (and, optionally, a page
+ * list it already resolved) and it takes care of the rest.
  *
  * Admin-core cannot render the viewer itself. The viewer needs the object's page list and a
  * ticket-service token per page, and both hooks live here. So the client registers this wrapper on
@@ -28,40 +38,19 @@ export interface ContentPageIiifViewerProps {
  * selection or download, and no url state. Those belong to the detail page, and the FA sends the
  * visitor there through the "Bekijk volledig fragment" CTA.
  */
-export const ContentPageIiifViewer: FC<ContentPageIiifViewerProps> = ({
-	schemaIdentifier,
-	title,
-}) => {
+export const IiifViewerWrapper: FC<IiifViewerWrapperProps> = ({ schemaIdentifier, title, pages }) => {
 	const [activeImageIndex, setActiveImageIndex] = useState(0);
 	const [isTextOverlayVisible, setIsTextOverlayVisible] = useState(false);
 
-	const { data: ieObject } = useGetIeObjectBySchemaIdentifier(schemaIdentifier, true);
+	// Only resolved when the caller didn't already hand over a page list.
+	const { data: ieObject } = useGetIeObjectBySchemaIdentifier(schemaIdentifier, true, {
+		enabled: !pages,
+	});
 
-	// Same mapping the object detail page does: one entry per page, built from the page's own files.
-	const imageInfos = useMemo((): ImageInfo[] => {
-		return compact(
-			ieObject?.pages?.flatMap((page) => {
-				const files = page?.representations?.flatMap((representation) => representation.files);
-				const imageApiFile =
-					files?.find((file) => IMAGE_API_FORMATS.includes(file.mimeType)) ||
-					files?.find((file) => file.storedAt.endsWith('jp2'));
-
-				if (!imageApiFile?.storedAt) {
-					return null;
-				}
-
-				return {
-					imageUrl: imageApiFile.storedAt.replace(
-						'https://iiif-qas.meemoo.be/image/3/public',
-						'https://iiif-qas.meemoo.be/image/3/hetarchief'
-					),
-					thumbnailUrl: files?.find((file) => IMAGE_BROWSE_COPY_FORMATS.includes(file.mimeType))
-						?.thumbnailUrl,
-					altoUrl: files?.find((file) => XML_FORMATS.includes(file.mimeType))?.storedAt,
-				};
-			})
-		);
-	}, [ieObject?.pages]);
+	const imageInfos = useMemo(
+		() => (pages ? mapGivenPagesToImageInfos(pages) : mapIeObjectPagesToImageInfos(ieObject?.pages)),
+		[pages, ieObject?.pages]
+	);
 
 	const { data: ticketServiceTokensByPath } = useGetIeObjectTicketServiceTokens(
 		imageInfos.map((imageInfo) => imageInfo.imageUrl),
