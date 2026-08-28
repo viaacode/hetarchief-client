@@ -1,5 +1,7 @@
+import { QUERY_KEYS } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
 import type { IPagination } from '@studiohyperdrive/pagination';
+import type { QueryClient } from '@tanstack/react-query';
 import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { sortBy } from 'es-toolkit/compat';
 import { stringifyUrl } from 'query-string';
@@ -16,6 +18,18 @@ import {
 } from './visitor-space.service.types';
 
 export class VisitorSpaceService {
+	/**
+	 * The QueryClient that backs the app (see src/pages/_app.tsx), injected from AppLayout.
+	 * Do NOT construct one here: a locally created client has an empty cache of its own, so
+	 * invalidating it does nothing, and a module-level singleton would be shared across all SSR
+	 * requests on the server.
+	 */
+	private static queryClient: QueryClient | null = null;
+
+	public static setQueryClient(queryClient: QueryClient): void {
+		VisitorSpaceService.queryClient = queryClient;
+	}
+
 	public static async getAll(
 		searchInput = '',
 		status: VisitorSpaceStatus[] | undefined = undefined,
@@ -109,6 +123,12 @@ export class VisitorSpaceService {
 		const response: VisitorSpaceInfo = await ApiService.getApi()
 			.post(VISITOR_SPACE_SERVICE_BASE_URL, { body: formData, headers })
 			.json();
+
+		// The content partner now has a space, so it must no longer show up in the
+		// `hasSpace: false` list that the create form offers
+		await VisitorSpaceService.queryClient?.invalidateQueries({
+			queryKey: [QUERY_KEYS.getContentPartners],
+		});
 
 		return response;
 	}
