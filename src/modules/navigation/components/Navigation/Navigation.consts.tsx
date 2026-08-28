@@ -10,6 +10,7 @@ import {
 } from '@navigation/services/navigation-service/navigation.types';
 import { Icon, type IconName } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { UnreadMaterialRequestIndicatorRow } from '@shared/components/UnreadMaterialRequestIndicator';
 import {
 	ROUTE_PARTS_BY_LOCALE,
 	ROUTE_PREFIXES_BY_LOCALE,
@@ -48,6 +49,7 @@ const renderLink = (
 	href: string,
 	{
 		badge,
+		showUnreadIndicator,
 		iconStart,
 		iconEnd,
 		className,
@@ -56,6 +58,7 @@ const renderLink = (
 		onClick,
 	}: {
 		badge?: ReactNode;
+		showUnreadIndicator?: boolean;
 		iconStart?: ReactNode;
 		iconEnd?: ReactNode;
 		className?: string;
@@ -74,7 +77,12 @@ const renderLink = (
 
 	if (href) {
 		return isDropdown ? (
-			<NavigationLink href={href} label={label} isDropdownItem />
+			<NavigationLink
+				href={href}
+				label={label}
+				showUnreadIndicator={showUnreadIndicator}
+				isDropdownItem
+			/>
 		) : (
 			<Link
 				href={href}
@@ -86,8 +94,12 @@ const renderLink = (
 				title={tooltip}
 			>
 				{iconStart && iconStart}
-				{label}
-				{badge && badge}
+				{showUnreadIndicator ? (
+					<UnreadMaterialRequestIndicatorRow>{label}</UnreadMaterialRequestIndicatorRow>
+				) : (
+					label
+				)}
+				{badge}
 				{iconEnd && iconEnd}
 			</Link>
 		);
@@ -97,8 +109,12 @@ const renderLink = (
 		// biome-ignore lint/a11y/useAriaPropsSupportedByRole: still using it
 		<span aria-label={tooltip} className={cn} title={tooltip}>
 			{iconStart && iconStart}
-			{label}
-			{badge && badge}
+			{showUnreadIndicator ? (
+				<UnreadMaterialRequestIndicatorRow>{label}</UnreadMaterialRequestIndicatorRow>
+			) : (
+				label
+			)}
+			{badge}
 			{iconEnd && iconEnd}
 		</span>
 	);
@@ -327,7 +343,9 @@ const getDynamicHeaderLinks = (
 	activeVisits: VisitRequest[] | null,
 	isMeemooAdmin: boolean | undefined,
 	permissions: Permission[],
-	locale: Locale
+	locale: Locale,
+	hasUnreadOutgoingMaterialRequestMessages: boolean,
+	hasUnreadIncomingMaterialRequestMessages: boolean
 ) => {
 	const itemsByPlacement = navigationItems[placement];
 
@@ -356,6 +374,14 @@ const getDynamicHeaderLinks = (
 					isSearchNavItem && hasActiveVisits && !isMeemooAdmin
 						? `${ROUTES_BY_LOCALE[locale].search}?aanbieder=${activeVisits[0].spaceSlug}`
 						: contentPath;
+				const isMyMaterialRequestsNavItem =
+					contentPath === ROUTES_BY_LOCALE[locale].accountMyMaterialRequests;
+				const isCpAdminMaterialRequestsNavItem = [
+					ROUTES_BY_LOCALE[locale].cpAdminVisitRequests,
+					ROUTES_BY_LOCALE[locale].cpAdminMaterialRequests,
+					ROUTES_BY_LOCALE[locale].cpAdminVisitors,
+					ROUTES_BY_LOCALE[locale].cpAdminSettings,
+				].includes(contentPath);
 
 				if (contentPath === NAVIGATION_DROPDOWN.SEARCH) {
 					return getSearchDropdown(label, currentPath, locale);
@@ -380,6 +406,9 @@ const getDynamicHeaderLinks = (
 						label,
 						searchUrl,
 						{
+							showUnreadIndicator:
+								(isMyMaterialRequestsNavItem && hasUnreadOutgoingMaterialRequestMessages) ||
+								(isCpAdminMaterialRequestsNavItem && hasUnreadIncomingMaterialRequestMessages),
 							target: linkTarget || undefined,
 							iconStart: iconName ? <Icon name={iconName as IconName} aria-hidden /> : null,
 							tooltip: tooltip || undefined,
@@ -397,12 +426,13 @@ const getCpAdminManagementDropdown = (
 	permissions: Permission[],
 	maintainerSlug: string | null,
 	isMobile: boolean,
-	locale: Locale
+	locale: Locale,
+	hasUnreadIncomingMaterialRequestMessages: boolean
 ): NavigationItem[] => {
 	if (
 		intersection(permissions, [
 			Permission.MANAGE_CP_VISIT_REQUESTS,
-			Permission.MANAGE_CP_VISIT_REQUESTS,
+			Permission.VIEW_ANY_MATERIAL_REQUESTS,
 			Permission.UPDATE_OWN_SPACE,
 		]).length === 0
 	) {
@@ -415,6 +445,7 @@ const getCpAdminManagementDropdown = (
 				tText('modules/navigation/components/navigation/navigation___beheer'),
 				isMobile ? ROUTES_BY_LOCALE[locale].cpAdminVisitRequests : '',
 				{
+					showUnreadIndicator: hasUnreadIncomingMaterialRequestMessages,
 					className: linkClasses,
 				}
 			),
@@ -566,7 +597,9 @@ export const getNavigationItemsLeft = (
 	maintainerSlug: string | null,
 	activeVisits: VisitRequest[] | null,
 	isMeemooAdmin: boolean,
-	locale: Locale
+	locale: Locale,
+	hasUnreadOutgoingMaterialRequestMessages: boolean,
+	hasUnreadIncomingMaterialRequestMessages: boolean
 ): NavigationItem[] => {
 	const beforeDivider = getDynamicHeaderLinks(
 		currentPath,
@@ -577,7 +610,9 @@ export const getNavigationItemsLeft = (
 		activeVisits,
 		isMeemooAdmin,
 		permissions,
-		locale
+		locale,
+		hasUnreadOutgoingMaterialRequestMessages,
+		hasUnreadIncomingMaterialRequestMessages
 	);
 	const afterDivider = getDynamicHeaderLinks(
 		currentPath,
@@ -588,7 +623,9 @@ export const getNavigationItemsLeft = (
 		null,
 		undefined,
 		permissions,
-		locale
+		locale,
+		hasUnreadOutgoingMaterialRequestMessages,
+		hasUnreadIncomingMaterialRequestMessages
 	);
 
 	const cpAdminLinks = getCpAdminManagementDropdown(
@@ -596,7 +633,8 @@ export const getNavigationItemsLeft = (
 		permissions,
 		maintainerSlug,
 		isMobile,
-		locale
+		locale,
+		hasUnreadIncomingMaterialRequestMessages
 	);
 	const meemooAdminLinks = getMeemooAdminManagementDropdown(currentPath, permissions, locale);
 
@@ -621,7 +659,9 @@ export const getNavigationItemsProfileDropdown = (
 	accessibleVisitorSpaces: VisitorSpaceInfo[],
 	linkedSpaceOrId: string | null,
 	locale: Locale,
-	user: AvoUserCommonUser | null
+	user: AvoUserCommonUser | null,
+	hasUnreadOutgoingMaterialRequestMessages: boolean,
+	hasUnreadIncomingMaterialRequestMessages: boolean
 ): NavigationItem[] => {
 	const profileDropdown = getDynamicHeaderLinks(
 		currentPath,
@@ -632,7 +672,9 @@ export const getNavigationItemsProfileDropdown = (
 		null,
 		undefined,
 		(user?.permissions || []) as unknown as Permission[],
-		locale
+		locale,
+		hasUnreadOutgoingMaterialRequestMessages,
+		hasUnreadIncomingMaterialRequestMessages
 	);
 
 	// Group navigation items by type

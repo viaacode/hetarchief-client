@@ -211,6 +211,7 @@ export const GET_BLANK_MATERIAL_REQUEST_REUSE_FORM = (): MaterialRequestReuseFor
 
 const MATERIAL_REQUESTS_COLUMN_WIDTH_LOOKUP: Record<MaterialRequestKeys, string> = {
 	[MaterialRequestKeys.objectSchemaName]: '20rem',
+	[MaterialRequestKeys.unreadStatus]: '6rem',
 	[MaterialRequestKeys.maintainerName]: '20rem',
 	[MaterialRequestKeys.requesterFullName]: '20rem',
 	[MaterialRequestKeys.type]: '13rem',

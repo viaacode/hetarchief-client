@@ -8,6 +8,7 @@ import {
 	MaterialRequestType,
 } from '@material-requests/types';
 import type { Column } from '@meemoo/react-components';
+import { UnreadMaterialRequestIndicator } from '@shared/components/UnreadMaterialRequestIndicator';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
@@ -87,11 +88,13 @@ export const GET_MATERIAL_REQUEST_DOWNLOAD_FILTER_ARRAY = (): {
 
 export const getAccountMaterialRequestTableColumns = (
 	isComplexReuseFlow: boolean,
-	isTabletPortrait: boolean
+	isTabletPortrait: boolean,
+	unreadCountsByMaterialRequestId: Record<string, number> = {}
 ): Column<MaterialRequest>[] => {
 	if (isComplexReuseFlow) {
 		return [
 			getMaterialColumn(isTabletPortrait),
+			getUnreadCountColumn(unreadCountsByMaterialRequestId),
 			...(isTabletPortrait ? [] : [getRequestedAtColumn()]),
 			getTypeColumn(isTabletPortrait),
 			getStatusColumn(isTabletPortrait),
@@ -111,6 +114,7 @@ export const getAccountMaterialRequestTableColumns = (
 				<span className="u-color-neutral">{original.maintainerName}</span>
 			),
 		},
+		getUnreadCountColumn(unreadCountsByMaterialRequestId),
 		getRequestedAtColumn(),
 		getTypeColumn(false),
 	];
@@ -131,6 +135,30 @@ const getMaterialColumn = (disableSort: boolean): Column<MaterialRequest> =>
 				</span>
 			</span>
 		),
+	}) as Column<MaterialRequest>;
+
+const getUnreadCountColumn = (
+	unreadCountsByMaterialRequestId: Record<string, number>
+): Column<MaterialRequest> =>
+	({
+		accessorKey: MaterialRequestKeys.unreadStatus,
+		header: '',
+		enableSorting: false,
+		cell: ({ row: { original } }) => {
+			const count = unreadCountsByMaterialRequestId[original.id] || 0;
+			if (!count) {
+				return null;
+			}
+			return (
+				<span
+					title={tText('modules/account/const/my-material-requests___count-ongelezen-berichten', {
+						count,
+					})}
+				>
+					<UnreadMaterialRequestIndicator count={count} />
+				</span>
+			);
+		},
 	}) as Column<MaterialRequest>;
 
 const getRequestedAtColumn = (): Column<MaterialRequest> =>

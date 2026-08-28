@@ -5,6 +5,7 @@ import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectCommonUser, selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
+import { useGetMaterialRequestsUnreadSummary } from '@material-requests/hooks/get-material-requests-unread-summary';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/client';
 import { Alert } from '@meemoo/react-components';
@@ -109,6 +110,13 @@ const AppLayout: FC<any> = ({ children }) => {
 			enabled: shouldFetchMaterialRequests,
 		}
 	);
+	const { data: materialRequestsUnreadSummary } = useGetMaterialRequestsUnreadSummary(
+		shouldFetchMaterialRequests
+	);
+	const hasUnreadOutgoingMaterialRequestMessages =
+		!!materialRequestsUnreadSummary?.hasUnreadOutgoingMessages;
+	const hasUnreadIncomingMaterialRequestMessages =
+		!!materialRequestsUnreadSummary?.hasUnreadIncomingMessages;
 	const { data: navigationItems } = useGetNavigationItems(locale);
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
@@ -292,6 +300,8 @@ const AppLayout: FC<any> = ({ children }) => {
 				user as AvoUserCommonUser | null,
 				{
 					hasUnreadNotifications,
+					hasUnreadOutgoingMaterialRequestMessages,
+					hasUnreadIncomingMaterialRequestMessages,
 					notificationsOpen: showNotificationsCenter,
 					userName,
 					onLogOutClick,
@@ -313,6 +323,8 @@ const AppLayout: FC<any> = ({ children }) => {
 		locale,
 		user,
 		hasUnreadNotifications,
+		hasUnreadOutgoingMaterialRequestMessages,
+		hasUnreadIncomingMaterialRequestMessages,
 		showNotificationsCenter,
 		userName,
 		onLogOutClick,
@@ -330,7 +342,9 @@ const AppLayout: FC<any> = ({ children }) => {
 			user?.visitorSpaceSlug || null,
 			visitorSpaces,
 			isMeemooAdmin,
-			locale
+			locale,
+			hasUnreadOutgoingMaterialRequestMessages,
+			hasUnreadIncomingMaterialRequestMessages
 		);
 
 		const staticItems = [
@@ -378,6 +392,8 @@ const AppLayout: FC<any> = ({ children }) => {
 		isMeemooAdmin,
 		locale,
 		isLoggedIn,
+		hasUnreadOutgoingMaterialRequestMessages,
+		hasUnreadIncomingMaterialRequestMessages,
 	]);
 
 	const showLoggedOutGrid = useMemo(() => !isLoggedIn && isMobile, [isMobile, isLoggedIn]);

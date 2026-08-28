@@ -8,6 +8,7 @@ import {
 } from '@material-requests/types';
 import type { Column } from '@meemoo/react-components';
 import { CopyButton } from '@shared/components/CopyButton';
+import { UnreadMaterialRequestIndicator } from '@shared/components/UnreadMaterialRequestIndicator';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SortDirectionParam } from '@shared/helpers';
 import { tText } from '@shared/helpers/translate';
@@ -46,9 +47,11 @@ export const GET_CP_MATERIAL_REQUEST_TYPE_FILTER_ARRAY = (): {
 ];
 
 export const getMaterialRequestTableColumns = (
-	isTabletPortrait: boolean
+	isTabletPortrait: boolean,
+	unreadCountsByMaterialRequestId: Record<string, number> = {}
 ): Column<MaterialRequest>[] => [
 	getRequesterColumn(isTabletPortrait),
+	getUnreadCountColumn(unreadCountsByMaterialRequestId),
 	getTitleColumn(isTabletPortrait),
 	...(isTabletPortrait ? [] : [getRequestedAtColumn()]),
 	getTypeColumn(isTabletPortrait),
@@ -79,6 +82,30 @@ const getRequesterColumn = (disableSort: boolean): Column<MaterialRequest> =>
 				</CopyButton>
 			</span>
 		),
+	}) as Column<MaterialRequest>;
+
+const getUnreadCountColumn = (
+	unreadCountsByMaterialRequestId: Record<string, number>
+): Column<MaterialRequest> =>
+	({
+		accessorKey: MaterialRequestKeys.unreadStatus,
+		header: '',
+		enableSorting: false,
+		cell: ({ row: { original } }) => {
+			const count = unreadCountsByMaterialRequestId[original.id] || 0;
+			if (!count) {
+				return null;
+			}
+			return (
+				<span
+					title={tText('modules/cp/const/material-requests___count-ongelezen-berichten', {
+						count,
+					})}
+				>
+					<UnreadMaterialRequestIndicator count={count} />
+				</span>
+			);
+		},
 	}) as Column<MaterialRequest>;
 
 const getTitleColumn = (disableSort: boolean): Column<MaterialRequest> =>

@@ -1,4 +1,5 @@
 import { Icon, type IconProps } from '@shared/components/Icon';
+import { UnreadMaterialRequestIndicatorRow } from '@shared/components/UnreadMaterialRequestIndicator';
 import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import Link from 'next/link';
@@ -7,6 +8,7 @@ import styles from '../Navigation.module.scss';
 import type { NavigationLinkIcon, NavigationLinkProps } from './NavigationLink.types';
 
 const NavigationLink: FC<NavigationLinkProps> = ({
+	showUnreadIndicator,
 	className,
 	href,
 	iconStart,
@@ -43,7 +45,11 @@ const NavigationLink: FC<NavigationLinkProps> = ({
 	const renderLabelWithIcons = () => (
 		<>
 			{renderIcon(iconStart, 'start')}
-			{label}
+			{showUnreadIndicator ? (
+				<UnreadMaterialRequestIndicatorRow>{label}</UnreadMaterialRequestIndicatorRow>
+			) : (
+				label
+			)}
 			{renderIcon(iconEnd, 'end')}
 		</>
 	);
