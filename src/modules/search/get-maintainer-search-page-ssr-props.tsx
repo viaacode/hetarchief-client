@@ -3,12 +3,15 @@ import type { IeObject } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
+import {
+	getIeObjectDetailRedirectDestination,
+	getLocalePathPrefix,
+} from '@shared/helpers/ie-object-urls';
 import { OrganisationService } from '@shared/services/organisation-service/organisation.service';
 import type { Organisation } from '@shared/services/organisation-service/organisation.types';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import type { Locale } from '@shared/utils/i18n';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
-import { kebabCase } from 'es-toolkit/compat';
 import type { GetServerSidePropsResult } from 'next';
 import type { GetServerSidePropsContext } from 'next/types';
 import { stringifyUrl } from 'query-string';
@@ -36,7 +39,8 @@ export async function getMaintainerSearchPageServerSideProps(
 		return {
 			redirect: {
 				destination: stringifyUrl({
-					url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
+					// Next.js uses the destination verbatim, so the locale prefix has to be included
+					url: `${getLocalePathPrefix(locale)}/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 					query: {
 						[SearchFilterId.Maintainers]: `${organisation.schemaIdentifier}${FILTER_LABEL_VALUE_DELIMITER}${organisation.schemaName}`,
 					},
@@ -73,11 +77,14 @@ export async function getMaintainerSearchPageServerSideProps(
 		return {
 			redirect: {
 				destination: stringifyUrl({
-					url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${ieObject.maintainerSlug}/${
-						ieObject.schemaIdentifier
-					}/${kebabCase(ieObject.name)}`,
+					url: getIeObjectDetailRedirectDestination(
+						locale,
+						ieObject.maintainerSlug,
+						ieObject.schemaIdentifier,
+						ieObject.name
+					),
 				}),
-				permanent: false,
+				permanent: true,
 			},
 		};
 	}

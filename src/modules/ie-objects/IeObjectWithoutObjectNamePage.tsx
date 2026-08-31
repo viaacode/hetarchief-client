@@ -1,10 +1,9 @@
 import { useGetIeObjectBySchemaIdentifier } from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
 import { Loading } from '@shared/components/Loading';
-import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { keepPreviousData } from '@tanstack/react-query';
-import { kebabCase } from 'es-toolkit/compat';
 import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
 import { type FC, useEffect } from 'react';
@@ -34,9 +33,13 @@ export const IeObjectWithoutObjectNamePage: FC<MaintainerSearchPageProps> = () =
 	useEffect(() => {
 		if (ieObjectInfo || isError) {
 			const parsedUrl = parseUrl(window.location.href);
-			const objectTitleSlug = kebabCase(ieObjectInfo?.name || '');
 			const searchUrl = stringifyUrl({
-				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${ieObjectInfo?.maintainerSlug || slug}/${ieObjectInfo?.schemaIdentifier || schemaIdentifier}/${objectTitleSlug || 'titel'}`,
+				url: getIeObjectDetailPath(
+					locale,
+					(ieObjectInfo?.maintainerSlug || slug) as string,
+					(ieObjectInfo?.schemaIdentifier || schemaIdentifier) as string,
+					ieObjectInfo?.name
+				),
 				query: parsedUrl.query,
 			});
 

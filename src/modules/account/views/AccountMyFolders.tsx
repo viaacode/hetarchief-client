@@ -24,6 +24,7 @@ import { ShareFolderBlade } from '@shared/components/ShareFolderBlade';
 import { SidebarLayoutTitle } from '@shared/components/SidebarLayoutTitle';
 import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { SidebarLayout } from '@shared/layouts/SidebarLayout';
@@ -36,7 +37,7 @@ import { asDate, formatMediumDate } from '@shared/utils/dates';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import clsx from 'clsx';
-import { isEmpty, isNil, kebabCase } from 'es-toolkit/compat';
+import { isEmpty, isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
@@ -509,7 +510,12 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 					keywords={mappedKeywords}
 					items={folderMedia?.data?.items.map((media) => {
 						let link: string | undefined = stringifyUrl({
-							url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${media.maintainerSlug}/${media.schemaIdentifier}/${kebabCase(media.name) || 'titel'}`,
+							url: getIeObjectDetailPath(
+								locale,
+								media.maintainerSlug,
+								media.schemaIdentifier,
+								media.name
+							),
 							query: {
 								[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: JSON.stringify(mappedKeywords),
 							},

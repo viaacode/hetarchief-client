@@ -8,8 +8,8 @@ import { makeServerSideRequestGetIeObjectThumbnail } from '@ie-objects/hooks/use
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
-import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
+import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { type UserProps } from '@shared/hooks/with-user';
@@ -17,7 +17,6 @@ import { setShowZendesk } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { QueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
-import { kebabCase } from 'es-toolkit/compat';
 import type { GetServerSidePropsResult, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import type { GetServerSidePropsContext } from 'next/types';
@@ -53,9 +52,12 @@ const IeObjectPidRouteRedirect: NextPage<DefaultSeoInfo & UserProps> = ({
 
 	useEffect(() => {
 		if (ieObjectInfo) {
-			const objectDetailPagePath = `${ROUTES_BY_LOCALE[locale].search}/${
-				ieObjectInfo.maintainerSlug
-			}/${ieObjectInfo.schemaIdentifier}/${kebabCase(ieObjectInfo.name)}`;
+			const objectDetailPagePath = getIeObjectDetailPath(
+				locale,
+				ieObjectInfo.maintainerSlug,
+				ieObjectInfo.schemaIdentifier,
+				ieObjectInfo.name
+			);
 			router.replace(objectDetailPagePath);
 		}
 	}, [ieObjectInfo, locale, router]);

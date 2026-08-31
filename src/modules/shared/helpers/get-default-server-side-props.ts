@@ -1,17 +1,13 @@
 import { getTranslations } from '@i18n/helpers/get-translations';
 import { IeObjectsService } from '@ie-objects/services';
 import type { IeObjectSeo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
-import getConfig from '@shared/config/public-runtime-config';
-import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { getIeObjectDetailUrl } from '@shared/helpers/ie-object-urls';
 import { makeServerSideRequestGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
-import type { DefaultSeoInfo } from '@shared/types/seo';
+import type { DefaultSeoInfo, PageInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
-import { kebabCase } from 'es-toolkit/compat';
 import type { GetServerSidePropsContext, GetStaticPropsResult } from 'next/types';
 import { i18n } from 'next-i18next/pages';
-
-const { publicRuntimeConfig } = getConfig();
 
 export async function getDefaultStaticProps(
 	context: GetServerSidePropsContext,
@@ -23,6 +19,7 @@ export async function getDefaultStaticProps(
 		description?: string | null;
 		image?: string | null;
 		canonicalUrl?: string | null;
+		translatedPages?: PageInfo[];
 		/**
 		 * When provided, skips the SEO endpoint fetch and uses this value to build
 		 * the canonical URL. Pass from callers that already fetched SEO themselves
@@ -64,13 +61,27 @@ export async function getDefaultStaticProps(
 			maintainerSlug = seoInfo?.maintainerSlug;
 		}
 
-		const baseUrl = publicRuntimeConfig.CLIENT_URL;
-		if (baseUrl && maintainerSlug && options.schemaIdentifier && options.title) {
+		if (maintainerSlug && options.schemaIdentifier && options.title) {
+			// Every locale self references its own url as the canonical one, the locales are tied
+			// together with hreflang tags instead. Canonicalising all locales onto the Dutch url
+			// would keep the English pages out of the index entirely.
 			options.canonicalUrl =
 				options.canonicalUrl ||
-				`${baseUrl}/${ROUTE_PARTS_BY_LOCALE.nl.search}/${maintainerSlug}/${options.schemaIdentifier}/${kebabCase(
-					options.title
-				)}`;
+				getIeObjectDetailUrl(locale, maintainerSlug, options.schemaIdentifier, options.title);
+
+			options.translatedPages = options.translatedPages || [
+				...Object.values(Locale).map(
+					(languageCode): PageInfo => ({
+						languageCode,
+						url: getIeObjectDetailUrl(
+							languageCode,
+							maintainerSlug as string,
+							options.schemaIdentifier as string,
+							options.title as string
+						),
+					})
+				),
+			];
 		}
 	}
 
@@ -82,6 +93,7 @@ export async function getDefaultStaticProps(
 			description: options?.description || null,
 			image: options?.image || null,
 			canonicalUrl: options?.canonicalUrl || null,
+			translatedPages: options?.translatedPages || [],
 			...(dehydratedState ? { dehydratedState } : {}),
 			_nextI18Next: {
 				initialI18nStore: {

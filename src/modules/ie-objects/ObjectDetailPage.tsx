@@ -82,6 +82,7 @@ import getConfig from '@shared/config/public-runtime-config';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { BooleanParamWithDefault } from '@shared/helpers/boolean-param-with-default';
+import { getIeObjectNameSlug } from '@shared/helpers/ie-object-urls';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -120,7 +121,6 @@ import {
 	intersection,
 	isEqual,
 	isNil,
-	kebabCase,
 	lowerCase,
 	noop,
 } from 'es-toolkit/compat';
@@ -149,6 +149,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	image,
 	url,
 	canonicalUrl,
+	translatedPages,
 }) => {
 	/**
 	 * Hooks
@@ -688,7 +689,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			const newPath = router.asPath
 				.replace(`/${ieObjectId}/`, `/${mediaInfo?.schemaIdentifier}/`)
 				.replace(`/${maintainerSlug}/`, `/${mediaInfo?.maintainerSlug}/`)
-				.replace(`/${ieObjectNameSlug}`, `/${kebabCase(mediaInfo?.name || '')}`);
+				.replace(`/${ieObjectNameSlug}`, `/${getIeObjectNameSlug(mediaInfo?.name)}`);
 			router.replace(newPath, undefined, { shallow: true });
 		}
 	}, [
@@ -2041,7 +2042,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				title={title}
 				description={seoDescription}
 				imgUrl={image}
-				translatedPages={[]}
+				translatedPages={translatedPages || []}
 				relativeUrl={url}
 				canonicalUrl={canonicalUrl}
 			/>

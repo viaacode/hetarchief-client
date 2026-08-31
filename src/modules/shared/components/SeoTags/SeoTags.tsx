@@ -1,8 +1,10 @@
 import getConfig from '@shared/config/public-runtime-config';
 import { ROUTE_PARTS_BY_LOCALE, ROUTES_BY_LOCALE, type RouteKey } from '@shared/const';
+import { DEFAULT_LOCALE, getAbsoluteUrl } from '@shared/helpers/ie-object-urls';
 import { useGetAllLanguages } from '@shared/hooks/use-get-all-languages/use-get-all-languages';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { LanguageInfo } from '@shared/services/translation-service/translation.types';
+import type { PageInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { createPageTitle } from '@shared/utils/seo';
 import { truncate } from 'es-toolkit/compat';
@@ -12,10 +14,7 @@ import { stripHtml } from 'string-strip-html';
 
 const { publicRuntimeConfig } = getConfig();
 
-export interface PageInfo {
-	url: string;
-	languageCode: Locale;
-}
+export type { PageInfo };
 
 interface SeoTagsProps {
 	title: string | null | undefined;
@@ -49,23 +48,31 @@ export const SeoTags: FC<SeoTagsProps> = ({
 		: null;
 	const locale = useLocale();
 	const { data: languages } = useGetAllLanguages();
-	const otherLanguages = (languages || []).filter((lang) => lang.languageCode !== locale);
 
-	const getResolvedUrl = (url: string): string => {
+	/**
+	 * Turns a locale relative path into an absolute url.
+	 * Next.js omits the prefix of the default locale, so the Dutch url must not get a /nl prefix.
+	 */
+	const getResolvedUrl = (url: string, urlLocale: Locale = locale): string => {
 		if (!url) {
 			return publicRuntimeConfig.CLIENT_URL;
 		}
 		if (url.startsWith('http')) {
-			// Absolute url
+			// Already absolute
 			return url;
 		}
-		// relative url
-		return `${publicRuntimeConfig.CLIENT_URL}/${locale}${url || ''}`;
+		return getAbsoluteUrl(urlLocale, url);
 	};
 
+	/**
+	 * The full set of language variants of this page, including the current locale.
+	 * Google expects every page in an hreflang cluster to reference itself as well as its
+	 * siblings, and it only accepts absolute urls.
+	 * https://meemoo.atlassian.net/browse/ARC-3363
+	 */
 	const getTranslatedPages = (): PageInfo[] => {
 		if (translatedPages.length > 0) {
-			return translatedPages.filter((page) => page.languageCode !== locale);
+			return translatedPages;
 		}
 
 		// search for page in known routes
@@ -75,10 +82,10 @@ export const SeoTags: FC<SeoTagsProps> = ({
 
 		const routeKey = knownRoutePair?.[0] as RouteKey | undefined;
 		if (routeKey) {
-			// Output routes for other languages
-			return otherLanguages.map((lang: LanguageInfo): PageInfo => {
+			// Output routes for every language, including the current one
+			return (languages || []).map((lang: LanguageInfo): PageInfo => {
 				return {
-					url: `/${lang.languageCode}${ROUTES_BY_LOCALE[lang.languageCode][routeKey]}`,
+					url: ROUTES_BY_LOCALE[lang.languageCode][routeKey],
 					languageCode: lang.languageCode,
 				};
 			});
@@ -108,13 +115,17 @@ export const SeoTags: FC<SeoTagsProps> = ({
 		return null;
 	}
 	const url = getResolvedUrl(relativeUrl);
+	const alternateLanguagePages = getTranslatedPages();
+	const defaultLanguagePage =
+		alternateLanguagePages.find((page) => page.languageCode === DEFAULT_LOCALE) ??
+		alternateLanguagePages[0];
 	return (
 		<Head>
 			<title>{resolvedTitle}</title>
 			{resolvedDescription && <meta name="description" content={resolvedDescription} />}
 			<meta property="og:type" content="website" />
 			<meta property="og:url" content={url} />
-			{canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+			{canonicalUrl && <link rel="canonical" href={getResolvedUrl(canonicalUrl, DEFAULT_LOCALE)} />}
 			<meta property="og:title" content={resolvedTitle} />
 			{resolvedDescription && <meta property="og:description" content={resolvedDescription} />}
 			<meta
@@ -125,16 +136,23 @@ export const SeoTags: FC<SeoTagsProps> = ({
 			<meta property="twitter:domain" content={publicRuntimeConfig.CLIENT_URL} />
 			<meta property="twitter:title" content={resolvedTitle} />
 			{resolvedDescription && <meta property="twitter:description" content={resolvedDescription} />}
-			{getTranslatedPages().map((translatedPage) => {
+			{alternateLanguagePages.map((translatedPage) => {
 				return (
 					<link
 						key={`translated-page__${translatedPage.languageCode}`}
 						rel="alternate"
 						hrefLang={translatedPage.languageCode}
-						href={translatedPage.url}
+						href={getResolvedUrl(translatedPage.url, translatedPage.languageCode)}
 					/>
 				);
 			})}
+			{defaultLanguagePage && (
+				<link
+					rel="alternate"
+					hrefLang="x-default"
+					href={getResolvedUrl(defaultLanguagePage.url, defaultLanguagePage.languageCode)}
+				/>
+			)}
 		</Head>
 	);
 };
