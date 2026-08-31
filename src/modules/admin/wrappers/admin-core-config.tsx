@@ -101,7 +101,7 @@ export function getAdminCoreConfig(
 				ContentBlockType.TitleWithParallax,
 				ContentBlockType.Timeline,
 				ContentBlockType.DoubleBanner,
-				ContentBlockType.Driekeuzespeler,
+				ContentBlockType.ThreeChoicesPlayer,
 			],
 			defaultPageWidth: ContentPageWidth.LARGE,
 			onSaveContentPage,
