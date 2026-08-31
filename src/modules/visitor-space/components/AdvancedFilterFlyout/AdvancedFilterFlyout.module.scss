@@ -1,0 +1,14 @@
+@use "src/styles/abstracts" as abstracts;
+
+// The list has to fit on every screen, so it scrolls inside the viewport instead of growing past it
+.c-advanced-filter-flyout {
+	list-style: none;
+	margin: 0;
+	max-height: calc(100vh - 8rem);
+	overflow-y: auto;
+	padding: 0;
+
+	li + li {
+		border-top: 1px solid abstracts.$platinum;
+	}
+}

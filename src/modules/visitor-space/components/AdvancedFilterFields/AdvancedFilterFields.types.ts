@@ -8,4 +8,6 @@ export interface AdvancedFilterFieldsProps {
 	filterValue: IdentityAdvancedFilter;
 	onChange: (index: number, value: IdentityAdvancedFilter) => void;
 	onRemove: (index: number) => void;
+	/** The property is fixed when this row belongs to one filter, so its dropdown is hidden. */
+	hideProperty?: boolean;
 }

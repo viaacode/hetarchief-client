@@ -1,7 +1,8 @@
-import { TEMP_FILTER_KEY_PREFIX } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
 import type { QueryParamConfig } from 'use-query-params';
 import { v4 as uuidV4 } from 'uuid';
 import { type AdvancedFilter, FilterProperty, Operator } from '../types';
+
+export const TEMP_FILTER_KEY_PREFIX = 'TEMP_FILTER_ID__';
 
 const divider = ',';
 export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undefined> = {
@@ -111,7 +112,7 @@ export function operatorToAcronym(operator: Operator): string {
 	return op[1];
 }
 
-function operatorAcronymToName(acronym: string | undefined): Operator {
+export function operatorAcronymToName(acronym: string | undefined): Operator {
 	if (!acronym) {
 		throw new Error(`Operator acronym undefined: ${acronym}`);
 	}

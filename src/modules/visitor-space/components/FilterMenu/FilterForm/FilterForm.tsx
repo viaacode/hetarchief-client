@@ -2,11 +2,17 @@ import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
+import { AutocompleteFilterForm } from '@visitor-space/components/AutocompleteFilterForm/AutocompleteFilterForm';
+import { CheckboxListFilterForm } from '@visitor-space/components/CheckboxListFilterForm/CheckboxListFilterForm';
+import { SearchableCheckboxFilterForm } from '@visitor-space/components/SearchableCheckboxFilterForm/SearchableCheckboxFilterForm';
+import { TextFilterForm } from '@visitor-space/components/TextFilterForm/TextFilterForm';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
-import type {
-	DefaultFilterFormProps,
-	InlineFilterFormProps,
-	SearchFilterId,
+import {
+	type DefaultFilterFormProps,
+	FilterModalType,
+	type GenericFilterFormProps,
+	type InlineFilterFormProps,
+	type SearchFilterId,
 } from '@visitor-space/types';
 import clsx from 'clsx';
 import { type FC, type ReactElement, useMemo } from 'react';
@@ -17,17 +23,27 @@ import { HAS_SHOW_OVERFLOW } from './FilterForm.const';
 import styles from './FilterForm.module.scss';
 import type { FilterFormProps } from './FilterForm.types';
 
+/** One generic form serves every filter of a modal type. See the FA of ARC-3806. */
+const GENERIC_FILTER_FORM_BY_MODAL_TYPE: Partial<
+	Record<FilterModalType, FC<GenericFilterFormProps>>
+> = {
+	[FilterModalType.SearchableCheckbox]: SearchableCheckboxFilterForm,
+	[FilterModalType.CheckboxList]: CheckboxListFilterForm,
+	[FilterModalType.Autocomplete]: AutocompleteFilterForm,
+	[FilterModalType.Text]: TextFilterForm,
+};
+
 const FilterForm: FC<FilterFormProps> = ({
 	className,
 	disabled,
-	form,
-	id,
+	filter,
 	onFormReset,
 	onFormSubmit,
 	title,
 	values,
-	type,
 }) => {
+	const { form, id, type } = filter;
+
 	const onFilterFormReset = (id: SearchFilterId, reset: () => void) => {
 		reset();
 		onFormReset(id);
@@ -73,8 +89,14 @@ const FilterForm: FC<FilterFormProps> = ({
 	};
 
 	const renderModal = (): ReactElement => {
-		// biome-ignore lint/suspicious/noExplicitAny: No typing yet
-		const FormComponent = (form as FC<DefaultFilterFormProps<any>>) ?? (() => null);
+		// A filter without a form of its own uses the generic form of its modal type.
+		// A form with its own component ignores the filter prop, a generic one reads it.
+		const FormComponent = (form ??
+			GENERIC_FILTER_FORM_BY_MODAL_TYPE[filter.modalType] ??
+			(() => null)) as FC<
+			// biome-ignore lint/suspicious/noExplicitAny: No typing yet
+			DefaultFilterFormProps<any> & Partial<Pick<GenericFilterFormProps, 'filter'>>
+		>;
 
 		return (
 			<div className={clsx(className, styles['c-filter-form'])} id={`c-filter-form--${id}`}>
@@ -86,6 +108,7 @@ const FilterForm: FC<FilterFormProps> = ({
 
 				<FormComponent
 					disabled={disabled}
+					filter={filter}
 					className={clsx(styles['c-filter-form__body'], {
 						[styles['c-filter-form__body--overflow']]: showOverflow,
 					})}

@@ -4,7 +4,9 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
+import { AdvancedFilterFlyout } from '@visitor-space/components/AdvancedFilterFlyout/AdvancedFilterFlyout';
 import { useGetThemeFilterOptions } from '@visitor-space/hooks/use-get-theme-filter-options';
+import { SearchFilterId } from '@visitor-space/types';
 import { mapFiltersToTags } from '@visitor-space/utils/map-filters';
 import clsx from 'clsx';
 import { isNil } from 'es-toolkit/compat';
@@ -34,6 +36,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	onRemoveValue,
 	sortOptions = [],
 	filterValues,
+	flyoutFilters = [],
+	onFlyoutFilterClick,
 }) => {
 	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
 	const [isSortActive, setIsSortActive] = useState(false);
@@ -58,7 +62,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	const goBackToInitial = activeFilter
 		? () => onFilterClick(activeFilter)
 		: () => setIsSortActive(false);
-	const tags = filterValues ? mapFiltersToTags(filterValues, { themeLabelsBySlug }) : [];
+	const tags = filterValues ? mapFiltersToTags(filterValues, filters, { themeLabelsBySlug }) : [];
 
 	const handleSortClick = (key: SearchSortProp, order?: AvoSearchOrderDirection) => {
 		onSortClick?.(key, order);
@@ -147,25 +151,21 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 		</>
 	);
 
-	const renderFormModal = (
-		{ form, id, label, type }: FilterMenuFilterOption,
-		isInline?: boolean
-	): ReactElement => (
+	const renderFormModal = (filter: FilterMenuFilterOption, isInline?: boolean): ReactElement => (
 		<FilterForm
 			className={clsx(styles['c-filter-menu-mobile__form'], {
 				[styles['c-filter-menu-mobile--inline']]: isInline,
 				[styles['c-filter-menu-mobile__option']]: isInline,
-				[styles['c-filter-menu-mobile__option--operative']]: !isNil(filterValues?.[id]) && isInline,
+				[styles['c-filter-menu-mobile__option--operative']]:
+					!isNil(filterValues?.[filter.id]) && isInline,
 			})}
-			form={form}
-			id={id}
+			filter={filter}
 			// Make sure to force a rerender the form by setting a key
-			key={`${id}-${openedAt}`}
+			key={`${filter.id}-${openedAt}`}
 			onFormReset={onFilterReset}
 			onFormSubmit={onFilterSubmit}
-			title={label}
-			values={filterValues?.[id]}
-			type={type}
+			title={filter.label}
+			values={filterValues?.[filter.id]}
 		/>
 	);
 
@@ -216,7 +216,15 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 			{showFilterOrSort && (
 				<>
 					{renderFilterModalHeader()}
-					{showFilterModal && renderFormModal(selectedFilter)}
+					{showFilterModal &&
+						(selectedFilter.id === SearchFilterId.Advanced ? (
+							<AdvancedFilterFlyout
+								filters={flyoutFilters}
+								onFilterClick={(filterId) => onFlyoutFilterClick?.(filterId)}
+							/>
+						) : (
+							renderFormModal(selectedFilter)
+						))}
 					{isSortActive && !activeFilter && renderSortModal()}
 				</>
 			)}

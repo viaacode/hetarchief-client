@@ -3,6 +3,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Overlay } from '@shared/components/Overlay';
 import { tText } from '@shared/helpers/translate';
+import { AdvancedFilterFlyout } from '@visitor-space/components/AdvancedFilterFlyout/AdvancedFilterFlyout';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import { SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
@@ -17,18 +18,18 @@ import type { FilterOptionProps } from './FilterOption.types';
 
 const FilterOption: FC<FilterOptionProps> = ({
 	activeFilter,
-	form,
-	icon,
-	id,
-	label,
-	type,
+	filter,
 	onClick,
 	onFormReset,
 	onFormSubmit,
 	values,
 	className,
+	flyoutFilters = [],
+	onFlyoutFilterClick,
 }) => {
+	const { icon, id, label, type } = filter;
 	const filterIsActive = id === activeFilter;
+	const isAdvancedFlyout = id === SearchFilterId.Advanced;
 
 	const onFilterToggle = useCallback(() => onClick?.(id), [id, onClick]);
 	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
@@ -55,15 +56,13 @@ const FilterOption: FC<FilterOptionProps> = ({
 			className={clsx(styles['c-filter-menu__option'], cs, {
 				[`${className}`]: isInline,
 			})}
-			form={form}
-			id={id}
+			filter={filter}
 			key={openedAt}
 			onFormReset={onFormReset}
 			onFormSubmit={onFormSubmit}
 			title={label}
 			values={values}
 			disabled={!filterIsActive}
-			type={type}
 		/>
 	);
 
@@ -80,7 +79,8 @@ const FilterOption: FC<FilterOptionProps> = ({
 		[SearchFilterId.Language]: '53.7rem',
 		[SearchFilterId.Maintainers]: '63.7rem',
 		[SearchFilterId.Reusability]: '20rem',
-		[SearchFilterId.Advanced]: '80rem',
+		[SearchFilterId.Genre]: '63.7rem',
+		[SearchFilterId.Rights]: '63.7rem',
 	};
 	const renderModal = (): ReactElement => {
 		return (
@@ -106,7 +106,11 @@ const FilterOption: FC<FilterOptionProps> = ({
 								position: 'absolute',
 								left: '100%',
 								width: '46.4rem',
-								top: `calc(-${FILTER_MENU_HEIGHTS[id]} / 2 + 2rem)`,
+								// The fly-out grows with its list, so it hangs from the button instead of
+								// being centred on a fixed height
+								top: isAdvancedFlyout
+									? 0
+									: `calc(-${FILTER_MENU_HEIGHTS[id] ?? '40rem'} / 2 + 2rem)`,
 								backgroundColor: 'white',
 								zIndex: 5,
 								display: filterIsActive ? 'block' : 'none',
@@ -121,7 +125,14 @@ const FilterOption: FC<FilterOptionProps> = ({
 								onClick={onFilterToggle}
 								variants="text"
 							/>
-							{renderFilterForm('c-filter-menu__form')}
+							{isAdvancedFlyout ? (
+								<AdvancedFilterFlyout
+									filters={flyoutFilters}
+									onFilterClick={(filterId) => onFlyoutFilterClick?.(filterId)}
+								/>
+							) : (
+								renderFilterForm('c-filter-menu__form')
+							)}
 						</div>
 					</NoServerSideRendering>
 				</div>

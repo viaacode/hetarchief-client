@@ -1,0 +1,32 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-text-filter-form {
+	&__description {
+		color: abstracts.$neutral;
+		font-size: abstracts.$font-size-sm;
+		margin-bottom: abstracts.$spacer-md;
+	}
+
+	&__condition {
+		margin-bottom: abstracts.$spacer-sm;
+	}
+
+	&__separator {
+		color: abstracts.$neutral;
+		display: block;
+		font-size: abstracts.$font-size-sm;
+		margin-bottom: abstracts.$spacer-xs;
+	}
+
+	&__value {
+		align-items: center;
+		display: flex;
+		gap: abstracts.$spacer-xs;
+		margin-top: abstracts.$spacer-xs;
+
+		> :first-child {
+			flex: 1 1 auto;
+			min-width: 0;
+		}
+	}
+}
