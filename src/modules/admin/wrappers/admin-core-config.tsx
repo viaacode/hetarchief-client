@@ -19,6 +19,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import Loading from '@shared/components/Loading/Loading';
 import getConfig from '@shared/config/public-runtime-config';
 import { ADMIN_CORE_ROUTES_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
+import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
 import { isContentPagePreview } from '@shared/helpers/is-content-page-preview';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
@@ -292,6 +293,8 @@ export function getAdminCoreConfig(
 			search: {
 				clientSearchUrlToApiSearchUrl,
 			},
+			getIeObjectDetailPath: (locale, maintainerSlug, schemaIdentifier, name) =>
+				getIeObjectDetailPath(locale as Locale, maintainerSlug, schemaIdentifier, name),
 		},
 		database: {
 			proxyUrl: publicRuntimeConfig.PROXY_URL,
