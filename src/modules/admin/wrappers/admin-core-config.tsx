@@ -163,9 +163,8 @@ export function getAdminCoreConfig(
 		},
 		components: {
 			defaultAudioStill: '/images/waveform.svg',
-			// A content block cannot resolve a newspaper's pages or their ticket-service tokens on its
-			// own, so the viewer is handed over ready to use.
-			// https://meemoo.atlassian.net/browse/ARC-3813
+			// A content block cannot resolve a newspaper's pages or their tickets, so the viewer is
+			// handed over ready to use.
 			iiifViewer: IiifViewerWrapper,
 			loader: {
 				component: () => <Loading fullscreen locationId="admin-core-loader" />,

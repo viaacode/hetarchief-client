@@ -16,8 +16,8 @@ export interface IiifViewerWrapperFile {
 }
 
 /**
- * One page of the ie-object as admin-core hands it over. Every field is optional there, so this
- * mirrors what the caller actually promises rather than the wider type the detail page works with.
+ * Every field is optional in admin-core's type, so this mirrors what the caller actually promises
+ * rather than the wider type the detail page works with.
  */
 export interface IiifViewerWrapperPage {
 	representations?: { files?: IiifViewerWrapperFile[] }[];
@@ -31,10 +31,7 @@ export function toHetarchiefIiifHost(url: string): string {
 	return url.replace(IIIF_PUBLIC_HOST, IIIF_HETARCHIEF_HOST);
 }
 
-/**
- * One entry per page, built from the page's own files. A page with no IIIF image file is dropped --
- * there is nothing to show for it.
- */
+/** A page with no IIIF image file is dropped: there is nothing to show for it. */
 export function mapIeObjectPagesToImageInfos(
 	pages: IiifViewerWrapperPage[] | undefined
 ): ImageInfo[] {

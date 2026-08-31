@@ -9,7 +9,6 @@ import {
 } from './IiifViewerWrapper.helpers';
 
 export interface IiifViewerWrapperProps {
-	/** The whole ie-object, resolved by the caller. Its pages are what the viewer renders. */
 	ieObject: {
 		schemaIdentifier: string;
 		pages?: IiifViewerWrapperPage[];
@@ -18,16 +17,12 @@ export interface IiifViewerWrapperProps {
 }
 
 /**
- * The IIIF viewer as a content block can use it: hand it an ie-object and it takes care of the rest.
+ * The IIIF viewer as a content block can use it. Registered on `components.iiifViewer` because
+ * admin-core can neither render the viewer nor resolve a per-page ticket, which is short-lived and
+ * access-checked at request time and so can never travel with the object.
  *
- * Admin-core cannot render the viewer itself, and it cannot resolve a ticket-service token per page
- * either -- a ticket is short-lived and access-checked at request time, so it can never travel with
- * the object. So the client registers this wrapper on `components.iiifViewer` and admin-core only
- * decides where it goes. https://meemoo.atlassian.net/browse/ARC-3813
- *
- * Deliberately a reduced viewer next to the one on the object detail page: no OCR search, no
- * selection or download, and no url state. Those belong to the detail page, and the FA sends the
- * visitor there through the "Bekijk volledig fragment" CTA.
+ * Deliberately reduced next to the detail page's viewer: no OCR search, selection, download or url
+ * state. Those belong to the detail page, which the "Bekijk volledig fragment" CTA links to.
  */
 export const IiifViewerWrapper: FC<IiifViewerWrapperProps> = ({ ieObject, title }) => {
 	const [activeImageIndex, setActiveImageIndex] = useState(0);
