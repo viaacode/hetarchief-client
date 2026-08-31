@@ -212,6 +212,16 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			display: block;
 		}
 
+		// The back button floats over the media's top-left corner here, unlike the smaller
+		// arrow shown when the visitor space navigation bar is visible
+		:global([class*="c-context-disclaimer"]) {
+			top: calc(#{$metadata-media-ocr-tabs-height-desktop} + abstracts.$spacer-sm);
+
+			@media (max-width: abstracts.$breakpoint-lg) {
+				top: calc(#{$metadata-media-ocr-tabs-height-mobile} + abstracts.$spacer-sm);
+			}
+		}
+
 		.p-object-detail__tabs {
 			// Desktop
 			grid-row: 2;
