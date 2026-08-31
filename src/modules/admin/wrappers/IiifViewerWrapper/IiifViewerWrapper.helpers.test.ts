@@ -1,29 +1,21 @@
-import type { IeObjectFile, IeObjectPage } from '@ie-objects/ie-objects.types';
 import { describe, expect, it } from 'vitest';
 import {
-	mapGivenPagesToImageInfos,
+	type IiifViewerWrapperFile,
+	type IiifViewerWrapperPage,
 	mapIeObjectPagesToImageInfos,
 	toHetarchiefIiifHost,
 } from './IiifViewerWrapper.helpers';
 
-const buildFile = (overrides: Partial<IeObjectFile> = {}): IeObjectFile =>
-	({
-		id: 'file-id',
-		name: 'file-name',
-		mimeType: 'image/jp2',
-		storedAt: 'https://iiif-qas.meemoo.be/image/3/public/page-1.jp2',
-		thumbnailUrl: '',
-		duration: '',
-		edmIsNextInSequence: '',
-		createdAt: '',
-		...overrides,
-	}) as IeObjectFile;
+const buildFile = (overrides: Partial<IiifViewerWrapperFile> = {}): IiifViewerWrapperFile => ({
+	mimeType: 'image/jp2',
+	storedAt: 'https://iiif-qas.meemoo.be/image/3/public/page-1.jp2',
+	thumbnailUrl: '',
+	...overrides,
+});
 
-const buildPage = (files: IeObjectFile[]): IeObjectPage =>
-	({
-		pageNumber: 1,
-		representations: [{ files } as IeObjectPage['representations'][0]],
-	}) as IeObjectPage;
+const buildPage = (files: IiifViewerWrapperFile[]): IiifViewerWrapperPage => ({
+	representations: [{ files }],
+});
 
 describe('toHetarchiefIiifHost', () => {
 	it('swaps the public host for the authenticated hetarchief one', () => {
@@ -39,61 +31,18 @@ describe('toHetarchiefIiifHost', () => {
 	});
 });
 
-describe('mapGivenPagesToImageInfos', () => {
-	it('swaps the host on imageUrl and passes thumbnailUrl/altoUrl through', () => {
-		expect(
-			mapGivenPagesToImageInfos([
-				{
-					imageUrl: 'https://iiif-qas.meemoo.be/image/3/public/page-1.jp2',
-					thumbnailUrl: 'https://assets.example.com/page-1-thumbnail.jpeg',
-					altoUrl: 'OR-abc/page-1-alto.xml',
-				},
-			])
-		).toEqual([
-			{
-				imageUrl: 'https://iiif-qas.meemoo.be/image/3/hetarchief/page-1.jp2',
-				thumbnailUrl: 'https://assets.example.com/page-1-thumbnail.jpeg',
-				altoUrl: 'OR-abc/page-1-alto.xml',
-			},
-		]);
-	});
-
-	it('turns a null thumbnailUrl/altoUrl into undefined, same as the object-detail-page mapping', () => {
-		const [result] = mapGivenPagesToImageInfos([
-			{
-				imageUrl: 'https://iiif-qas.meemoo.be/image/3/public/page-1.jp2',
-				thumbnailUrl: null,
-				altoUrl: null,
-			},
-		]);
-
-		expect(result.thumbnailUrl).toBeUndefined();
-		expect(result.altoUrl).toBeUndefined();
-	});
-
-	it('returns an empty list for an empty page list', () => {
-		expect(mapGivenPagesToImageInfos([])).toEqual([]);
-	});
-});
-
 describe('mapIeObjectPagesToImageInfos', () => {
 	it('resolves imageUrl/thumbnailUrl/altoUrl from a page carrying all three file kinds', () => {
 		const page = buildPage([
 			buildFile({
-				id: 'image-file',
 				mimeType: 'image/jp2',
 				storedAt: 'https://iiif-qas.meemoo.be/image/3/public/page-1.jp2',
 			}),
 			buildFile({
-				id: 'thumbnail-file',
 				mimeType: 'image/jpeg',
 				thumbnailUrl: 'https://assets.example.com/page-1-thumbnail.jpeg',
 			}),
-			buildFile({
-				id: 'alto-file',
-				mimeType: 'application/xml',
-				storedAt: 'OR-abc/page-1-alto.xml',
-			}),
+			buildFile({ mimeType: 'application/xml', storedAt: 'OR-abc/page-1-alto.xml' }),
 		]);
 
 		expect(mapIeObjectPagesToImageInfos([page])).toEqual([
@@ -108,7 +57,7 @@ describe('mapIeObjectPagesToImageInfos', () => {
 	it('falls back to a storedAt ending in jp2 when no image/jp2 mime type is present (ARC-3156)', () => {
 		const page = buildPage([
 			buildFile({
-				mimeType: null as unknown as string,
+				mimeType: undefined,
 				storedAt: 'https://iiif-qas.meemoo.be/image/3/public/page-1.jp2',
 			}),
 		]);

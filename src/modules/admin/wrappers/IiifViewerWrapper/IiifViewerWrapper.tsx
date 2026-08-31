@@ -1,4 +1,3 @@
-import { useGetIeObjectBySchemaIdentifier } from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
 import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/use-get-ie-object-ticket-service-tokens';
 import { IiifViewer } from '@iiif-viewer/IiifViewer';
 import type { ImageInfoWithToken } from '@iiif-viewer/IiifViewer.types';
@@ -6,55 +5,39 @@ import type { FC } from 'react';
 import { useMemo, useState } from 'react';
 import {
 	type IiifViewerWrapperPage,
-	mapGivenPagesToImageInfos,
 	mapIeObjectPagesToImageInfos,
 } from './IiifViewerWrapper.helpers';
 
 export interface IiifViewerWrapperProps {
-	schemaIdentifier: string;
+	/** The whole ie-object, resolved by the caller. Its pages are what the viewer renders. */
+	ieObject: {
+		schemaIdentifier: string;
+		pages?: IiifViewerWrapperPage[];
+	};
 	title?: string;
-	/**
-	 * The object's pages, when the caller already has them (e.g. the driekeuzespeler's own
-	 * proactive fetch) -- same shape playable-display-data's `pages` field returns. Given this,
-	 * the wrapper skips useGetIeObjectBySchemaIdentifier entirely: the one thing it still has to
-	 * resolve itself is a ticket-service token per image, since a ticket is short-lived and
-	 * access-checked at request time, so it can never travel with a prefetched page list. Omit it
-	 * and the wrapper falls back to resolving the full object (and its page list) itself, exactly
-	 * as it always has, for a caller that has only an id.
-	 */
-	pages?: IiifViewerWrapperPage[];
 }
 
 /**
- * The IIIF viewer as a content block can use it: hand it an object id (and, optionally, a page
- * list it already resolved) and it takes care of the rest.
+ * The IIIF viewer as a content block can use it: hand it an ie-object and it takes care of the rest.
  *
- * Admin-core cannot render the viewer itself. The viewer needs the object's page list and a
- * ticket-service token per page, and both hooks live here. So the client registers this wrapper on
- * `components.iiifViewer` and admin-core only decides where it goes.
- * https://meemoo.atlassian.net/browse/ARC-3813
+ * Admin-core cannot render the viewer itself, and it cannot resolve a ticket-service token per page
+ * either -- a ticket is short-lived and access-checked at request time, so it can never travel with
+ * the object. So the client registers this wrapper on `components.iiifViewer` and admin-core only
+ * decides where it goes. https://meemoo.atlassian.net/browse/ARC-3813
  *
  * Deliberately a reduced viewer next to the one on the object detail page: no OCR search, no
  * selection or download, and no url state. Those belong to the detail page, and the FA sends the
  * visitor there through the "Bekijk volledig fragment" CTA.
  */
-export const IiifViewerWrapper: FC<IiifViewerWrapperProps> = ({ schemaIdentifier, title, pages }) => {
+export const IiifViewerWrapper: FC<IiifViewerWrapperProps> = ({ ieObject, title }) => {
 	const [activeImageIndex, setActiveImageIndex] = useState(0);
 	const [isTextOverlayVisible, setIsTextOverlayVisible] = useState(false);
 
-	// Only resolved when the caller didn't already hand over a page list.
-	const { data: ieObject } = useGetIeObjectBySchemaIdentifier(schemaIdentifier, true, {
-		enabled: !pages,
-	});
-
-	const imageInfos = useMemo(
-		() => (pages ? mapGivenPagesToImageInfos(pages) : mapIeObjectPagesToImageInfos(ieObject?.pages)),
-		[pages, ieObject?.pages]
-	);
+	const imageInfos = useMemo(() => mapIeObjectPagesToImageInfos(ieObject.pages), [ieObject.pages]);
 
 	const { data: ticketServiceTokensByPath } = useGetIeObjectTicketServiceTokens(
 		imageInfos.map((imageInfo) => imageInfo.imageUrl),
-		schemaIdentifier,
+		ieObject.schemaIdentifier,
 		{ enabled: imageInfos.length > 0 }
 	);
 
@@ -78,7 +61,7 @@ export const IiifViewerWrapper: FC<IiifViewerWrapperProps> = ({ schemaIdentifier
 
 	return (
 		<IiifViewer
-			id={`content-page-iiif-viewer--${schemaIdentifier}`}
+			id={`content-page-iiif-viewer--${ieObject.schemaIdentifier}`}
 			imageInfosWithTokens={imageInfosWithTokens}
 			isTextOverlayVisible={isTextOverlayVisible}
 			setIsTextOverlayVisible={setIsTextOverlayVisible}
