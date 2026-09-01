@@ -1,19 +1,20 @@
+import type { IiifViewerConfigProps } from '@meemoo/admin-core-ui/client';
 import { describe, expect, it } from 'vitest';
-import {
-	type IiifViewerWrapperFile,
-	type IiifViewerWrapperPage,
-	mapIeObjectPagesToImageInfos,
-	toHetarchiefIiifHost,
-} from './IiifViewerWrapper.helpers';
+import { mapIeObjectPagesToImageInfos, toHetarchiefIiifHost } from './IiifViewerWrapper.helpers';
 
-const buildFile = (overrides: Partial<IiifViewerWrapperFile> = {}): IiifViewerWrapperFile => ({
+type IeObjectPage = NonNullable<IiifViewerConfigProps['ieObject']['pages']>[number];
+type IeObjectFile = NonNullable<
+	NonNullable<IeObjectPage['representations']>[number]['files']
+>[number];
+
+const buildFile = (overrides: Partial<IeObjectFile> = {}): IeObjectFile => ({
 	mimeType: 'image/jp2',
 	storedAt: 'https://iiif-qas.meemoo.be/image/3/public/page-1.jp2',
 	thumbnailUrl: '',
 	...overrides,
 });
 
-const buildPage = (files: IiifViewerWrapperFile[]): IiifViewerWrapperPage => ({
+const buildPage = (files: IeObjectFile[]): IeObjectPage => ({
 	representations: [{ files }],
 });
 

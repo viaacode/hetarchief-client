@@ -1,20 +1,11 @@
 import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/use-get-ie-object-ticket-service-tokens';
 import { IiifViewer } from '@iiif-viewer/IiifViewer';
 import type { ImageInfoWithToken } from '@iiif-viewer/IiifViewer.types';
+import type { IiifViewerConfigProps } from '@meemoo/admin-core-ui/client';
+import { noop } from 'es-toolkit/compat';
 import type { FC } from 'react';
 import { useMemo, useState } from 'react';
-import {
-	type IiifViewerWrapperPage,
-	mapIeObjectPagesToImageInfos,
-} from './IiifViewerWrapper.helpers';
-
-export interface IiifViewerWrapperProps {
-	ieObject: {
-		schemaIdentifier: string;
-		pages?: IiifViewerWrapperPage[];
-	};
-	title?: string;
-}
+import { mapIeObjectPagesToImageInfos } from './IiifViewerWrapper.helpers';
 
 /**
  * The IIIF viewer as a content block can use it. Registered on `components.iiifViewer` because
@@ -24,7 +15,7 @@ export interface IiifViewerWrapperProps {
  * Deliberately reduced next to the detail page's viewer: no OCR search, selection, download or url
  * state. Those belong to the detail page, which the "Bekijk volledig fragment" CTA links to.
  */
-export const IiifViewerWrapper: FC<IiifViewerWrapperProps> = ({ ieObject, title }) => {
+export const IiifViewerWrapper: FC<IiifViewerConfigProps> = ({ ieObject, title }) => {
 	const [activeImageIndex, setActiveImageIndex] = useState(0);
 	const [isTextOverlayVisible, setIsTextOverlayVisible] = useState(false);
 
@@ -62,17 +53,17 @@ export const IiifViewerWrapper: FC<IiifViewerWrapperProps> = ({ ieObject, title 
 			setIsTextOverlayVisible={setIsTextOverlayVisible}
 			activeImageIndex={activeImageIndex}
 			setActiveImageIndex={setActiveImageIndex}
-			onInitialized={() => undefined}
+			onInitialized={noop}
 			onPageChanged={setActiveImageIndex}
 			// The detail page owns OCR search; here the viewer is only for looking at the pages.
 			isSearchEnabled={false}
 			searchTerms=""
-			setSearchTerms={() => undefined}
-			onSearch={() => undefined}
-			onClearSearch={() => undefined}
+			setSearchTerms={noop}
+			onSearch={noop}
+			onClearSearch={noop}
 			currentSearchIndex={0}
 			searchResults={null}
-			setSearchResultIndex={() => undefined}
+			setSearchResultIndex={noop}
 			enableSelection={false}
 			aria-label={title}
 		/>
