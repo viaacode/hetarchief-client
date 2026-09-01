@@ -7,6 +7,8 @@ import type { ImageInfo } from '@iiif-viewer/IiifViewer.types';
 import type { IiifViewerConfigProps } from '@meemoo/admin-core-ui/client';
 import { compact } from 'es-toolkit/compat';
 
+// Hardcoded rather than derived from IIIF_IMAGE_API: only 2 newspaper files on QAS still carry the
+// /public/ path, and none do on production.
 const IIIF_PUBLIC_HOST = 'https://iiif-qas.meemoo.be/image/3/public';
 const IIIF_HETARCHIEF_HOST = 'https://iiif-qas.meemoo.be/image/3/hetarchief';
 
