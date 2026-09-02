@@ -2,14 +2,9 @@ import Metadata from '@ie-objects/components/Metadata/Metadata';
 import type { IeObjectTheme } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { Locale } from '@shared/utils/i18n';
-import {
-	filterNameToAcronym,
-	operatorToAcronym,
-} from '@visitor-space/const/advanced-filter-array-param';
-import { FilterProperty, Operator } from '@visitor-space/types';
+import { getThemeSearchPath } from '@visitor-space/utils/theme-search-path';
 import clsx from 'clsx';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
@@ -57,11 +52,6 @@ export function ObjectDetailPageMetadataThemes({
 		);
 	};
 
-	const getThemeSearchLink = (theme: IeObjectTheme) =>
-		`${ROUTES_BY_LOCALE[locale].search}?advanced=${filterNameToAcronym(
-			FilterProperty.THEME
-		)}${operatorToAcronym(Operator.EQUALS)}${theme.slug}&page=1`;
-
 	return (
 		<Metadata title={title} className={className} key="metadata-themes">
 			<ul className={styles['c-object-detail-page-metadata-themes__list']}>
@@ -69,7 +59,7 @@ export function ObjectDetailPageMetadataThemes({
 					<li key={theme.id} className={styles['c-object-detail-page-metadata-themes__item']}>
 						{renderThemeName(theme)}
 						<Link
-							href={getThemeSearchLink(theme)}
+							href={getThemeSearchPath(locale, theme.slug)}
 							className={styles['c-object-detail-page-metadata-themes__count']}
 						>
 							<Icon

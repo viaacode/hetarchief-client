@@ -36,6 +36,7 @@ import type { Locale } from '@shared/utils/i18n';
 import { isServerSideRendering } from '@shared/utils/is-browser/is-browser';
 import { AvoCoreDatabaseType, type AvoUserCommonUser } from '@viaa/avo2-types';
 import { clientSearchUrlToApiSearchUrl } from '@visitor-space/utils/search-url-to-api-url/client-search-url-to-api-search-url';
+import { getThemeSearchPath } from '@visitor-space/utils/theme-search-path';
 import { noop } from 'es-toolkit/compat';
 import Link from 'next/link';
 import type { NextRouter } from 'next/router';
@@ -301,11 +302,7 @@ export function getAdminCoreConfig(
 			},
 			getIeObjectDetailPath: (locale, maintainerSlug, schemaIdentifier, name) =>
 				getIeObjectDetailPath(locale as Locale, maintainerSlug, schemaIdentifier, name),
-			getThemeSearchPath: (locale, themeSlug) =>
-				// ARC-3797: this release line has no theme-filtered search yet, so this only lands
-				// the visitor on the search page with the theme slug on the url, not an actually
-				// pre-filtered result.
-				`${ADMIN_CORE_ROUTES_BY_LOCALE[locale as Locale].SEARCH}?thema=${themeSlug}`,
+			getThemeSearchPath: (locale, themeSlug) => getThemeSearchPath(locale as Locale, themeSlug),
 		},
 		database: {
 			proxyUrl: publicRuntimeConfig.PROXY_URL,
