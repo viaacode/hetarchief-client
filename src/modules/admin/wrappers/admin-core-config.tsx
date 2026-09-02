@@ -5,6 +5,7 @@ import {
 	ContentBlockType,
 	type ContentPageInfo,
 	ContentPageWidth,
+	type IeObjectPlayInfo,
 	type LinkInfo,
 	type ToastInfo,
 } from '@meemoo/admin-core-ui/client';
@@ -19,12 +20,23 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import Loading from '@shared/components/Loading/Loading';
 import getConfig from '@shared/config/public-runtime-config';
 import { ADMIN_CORE_ROUTES_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
+import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
+import { isContentPagePreview } from '@shared/helpers/is-content-page-preview';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
+import {
+	EventsService,
+	LogEventType,
+	mapPlayEventData,
+	PlayEventPageType,
+} from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
+import type { IeObjectType } from '@shared/types/ie-objects';
 import type { Locale } from '@shared/utils/i18n';
+import { isServerSideRendering } from '@shared/utils/is-browser/is-browser';
 import { AvoCoreDatabaseType, type AvoUserCommonUser } from '@viaa/avo2-types';
 import { clientSearchUrlToApiSearchUrl } from '@visitor-space/utils/search-url-to-api-url/client-search-url-to-api-search-url';
+import { noop } from 'es-toolkit/compat';
 import Link from 'next/link';
 import type { NextRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
@@ -52,6 +64,49 @@ const onSaveContentPage = async (contentPageInfo: ContentPageInfo) => {
 			query: { language: contentPageInfo.language, path: contentPageInfo.path },
 		})
 	);
+};
+
+// The hero carousel autoplays its active slide and rebuilds the player every time a slide becomes
+// active, so a looping carousel would report the same object over and over. One play per object per
+// page view is what we want to count, so the objects already reported are remembered here, and
+// forgotten as soon as another page is opened.
+let playedObjectsPath: string | null = null;
+const playedObjects = new Set<string>();
+
+/**
+ * Logs a play of an ie-object embedded in a content page. Objects only end up on a content page
+ * once they are publicly accessible, so this is always the public play event, never the visitor
+ * space one.
+ */
+const onIeObjectPlay = (info: IeObjectPlayInfo) => {
+	// A play always comes from a mounted player, so window is there, but this config is also built
+	// server side and window is read below.
+	if (isServerSideRendering() || isContentPagePreview()) {
+		return;
+	}
+
+	const path = window.location.pathname;
+	if (playedObjectsPath !== path) {
+		playedObjectsPath = path;
+		playedObjects.clear();
+	}
+	if (playedObjects.has(info.schemaIdentifier)) {
+		return;
+	}
+	playedObjects.add(info.schemaIdentifier);
+
+	EventsService.triggerEvent(
+		LogEventType.ITEM_PLAY,
+		window.location.href,
+		mapPlayEventData({
+			// The two IeObjectType enums hold the same formats under differently named members
+			dctermsFormat: info.dctermsFormat as unknown as IeObjectType,
+			schemaIdentifier: info.schemaIdentifier,
+			maintainerId: info.maintainerId,
+			pageType: PlayEventPageType.CONTENT_PAGE,
+			isBlockSnippet: info.isBlockSnippet,
+		})
+	).then(noop);
 };
 
 export function getAdminCoreConfig(
@@ -244,6 +299,8 @@ export function getAdminCoreConfig(
 			search: {
 				clientSearchUrlToApiSearchUrl,
 			},
+			getIeObjectDetailPath: (locale, maintainerSlug, schemaIdentifier, name) =>
+				getIeObjectDetailPath(locale as Locale, maintainerSlug, schemaIdentifier, name),
 			getThemeSearchPath: (locale, themeSlug) =>
 				// ARC-3797: this release line has no theme-filtered search yet, so this only lands
 				// the visitor on the search page with the theme slug on the url, not an actually
@@ -261,6 +318,7 @@ export function getAdminCoreConfig(
 			onExternalLink: () => {
 				// Client decides what should happen when an external link is clicked
 			},
+			onIeObjectPlay,
 		},
 		routes: ADMIN_CORE_ROUTES_BY_LOCALE[locale],
 		// biome-ignore lint/suspicious/noExplicitAny: The Locale types between the admin-core and the client differ slightly, so they never match

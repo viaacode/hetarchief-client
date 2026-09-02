@@ -1,11 +1,16 @@
+import { getIeObjectDetailPageServerSideProps } from '@ie-objects/get-ie-object-detail-page-ssr-props';
 import { IeObjectWithoutObjectNamePage } from '@ie-objects/IeObjectWithoutObjectNamePage';
-import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import type { GetServerSidePropsResult, NextPage } from 'next';
 import type { GetServerSidePropsContext } from 'next/types';
 
 /**
- * Redirect page for urls of the form: /zoeken/:maintainerSlug/:ieObjectId => redirects to: /zoeken/:maintainerSlug/:ieObjectId/:ieObjectName
+ * Redirect page for urls of the form: /zoeken/:maintainerSlug/:ieObjectId
+ * => redirects to: /zoeken/:maintainerSlug/:ieObjectId/:ieObjectName
+ *
+ * The redirect happens server side as a 301 whenever the object can be resolved, so that search
+ * engines never index this url. Objects that cannot be resolved server side (eg private objects
+ * that return a 403) fall back to the client side redirect below.
  * @constructor
  */
 const IeObjectWithoutObjectNamePageDutch: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
@@ -15,8 +20,7 @@ const IeObjectWithoutObjectNamePageDutch: NextPage<DefaultSeoInfo> = ({ url, loc
 export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
-	const schemaIdentifier = context.query.ie as string;
-	return getDefaultStaticProps(context, context.resolvedUrl, { schemaIdentifier });
+	return getIeObjectDetailPageServerSideProps(context);
 }
 
 export default IeObjectWithoutObjectNamePageDutch;

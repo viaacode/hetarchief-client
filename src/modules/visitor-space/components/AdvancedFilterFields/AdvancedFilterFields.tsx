@@ -11,7 +11,9 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SEPARATOR } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { useUserGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { SearchPageMediaType } from '@shared/types/ie-objects';
 import type { AdvancedFilterFieldsProps } from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
 import { AdvancedRightsSelect } from '@visitor-space/components/AdvancedRightsSelect/AdvancedRightsSelect';
 import AutocompleteFieldInput, {
@@ -31,10 +33,13 @@ import { LanguageSelect } from '@visitor-space/components/LanguageSelect/Languag
 import { MediaTypeSelect } from '@visitor-space/components/MediaTypeSelect';
 import { MediumSelect } from '@visitor-space/components/MediumSelect/MediumSelect';
 import { ObjectTypeSelect } from '@visitor-space/components/ObjectTypeSelect';
+import { ThemeSelect } from '@visitor-space/components/ThemeSelect';
+import { SEARCH_PAGE_QUERY_PARAM_CONFIG } from '@visitor-space/const';
 import type {
 	FilterConfig,
 	FilterInputComponentProps,
 } from '@visitor-space/const/advanced-filters.consts';
+import { useGetThemeFilterOptions } from '@visitor-space/hooks/use-get-theme-filter-options';
 import clsx from 'clsx';
 import { parseISO } from 'date-fns';
 import { kebabCase } from 'es-toolkit/compat';
@@ -45,6 +50,7 @@ import {
 } from 'modules/visitor-space/utils/advanced-filters';
 import React, { type FC } from 'react';
 import type { MultiValue, SingleValue } from 'react-select';
+import { useQueryParams } from 'use-query-params';
 import type { FilterProperty, IdentityAdvancedFilter, Operator } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
@@ -64,6 +70,11 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	onRemove,
 }) => {
 	const locale = useLocale();
+	// Only theme slugs are stored, so the selected theme is labelled from this lookup
+	const { labelsBySlug: themeLabelsBySlug } = useGetThemeFilterOptions();
+	const [query] = useQueryParams(SEARCH_PAGE_QUERY_PARAM_CONFIG);
+	const selectedTab = (query.format || SearchPageMediaType.All) as SearchPageMediaType;
+	const userGroup = useUserGroup();
 
 	// Computed
 
@@ -212,6 +223,35 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				);
 			}
 
+			// Separate case, since the stored value is a theme slug that we need to label in the
+			// language of the UI, e.g. education-learning => Onderwijs & leren
+			case ThemeSelect: {
+				const selectComponentProps = filterConfig.inputComponentProps as ReactSelectProps;
+				const value = filterValue.val
+					? {
+							label: themeLabelsBySlug[filterValue.val] ?? filterValue.val,
+							value: filterValue.val,
+						}
+					: undefined;
+
+				return (
+					<ThemeSelect
+						{...(selectComponentProps || {})}
+						{...(props as ReactSelectProps)}
+						className={clsx(
+							styles['c-advanced-filter-fields__dynamic-field'],
+							styles['c-advanced-filter-fields__dynamic-field--select']
+						)}
+						value={value}
+						onChange={(e: SingleValue<SelectOption> | MultiValue<SelectOption>) =>
+							onFieldChange({
+								val: (e as SingleValue<SelectOption>)?.value ?? undefined,
+							})
+						}
+					/>
+				);
+			}
+
 			// Separate case, since we also need to translate the selected value from nl => Nederlands
 			case LanguageSelect: {
 				const selectComponentProps = filterConfig.inputComponentProps as ReactSelectProps;
@@ -319,7 +359,9 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 							val: undefined,
 						});
 					}}
-					options={getAdvancedProperties()}
+					// Properties that do not apply to this tab or this user are left out of the list, but
+					// an already applied filter is still labelled, hence the unrestricted list below
+					options={getAdvancedProperties({ selectedTab, userGroup })}
 					value={getSelectValue(getAdvancedProperties(), filterValue.prop)}
 				/>
 			</FormControl>

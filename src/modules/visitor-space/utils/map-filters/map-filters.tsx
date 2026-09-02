@@ -83,9 +83,18 @@ const mapArrayParamToTags = (
 		});
 };
 
+export interface MapFiltersToTagsOptions {
+	/**
+	 * Theme slug to theme name in the language of the UI. Only the slug is stored in the url, so the
+	 * pill of the theme filter is labelled in whichever language the visitor is using. See ARC-3797
+	 */
+	themeLabelsBySlug?: Record<string, string>;
+}
+
 const mapAdvancedToTags = (
 	advanced: Array<AdvancedFilter>,
-	key: SearchFilterId = SearchFilterId.Advanced
+	key: SearchFilterId = SearchFilterId.Advanced,
+	options: MapFiltersToTagsOptions = {}
 ): TagIdentity[] => {
 	return advanced.map((advanced: AdvancedFilter) => {
 		const filterProp = advanced.prop as FilterProperty;
@@ -124,6 +133,12 @@ const mapAdvancedToTags = (
 				value = getRightsLabel(value) || value;
 				break;
 
+			case FilterProperty.THEME:
+				// Only the slug is stored, so the pill is labelled in the language of the UI.
+				// Falls back to the slug while the themes are still loading
+				value = (value && options.themeLabelsBySlug?.[value]) || value;
+				break;
+
 			default:
 				break;
 		}
@@ -149,7 +164,10 @@ const mapAdvancedToTags = (
 	});
 };
 
-export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] => {
+export const mapFiltersToTags = (
+	query: SearchPageQueryParams,
+	options: MapFiltersToTagsOptions = {}
+): TagIdentity[] => {
 	return [
 		...mapArrayParamToTags(
 			query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || [],
@@ -224,7 +242,7 @@ export const mapFiltersToTags = (query: SearchPageQueryParams): TagIdentity[] =>
 			tText('modules/visitor-space/utils/map-filters/map-filters___herbruikbaarheid'),
 			SearchFilterId.Reusability
 		),
-		...mapAdvancedToTags(query[SearchFilterId.Advanced] || []),
+		...mapAdvancedToTags(query[SearchFilterId.Advanced] || [], SearchFilterId.Advanced, options),
 	];
 };
 

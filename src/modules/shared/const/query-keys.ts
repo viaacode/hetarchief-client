@@ -35,6 +35,7 @@ export enum QUERY_KEYS {
 	getContentPageByPath = 'getContentPageByPath',
 	getMaterialRequestMessages = 'getMaterialRequestMessages',
 	getMaterialRequestMessagesUnreadCount = 'getMaterialRequestMessagesUnreadCount',
+	getMaterialRequestsUnreadSummary = 'getMaterialRequestsUnreadSummary',
 	getMaterialRequestStatus = 'getMaterialRequestStatus',
 	getOrganisations = 'getOrganisations',
 	getOrganisationBySlug = 'getOrganisationBySlug',

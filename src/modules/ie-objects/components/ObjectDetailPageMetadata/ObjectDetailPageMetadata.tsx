@@ -59,6 +59,7 @@ import {
 import { getIeObjectProviderIdentifierLinkProps } from '@ie-objects/utils/get-ie-object-provider-identifier-link-props';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import { getIeObjectSourceAttribution } from '@ie-objects/utils/get-ie-object-source-attribution';
+import { isAudioVideoIeObjectType } from '@ie-objects/utils/is-audio-video-ie-object-type';
 import {
 	mapArrayToMetadataData,
 	mapObjectOrArrayToMetadata,
@@ -129,14 +130,6 @@ import MetadataList from '../Metadata/MetadataList';
 import styles from './ObjectDetailPageMetadata.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
-
-const AV_OBJECT_TYPES = [
-	IeObjectType.AUDIO,
-	IeObjectType.AUDIO_FRAGMENT,
-	IeObjectType.FILM,
-	IeObjectType.VIDEO,
-	IeObjectType.VIDEO_FRAGMENT,
-];
 
 export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	mediaInfo,
@@ -877,7 +870,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	);
 
 	const getRightsInfoForAudioVideo = (mediaInfo: IeObject): IeObjectRightsInfo | null => {
-		const isAudioOrVideo = AV_OBJECT_TYPES.includes(mediaInfo.dctermsFormat);
+		const isAudioOrVideo = isAudioVideoIeObjectType(mediaInfo.dctermsFormat);
 		return isAudioOrVideo ? mediaInfo.rightsInfo || null : null;
 	};
 

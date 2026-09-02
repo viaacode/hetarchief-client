@@ -7,6 +7,7 @@ import {
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
+import { ContextDisclaimer } from '@ie-objects/components/ContextDisclaimer/ContextDisclaimer';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import Metadata, {
@@ -49,6 +50,7 @@ import {
 import { filterAltoBySearchTerms } from '@ie-objects/utils/filter-alto-by-search-terms';
 import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-terms-in-transcription';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
+import { isAudioVideoIeObjectType } from '@ie-objects/utils/is-audio-video-ie-object-type';
 import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
@@ -80,6 +82,7 @@ import getConfig from '@shared/config/public-runtime-config';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { BooleanParamWithDefault } from '@shared/helpers/boolean-param-with-default';
+import { getIeObjectNameSlug } from '@shared/helpers/ie-object-urls';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -88,7 +91,12 @@ import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
-import { EventsService, LogEventType } from '@shared/services/events-service';
+import {
+	EventsService,
+	LogEventType,
+	mapPlayEventData,
+	PlayEventPageType,
+} from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
 import { selectLastSearchParams, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import type { IeObjectsSearchTermObject } from '@shared/types/api';
@@ -113,7 +121,6 @@ import {
 	intersection,
 	isEqual,
 	isNil,
-	kebabCase,
 	lowerCase,
 	noop,
 } from 'es-toolkit/compat';
@@ -142,6 +149,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	image,
 	url,
 	canonicalUrl,
+	translatedPages,
 }) => {
 	/**
 	 * Hooks
@@ -465,6 +473,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			IeObjectAccessThrough.VISITOR_SPACE_FULL,
 		]).length > 0;
 
+	// ARC-3824: warn the user that publicly available av content was made within a certain context
+	const showContextDisclaimer =
+		!!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
+		isAudioVideoIeObjectType(mediaInfo?.dctermsFormat) &&
+		!!isFlowPlayerMediaAvailable;
+
 	const showVisitButton =
 		isNil(mediaInfo?.thumbnailUrl) &&
 		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
@@ -675,7 +689,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			const newPath = router.asPath
 				.replace(`/${ieObjectId}/`, `/${mediaInfo?.schemaIdentifier}/`)
 				.replace(`/${maintainerSlug}/`, `/${mediaInfo?.maintainerSlug}/`)
-				.replace(`/${ieObjectNameSlug}`, `/${kebabCase(mediaInfo?.name || '')}`);
+				.replace(`/${ieObjectNameSlug}`, `/${getIeObjectNameSlug(mediaInfo?.name)}`);
 			router.replace(newPath, undefined, { shallow: true });
 		}
 	}, [
@@ -1129,12 +1143,22 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				// Skip triggering event on server side rendering since window is not available
 				if (!oldHasMediaPlayed && !isServerSideRendering()) {
 					const path = window.location.href;
-					const eventData = mapIeObjectToEventData();
+					// A play from this page is never a content block snippet: the object detail page
+					// always offers the whole object.
+					const playEventData = mapPlayEventData({
+						dctermsFormat: mediaInfo?.dctermsFormat,
+						schemaIdentifier: mediaInfo?.schemaIdentifier,
+						maintainerId: mediaInfo?.maintainerId,
+						pageType: PlayEventPageType.OBJECT_DETAIL,
+						isBlockSnippet: false,
+					});
 
 					if (hasAccessToVisitorSpaceOfObject) {
-						EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_PLAY, path, eventData).then(noop);
+						EventsService.triggerEvent(LogEventType.BEZOEK_ITEM_PLAY, path, playEventData).then(
+							noop
+						);
 					} else {
-						EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, eventData).then(noop);
+						EventsService.triggerEvent(LogEventType.ITEM_PLAY, path, playEventData).then(noop);
 					}
 				}
 
@@ -1662,6 +1686,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : {}}
 					>
 						{renderMedia()}
+						{showContextDisclaimer && <ContextDisclaimer />}
 					</div>
 					{showFragmentSlider && (
 						<FragmentSlider
@@ -2017,7 +2042,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				title={title}
 				description={seoDescription}
 				imgUrl={image}
-				translatedPages={[]}
+				translatedPages={translatedPages || []}
 				relativeUrl={url}
 				canonicalUrl={canonicalUrl}
 			/>

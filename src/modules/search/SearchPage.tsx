@@ -46,6 +46,7 @@ import {
 } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { numberWithCommas } from '@shared/helpers';
+import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
@@ -97,6 +98,7 @@ import {
 } from '@visitor-space/const';
 import { SEARCH_PAGE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
+import { useGetThemeFilterOptions } from '@visitor-space/hooks/use-get-theme-filter-options';
 import {
 	type AdvancedFilter,
 	FilterProperty,
@@ -107,7 +109,7 @@ import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/util
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
-import { intersection, isEmpty, isNil, kebabCase, sortBy, sum } from 'es-toolkit/compat';
+import { intersection, isEmpty, isNil, sortBy, sum } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -138,6 +140,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const locale = useLocale();
 
 	const { data: folders } = useGetFolders();
+	// Theme slugs are what live in the url, the names shown in the pills come from this lookup
+	const { labelsBySlug: themeLabelsBySlug } = useGetThemeFilterOptions();
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 	const isKioskUser = useHasAnyGroup(GroupName.KIOSK_VISITOR);
@@ -648,7 +652,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const isLoadedWithResults = !!searchResults && searchResults?.items?.length > 0;
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
 	const showVisitorSpacesDropdown = isUserWithAccount && accessibleVisitorSpaceRequests.length > 0;
-	const activeFilters = useMemo(() => mapFiltersToTags(query), [query]);
+	const activeFilters = useMemo(
+		() => mapFiltersToTags(query, { themeLabelsBySlug }),
+		[query, themeLabelsBySlug]
+	);
 
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {
 		return (searchResults?.items || []).map((item): IdentifiableMediaCard => {
@@ -670,7 +677,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				: '';
 
 			const link: string | undefined = stringifyUrl({
-				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${item.maintainerSlug}/${item.schemaIdentifier}/${kebabCase(item.name) || 'titel'}`,
+				url: getIeObjectDetailPath(locale, item.maintainerSlug, item.schemaIdentifier, item.name),
 				query: {
 					[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: plainTextSearchTerms,
 				},
@@ -698,6 +705,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				link,
 				previousPage: ROUTES_BY_LOCALE[locale].search,
 				numOfChildren: item.children || 0,
+				isPartOfOtherItem: !!item.premisIsPartOf,
 			};
 		});
 	}, [isKioskUser, locale, isGlobalArchive, searchResults]);

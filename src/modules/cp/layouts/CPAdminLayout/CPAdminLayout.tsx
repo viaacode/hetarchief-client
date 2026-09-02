@@ -2,9 +2,12 @@ import { GroupName } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import { CP_ADMIN_NAVIGATION_LINKS, CP_ADMIN_SEARCH_VISITOR_SPACE_KEY } from '@cp/const';
 import type { CPAdminLayoutProps } from '@cp/layouts';
+import { useGetMaterialRequestsUnreadSummary } from '@material-requests/hooks/get-material-requests-unread-summary';
+import { showMaterialRequestUnreadIndicator } from '@material-requests/utils/show-material-request-unread-indicator';
 import ErrorBoundary from '@shared/components/ErrorBoundary/ErrorBoundary';
 import { Icon } from '@shared/components/Icon';
 import type { ListNavigationItem } from '@shared/components/ListNavigation';
+import { UnreadMaterialRequestIndicatorRow } from '@shared/components/UnreadMaterialRequestIndicator';
 import { globalLabelKeys } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -27,6 +30,12 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 	const locale = useLocale();
 
 	const user = useSelector(selectUser);
+	const { data: unreadSummary } = useGetMaterialRequestsUnreadSummary();
+	const showMaterialRequestIndicator = useCallback(
+		(href: string, hasChildren: boolean) =>
+			showMaterialRequestUnreadIndicator(href, hasChildren, unreadSummary, locale),
+		[unreadSummary, locale]
+	);
 
 	const shouldBeActive = useCallback((currentPath: string, parentPath: string) => {
 		if (!parentPath) {
@@ -54,28 +63,54 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 								},
 							});
 
+				const showIndicator = showMaterialRequestIndicator(href, !!children?.length);
 				return {
 					id,
 					node: ({ linkClassName }) => (
 						<Link href={url} className={linkClassName} aria-label={label}>
 							{!isNil(iconName) && <Icon className="u-mr-4" name={iconName} aria-hidden />}
-							<span>{label}</span>
+							{showIndicator ? (
+								<UnreadMaterialRequestIndicatorRow>
+									<span>{label}</span>
+									{showIndicator}
+								</UnreadMaterialRequestIndicatorRow>
+							) : (
+								<span>{label}</span>
+							)}
 						</Link>
 					),
 					active: shouldBeActive(asPath, url),
-					children: children?.map(({ id, label, href }) => ({
-						id,
-						node: ({ linkClassName }) => (
-							<Link href={href} className={linkClassName} aria-label={label}>
-								{!isNil(iconName) && <Icon className="u-mr-4" name={iconName} aria-hidden />}
-								<span>{label}</span>
-							</Link>
-						),
-						active: shouldBeActive(asPath, href),
-					})),
+					children: children?.map(({ id, label, href }) => {
+						const showIndicator = showMaterialRequestIndicator(href, false);
+						return {
+							id,
+							node: ({ linkClassName }) => (
+								<Link href={href} className={linkClassName} aria-label={label}>
+									{!isNil(iconName) && <Icon className="u-mr-4" name={iconName} aria-hidden />}
+									{showIndicator ? (
+										<UnreadMaterialRequestIndicatorRow>
+											<span>{label}</span>
+											{showIndicator}
+										</UnreadMaterialRequestIndicatorRow>
+									) : (
+										<span>{label}</span>
+									)}
+								</Link>
+							),
+							active: shouldBeActive(asPath, href),
+						};
+					}),
 				};
 			}),
-		[asPath, locale, user?.visitorSpaceSlug, user?.permissions, user?.groupName, shouldBeActive]
+		[
+			asPath,
+			locale,
+			user?.visitorSpaceSlug,
+			user?.permissions,
+			user?.groupName,
+			shouldBeActive,
+			showMaterialRequestIndicator,
+		]
 	);
 
 	useEffect(() => {

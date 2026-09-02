@@ -1,0 +1,70 @@
+@use "src/styles/abstracts" as abstracts;
+
+$context-disclaimer-offset: abstracts.$spacer-sm;
+
+.c-context-disclaimer {
+	position: absolute;
+	top: $context-disclaimer-offset;
+	left: $context-disclaimer-offset;
+	z-index: abstracts.get-z-layer("foreground");
+	color: abstracts.$white;
+
+	@include abstracts.focus-outline;
+
+	&--active {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		gap: abstracts.$spacer-sm;
+		max-width: 43.2rem; // Figma: 432px
+		padding: abstracts.$spacer-sm;
+		background-color: abstracts.$black-64;
+	}
+
+	// The circle itself comes from the c-button--icon variant
+	&--inactive {
+		background-color: abstracts.$black-40;
+		cursor: pointer;
+
+		// The button base style paints its icon dark, which is invisible on the dark circle
+		:global(.c-button__icon) {
+			font-size: abstracts.$font-size-lg;
+			color: abstracts.$white;
+		}
+	}
+
+	&__icon {
+		flex-shrink: 0;
+		font-size: abstracts.$font-size-lg;
+		color: abstracts.$white;
+	}
+
+	&__label {
+		font-size: abstracts.$font-size-sm;
+		font-weight: abstracts.$font-weight-medium;
+		line-height: 2rem; // Figma: 20px on 14px text, which no line-height token matches
+
+		a {
+			color: abstracts.$white;
+			text-decoration: underline;
+		}
+	}
+
+	&__close-button {
+		flex-shrink: 0;
+		cursor: pointer;
+
+		@include abstracts.focus-outline;
+
+		:global(.c-button__icon) {
+			font-size: abstracts.$font-size-lg;
+			color: abstracts.$white;
+		}
+	}
+
+	@media (max-width: abstracts.$breakpoint-md) {
+		&--active {
+			max-width: calc(100% - #{$context-disclaimer-offset} * 2);
+		}
+	}
+}

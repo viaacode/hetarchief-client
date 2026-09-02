@@ -59,6 +59,7 @@ const FILTER_NAME_WITH_ACRONYM: [FilterProperty, string][] = [
 	[FilterProperty.RIGHTS, 'ri'],
 	[FilterProperty.SPACIAL_COVERAGE, 'sc'],
 	[FilterProperty.TEMPORAL_COVERAGE, 'tc'],
+	[FilterProperty.THEME, 'th'],
 	[FilterProperty.TITLE, 'ti'],
 	[FilterProperty.NEWSPAPER_SERIES_NAME, 'ns'],
 	[FilterProperty.LOCATION_CREATED, 'lc'],

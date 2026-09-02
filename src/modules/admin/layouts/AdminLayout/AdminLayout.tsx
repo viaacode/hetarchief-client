@@ -6,8 +6,11 @@ import {
 	AdminFiltersLeft,
 	AdminFiltersRight,
 } from '@admin/layouts/AdminLayout/AdminLayout.slots';
+import { useGetMaterialRequestsUnreadSummary } from '@material-requests/hooks/get-material-requests-unread-summary';
+import { showMaterialRequestUnreadIndicator } from '@material-requests/utils/show-material-request-unread-indicator';
 import { useSlot } from '@meemoo/react-components';
 import type { ListNavigationItem } from '@shared/components/ListNavigation';
+import { UnreadMaterialRequestIndicatorRow } from '@shared/components/UnreadMaterialRequestIndicator';
 import { globalLabelKeys } from '@shared/const';
 import { tHtml } from '@shared/helpers/translate';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
@@ -38,6 +41,12 @@ const AdminLayout: AdminLayoutComponent = ({
 	const locale = useLocale();
 	const router = useRouter();
 	const commonUser = useSelector(selectCommonUser);
+	const { data: unreadSummary } = useGetMaterialRequestsUnreadSummary();
+	const showMaterialRequestIndicator = useCallback(
+		(href: string, hasChildren: boolean) =>
+			showMaterialRequestUnreadIndicator(href, hasChildren, unreadSummary, locale),
+		[unreadSummary, locale]
+	);
 
 	const actions = useSlot(AdminActions, children);
 	const filtersLeft = useSlot(AdminFiltersLeft, children);
@@ -67,25 +76,39 @@ const AdminLayout: AdminLayoutComponent = ({
 
 	const sidebarLinks: ListNavigationItem[] = useMemo(
 		() =>
-			ADMIN_NAVIGATION_LINKS(locale).map(({ id, label, href, children }) => ({
-				id,
-				node: ({ linkClassName }) => (
-					<Link href={href} className={linkClassName} aria-label={label}>
-						{label}
-					</Link>
-				),
-				active: shouldBeActive(asPath, href),
-				children: children?.(locale).map(({ id, label, href }) => ({
+			ADMIN_NAVIGATION_LINKS(locale).map(({ id, label, href, children }) => {
+				const showIndicator = showMaterialRequestIndicator(href, !!children);
+				return {
 					id,
 					node: ({ linkClassName }) => (
 						<Link href={href} className={linkClassName} aria-label={label}>
-							{label}
+							{showIndicator ? (
+								<UnreadMaterialRequestIndicatorRow>{label}</UnreadMaterialRequestIndicatorRow>
+							) : (
+								label
+							)}
 						</Link>
 					),
 					active: shouldBeActive(asPath, href),
-				})),
-			})),
-		[asPath, locale, shouldBeActive]
+					children: children?.(locale).map(({ id, label, href }) => {
+						const showIndicator = showMaterialRequestIndicator(href, false);
+						return {
+							id,
+							node: ({ linkClassName }) => (
+								<Link href={href} className={linkClassName} aria-label={label}>
+									{showIndicator ? (
+										<UnreadMaterialRequestIndicatorRow>{label}</UnreadMaterialRequestIndicatorRow>
+									) : (
+										label
+									)}
+								</Link>
+							),
+							active: shouldBeActive(asPath, href),
+						};
+					}),
+				};
+			}),
+		[asPath, locale, shouldBeActive, showMaterialRequestIndicator]
 	);
 
 	return (
