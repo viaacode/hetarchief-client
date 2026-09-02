@@ -1,4 +1,4 @@
-import { Button } from '@meemoo/react-components';
+import { Button, keysEscape } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Overlay } from '@shared/components/Overlay';
@@ -38,6 +38,24 @@ const FilterOption: FC<FilterOptionProps> = ({
 	useEffect(() => {
 		setOpenedAt(Date.now());
 	}, [filterIsActive]);
+
+	// The fly-out has no close CTA in the design, so escape is the way out of it
+	const closeFlyoutOnEscape = useCallback(
+		(event: KeyboardEvent) => {
+			if (isAdvancedFlyout && filterIsActive && keysEscape.includes(event.key)) {
+				onFilterToggle();
+			}
+		},
+		[isAdvancedFlyout, filterIsActive, onFilterToggle]
+	);
+
+	useEffect(() => {
+		document.addEventListener('keydown', closeFlyoutOnEscape, false);
+
+		return () => {
+			document.removeEventListener('keydown', closeFlyoutOnEscape, false);
+		};
+	}, [closeFlyoutOnEscape]);
 
 	const renderFilterOptionByType = (): ReactElement => {
 		switch (type) {
@@ -81,6 +99,9 @@ const FilterOption: FC<FilterOptionProps> = ({
 		[SearchFilterId.Reusability]: '20rem',
 		[SearchFilterId.Genre]: '63.7rem',
 		[SearchFilterId.Rights]: '63.7rem',
+		[SearchFilterId.Theme]: '63.7rem',
+		// The fly-out lists every filter of the tab, so it is the tallest of them all
+		[SearchFilterId.Advanced]: '62rem',
 	};
 	const renderModal = (): ReactElement => {
 		return (
@@ -116,15 +137,18 @@ const FilterOption: FC<FilterOptionProps> = ({
 								display: filterIsActive ? 'block' : 'none',
 							}}
 						>
-							<Button
-								className={styles['c-filter-menu__flyout-close']}
-								icon={<Icon name={IconNamesLight.Times} aria-hidden />}
-								ariaLabel={tText(
-									'modules/visitor-space/components/filter-menu/filter-option/filter-option___sluiten'
-								)}
-								onClick={onFilterToggle}
-								variants="text"
-							/>
+							{/* The fly-out closes with escape or by clicking away, so it has no close CTA */}
+							{!isAdvancedFlyout && (
+								<Button
+									className={styles['c-filter-menu__flyout-close']}
+									icon={<Icon name={IconNamesLight.Times} aria-hidden />}
+									ariaLabel={tText(
+										'modules/visitor-space/components/filter-menu/filter-option/filter-option___sluiten'
+									)}
+									onClick={onFilterToggle}
+									variants="text"
+								/>
+							)}
 							{isAdvancedFlyout ? (
 								<AdvancedFilterFlyout
 									filters={flyoutFilters}
