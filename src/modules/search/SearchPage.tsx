@@ -97,6 +97,7 @@ import {
 	getVisiblePanelFilters,
 } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
+import { useSearchQueryFilters } from '@visitor-space/hooks/get-search-query-filters';
 import { useGetThemeFilterOptions } from '@visitor-space/hooks/use-get-theme-filter-options';
 import {
 	type AdvancedFilter,
@@ -106,7 +107,6 @@ import {
 	type TagIdentity,
 	type TextFilterCondition,
 } from '@visitor-space/types';
-import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
 import { migrateLegacyAdvancedFilters } from '@visitor-space/utils/migrate-legacy-advanced-filters';
 import clsx from 'clsx';
@@ -205,6 +205,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const { data: activeVisitRequest, isLoading: isLoadingActiveVisitRequest } =
 		useGetActiveVisitRequestForUserAndSpace(query[SearchFilterId.Maintainer], user);
 
+	// The same filters the option lists of the individual filters search with
+	const searchQueryFilters = useSearchQueryFilters();
+
 	const [isInitialPageLoad, setIsInitialPageLoad] = useState(false);
 
 	const isMobile = isMobileSize(windowSize);
@@ -253,10 +256,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		error: searchResultsError,
 	} = useGetIeObjects(
 		{
-			filters: [
-				...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
-				...mapFiltersToElastic(query),
-			],
+			filters: searchQueryFilters,
 			page,
 			size: SEARCH_RESULTS_PAGE_SIZE,
 			sort: activeSort,
@@ -264,10 +264,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		!isLoadingActiveVisitRequest
 	);
 	const { data: formatCounts } = useGetIeObjectFormatCounts(
-		[
-			...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
-			...mapFiltersToElastic(query),
-		].filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
+		searchQueryFilters.filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
 
 		// Enabled when search query is finished, so it loads the tab counts after the initial results
 		!searchResultsRefetching
@@ -435,9 +432,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 	/** Clicking a pill opens the modal of that filter, with the selected values filled in. */
 	const onPillClick = (tag: ClickableTag) => {
-		if (tag.key === QUERY_PARAM_KEY.SEARCH_QUERY_KEY) {
-			return;
-		}
 		setFilterMenuOpen(true);
 		setMobileFilterMenuOpen(true);
 		setQuery({ filter: tag.key });
@@ -565,6 +559,12 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 		const currentPage = isInitialPageLoad ? page : undefined;
 
+		// A filter applied without a selection leaves the panel again, so it must also let go of
+		// the fly-out that put it there. See flow 1, step 6b of the FA of ARC-3806.
+		if (isNil(data)) {
+			setFiltersOpenedFromFlyout((previous) => previous.filter((filterId) => filterId !== id));
+		}
+
 		setQuery({
 			[id]: data,
 			filter: undefined,
@@ -634,6 +634,12 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
 		};
 		// biome-ignore-end lint/correctness/noUnusedVariables: filter it out of the query
+
+		// A filter whose pill is gone leaves the panel, so it must also let go of the fly-out that
+		// put it there. See flow 1, step 6a of the FA of ARC-3806.
+		setFiltersOpenedFromFlyout((previous) =>
+			previous.filter((filterId) => !isNil(updatedQuery[filterId]))
+		);
 
 		setQuery({ ...rest, ...updatedQuery, page: undefined });
 	};
