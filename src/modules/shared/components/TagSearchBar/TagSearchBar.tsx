@@ -10,7 +10,7 @@ import type {
 import { TagSearchBarButton } from '@shared/components/TagSearchBar/TagSearchBarButton';
 import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
-import { type KeyboardEvent, type ReactElement, useMemo } from 'react';
+import { type KeyboardEvent, type MouseEvent, type ReactElement, useMemo } from 'react';
 import type { InputActionMeta } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { Spinner } from '../Spinner/Spinner';
@@ -22,6 +22,7 @@ import { TagSearchBarValueContainer } from './TagSearchBarValueContainer';
 export interface ClickableTag {
 	key: string;
 	value?: string;
+	isClickable?: boolean;
 }
 
 /**
@@ -35,25 +36,23 @@ const makeClickableMultiValue =
 		<span {...innerProps} className={cx({ 'multi-value': true }, className)}>
 			<Tag
 				id={data.value}
-				label={
-					<button
-						type="button"
-						className="c-tag__label-button"
-						onClick={() => onTagClick(data)}
-						aria-label={tText(
-							'modules/shared/components/tag-search-bar/tag-search-bar___pas-deze-filter-aan'
-						)}
-					>
-						{children}
-					</button>
-				}
+				label={children}
 				closeButton={
-					<div {...removeProps} className="c-tag__close">
+					<div
+						{...removeProps}
+						className="c-tag__close"
+						// The whole tag opens the filter, so removing it must not open it as well
+						onClick={(event: MouseEvent<HTMLDivElement>) => {
+							event.stopPropagation();
+							removeProps.onClick?.(event);
+						}}
+					>
 						<Icon name={IconNamesLight.Times} aria-hidden />
 					</div>
 				}
 				disabled={isDisabled}
 				variants="closable"
+				{...(data.isClickable === false ? {} : { onClick: () => onTagClick(data) })}
 			/>
 		</span>
 	);

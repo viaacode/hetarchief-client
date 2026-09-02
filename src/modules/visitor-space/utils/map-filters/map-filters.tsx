@@ -84,6 +84,7 @@ const mapArrayParamToTags = (
 				value: unique,
 				key,
 				id: unique,
+				isClickable: false,
 			};
 		});
 };

@@ -188,6 +188,15 @@ describe('Utils', () => {
 			expect(tags[0].id).not.toEqual(tags[1].id);
 		});
 
+		// A search term has no filter modal behind it, so its pill must not offer to open one
+		it('marks a search term pill as not clickable, and a filter pill as clickable', () => {
+			const [searchTerm] = mapFiltersToTags({ [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: ['concert'] });
+			const [genre] = mapFiltersToTags({ [SearchFilterId.Genre]: ['concert'] }, [GENRE_FILTER]);
+
+			expect(searchTerm.isClickable).toBe(false);
+			expect(genre.isClickable).not.toBe(false);
+		});
+
 		it('gives a filter without a value no pill', () => {
 			expect(mapFiltersToTags({}, [GENRE_FILTER, TITLE_FILTER])).toEqual([]);
 		});

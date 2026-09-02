@@ -204,4 +204,6 @@ export interface IdentityAdvancedFilter extends AdvancedFilter {
 export interface TagIdentity extends Partial<AdvancedFilter>, TagInfo {
 	key: string;
 	id: string | number;
+	/** False for a pill with no filter behind it to open, such as a search term. */
+	isClickable?: boolean;
 }
