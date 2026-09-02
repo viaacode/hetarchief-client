@@ -8,7 +8,8 @@
 	overflow-y: auto;
 	padding: 0;
 
-	li + li {
-		border-top: 1px solid abstracts.$platinum;
+	// The filter panel is dark and divides its rows with a line, the fly-out is white and does not
+	:global(.c-button) {
+		border-bottom: 0;
 	}
 }

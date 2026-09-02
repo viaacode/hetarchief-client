@@ -29,6 +29,7 @@ export const AdvancedFilterFlyout: FC<AdvancedFilterFlyoutProps> = ({
 					icon={IconNamesLight.AngleRight}
 					isActive={false}
 					label={filter.label}
+					variants={['white', 'block']}
 					onClick={() => onFilterClick(filter.id)}
 				/>
 			</li>

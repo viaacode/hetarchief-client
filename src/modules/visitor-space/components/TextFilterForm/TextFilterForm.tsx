@@ -73,7 +73,7 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 
 	return (
 		<>
-			<div className={clsx(className, styles['c-text-filter-form'], 'u-px-32 u-px-20-md')}>
+			<div className={clsx(className, styles['c-text-filter-form'])}>
 				<p className={styles['c-text-filter-form__description']}>
 					{tHtml(
 						'modules/visitor-space/components/text-filter-form/text-filter-form___combineer-verschillende-voorwaarden-om-jouw-exacte-zoekopdracht-waar-te-maken'
@@ -90,7 +90,10 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 						)}
 
 						<FormControl
-							className="c-form-control--label-hidden"
+							className={clsx(
+								'c-form-control--label-hidden',
+								styles['c-text-filter-form__operator']
+							)}
 							id={`text-filter-form-${filter.id}-operator-${index}`}
 							label={tHtml(
 								'modules/visitor-space/components/text-filter-form/text-filter-form___operator'
@@ -135,7 +138,7 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 				))}
 
 				<Button
-					className="u-p-0"
+					className={styles['c-text-filter-form__add']}
 					disabled={disabled}
 					iconStart={<Icon name={IconNamesLight.Plus} aria-hidden />}
 					label={tText(
