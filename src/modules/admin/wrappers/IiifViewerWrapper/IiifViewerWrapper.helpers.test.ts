@@ -1,22 +1,24 @@
-import type { IiifViewerConfigProps } from '@meemoo/admin-core-ui/client';
+import type {
+	HetArchiefIeObjectFile as IeObjectFile,
+	HetArchiefIeObjectPage as IeObjectPage,
+} from '@viaa/avo2-types';
 import { describe, expect, it } from 'vitest';
 import { mapIeObjectPagesToImageInfos, toHetarchiefIiifHost } from './IiifViewerWrapper.helpers';
 
-type IeObjectPage = NonNullable<IiifViewerConfigProps['ieObject']['pages']>[number];
-type IeObjectFile = NonNullable<
-	NonNullable<IeObjectPage['representations']>[number]['files']
->[number];
+// Only mimeType/storedAt/thumbnailUrl drive mapIeObjectPagesToImageInfos, so the rest of the
+// (otherwise required) typings fields are irrelevant filler here.
+const buildFile = (overrides: Partial<IeObjectFile> = {}): IeObjectFile =>
+	({
+		mimeType: 'image/jp2',
+		storedAt: 'https://iiif-qas.meemoo.be/image/3/public/page-1.jp2',
+		thumbnailUrl: '',
+		...overrides,
+	}) as IeObjectFile;
 
-const buildFile = (overrides: Partial<IeObjectFile> = {}): IeObjectFile => ({
-	mimeType: 'image/jp2',
-	storedAt: 'https://iiif-qas.meemoo.be/image/3/public/page-1.jp2',
-	thumbnailUrl: '',
-	...overrides,
-});
-
-const buildPage = (files: IeObjectFile[]): IeObjectPage => ({
-	representations: [{ files }],
-});
+const buildPage = (files: IeObjectFile[]): IeObjectPage =>
+	({
+		representations: [{ files }],
+	}) as IeObjectPage;
 
 describe('toHetarchiefIiifHost', () => {
 	it('swaps the public host for the authenticated hetarchief one', () => {

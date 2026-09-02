@@ -4,7 +4,7 @@ import {
 	XML_FORMATS,
 } from '@ie-objects/ie-objects.consts';
 import type { ImageInfo } from '@iiif-viewer/IiifViewer.types';
-import type { IiifViewerConfigProps } from '@meemoo/admin-core-ui/client';
+import type { HetArchiefIeObjectPage as IeObjectPage } from '@viaa/avo2-types';
 import { compact } from 'es-toolkit/compat';
 
 // 2 newspapers still use this old file format, on QAS only, so this stays hardcoded:
@@ -21,9 +21,7 @@ export function toHetarchiefIiifHost(url: string): string {
 }
 
 /** A page with no IIIF image file is dropped: there is nothing to show for it. */
-export function mapIeObjectPagesToImageInfos(
-	pages: IiifViewerConfigProps['ieObject']['pages']
-): ImageInfo[] {
+export function mapIeObjectPagesToImageInfos(pages: IeObjectPage[] | undefined): ImageInfo[] {
 	return compact(
 		(pages || []).flatMap((page) => {
 			const files = page?.representations?.flatMap((representation) => representation.files || []);

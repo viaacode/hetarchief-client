@@ -244,6 +244,11 @@ export function getAdminCoreConfig(
 			search: {
 				clientSearchUrlToApiSearchUrl,
 			},
+			getThemeSearchPath: (locale, themeSlug) =>
+				// ARC-3797: this release line has no theme-filtered search yet, so this only lands
+				// the visitor on the search page with the theme slug on the url, not an actually
+				// pre-filtered result.
+				`${ADMIN_CORE_ROUTES_BY_LOCALE[locale as Locale].SEARCH}?thema=${themeSlug}`,
 		},
 		database: {
 			proxyUrl: publicRuntimeConfig.PROXY_URL,
