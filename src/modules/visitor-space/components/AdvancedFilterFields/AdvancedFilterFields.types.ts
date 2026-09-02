@@ -3,11 +3,8 @@ import type { ReactNode } from 'react';
 
 export interface AdvancedFilterFieldsProps {
 	children?: ReactNode;
+	/** Unique per rendered row, since every filter form of the panel is mounted at once. */
 	id: string;
-	index: number;
 	filterValue: IdentityAdvancedFilter;
-	onChange: (index: number, value: IdentityAdvancedFilter) => void;
-	onRemove: (index: number) => void;
-	/** The property is fixed when this row belongs to one filter, so its dropdown is hidden. */
-	hideProperty?: boolean;
+	onChange: (value: IdentityAdvancedFilter) => void;
 }

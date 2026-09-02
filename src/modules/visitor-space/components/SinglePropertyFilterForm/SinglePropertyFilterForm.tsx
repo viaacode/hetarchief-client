@@ -44,12 +44,9 @@ export const SinglePropertyFilterForm: FC<GenericFilterFormProps> = ({
 		<>
 			<div className={clsx(className, 'u-px-32 u-px-20-md')}>
 				<AdvancedFilterFields
-					hideProperty
 					id={filterValue.id}
-					index={0}
 					filterValue={filterValue}
-					onChange={(_index, newValue) => setFilterValue(newValue)}
-					onRemove={() => null}
+					onChange={setFilterValue}
 				/>
 			</div>
 

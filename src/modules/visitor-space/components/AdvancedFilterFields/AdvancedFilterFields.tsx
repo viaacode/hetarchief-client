@@ -1,5 +1,4 @@
 import {
-	Button,
 	FormControl,
 	ReactSelect,
 	type ReactSelectProps,
@@ -7,8 +6,6 @@ import {
 	TextInput,
 	type TextInputProps,
 } from '@meemoo/react-components';
-import { Icon } from '@shared/components/Icon';
-import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { SEPARATOR } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -37,11 +34,7 @@ import type {
 	FilterInputComponentProps,
 } from '@visitor-space/const/advanced-filters.consts';
 import { useGetThemeFilterOptions } from '@visitor-space/hooks/use-get-theme-filter-options';
-import {
-	getAdvancedProperties,
-	getFilterConfig,
-	getOperators,
-} from '@visitor-space/utils/advanced-filters';
+import { getFilterConfig, getOperators } from '@visitor-space/utils/advanced-filters';
 import clsx from 'clsx';
 import { parseISO } from 'date-fns';
 import { kebabCase } from 'es-toolkit/compat';
@@ -60,11 +53,9 @@ const labelKeys = {
 };
 
 export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
-	index,
+	id,
 	filterValue,
 	onChange,
-	onRemove,
-	hideProperty,
 }) => {
 	const locale = useLocale();
 	// Only theme slugs are stored, so the selected theme is labelled from this lookup
@@ -78,7 +69,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	// Events
 
 	const onFieldChange = (data: Partial<IdentityAdvancedFilter>) => {
-		onChange(index, { ...filterValue, ...data });
+		onChange({ ...filterValue, ...data });
 	};
 
 	// Render
@@ -332,49 +323,18 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 	};
 
 	return (
-		<div
-			className={clsx(styles['c-advanced-filter-fields'], {
-				[styles['c-advanced-filter-fields--single-property']]: hideProperty,
-			})}
-		>
-			{!hideProperty && (
-				<FormControl
-					className="c-form-control--label-hidden"
-					id={`${labelKeys.property}__${index}`}
-					label={tHtml(
-						'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___veldnaam'
-					)}
-				>
-					<ReactSelect
-						components={{ IndicatorSeparator: () => null }}
-						inputId={`${labelKeys.property}__${index}`}
-						onChange={(newValue) => {
-							const prop = (newValue as SingleValue<SelectOption>)?.value;
-							const operators = prop ? getOperators(prop as FilterProperty) : [];
-
-							onFieldChange({
-								prop,
-								op: operators.length > 0 ? operators[0].value : undefined,
-								val: undefined,
-							});
-						}}
-						options={getAdvancedProperties()}
-						value={getSelectValue(getAdvancedProperties(), filterValue.prop)}
-					/>
-				</FormControl>
-			)}
-
+		<div className={styles['c-advanced-filter-fields']}>
 			{operators.length > 0 && (
 				<FormControl
 					className="c-form-control--label-hidden"
-					id={`${labelKeys.operator}__${index}`}
+					id={`${labelKeys.operator}__${id}`}
 					label={tHtml(
 						'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___operator'
 					)}
 				>
 					<ReactSelect
 						components={{ IndicatorSeparator: () => null }}
-						inputId={`${labelKeys.operator}__${index}`}
+						inputId={`${labelKeys.operator}__${id}`}
 						onChange={(newValue) =>
 							onFieldChange({
 								op: (newValue as SingleValue<SelectOption>)?.value,
@@ -392,7 +352,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 					styles['c-advanced-filter-fields__field-container'],
 					'c-form-control--label-hidden'
 				)}
-				id={`${labelKeys.value}__${index}`}
+				id={`${labelKeys.value}__${id}`}
 				label={tHtml(
 					'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___waarde'
 				)}
@@ -400,20 +360,9 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 				{/* Ensure input field rerenders when operator or filter changed */}
 				<div key={`advanced-filter-input--${filterValue.prop}`} className="u-full-width">
 					{renderField({
-						id: `${labelKeys.value}__${index}`,
+						id: `${labelKeys.value}__${id}`,
 					})}
 				</div>
-
-				{index > 0 && (
-					<Button
-						icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
-						ariaLabel={tText(
-							'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___criterium-verwijderen'
-						)}
-						variants="black"
-						onClick={() => onRemove(index)}
-					/>
-				)}
 			</FormControl>
 		</div>
 	);
