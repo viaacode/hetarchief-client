@@ -74,7 +74,8 @@ export const SEARCH_PAGE_FILTERS = (
 	});
 
 	return [
-		// Inline checkboxes. The FA leaves these as they are.
+		// The panel shows these by default. Their order is the order of the design, so it is not
+		// grouped by modal type the way the rest of this list is.
 		{
 			id: SearchFilterId.ConsultableMedia,
 			label: {
@@ -127,8 +128,6 @@ export const SEARCH_PAGE_FILTERS = (
 				return isKioskUser;
 			},
 		},
-
-		// Searchable checkbox filters
 		{
 			id: SearchFilterId.Maintainers,
 			label: tText('modules/visitor-space/const/index___aanbieder'),
@@ -142,6 +141,52 @@ export const SEARCH_PAGE_FILTERS = (
 			},
 		},
 		{
+			id: SearchFilterId.NewspaperSeriesName,
+			label: tText('modules/visitor-space/const/visitor-space-filters___reeks'),
+			type: FilterMenuType.Modal,
+			modalType: FilterModalType.Autocomplete,
+			field: IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME,
+			inMainPanelByDefault: true,
+			tabs: NEWSPAPER_TABS,
+		},
+		{
+			id: SearchFilterId.ReleaseDate,
+			label: tText('modules/visitor-space/const/visitor-space-filters___uitgavedatum'),
+			form: ReleaseDateFilterForm,
+			type: FilterMenuType.Modal,
+			modalType: FilterModalType.Unchanged,
+			field: IeObjectsSearchFilterField.RELEASE_DATE,
+			property: FilterProperty.RELEASE_DATE,
+			inMainPanelByDefault: true,
+			tabs: ALL_TABS,
+		},
+		{
+			id: SearchFilterId.Reusability,
+			label: tText('modules/visitor-space/const/visitor-space-filters___herbruikbaarheid'),
+			type: FilterMenuType.Modal,
+			modalType: FilterModalType.CheckboxList,
+			field: IeObjectsSearchFilterField.REUSABILITY,
+			options: () =>
+				GET_REUSABILITY_OPTIONS().map((option) => ({
+					label: option.label,
+					value: `${option.key}${FILTER_LABEL_VALUE_DELIMITER}${option.label}`,
+				})),
+			inMainPanelByDefault: true,
+			tabs: ALL_TABS,
+			isDisabled: () => {
+				return !ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY && !isKeyUser;
+			},
+		},
+		{
+			id: SearchFilterId.LocationCreated,
+			label: tText('modules/visitor-space/const/visitor-space-filters___plaats-van-uitgave'),
+			type: FilterMenuType.Modal,
+			modalType: FilterModalType.CheckboxList,
+			field: IeObjectsSearchFilterField.LOCATION_CREATED,
+			inMainPanelByDefault: true,
+			tabs: NEWSPAPER_TABS,
+		},
+		{
 			id: SearchFilterId.Medium,
 			label: tText('modules/visitor-space/const/index___analoge-drager'),
 			type: FilterMenuType.Modal,
@@ -150,6 +195,25 @@ export const SEARCH_PAGE_FILTERS = (
 			inMainPanelByDefault: true,
 			tabs: AUDIO_VIDEO_TABS,
 		},
+		{
+			id: SearchFilterId.Creator,
+			label: getFilterLabel(FilterProperty.CREATOR),
+			type: FilterMenuType.Modal,
+			modalType: FilterModalType.Autocomplete,
+			field: IeObjectsSearchFilterField.CREATOR,
+			inMainPanelByDefault: true,
+			tabs: AUDIO_VIDEO_TABS,
+		},
+		{
+			id: SearchFilterId.Mentions,
+			label: tText('modules/visitor-space/const/visitor-space-filters___namenlijst-gesneuvelden'),
+			type: FilterMenuType.Modal,
+			modalType: FilterModalType.Autocomplete,
+			field: IeObjectsSearchFilterField.MENTIONS,
+			inMainPanelByDefault: true,
+			tabs: NEWSPAPER_TABS,
+		},
+		// Reachable through the advanced fly-out, which sorts them alphabetically itself.
 		{
 			id: SearchFilterId.Genre,
 			label: getFilterLabel(FilterProperty.GENRE),
@@ -185,34 +249,6 @@ export const SEARCH_PAGE_FILTERS = (
 				return isKioskUser;
 			},
 		},
-
-		// Checkbox filters, no search bar
-		{
-			id: SearchFilterId.Reusability,
-			label: tText('modules/visitor-space/const/visitor-space-filters___herbruikbaarheid'),
-			type: FilterMenuType.Modal,
-			modalType: FilterModalType.CheckboxList,
-			field: IeObjectsSearchFilterField.REUSABILITY,
-			options: () =>
-				GET_REUSABILITY_OPTIONS().map((option) => ({
-					label: option.label,
-					value: `${option.key}${FILTER_LABEL_VALUE_DELIMITER}${option.label}`,
-				})),
-			inMainPanelByDefault: true,
-			tabs: ALL_TABS,
-			isDisabled: () => {
-				return !ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY && !isKeyUser;
-			},
-		},
-		{
-			id: SearchFilterId.LocationCreated,
-			label: tText('modules/visitor-space/const/visitor-space-filters___plaats-van-uitgave'),
-			type: FilterMenuType.Modal,
-			modalType: FilterModalType.CheckboxList,
-			field: IeObjectsSearchFilterField.LOCATION_CREATED,
-			inMainPanelByDefault: true,
-			tabs: NEWSPAPER_TABS,
-		},
 		{
 			id: SearchFilterId.Language,
 			label: getFilterLabel(FilterProperty.LANGUAGE),
@@ -222,37 +258,6 @@ export const SEARCH_PAGE_FILTERS = (
 			inMainPanelByDefault: false,
 			tabs: ALL_TABS,
 		},
-
-		// Autocomplete filters
-		{
-			id: SearchFilterId.Creator,
-			label: getFilterLabel(FilterProperty.CREATOR),
-			type: FilterMenuType.Modal,
-			modalType: FilterModalType.Autocomplete,
-			field: IeObjectsSearchFilterField.CREATOR,
-			inMainPanelByDefault: true,
-			tabs: AUDIO_VIDEO_TABS,
-		},
-		{
-			id: SearchFilterId.NewspaperSeriesName,
-			label: tText('modules/visitor-space/const/visitor-space-filters___reeks'),
-			type: FilterMenuType.Modal,
-			modalType: FilterModalType.Autocomplete,
-			field: IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME,
-			inMainPanelByDefault: true,
-			tabs: NEWSPAPER_TABS,
-		},
-		{
-			id: SearchFilterId.Mentions,
-			label: tText('modules/visitor-space/const/visitor-space-filters___namenlijst-gesneuvelden'),
-			type: FilterMenuType.Modal,
-			modalType: FilterModalType.Autocomplete,
-			field: IeObjectsSearchFilterField.MENTIONS,
-			inMainPanelByDefault: true,
-			tabs: NEWSPAPER_TABS,
-		},
-
-		// Text filters
 		textFilter(SearchFilterId.Title, IeObjectsSearchFilterField.NAME, FilterProperty.TITLE),
 		textFilter(
 			SearchFilterId.Description,
@@ -290,19 +295,6 @@ export const SEARCH_PAGE_FILTERS = (
 			IeObjectsSearchFilterField.PUBLISHER,
 			FilterProperty.PUBLISHER
 		),
-
-		// Date and duration filters. The FA leaves these as they are.
-		{
-			id: SearchFilterId.ReleaseDate,
-			label: tText('modules/visitor-space/const/visitor-space-filters___uitgavedatum'),
-			form: ReleaseDateFilterForm,
-			type: FilterMenuType.Modal,
-			modalType: FilterModalType.Unchanged,
-			field: IeObjectsSearchFilterField.RELEASE_DATE,
-			property: FilterProperty.RELEASE_DATE,
-			inMainPanelByDefault: true,
-			tabs: ALL_TABS,
-		},
 		{
 			id: SearchFilterId.Created,
 			label: getFilterLabel(FilterProperty.CREATED_AT),
@@ -336,7 +328,6 @@ export const SEARCH_PAGE_FILTERS = (
 			inMainPanelByDefault: false,
 			tabs: AUDIO_VIDEO_TABS,
 		},
-
 		// The advanced fly-out itself. Always last in the panel. FilterOption renders its list.
 		{
 			id: SearchFilterId.Advanced,
@@ -385,23 +376,38 @@ export const getAdvancedFlyoutFilters = (
 	);
 
 /**
- * The filters the panel shows.
+ * The filters the panel shows, in the order the design puts them.
  *
- * A filter shows when it belongs there by default, when the url holds a value for it, or when the
- * user just picked it from the advanced fly-out. The url covers a tab switch, a trip to a detail
- * page and back, and a url typed by hand. It also covers the three ways the FA of ARC-3806 lets a
- * row disappear again, since all three clear the parameter: the pill is removed, the filter is
- * reset and applied empty, or the page reloads without the parameter.
- * `openedFromFlyout` covers a filter that is open but not applied yet, and dies on a reload.
+ * The filters that belong to the panel come first, in the order of this file. A filter the user
+ * added shows underneath them, in the order they added it, and "Geavanceerd" stays at the bottom.
+ *
+ * A filter is added when the url holds a value for it, or when the user just picked it from the
+ * advanced fly-out. The url covers a tab switch, a trip to a detail page and back, and a url typed
+ * by hand. It also covers the three ways the FA of ARC-3806 lets a row disappear again, since all
+ * three clear the parameter: the pill is removed, the filter is reset and applied empty, or the
+ * page reloads without the parameter. `openedFromFlyout` covers a filter that is open but not
+ * applied yet, and dies on a reload.
  */
 export const getVisiblePanelFilters = (
 	availableFilters: FilterMenuFilterOption[],
 	query: Record<string, unknown>,
 	openedFromFlyout: SearchFilterId[]
-): FilterMenuFilterOption[] =>
-	availableFilters.filter(
-		(filter) =>
-			filter.inMainPanelByDefault ||
-			!isNil(query[filter.id]) ||
-			openedFromFlyout.includes(filter.id)
-	);
+): FilterMenuFilterOption[] => {
+	const isAdded = (filter: FilterMenuFilterOption): boolean =>
+		!filter.inMainPanelByDefault &&
+		(!isNil(query[filter.id]) || openedFromFlyout.includes(filter.id));
+
+	const added = sortBy(availableFilters.filter(isAdded), (filter) => {
+		const openedAt = openedFromFlyout.indexOf(filter.id);
+		// A filter that arrived through the url has no moment of its own, so it keeps its own order
+		return openedAt === -1 ? Number.MAX_SAFE_INTEGER : openedAt;
+	});
+
+	return [
+		...availableFilters.filter(
+			(filter) => filter.inMainPanelByDefault && filter.id !== SearchFilterId.Advanced
+		),
+		...added,
+		...availableFilters.filter((filter) => filter.id === SearchFilterId.Advanced),
+	];
+};

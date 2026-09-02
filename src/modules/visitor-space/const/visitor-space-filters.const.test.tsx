@@ -239,6 +239,25 @@ describe('getVisiblePanelFilters', () => {
 		expect(visibleIds({ [SearchFilterId.Creator]: undefined })).toContain(SearchFilterId.Creator);
 	});
 
+	// The design puts an added filter under the default rows, not in the order of the registry
+	it('puts the filters the user added under the default ones, in the order they added them', () => {
+		const ids = visibleIds({}, [SearchFilterId.Title, SearchFilterId.Genre]);
+		const defaults = visibleIds({}).filter((id) => id !== SearchFilterId.Advanced);
+
+		expect(ids.slice(0, defaults.length)).toEqual(defaults);
+		expect(ids.slice(defaults.length)).toEqual([
+			SearchFilterId.Title,
+			SearchFilterId.Genre,
+			SearchFilterId.Advanced,
+		]);
+	});
+
+	it('keeps "Geavanceerd" at the bottom', () => {
+		const ids = visibleIds({ [SearchFilterId.Genre]: ['concert'] });
+
+		expect(ids[ids.length - 1]).toEqual(SearchFilterId.Advanced);
+	});
+
 	it('leaves out a filter that does not belong to this tab', () => {
 		const newspaperOnly = getVisiblePanelFilters(
 			getAvailableSearchPageFilters(true, false, true, SearchPageMediaType.All),
