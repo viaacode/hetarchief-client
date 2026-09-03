@@ -133,4 +133,14 @@ describe('CheckboxListFilterForm', () => {
 
 		expect(screen.getByText('geen waarden gevonden')).toBeInTheDocument();
 	});
+
+	// It used to claim there was nothing to tick while the aggregation was still on its way
+	it('waits rather than saying there is nothing to tick, while the options load', () => {
+		useGetFilterOptions.mockReturnValue({ options: [], isLoading: true });
+
+		renderForm();
+
+		expect(screen.getByLabelText('Bezig met laden')).toBeInTheDocument();
+		expect(screen.queryByText('geen waarden gevonden')).not.toBeInTheDocument();
+	});
 });

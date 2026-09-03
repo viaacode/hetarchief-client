@@ -1,5 +1,6 @@
 import { CheckboxList } from '@meemoo/react-components';
 import { SearchBar } from '@shared/components/SearchBar';
+import { Spinner } from '@shared/components/Spinner/Spinner';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { SEARCH_PAGE_QUERY_PARAM_CONFIG } from '@visitor-space/const';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
@@ -30,7 +31,10 @@ export const SearchableCheckboxFilterForm: FC<GenericFilterFormProps> = ({
 
 	const { reset, handleSubmit } = useForm({ defaultValues: {} });
 	const fixedOptions = filter.options?.();
-	const { options: aggregatedOptions } = useGetFilterOptions(filter, !disabled && !fixedOptions);
+	const { options: aggregatedOptions, isLoading } = useGetFilterOptions(
+		filter,
+		!disabled && !fixedOptions
+	);
 	const options = fixedOptions ?? aggregatedOptions;
 
 	const matchingOptions = options.filter((option) =>
@@ -74,7 +78,13 @@ export const SearchableCheckboxFilterForm: FC<GenericFilterFormProps> = ({
 				/>
 
 				<div className="c-filter-form__body--scrollable">
-					{matchingOptions.length === 0 && (
+					{isLoading && (
+						<div className="u-text-center">
+							<Spinner />
+						</div>
+					)}
+
+					{!isLoading && matchingOptions.length === 0 && (
 						<p className="u-color-neutral u-text-center">
 							{tHtml(
 								'modules/visitor-space/components/searchable-checkbox-filter-form/searchable-checkbox-filter-form___geen-waarden-gevonden'

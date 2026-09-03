@@ -1,4 +1,5 @@
 import { CheckboxList } from '@meemoo/react-components';
+import { Spinner } from '@shared/components/Spinner/Spinner';
 import { tHtml } from '@shared/helpers/translate';
 import { SEARCH_PAGE_QUERY_PARAM_CONFIG } from '@visitor-space/const';
 import { useGetFilterOptions } from '@visitor-space/hooks/get-filter-options';
@@ -27,7 +28,10 @@ export const CheckboxListFilterForm: FC<GenericFilterFormProps> = ({
 
 	const { reset, handleSubmit } = useForm({ defaultValues: {} });
 	const fixedOptions = filter.options?.();
-	const { options: aggregatedOptions } = useGetFilterOptions(filter, !disabled && !fixedOptions);
+	const { options: aggregatedOptions, isLoading } = useGetFilterOptions(
+		filter,
+		!disabled && !fixedOptions
+	);
 	const options = fixedOptions ?? aggregatedOptions;
 
 	const onItemClick = (checked: boolean, value: unknown): void => {
@@ -49,7 +53,13 @@ export const CheckboxListFilterForm: FC<GenericFilterFormProps> = ({
 		<>
 			<div className={clsx(className, 'u-px-32 u-px-20-md')}>
 				<div className="c-filter-form__body">
-					{options.length === 0 && (
+					{isLoading && (
+						<div className="u-text-center">
+							<Spinner />
+						</div>
+					)}
+
+					{!isLoading && options.length === 0 && (
 						<p className="u-color-neutral u-text-center">
 							{tHtml(
 								'modules/visitor-space/components/checkbox-list-filter-form/checkbox-list-filter-form___geen-waarden-gevonden'

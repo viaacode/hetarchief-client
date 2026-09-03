@@ -1,7 +1,7 @@
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { FilterMenuType } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@shared/helpers/translate', () => ({
 	tText: (key: string) => key.split('___').pop()?.replaceAll('-', ' ') || '',
@@ -13,16 +13,18 @@ vi.mock('use-query-params', async (importOriginal) => ({
 	useQueryParams: () => [{}, vi.fn()],
 }));
 
+const useGetFilterOptions = vi.fn();
+
 vi.mock('@visitor-space/hooks/get-filter-options', () => ({
-	useGetFilterOptions: () => ({
-		options: [
-			{ label: 'A Two Dogs Company', value: 'A Two Dogs Company' },
-			{ label: 'Compagnie Cecilia', value: 'Compagnie Cecilia' },
-			{ label: 'Amsab-ISG', value: 'Amsab-ISG' },
-		],
-		isLoading: false,
-	}),
+	useGetFilterOptions: (...args: unknown[]) =>
+		(useGetFilterOptions as unknown as (...a: unknown[]) => unknown)(...args),
 }));
+
+const MAINTAINER_OPTIONS = [
+	{ label: 'A Two Dogs Company', value: 'A Two Dogs Company' },
+	{ label: 'Compagnie Cecilia', value: 'Compagnie Cecilia' },
+	{ label: 'Amsab-ISG', value: 'Amsab-ISG' },
+];
 
 import { FilterModalType, SearchFilterId } from '@visitor-space/types';
 import { SearchableCheckboxFilterForm } from './SearchableCheckboxFilterForm';
@@ -56,6 +58,21 @@ const selectedValues = (getParams: () => { values: Record<string, string[]> }) =
 	getParams().values[SearchFilterId.Maintainers];
 
 describe('SearchableCheckboxFilterForm', () => {
+	beforeEach(() => {
+		useGetFilterOptions.mockReset();
+		useGetFilterOptions.mockReturnValue({ options: MAINTAINER_OPTIONS, isLoading: false });
+	});
+
+	// It used to claim there were no values while the aggregation was still on its way
+	it('waits rather than saying there are no values, while the options load', () => {
+		useGetFilterOptions.mockReturnValue({ options: [], isLoading: true });
+
+		renderForm();
+
+		expect(screen.getByLabelText('Bezig met laden')).toBeInTheDocument();
+		expect(screen.queryByText('geen waarden gevonden')).not.toBeInTheDocument();
+	});
+
 	it('lists every option it is given', () => {
 		renderForm();
 
