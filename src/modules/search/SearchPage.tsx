@@ -416,18 +416,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		[availableFilters]
 	);
 
-	/**
-	 * A filter shows in the panel when it belongs there by default, when the url holds a value for
-	 * it, or when the user just picked it from the advanced fly-out. The url covers a tab switch, a
-	 * trip to a detail page and back, and a url typed by hand; the state below covers a filter that
-	 * is open but not applied yet, and dies on a reload, which is what the FA of ARC-3806 asks.
-	 */
-	const [filtersOpenedFromFlyout, setFiltersOpenedFromFlyout] = useState<SearchFilterId[]>([]);
-
 	const filters = useMemo(
-		(): FilterMenuFilterOption[] =>
-			getVisiblePanelFilters(availableFilters, query, filtersOpenedFromFlyout),
-		[availableFilters, query, filtersOpenedFromFlyout]
+		(): FilterMenuFilterOption[] => getVisiblePanelFilters(availableFilters, query),
+		[availableFilters, query]
 	);
 
 	/** Clicking a pill opens the modal of that filter, with the selected values filled in. */
@@ -439,9 +430,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 	/** Picking a filter from the fly-out puts it in the panel and opens its modal. */
 	const onFlyoutFilterClick = (filterId: SearchFilterId) => {
-		setFiltersOpenedFromFlyout((previous) =>
-			previous.includes(filterId) ? previous : [...previous, filterId]
-		);
 		setQuery({ filter: filterId });
 	};
 
@@ -559,12 +547,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 		const currentPage = isInitialPageLoad ? page : undefined;
 
-		// A filter applied without a selection leaves the panel again, so it must also let go of
-		// the fly-out that put it there. See flow 1, step 6b of the FA of ARC-3806.
-		if (isNil(data)) {
-			setFiltersOpenedFromFlyout((previous) => previous.filter((filterId) => filterId !== id));
-		}
-
 		setQuery({
 			[id]: data,
 			filter: undefined,
@@ -634,12 +616,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			...VISITOR_SPACE_QUERY_PARAM_INIT,
 		};
 		// biome-ignore-end lint/correctness/noUnusedVariables: filter it out of the query
-
-		// A filter whose pill is gone leaves the panel, so it must also let go of the fly-out that
-		// put it there. See flow 1, step 6a of the FA of ARC-3806.
-		setFiltersOpenedFromFlyout((previous) =>
-			previous.filter((filterId) => !isNil(updatedQuery[filterId]))
-		);
 
 		setQuery({ ...rest, ...updatedQuery, page: undefined });
 	};

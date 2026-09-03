@@ -379,35 +379,28 @@ export const getAdvancedFlyoutFilters = (
  * The filters the panel shows, in the order the design puts them.
  *
  * The filters that belong to the panel come first, in the order of this file. A filter the user
- * added shows underneath them, in the order they added it, and "Geavanceerd" stays at the bottom.
+ * added shows underneath them, and "Geavanceerd" stays at the bottom.
  *
- * A filter is added when the url holds a value for it, or when the user just picked it from the
- * advanced fly-out. The url covers a tab switch, a trip to a detail page and back, and a url typed
- * by hand. It also covers the three ways the FA of ARC-3806 lets a row disappear again, since all
- * three clear the parameter: the pill is removed, the filter is reset and applied empty, or the
- * page reloads without the parameter. `openedFromFlyout` covers a filter that is open but not
- * applied yet, and dies on a reload.
+ * A filter the user added shows while the url holds a value for it, or while its modal is open.
+ * The url alone carries every case the FA of ARC-3806 names: an activated filter survives a tab
+ * switch, a trip to a detail page and back, and a url typed by hand, and it leaves the panel in
+ * the three ways the FA allows, since all three drop the parameter.
  */
+export const ACTIVE_FILTER_PARAM = 'filter';
+
 export const getVisiblePanelFilters = (
 	availableFilters: FilterMenuFilterOption[],
-	query: Record<string, unknown>,
-	openedFromFlyout: SearchFilterId[]
+	query: Record<string, unknown>
 ): FilterMenuFilterOption[] => {
 	const isAdded = (filter: FilterMenuFilterOption): boolean =>
 		!filter.inMainPanelByDefault &&
-		(!isNil(query[filter.id]) || openedFromFlyout.includes(filter.id));
-
-	const added = sortBy(availableFilters.filter(isAdded), (filter) => {
-		const openedAt = openedFromFlyout.indexOf(filter.id);
-		// A filter that arrived through the url has no moment of its own, so it keeps its own order
-		return openedAt === -1 ? Number.MAX_SAFE_INTEGER : openedAt;
-	});
+		(!isNil(query[filter.id]) || query[ACTIVE_FILTER_PARAM] === filter.id);
 
 	return [
 		...availableFilters.filter(
 			(filter) => filter.inMainPanelByDefault && filter.id !== SearchFilterId.Advanced
 		),
-		...added,
+		...availableFilters.filter(isAdded),
 		...availableFilters.filter((filter) => filter.id === SearchFilterId.Advanced),
 	];
 };

@@ -206,8 +206,8 @@ describe('getVisiblePanelFilters', () => {
 	const availableFilters = () =>
 		getAvailableSearchPageFilters(true, false, true, SearchPageMediaType.All);
 
-	const visibleIds = (query: Record<string, unknown>, openedFromFlyout: SearchFilterId[] = []) =>
-		getVisiblePanelFilters(availableFilters(), query, openedFromFlyout).map(({ id }) => id);
+	const visibleIds = (query: Record<string, unknown>) =>
+		getVisiblePanelFilters(availableFilters(), query).map(({ id }) => id);
 
 	it('shows the default filters and nothing more on a bare url', () => {
 		const ids = visibleIds({});
@@ -219,12 +219,12 @@ describe('getVisiblePanelFilters', () => {
 	});
 
 	// Flow 1, step 3 of the FA: the row appears before anything is applied
-	it('shows a filter the user just picked from the fly-out', () => {
-		expect(visibleIds({}, [SearchFilterId.Genre])).toContain(SearchFilterId.Genre);
+	it('shows a filter while its modal is open', () => {
+		expect(visibleIds({ filter: SearchFilterId.Genre })).toContain(SearchFilterId.Genre);
 	});
 
 	// Flow 1, step 5: the row survives a tab switch, a detail page, and a url typed by hand
-	it('shows a filter the url holds a value for, without help from the fly-out state', () => {
+	it('shows a filter the url holds a value for, with its modal closed', () => {
 		expect(visibleIds({ [SearchFilterId.Genre]: ['concert'] })).toContain(SearchFilterId.Genre);
 	});
 
@@ -239,17 +239,31 @@ describe('getVisiblePanelFilters', () => {
 		expect(visibleIds({ [SearchFilterId.Creator]: undefined })).toContain(SearchFilterId.Creator);
 	});
 
-	// The design puts an added filter under the default rows, not in the order of the registry
-	it('puts the filters the user added under the default ones, in the order they added them', () => {
-		const ids = visibleIds({}, [SearchFilterId.Title, SearchFilterId.Genre]);
+	// The design puts an added filter under the default rows
+	it('puts the filters the user added under the default ones', () => {
+		const ids = visibleIds({
+			[SearchFilterId.Genre]: ['concert'],
+			[SearchFilterId.Title]: ['concert'],
+		});
 		const defaults = visibleIds({}).filter((id) => id !== SearchFilterId.Advanced);
 
 		expect(ids.slice(0, defaults.length)).toEqual(defaults);
 		expect(ids.slice(defaults.length)).toEqual([
-			SearchFilterId.Title,
 			SearchFilterId.Genre,
+			SearchFilterId.Title,
 			SearchFilterId.Advanced,
 		]);
+	});
+
+	// Flow 1, step 6a: the pill is gone, so the row goes with it, even with the modal open
+	it('hides a filter whose value is gone while another filter is open', () => {
+		const ids = visibleIds({
+			[SearchFilterId.Genre]: undefined,
+			filter: SearchFilterId.Title,
+		});
+
+		expect(ids).not.toContain(SearchFilterId.Genre);
+		expect(ids).toContain(SearchFilterId.Title);
 	});
 
 	it('keeps "Geavanceerd" at the bottom', () => {
@@ -261,8 +275,7 @@ describe('getVisiblePanelFilters', () => {
 	it('leaves out a filter that does not belong to this tab', () => {
 		const newspaperOnly = getVisiblePanelFilters(
 			getAvailableSearchPageFilters(true, false, true, SearchPageMediaType.All),
-			{ [SearchFilterId.Mentions]: ['Abel Joseph Riviere'] },
-			[SearchFilterId.Mentions]
+			{ [SearchFilterId.Mentions]: ['Abel Joseph Riviere'], filter: SearchFilterId.Mentions }
 		).map(({ id }) => id);
 
 		expect(newspaperOnly).not.toContain(SearchFilterId.Mentions);
