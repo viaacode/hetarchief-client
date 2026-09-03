@@ -56,6 +56,23 @@ const THEME_FILTER = filter(
 	IeObjectsSearchFilterField.THEME
 );
 
+const CONSULTABLE_MEDIA_FILTER: FilterMenuFilterOption = {
+	...filter(
+		SearchFilterId.ConsultableMedia,
+		FilterModalType.Unchanged,
+		'Alles wat raadpleegbaar is',
+		IeObjectsSearchFilterField.CONSULTABLE_MEDIA
+	),
+	type: FilterMenuType.Checkbox,
+};
+
+const RELEASE_DATE_FILTER = filter(
+	SearchFilterId.ReleaseDate,
+	FilterModalType.Unchanged,
+	'Uitgavedatum',
+	IeObjectsSearchFilterField.RELEASE_DATE
+);
+
 const asText = (tagLabel: unknown): string =>
 	renderToStaticMarkup(tagLabel as React.ReactElement).replace(/<[^>]*>/g, '');
 
@@ -195,6 +212,45 @@ describe('Utils', () => {
 
 			expect(searchTerm.isClickable).toBe(false);
 			expect(genre.isClickable).not.toBe(false);
+		});
+
+		// Neither of these has a modal behind it either, so neither pill may offer to open one
+		it('marks a boolean filter pill and a legacy advanced pill as not clickable', () => {
+			const [consultable] = mapFiltersToTags({ [SearchFilterId.ConsultableMedia]: true }, [
+				CONSULTABLE_MEDIA_FILTER,
+			]);
+			const [legacy] = mapFiltersToTags({
+				[SearchFilterId.Advanced]: [
+					{
+						prop: FilterProperty.TITLE,
+						op: Operator.CONTAINS,
+						val: 'concert',
+						renderKey: 'legacy-title',
+					},
+				],
+			});
+
+			expect(consultable.isClickable).toBe(false);
+			expect(legacy.isClickable).toBe(false);
+		});
+
+		// A date filter does have a modal, so its pill keeps opening it
+		it('keeps a date filter pill clickable', () => {
+			const [releaseDate] = mapFiltersToTags(
+				{
+					[SearchFilterId.ReleaseDate]: [
+						{
+							prop: FilterProperty.RELEASE_DATE,
+							op: Operator.GREATER_THAN_OR_EQUAL,
+							val: '2020-01-01',
+							renderKey: 'release-date',
+						},
+					],
+				},
+				[RELEASE_DATE_FILTER]
+			);
+
+			expect(releaseDate.isClickable).not.toBe(false);
 		});
 
 		it('gives a filter without a value no pill', () => {

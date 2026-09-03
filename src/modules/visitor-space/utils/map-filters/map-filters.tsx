@@ -59,6 +59,8 @@ const mapBooleanParamToTag = (value: boolean, label: string, key: string): TagId
 			value: unique,
 			key,
 			id: unique,
+			// This filter is a checkbox in the panel, so there is no modal to open
+			isClickable: false,
 		},
 	];
 };
@@ -205,6 +207,8 @@ const mapAdvancedToTags = (
 			value: unique,
 			key,
 			id: unique,
+			// A url from before ARC-3806 keeps one combined pill, which has no modal to open
+			isClickable: key !== SearchFilterId.Advanced,
 			...advanced,
 		};
 	});
