@@ -1686,7 +1686,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : {}}
 					>
 						{renderMedia()}
-						{showContextDisclaimer && <ContextDisclaimer />}
+						{showContextDisclaimer && (
+							<ContextDisclaimer className={styles['p-object-detail__context-disclaimer']} />
+						)}
 					</div>
 					{showFragmentSlider && (
 						<FragmentSlider
