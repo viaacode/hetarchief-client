@@ -1,3 +1,4 @@
+import { IiifViewerWrapper } from '@admin/wrappers/IiifViewerWrapper/IiifViewerWrapper';
 import { BlockContentEnclose } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose';
 import {
 	type AdminConfig,
@@ -35,6 +36,7 @@ import type { Locale } from '@shared/utils/i18n';
 import { isServerSideRendering } from '@shared/utils/is-browser/is-browser';
 import { AvoCoreDatabaseType, type AvoUserCommonUser } from '@viaa/avo2-types';
 import { clientSearchUrlToApiSearchUrl } from '@visitor-space/utils/search-url-to-api-url/client-search-url-to-api-search-url';
+import { getThemeSearchPath } from '@visitor-space/utils/theme-search-path';
 import { noop } from 'es-toolkit/compat';
 import Link from 'next/link';
 import type { NextRouter } from 'next/router';
@@ -155,6 +157,7 @@ export function getAdminCoreConfig(
 				ContentBlockType.TitleWithParallax,
 				ContentBlockType.Timeline,
 				ContentBlockType.DoubleBanner,
+				ContentBlockType.ThreeChoicesPlayer,
 			],
 			defaultPageWidth: ContentPageWidth.LARGE,
 			onSaveContentPage,
@@ -209,12 +212,16 @@ export function getAdminCoreConfig(
 				play: { name: IconNamesLight.Play },
 				pause: { name: IconNamesLight.Pause },
 				collection: { name: IconNamesLight.Collection },
+				collectionShuffle: { name: IconNamesLight.CollectionShuffle },
 			},
 			list: GET_ICON_LIST_CONFIG,
 			alerts: GET_ALERT_ICON_LIST_CONFIG,
 		},
 		components: {
 			defaultAudioStill: '/images/waveform.svg',
+			// A content block cannot resolve a newspaper's pages or their tickets, so the viewer is
+			// handed over ready to use.
+			iiifViewer: IiifViewerWrapper,
 			loader: {
 				component: () => <Loading fullscreen locationId="admin-core-loader" />,
 			},
@@ -295,6 +302,7 @@ export function getAdminCoreConfig(
 			},
 			getIeObjectDetailPath: (locale, maintainerSlug, schemaIdentifier, name) =>
 				getIeObjectDetailPath(locale as Locale, maintainerSlug, schemaIdentifier, name),
+			getThemeSearchPath: (locale, themeSlug) => getThemeSearchPath(locale as Locale, themeSlug),
 		},
 		database: {
 			proxyUrl: publicRuntimeConfig.PROXY_URL,
