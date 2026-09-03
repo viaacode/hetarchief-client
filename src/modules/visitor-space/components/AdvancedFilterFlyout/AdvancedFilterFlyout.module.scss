@@ -1,6 +1,7 @@
 @use "src/styles/abstracts" as abstracts;
 
-// The list has to fit on every screen, so it scrolls inside the viewport instead of growing past it
+// The fly-out sits centred in the window, so this cap keeps it clear of both edges and scrolls
+// the rest. See the "Redesign van geavanceerde filters" section of the FA of ARC-3806.
 .c-advanced-filter-flyout {
 	list-style: none;
 	margin: 0;
