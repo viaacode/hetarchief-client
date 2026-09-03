@@ -65,7 +65,7 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 	/** Clearing the only condition empties its text field rather than removing the row. */
 	const clearCondition = (index: number): void => {
 		if (conditions.length === 1) {
-			setConditions([emptyCondition()]);
+			changeCondition(index, { val: '' });
 			return;
 		}
 		setConditions(conditions.filter((_condition, i) => i !== index));
@@ -80,62 +80,68 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 					)}
 				</p>
 
-				{conditions.map((condition, index) => (
-					// biome-ignore lint/suspicious/noArrayIndexKey: a condition has no id of its own
-					<div className={styles['c-text-filter-form__condition']} key={`condition-${index}`}>
-						{index > 0 && (
-							<span className={styles['c-text-filter-form__separator']}>
-								{tText('modules/visitor-space/components/text-filter-form/text-filter-form___of')}
-							</span>
-						)}
-
-						<FormControl
-							className={clsx(
-								'c-form-control--label-hidden',
-								styles['c-text-filter-form__operator']
+				{/* A text filter takes any number of conditions, so the list scrolls on its own and
+				    leaves the footer alone */}
+				<div className="c-filter-form__body--scrollable">
+					{conditions.map((condition, index) => (
+						// biome-ignore lint/suspicious/noArrayIndexKey: a condition has no id of its own
+						<div className={styles['c-text-filter-form__condition']} key={`condition-${index}`}>
+							{index > 0 && (
+								<span className={styles['c-text-filter-form__separator']}>
+									{tText('modules/visitor-space/components/text-filter-form/text-filter-form___of')}
+								</span>
 							)}
-							id={`text-filter-form-${filter.id}-operator-${index}`}
-							label={tHtml(
-								'modules/visitor-space/components/text-filter-form/text-filter-form___operator'
-							)}
-						>
-							<ReactSelect
-								components={{ IndicatorSeparator: () => null }}
-								inputId={`text-filter-form-${filter.id}-operator-${index}`}
-								isDisabled={disabled}
-								onChange={(newValue) =>
-									changeCondition(index, {
-										op: (newValue as SingleValue<SelectOption>)?.value as Operator,
-									})
-								}
-								options={operatorOptions}
-								value={getSelectValue(operatorOptions, condition.op)}
-							/>
-						</FormControl>
 
-						<div className={styles['c-text-filter-form__value']}>
-							<TextInput
-								id={`text-filter-form-${filter.id}-value-${index}`}
-								disabled={disabled}
-								value={condition.val}
-								onChange={(e) => changeCondition(index, { val: e.target.value })}
-								ariaLabel={tText(
-									'modules/visitor-space/components/text-filter-form/text-filter-form___zoek-field-name-input-aria-label',
-									{ fieldName: filter.label }
+							<FormControl
+								className={clsx(
+									'c-form-control--label-hidden',
+									styles['c-text-filter-form__operator']
 								)}
-							/>
-							<Button
-								disabled={disabled}
-								icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
-								ariaLabel={tText(
-									'modules/visitor-space/components/text-filter-form/text-filter-form___voorwaarde-wissen'
+								id={`text-filter-form-${filter.id}-operator-${index}`}
+								label={tHtml(
+									'modules/visitor-space/components/text-filter-form/text-filter-form___operator'
 								)}
-								variants="black"
-								onClick={() => clearCondition(index)}
-							/>
+							>
+								<ReactSelect
+									components={{ IndicatorSeparator: () => null }}
+									// The list of conditions scrolls, which would otherwise cut the menu off
+									menuPosition="fixed"
+									inputId={`text-filter-form-${filter.id}-operator-${index}`}
+									isDisabled={disabled}
+									onChange={(newValue) =>
+										changeCondition(index, {
+											op: (newValue as SingleValue<SelectOption>)?.value as Operator,
+										})
+									}
+									options={operatorOptions}
+									value={getSelectValue(operatorOptions, condition.op)}
+								/>
+							</FormControl>
+
+							<div className={styles['c-text-filter-form__value']}>
+								<TextInput
+									id={`text-filter-form-${filter.id}-value-${index}`}
+									disabled={disabled}
+									value={condition.val}
+									onChange={(e) => changeCondition(index, { val: e.target.value })}
+									ariaLabel={tText(
+										'modules/visitor-space/components/text-filter-form/text-filter-form___zoek-field-name-input-aria-label',
+										{ fieldName: filter.label }
+									)}
+								/>
+								<Button
+									disabled={disabled}
+									icon={<Icon name={IconNamesLight.Trash} aria-hidden />}
+									ariaLabel={tText(
+										'modules/visitor-space/components/text-filter-form/text-filter-form___voorwaarde-wissen'
+									)}
+									variants="black"
+									onClick={() => clearCondition(index)}
+								/>
+							</div>
 						</div>
-					</div>
-				))}
+					))}
+				</div>
 
 				<Button
 					className={styles['c-text-filter-form__add']}

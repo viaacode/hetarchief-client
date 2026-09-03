@@ -32,6 +32,15 @@ const valueInputs = (): HTMLInputElement[] => screen.getAllByRole('textbox') as 
 const addConditionButton = () => screen.getByText('voeg voorwaarde toe');
 const clearButtons = () => screen.getAllByLabelText('voorwaarde wissen');
 
+/** Pick "bevat niet" in the operator dropdown of the first condition. */
+const selectContainsNot = (): void => {
+	const operator = document.getElementById(
+		`text-filter-form-${SearchFilterId.Title}-operator-0`
+	) as HTMLElement;
+	fireEvent.keyDown(operator, { key: 'ArrowDown' });
+	fireEvent.click(screen.getByText('bevat niet'));
+};
+
 const renderForm = () => {
 	// biome-ignore lint/suspicious/noExplicitAny: the children callback shape is checked by the form
 	let latest: any;
@@ -87,6 +96,18 @@ describe('TextFilterForm', () => {
 
 		expect(valueInputs()).toHaveLength(1);
 		expect(valueInputs()[0].value).toEqual('');
+	});
+
+	it('keeps the operator when the last condition is cleared', () => {
+		renderForm();
+
+		selectContainsNot();
+		fireEvent.change(valueInputs()[0], { target: { value: 'concert' } });
+
+		fireEvent.click(clearButtons()[0]);
+
+		expect(valueInputs()[0].value).toEqual('');
+		expect(screen.getByText('bevat niet')).toBeTruthy();
 	});
 
 	it('hands back the conditions that hold a value, and drops the empty ones', () => {
