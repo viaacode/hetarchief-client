@@ -136,16 +136,37 @@ $media-card-list-view-height: 13rem;
 			}
 		}
 
-		&__children {
+		&__badges {
 			position: absolute;
 			right: $spacer-xxs;
 			top: $spacer-xxs;
+			display: flex;
+			align-items: center;
+			gap: $spacer-xxs;
+		}
+
+		&__children,
+		&__parent {
 			background-color: $black;
 			border-radius: $spacer-sm;
-			display: inline-block;
+			display: inline-flex;
+			align-items: center;
 			color: $white;
+		}
+
+		&__children {
 			font-size: $font-size-xs;
 			padding: $spacer-xxs $spacer-xs;
+		}
+
+		&__parent {
+			padding: 0.1rem $spacer-xs;
+
+			span {
+				display: inline-flex;
+				font-size: $font-size-md;
+				transform: rotate(45deg);
+			}
 		}
 
 		&--no-content {

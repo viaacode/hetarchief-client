@@ -438,6 +438,17 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		overflow-y: auto;
 		box-shadow: abstracts.$shadow-24-black-12;
 
+		// Breathing room under whatever the last section happens to be (metadata, "ook
+		// interessant", ...), so the content never ends flush against the bottom edge
+		padding-bottom: abstracts.$spacer-2xl;
+
+		// "Ook interessant" is always the last section when it renders, and it paints its own
+		// background. Padding here would leave that grey stopping short with a white band
+		// underneath it, so let the list carry its own bottom padding instead.
+		&:has(:global(.p-object-detail__metadata-list--similar)) {
+			padding-bottom: 0;
+		}
+
 		&__tab-media {
 			overflow-y: auto;
 		}
@@ -590,7 +601,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			// Firefox and Safari render weirdly with: margin: 0 - abstracts.$spacer-md;
 			margin-left: -#{abstracts.$spacer-lg};
 			margin-right: -#{abstracts.$spacer-lg};
-			padding: abstracts.$spacer-md abstracts.$spacer-lg;
+
+			// The extra bottom padding keeps the grey running to the bottom of the scroll area,
+			// since this is always the last section of the sidebar when it renders
+			padding: abstracts.$spacer-md abstracts.$spacer-lg abstracts.$spacer-2xl;
 		}
 	}
 

@@ -2,12 +2,12 @@ import { useGetIeObjectBySchemaIdentifier } from '@ie-objects/hooks/use-get-ie-o
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { keepPreviousData } from '@tanstack/react-query';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
-import { kebabCase } from 'es-toolkit/compat';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import { type FC, useEffect } from 'react';
@@ -55,7 +55,12 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 	useEffect(() => {
 		if (ieObjectInfo) {
 			const searchUrl = stringifyUrl({
-				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${ieObjectInfo.maintainerSlug}/${ieObjectInfo.schemaIdentifier}/${kebabCase(ieObjectInfo.name)}`,
+				url: getIeObjectDetailPath(
+					locale,
+					ieObjectInfo.maintainerSlug,
+					ieObjectInfo.schemaIdentifier,
+					ieObjectInfo.name
+				),
 			});
 			router.replace(searchUrl, undefined, { shallow: true });
 		}

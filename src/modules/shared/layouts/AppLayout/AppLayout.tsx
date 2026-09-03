@@ -5,6 +5,7 @@ import { AuthService } from '@auth/services/auth-service';
 import { checkLoginAction, selectCommonUser, selectIsLoggedIn, selectUser } from '@auth/store/user';
 import { useDismissMaintenanceAlert } from '@maintenance-alerts/hooks/dismiss-maintenance-alerts';
 import { useGetActiveMaintenanceAlerts } from '@maintenance-alerts/hooks/get-maintenance-alerts';
+import { useGetMaterialRequestsUnreadSummary } from '@material-requests/hooks/get-material-requests-unread-summary';
 import { useGetPendingMaterialRequests } from '@material-requests/hooks/get-pending-material-requests';
 import { AdminConfigManager } from '@meemoo/admin-core-ui/client';
 import { Alert } from '@meemoo/react-components';
@@ -66,6 +67,7 @@ import { scrollTo } from '@shared/utils/scroll-to-top';
 import { useQueryClient } from '@tanstack/react-query';
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import { useGetAllActiveVisits } from '@visit-requests/hooks/get-all-active-visits';
+import { VisitorSpaceService } from '@visitor-space/services';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -108,6 +110,13 @@ const AppLayout: FC<any> = ({ children }) => {
 			enabled: shouldFetchMaterialRequests,
 		}
 	);
+	const { data: materialRequestsUnreadSummary } = useGetMaterialRequestsUnreadSummary(
+		shouldFetchMaterialRequests
+	);
+	const hasUnreadOutgoingMaterialRequestMessages =
+		!!materialRequestsUnreadSummary?.hasUnreadOutgoingMessages;
+	const hasUnreadIncomingMaterialRequestMessages =
+		!!materialRequestsUnreadSummary?.hasUnreadIncomingMessages;
 	const { data: navigationItems } = useGetNavigationItems(locale);
 	const canManageAccount = useHasAllPermission(Permission.MANAGE_ACCOUNT);
 	const showLinkedSpaceAsHomepage = useHasAllPermission(Permission.SHOW_LINKED_SPACE_AS_HOMEPAGE);
@@ -201,6 +210,14 @@ const AppLayout: FC<any> = ({ children }) => {
 	}, []);
 
 	useEffect(() => {
+		// Give services that live outside of React the app's real QueryClient, so they can
+		// invalidate/clear the cache the app actually reads from
+		// https://meemoo.atlassian.net/browse/ARC-1828
+		AuthService.setQueryClient(queryClient);
+		VisitorSpaceService.setQueryClient(queryClient);
+	}, [queryClient]);
+
+	useEffect(() => {
 		if (router && user) {
 			NotificationsService.setQueryClient(queryClient);
 			NotificationsService.initPolling(router, setNotificationsOpen, setUnreadNotifications);
@@ -283,6 +300,8 @@ const AppLayout: FC<any> = ({ children }) => {
 				user as AvoUserCommonUser | null,
 				{
 					hasUnreadNotifications,
+					hasUnreadOutgoingMaterialRequestMessages,
+					hasUnreadIncomingMaterialRequestMessages,
 					notificationsOpen: showNotificationsCenter,
 					userName,
 					onLogOutClick,
@@ -304,6 +323,8 @@ const AppLayout: FC<any> = ({ children }) => {
 		locale,
 		user,
 		hasUnreadNotifications,
+		hasUnreadOutgoingMaterialRequestMessages,
+		hasUnreadIncomingMaterialRequestMessages,
 		showNotificationsCenter,
 		userName,
 		onLogOutClick,
@@ -321,7 +342,9 @@ const AppLayout: FC<any> = ({ children }) => {
 			user?.visitorSpaceSlug || null,
 			visitorSpaces,
 			isMeemooAdmin,
-			locale
+			locale,
+			hasUnreadOutgoingMaterialRequestMessages,
+			hasUnreadIncomingMaterialRequestMessages
 		);
 
 		const staticItems = [
@@ -369,6 +392,8 @@ const AppLayout: FC<any> = ({ children }) => {
 		isMeemooAdmin,
 		locale,
 		isLoggedIn,
+		hasUnreadOutgoingMaterialRequestMessages,
+		hasUnreadIncomingMaterialRequestMessages,
 	]);
 
 	const showLoggedOutGrid = useMemo(() => !isLoggedIn && isMobile, [isMobile, isLoggedIn]);

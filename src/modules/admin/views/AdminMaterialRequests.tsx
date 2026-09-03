@@ -16,9 +16,11 @@ import { getMaterialRequestTableColumnProps } from '@material-requests/const';
 import { useGetMaterialRequestById } from '@material-requests/hooks/get-material-request-by-id';
 import { useGetMaterialRequests } from '@material-requests/hooks/get-material-requests';
 import { useGetMaterialRequestsMaintainers } from '@material-requests/hooks/get-material-requests-maintainers';
+import { useGetMaterialRequestsUnreadSummary } from '@material-requests/hooks/get-material-requests-unread-summary';
 import {
 	type MaterialRequest,
 	MaterialRequestKeys,
+	type MaterialRequestOrderProp,
 	type MaterialRequestStatus,
 	type MaterialRequestType,
 } from '@material-requests/types';
@@ -95,7 +97,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 		size: ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE,
 		...(!isNil(filters.page) && { page: filters.page }),
 		...(!isNil(filters.orderProp) && {
-			orderProp: filters.orderProp as MaterialRequestKeys,
+			orderProp: filters.orderProp as MaterialRequestOrderProp,
 		}),
 		...(!isNil(filters.orderDirection) && {
 			orderDirection: filters.orderDirection as AvoSearchOrderDirection,
@@ -137,6 +139,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	}, [isLoadingDetail, currentMaterialRequest, currentMaterialRequestDetail]);
 
 	const { data: maintainers } = useGetMaterialRequestsMaintainers();
+	const { data: unreadSummary } = useGetMaterialRequestsUnreadSummary();
 
 	const maintainerList = useMemo(() => {
 		if (maintainers) {
@@ -323,7 +326,10 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 			<Table<MaterialRequest>
 				className="u-mt-24 p-material-requests__table"
 				options={{
-					columns: getAdminMaterialRequestTableColumns(isTabletPortrait),
+					columns: getAdminMaterialRequestTableColumns(
+						isTabletPortrait,
+						unreadSummary?.unreadCountsByMaterialRequestId
+					),
 					data: materialRequests?.items || [],
 					initialState: {
 						pagination: { pageIndex: 0, pageSize: ADMIN_MATERIAL_REQUESTS_TABLE_PAGE_SIZE },

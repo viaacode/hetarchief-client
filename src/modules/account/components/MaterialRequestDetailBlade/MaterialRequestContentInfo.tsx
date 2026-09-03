@@ -20,15 +20,15 @@ import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { ROUTES_BY_LOCALE } from '@shared/const';
 import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
+import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate, formatMediumDateWithTime } from '@shared/utils/dates';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
-import { kebabCase, noop } from 'es-toolkit/compat';
+import { noop } from 'es-toolkit/compat';
 import { stringifyUrl } from 'query-string';
 import React, { type FC, type ReactNode, useState } from 'react';
 import styles from './MaterialRequestContentInfo.module.scss';
@@ -436,10 +436,12 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 		// Generate detail page url with cuepoints if only a partial video was requested
 		// https://meemoo.atlassian.net/browse/ARC-3724
 		const detailPageLink = stringifyUrl({
-			url: ROUTES_BY_LOCALE[locale].detailPage
-				.replace(':maintainerSlug', currentMaterialRequestDetail.maintainerSlug)
-				.replace(':pid', currentMaterialRequestDetail.objectSchemaIdentifier)
-				.replace(':title', kebabCase(currentMaterialRequestDetail.objectSchemaName)),
+			url: getIeObjectDetailPath(
+				locale,
+				currentMaterialRequestDetail.maintainerSlug,
+				currentMaterialRequestDetail.objectSchemaIdentifier,
+				currentMaterialRequestDetail.objectSchemaName
+			),
 			query:
 				currentMaterialRequestDetail.reuseForm.durationType === MaterialRequestDurationType.PARTIAL
 					? {

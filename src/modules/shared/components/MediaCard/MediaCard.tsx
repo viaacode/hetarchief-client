@@ -60,6 +60,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	hasTempAccess,
 	previousPage,
 	numOfChildren = 0,
+	isPartOfOtherItem = false,
 	className,
 }) => {
 	const router = useRouter();
@@ -258,16 +259,36 @@ const MediaCard: FC<MediaCardProps> = ({
 		);
 	};
 
-	const renderNumberOfChildren = () => {
-		if (numOfChildren === 0) {
-			return;
+	const renderHeaderBadges = () => {
+		if (numOfChildren === 0 && !isPartOfOtherItem) {
+			return null;
 		}
 		return (
-			<div className={styles['c-media-card__header__children']}>
-				{numOfChildren}{' '}
-				{numOfChildren > 1
-					? tText('modules/shared/components/media-card/media-card___items')
-					: tText('modules/shared/components/media-card/media-card___item')}
+			<div className={styles['c-media-card__header__badges']}>
+				{isPartOfOtherItem && (
+					<div
+						className={styles['c-media-card__header__parent']}
+						title={tText(
+							'modules/shared/components/media-card/media-card___dit-item-is-een-onderdeel-van-een-ander-item'
+						)}
+					>
+						<Icon name={IconNamesLight.Link} aria-hidden />
+					</div>
+				)}
+				{numOfChildren > 0 && (
+					<div
+						className={styles['c-media-card__header__children']}
+						title={tText(
+							'modules/shared/components/media-card/media-card___dit-object-heeft-childrencount-kind-objecten',
+							{ childrenCount: numOfChildren }
+						)}
+					>
+						{numOfChildren}{' '}
+						{numOfChildren > 1
+							? tText('modules/shared/components/media-card/media-card___num-of-children-items')
+							: tText('modules/shared/components/media-card/media-card___1-item')}
+					</div>
+				)}
 			</div>
 		);
 	};
@@ -286,7 +307,7 @@ const MediaCard: FC<MediaCardProps> = ({
 					)}
 				>
 					{renderIcon()}
-					{renderNumberOfChildren()}
+					{renderHeaderBadges()}
 					{renderLocallyAvailablePill()}
 				</div>
 			);
@@ -329,7 +350,7 @@ const MediaCard: FC<MediaCardProps> = ({
 						{renderLocallyAvailablePill()}
 					</>
 				)}
-				{renderNumberOfChildren()}
+				{renderHeaderBadges()}
 				{duration && renderDuration()}
 			</div>
 		);

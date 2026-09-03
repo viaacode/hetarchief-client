@@ -33,6 +33,7 @@ export interface MediaCardProps {
 	hasTempAccess?: boolean;
 	previousPage?: string;
 	numOfChildren?: number;
+	isPartOfOtherItem?: boolean;
 	className?: string;
 }
 

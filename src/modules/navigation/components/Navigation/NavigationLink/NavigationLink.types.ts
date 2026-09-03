@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 export type NavigationLinkIcon = IconProps['name'] | Pick<IconProps, 'name'>;
 
 export interface NavigationLinkProps extends DefaultComponentProps {
+	showUnreadIndicator?: boolean;
 	children?: ReactNode;
 	href?: string;
 	iconStart?: NavigationLinkIcon;

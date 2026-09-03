@@ -4,6 +4,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
+import { useGetThemeFilterOptions } from '@visitor-space/hooks/use-get-theme-filter-options';
 import { mapFiltersToTags } from '@visitor-space/utils/map-filters';
 import clsx from 'clsx';
 import { isNil } from 'es-toolkit/compat';
@@ -36,6 +37,8 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 }) => {
 	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
 	const [isSortActive, setIsSortActive] = useState(false);
+	// Only theme slugs live in the url, the names shown in the pills come from this lookup
+	const { labelsBySlug: themeLabelsBySlug } = useGetThemeFilterOptions();
 
 	// re-render form to ensure correct state
 	// e.g. open -> reset -> close -> open === values in url, in form
@@ -55,7 +58,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	const goBackToInitial = activeFilter
 		? () => onFilterClick(activeFilter)
 		: () => setIsSortActive(false);
-	const tags = filterValues ? mapFiltersToTags(filterValues) : [];
+	const tags = filterValues ? mapFiltersToTags(filterValues, { themeLabelsBySlug }) : [];
 
 	const handleSortClick = (key: SearchSortProp, order?: AvoSearchOrderDirection) => {
 		onSortClick?.(key, order);

@@ -2,8 +2,14 @@ import Metadata from '@ie-objects/components/Metadata/Metadata';
 import type { IeObjectTheme } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { tText } from '@shared/helpers/translate';
 import { Locale } from '@shared/utils/i18n';
+import {
+	filterNameToAcronym,
+	operatorToAcronym,
+} from '@visitor-space/const/advanced-filter-array-param';
+import { FilterProperty, Operator } from '@visitor-space/types';
 import clsx from 'clsx';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
@@ -51,30 +57,41 @@ export function ObjectDetailPageMetadataThemes({
 		);
 	};
 
+	const getThemeSearchLink = (theme: IeObjectTheme) =>
+		`${ROUTES_BY_LOCALE[locale].search}?advanced=${filterNameToAcronym(
+			FilterProperty.THEME
+		)}${operatorToAcronym(Operator.EQUALS)}${theme.slug}&page=1`;
+
 	return (
 		<Metadata title={title} className={className} key="metadata-themes">
 			<ul className={styles['c-object-detail-page-metadata-themes__list']}>
 				{themes.map((theme) => (
 					<li key={theme.id} className={styles['c-object-detail-page-metadata-themes__item']}>
 						{renderThemeName(theme)}
-						{/* TODO ARC-3797: link the counter to a search filtered on this theme once the
-						    theme filter exists. Until then it is plain text. */}
-						<span className={styles['c-object-detail-page-metadata-themes__count']}>
+						<Link
+							href={getThemeSearchLink(theme)}
+							className={styles['c-object-detail-page-metadata-themes__count']}
+						>
 							<Icon
 								className={styles['c-object-detail-page-metadata-themes__count-icon']}
 								name={IconNamesLight.RelatedObjects}
 								aria-hidden
 							/>
 							{/* The bare number carries no meaning on its own, so screen readers get the
-							    spelled out label instead */}
-							<span aria-hidden>{theme.ieObjectCount}</span>
+							     spelled-out label instead */}
+							<span
+								className={styles['c-object-detail-page-metadata-themes__count-number']}
+								aria-hidden
+							>
+								{theme.ieObjectCount}
+							</span>
 							<span className={styles['c-object-detail-page-metadata-themes__count-label']}>
 								{tText(
 									'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata-themes___aantal-objecten-in-dit-thema',
 									{ count: theme.ieObjectCount }
 								)}
 							</span>
-						</span>
+						</Link>
 					</li>
 				))}
 			</ul>
