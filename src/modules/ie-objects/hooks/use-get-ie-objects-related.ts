@@ -31,7 +31,9 @@ export const useGetIeObjectsRelated = (
 		queryFn: () => getIeObjectsRelated(ieObjectIri, parentIeObjectIri),
 		placeholderData: keepPreviousData,
 		enabled,
-		staleTime: 5 * 60 * 1000,
+		// No staleTime: the server side render is always anonymous, so the prefetched data that is
+		// hydrated here reports no essence access and no thumbnails. Let the browser revalidate with
+		// the user's session on mount, the way the "also interesting" query does.
 	});
 };
 
