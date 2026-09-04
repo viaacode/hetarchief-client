@@ -108,16 +108,7 @@ import {
 	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
-import {
-	filterNameToAcronym,
-	operatorToAcronym,
-} from '@visitor-space/const/advanced-filter-array-param';
-import {
-	FILTER_LABEL_VALUE_DELIMITER,
-	FilterProperty,
-	Operator,
-	SearchFilterId,
-} from '@visitor-space/types';
+import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
 import { compact, indexOf, isEmpty, isNil, isString, noop, sortBy } from 'es-toolkit/compat';
 import Link from 'next/link';
@@ -1125,9 +1116,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									<SearchLinkTag
 										key={genre}
 										label={genre}
-										link={`${ROUTES_BY_LOCALE[locale].search}?advanced=${filterNameToAcronym(
-											FilterProperty.GENRE
-										)}${operatorToAcronym(Operator.EQUALS)}${genre}`}
+										link={`${ROUTES_BY_LOCALE[locale].search}?${SearchFilterId.Genre}=${encodeURIComponent(genre)}`}
 									/>
 								))}
 							</div>

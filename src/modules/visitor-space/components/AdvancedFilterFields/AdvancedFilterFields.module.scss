@@ -14,6 +14,13 @@
 	}
 }
 
+// One filter of its own, so there is no property dropdown to sit next to
+.c-advanced-filter-fields--single-property {
+	background-color: transparent;
+	border-bottom: 0;
+	grid-template-columns: 1fr;
+}
+
 .c-advanced-filter-fields__field-container {
 	grid-column: span 2;
 

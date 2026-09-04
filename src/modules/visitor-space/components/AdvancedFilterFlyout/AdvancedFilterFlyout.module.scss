@@ -1,0 +1,16 @@
+@use "src/styles/abstracts" as abstracts;
+
+// The fly-out sits centred in the window, so this cap keeps it clear of both edges and scrolls
+// the rest. See the "Redesign van geavanceerde filters" section of the FA of ARC-3806.
+.c-advanced-filter-flyout {
+	list-style: none;
+	margin: 0;
+	max-height: calc(100vh - 8rem);
+	overflow-y: auto;
+	padding: 0;
+
+	// The filter panel is dark and divides its rows with a line, the fly-out is white and does not
+	:global(.c-button) {
+		border-bottom: 0;
+	}
+}

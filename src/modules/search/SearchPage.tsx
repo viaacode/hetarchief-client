@@ -35,6 +35,7 @@ import { Placeholder } from '@shared/components/Placeholder';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { ScrollableTabs, TabLabel } from '@shared/components/Tabs';
 import { TagSearchBar } from '@shared/components/TagSearchBar';
+import type { ClickableTag } from '@shared/components/TagSearchBar/TagSearchBar';
 import { TagSearchBarInfo } from '@shared/components/TagSearchBar/TagSearchBarInfo/TagSearchBarInfo';
 import type { ToggleOption } from '@shared/components/Toggle';
 import { VisitorSpaceDropdown } from '@shared/components/VisitorSpaceDropdown/VisitorSpaceDropdown';
@@ -77,18 +78,11 @@ import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/g
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
-import {
-	initialFields,
-	TEMP_FILTER_KEY_PREFIX,
-} from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
-import type { AdvancedFilterFormState } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.types';
 import type { ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
 import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
-import type { MaintainerFilterFormState } from '@visitor-space/components/MaintainerFilterForm/MaintainerFilterForm.types';
-import type { MediumFilterFormState } from '@visitor-space/components/MediumFilterForm';
+import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import type { ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
-import type { ReusabilityFilterFormState } from '@visitor-space/components/ReusabilityFilterForm/ReusabilityFilterForm.types';
 import {
 	GLOBAL_ARCHIVE,
 	SEARCH_PAGE_QUERY_PARAM_CONFIG,
@@ -96,17 +90,25 @@ import {
 	VISITOR_SPACE_QUERY_PARAM_INIT,
 	VISITOR_SPACE_SORT_OPTIONS,
 } from '@visitor-space/const';
-import { SEARCH_PAGE_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
+import { TEMP_FILTER_KEY_PREFIX } from '@visitor-space/const/advanced-filter-array-param';
+import {
+	getAdvancedFlyoutFilters,
+	getAvailableSearchPageFilters,
+	getVisiblePanelFilters,
+} from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
+import { useSearchQueryFilters } from '@visitor-space/hooks/get-search-query-filters';
 import { useGetThemeFilterOptions } from '@visitor-space/hooks/use-get-theme-filter-options';
 import {
 	type AdvancedFilter,
+	FilterModalType,
 	FilterProperty,
 	SearchFilterId,
 	type TagIdentity,
+	type TextFilterCondition,
 } from '@visitor-space/types';
-import { mapFiltersToElastic, mapMaintainerToElastic } from '@visitor-space/utils/elastic-filters';
 import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
+import { migrateLegacyAdvancedFilters } from '@visitor-space/utils/migrate-legacy-advanced-filters';
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
 import { intersection, isEmpty, isNil, sortBy, sum } from 'es-toolkit/compat';
@@ -203,6 +205,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const { data: activeVisitRequest, isLoading: isLoadingActiveVisitRequest } =
 		useGetActiveVisitRequestForUserAndSpace(query[SearchFilterId.Maintainer], user);
 
+	// The same filters the option lists of the individual filters search with
+	const searchQueryFilters = useSearchQueryFilters();
+
 	const [isInitialPageLoad, setIsInitialPageLoad] = useState(false);
 
 	const isMobile = isMobileSize(windowSize);
@@ -251,10 +256,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		error: searchResultsError,
 	} = useGetIeObjects(
 		{
-			filters: [
-				...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
-				...mapFiltersToElastic(query),
-			],
+			filters: searchQueryFilters,
 			page,
 			size: SEARCH_RESULTS_PAGE_SIZE,
 			sort: activeSort,
@@ -262,10 +264,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		!isLoadingActiveVisitRequest
 	);
 	const { data: formatCounts } = useGetIeObjectFormatCounts(
-		[
-			...mapMaintainerToElastic(query, activeVisitRequest, accessibleVisitorSpaceRequests),
-			...mapFiltersToElastic(query),
-		].filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
+		searchQueryFilters.filter((item) => item.field !== IeObjectsSearchFilterField.FORMAT),
 
 		// Enabled when search query is finished, so it loads the tab counts after the initial results
 		!searchResultsRefetching
@@ -316,6 +315,15 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useEffect(() => {
 		setIsInitialPageLoad(true);
 	}, []);
+
+	// Convert a url shared before ARC-3806, which still holds the old combined "advanced" parameter
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only react to the legacy parameter
+	useEffect(() => {
+		const changes = migrateLegacyAdvancedFilters(query[SearchFilterId.Advanced]);
+		if (!isEmpty(changes)) {
+			setQuery(changes);
+		}
+	}, [query[SearchFilterId.Advanced]]);
 
 	useEffect(() => {
 		dispatch(setLastSearchParams(searchParams.toString()));
@@ -398,13 +406,32 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		isMobile,
 	]);
 
-	const filters = useMemo(
-		() =>
-			SEARCH_PAGE_FILTERS(isGlobalArchive, isKioskUser, isKeyUser, format).filter(
-				({ isDisabled, tabs }) => !isDisabled?.() && tabs.includes(format)
-			),
+	const availableFilters = useMemo(
+		() => getAvailableSearchPageFilters(isGlobalArchive, isKioskUser, isKeyUser, format),
 		[isGlobalArchive, isKioskUser, isKeyUser, format]
 	);
+
+	const flyoutFilters = useMemo(
+		() => getAdvancedFlyoutFilters(availableFilters),
+		[availableFilters]
+	);
+
+	const filters = useMemo(
+		(): FilterMenuFilterOption[] => getVisiblePanelFilters(availableFilters, query),
+		[availableFilters, query]
+	);
+
+	/** Clicking a pill opens the modal of that filter, with the selected values filled in. */
+	const onPillClick = (tag: ClickableTag) => {
+		setFilterMenuOpen(true);
+		setMobileFilterMenuOpen(true);
+		setQuery({ filter: tag.key });
+	};
+
+	/** Picking a filter from the fly-out puts it in the panel and opens its modal. */
+	const onFlyoutFilterClick = (filterId: SearchFilterId) => {
+		setQuery({ filter: filterId });
+	};
 
 	/**
 	 * Methods
@@ -467,19 +494,15 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	};
 
 	/**
-	 * Set one filter with its values
-	 * @param id
-	 * @param values
+	 * Set one filter with its values.
+	 * The generic forms of ARC-3806 all hand back { [filter id]: values }, so only the filters
+	 * with a form of their own need a case here.
 	 */
 	const onSubmitFilter = (id: SearchFilterId, values: unknown) => {
 		const searchValue = prepareSearchValue(searchBarInputValue);
-		let data: string[] | string | boolean | AdvancedFilter[] | undefined;
+		let data: string[] | string | boolean | AdvancedFilter[] | TextFilterCondition[] | undefined;
 
 		switch (id) {
-			case SearchFilterId.Medium:
-				data = (values as MediumFilterFormState).mediums;
-				break;
-
 			case SearchFilterId.ReleaseDate: {
 				const state = values as ReleaseDateFilterFormState;
 				data = state.releaseDate
@@ -494,30 +517,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 					: undefined;
 				break;
 			}
-
-			case SearchFilterId.Creator:
-				data = (values as { creator: string }).creator;
-				break;
-
-			case SearchFilterId.NewspaperSeriesName:
-				data = (values as { newspaperSeriesName: string }).newspaperSeriesName;
-				break;
-
-			case SearchFilterId.LocationCreated:
-				data = (values as { locationCreated: string }).locationCreated;
-				break;
-
-			case SearchFilterId.Mentions:
-				data = (values as { mentions: string }).mentions;
-				break;
-
-			case SearchFilterId.Maintainers:
-				data = (values as MaintainerFilterFormState).maintainers;
-				break;
-
-			case SearchFilterId.Reusability:
-				data = (values as ReusabilityFilterFormState).reusability;
-				break;
 
 			case SearchFilterId.ConsultableOnlyOnLocation: {
 				// Info: remove query param if false (= set to undefined)
@@ -537,21 +536,13 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				break;
 			}
 
-			case SearchFilterId.Advanced:
-				data = (values as AdvancedFilterFormState).advanced.filter((advanced) => {
-					return !isNil(advanced.val) && advanced.val !== initialFields().val;
-				});
-
-				if (data.length === 0) {
-					setQuery({ [id]: undefined, filter: undefined, page: undefined });
-					return;
-				}
-
+			default: {
+				const submitted = (values as Record<string, unknown>)?.[id];
+				data = isEmpty(submitted)
+					? undefined
+					: (submitted as string[] | AdvancedFilter[] | TextFilterCondition[]);
 				break;
-
-			default:
-				console.warn(`[WARN][VisitorSpacePage] No submit handler for ${id}`);
-				break;
+			}
 		}
 
 		const currentPage = isInitialPageLoad ? page : undefined;
@@ -567,43 +558,46 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	};
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
+		// The tag list hands back the tags that survive, so the query is rebuilt from those
 		const updatedQuery: Record<string, unknown> = {};
 
 		for (const tag of tags) {
-			switch (tag.key) {
-				case SearchFilterId.Genre:
-				case SearchFilterId.Keywords:
-				case SearchFilterId.Language:
-				case SearchFilterId.Medium:
-				case SearchFilterId.Maintainers:
-				case SearchFilterId.Reusability:
-				case QUERY_PARAM_KEY.SEARCH_QUERY_KEY:
-				case SearchFilterId.Creator:
-				case SearchFilterId.LocationCreated:
-				case SearchFilterId.Mentions:
-				case SearchFilterId.NewspaperSeriesName:
+			if (tag.key === QUERY_PARAM_KEY.SEARCH_QUERY_KEY) {
+				// The search bar keeps one pill per term
+				updatedQuery[tag.key] = [
+					...((updatedQuery[tag.key] as Array<unknown>) || []),
+					`${tag.value}`.replace(tagPrefix(tag.key), ''),
+				];
+				continue;
+			}
+
+			const filter = availableFilters.find((availableFilter) => availableFilter.id === tag.key);
+
+			switch (filter?.modalType) {
+				case FilterModalType.Text:
+					// A text filter has one pill per operator, so keep the conditions of this operator
 					updatedQuery[tag.key] = [
-						...((updatedQuery[tag.key] as Array<unknown>) || []),
-						`${tag.value}`.replace(tagPrefix(tag.key), ''),
+						...((updatedQuery[tag.key] as TextFilterCondition[]) || []),
+						...(((query[tag.key] as TextFilterCondition[]) || []).filter(
+							(condition) => condition.op === tag.op
+						) as TextFilterCondition[]),
 					];
 					break;
 
-				case SearchFilterId.Advanced:
-				case SearchFilterId.ReleaseDate:
-				case SearchFilterId.Duration:
-					updatedQuery[tag.key] = [...((updatedQuery[tag.key] as Array<unknown>) || []), tag];
+				case FilterModalType.SearchableCheckbox:
+				case FilterModalType.CheckboxList:
+				case FilterModalType.Autocomplete:
+					// One pill holds every value of the filter, so a surviving pill keeps them all
+					updatedQuery[tag.key] = query[tag.key];
 					break;
-
-				case SearchFilterId.ConsultableOnlyOnLocation:
-				case SearchFilterId.ConsultableMedia: {
-					// eslint-disable-next-line no-case-declarations
-					const newValue = `${tag.value ?? 'false'}`.replace(tagPrefix(tag.key), '');
-					updatedQuery[tag.key] = newValue === 'true' ? 'false' : 'true';
-					break;
-				}
 
 				default:
-					updatedQuery[tag.key] = tag.value;
+					if (typeof query[tag.key] === 'boolean') {
+						updatedQuery[tag.key] = true;
+					} else {
+						// A date, duration or legacy advanced pill carries its own prop, op and value
+						updatedQuery[tag.key] = [...((updatedQuery[tag.key] as Array<unknown>) || []), tag];
+					}
 					break;
 			}
 		}
@@ -653,8 +647,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
 	const showVisitorSpacesDropdown = isUserWithAccount && accessibleVisitorSpaceRequests.length > 0;
 	const activeFilters = useMemo(
-		() => mapFiltersToTags(query, { themeLabelsBySlug }),
-		[query, themeLabelsBySlug]
+		() => mapFiltersToTags(query, availableFilters, { themeLabelsBySlug }),
+		[query, availableFilters, themeLabelsBySlug]
 	);
 
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {
@@ -795,6 +789,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 					activeSort={activeSort}
 					filters={filters}
 					filterValues={query}
+					flyoutFilters={flyoutFilters}
+					onFlyoutFilterClick={onFlyoutFilterClick}
 					label={tText('pages/bezoekersruimte/visitor-space-slug/index___filters')}
 					isOpen={filterMenuOpen}
 					isMobileOpen={mobileFilterMenuOpen}
@@ -991,6 +987,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 											onClear={onResetFilters}
 											onRemoveValue={onRemoveTag}
 											onSearch={onSearch}
+											onTagClick={onPillClick}
 											placeholder={tText(
 												'pages/bezoekersruimte/slug___zoek-op-trefwoord-jaartal-aanbieder'
 											)}

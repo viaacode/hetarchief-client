@@ -19,6 +19,7 @@ import {
 import { SearchFilterId, SearchSortProp, VisitorSpaceStatus } from '../types';
 
 import { AdvancedFilterArrayParam } from './advanced-filter-array-param';
+import { TextFilterArrayParam } from './text-filter-array-param';
 
 export const GLOBAL_ARCHIVE = ''; // No maintainer query param means the public collection should be selected
 
@@ -55,11 +56,16 @@ export const VISITOR_SPACE_QUERY_PARAM_INIT: Record<
 	[SearchFilterId.ConsultableMedia]: undefined,
 	[SearchFilterId.ConsultablePublicDomain]: undefined,
 	[SearchFilterId.Reusability]: undefined,
+	[SearchFilterId.Rights]: undefined,
+	[SearchFilterId.Theme]: undefined,
 	[SearchFilterId.Cast]: undefined,
 	[SearchFilterId.Identifier]: undefined,
 	[SearchFilterId.ObjectType]: undefined,
 	[SearchFilterId.SpacialCoverage]: undefined,
 	[SearchFilterId.TemporalCoverage]: undefined,
+	[SearchFilterId.Title]: undefined,
+	[SearchFilterId.Description]: undefined,
+	[SearchFilterId.Publisher]: undefined,
 	[SearchFilterId.Advanced]: undefined,
 
 	// Pagination
@@ -80,14 +86,27 @@ export const SEARCH_PAGE_QUERY_PARAM_CONFIG: Record<string, QueryParamConfig<any
 	[SearchFilterId.Created]: AdvancedFilterArrayParam,
 	[SearchFilterId.Published]: AdvancedFilterArrayParam,
 	[SearchFilterId.ReleaseDate]: AdvancedFilterArrayParam,
-	[SearchFilterId.Creator]: StringParam,
-	[SearchFilterId.NewspaperSeriesName]: StringParam,
-	[SearchFilterId.LocationCreated]: StringParam,
-	[SearchFilterId.Mentions]: StringParam,
+	// Multiselect filters. Several values inside one filter are OR-ed. https://meemoo.atlassian.net/browse/ARC-3806
+	[SearchFilterId.Creator]: ArrayParam,
+	[SearchFilterId.NewspaperSeriesName]: ArrayParam,
+	[SearchFilterId.LocationCreated]: ArrayParam,
+	[SearchFilterId.Mentions]: ArrayParam,
 	[SearchFilterId.Genre]: ArrayParam,
-	[SearchFilterId.Keywords]: ArrayParam,
 	[SearchFilterId.Language]: ArrayParam,
 	[SearchFilterId.Maintainers]: ArrayParam,
+	[SearchFilterId.Rights]: ArrayParam,
+	[SearchFilterId.Theme]: ArrayParam,
+	// Text filters. Each value carries its own "Bevat" / "Bevat niet" operator.
+	[SearchFilterId.Title]: TextFilterArrayParam,
+	[SearchFilterId.Description]: TextFilterArrayParam,
+	[SearchFilterId.Cast]: TextFilterArrayParam,
+	[SearchFilterId.Identifier]: TextFilterArrayParam,
+	[SearchFilterId.SpacialCoverage]: TextFilterArrayParam,
+	[SearchFilterId.ObjectType]: TextFilterArrayParam,
+	[SearchFilterId.TemporalCoverage]: TextFilterArrayParam,
+	[SearchFilterId.Keywords]: TextFilterArrayParam,
+	[SearchFilterId.Publisher]: TextFilterArrayParam,
+	// Kept so shared urls from before ARC-3806 still work. SearchPage migrates it away on load.
 	[SearchFilterId.Advanced]: AdvancedFilterArrayParam,
 	[SearchFilterId.ConsultableOnlyOnLocation]: BooleanParam,
 	[SearchFilterId.ConsultableMedia]: BooleanParam,

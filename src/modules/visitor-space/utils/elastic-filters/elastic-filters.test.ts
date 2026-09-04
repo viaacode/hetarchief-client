@@ -70,4 +70,71 @@ describe('mapFiltersToElastic()', () => {
 			value: RightsLabel.IN_COPYRIGHT,
 		});
 	});
+
+	// The multiselect and text filters of ARC-3806
+	it('sends every value of one multiselect filter as one multiValue clause', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Creator]: ['VRT', 'Amsab-ISG'],
+		} as SearchPageQueryParams);
+
+		expect(filters.find(({ field }) => field === IeObjectsSearchFilterField.CREATOR)).toEqual({
+			field: IeObjectsSearchFilterField.CREATOR,
+			operator: IeObjectsSearchOperator.IS,
+			multiValue: ['VRT', 'Amsab-ISG'],
+		});
+	});
+
+	it('strips the label half of a value that carries its own label', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Maintainers]: [
+				`OR-1${FILTER_LABEL_VALUE_DELIMITER}VRT`,
+				`OR-2${FILTER_LABEL_VALUE_DELIMITER}Amsab-ISG`,
+			],
+		} as SearchPageQueryParams);
+
+		expect(
+			filters.find(({ field }) => field === IeObjectsSearchFilterField.MAINTAINER_ID)?.multiValue
+		).toEqual(['OR-1', 'OR-2']);
+	});
+
+	it('sends one clause per text filter condition, with its own operator', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Title]: [
+				{ op: Operator.CONTAINS, val: 'concert' },
+				{ op: Operator.CONTAINS_NOT, val: 'herhaling' },
+			],
+		} as SearchPageQueryParams);
+
+		expect(filters.filter(({ field }) => field === IeObjectsSearchFilterField.NAME)).toEqual([
+			{
+				field: IeObjectsSearchFilterField.NAME,
+				operator: IeObjectsSearchOperator.CONTAINS,
+				value: 'concert',
+			},
+			{
+				field: IeObjectsSearchFilterField.NAME,
+				operator: IeObjectsSearchOperator.CONTAINS_NOT,
+				value: 'herhaling',
+			},
+		]);
+	});
+
+	it('keeps the two filters of the FA example apart, so the proxy can and them', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.NewspaperSeriesName]: ['Reeks A', 'Reeks B'],
+			[SearchFilterId.Maintainers]: ['OR-1', 'OR-2'],
+		} as SearchPageQueryParams);
+
+		expect(
+			filters.find(({ field }) => field === IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME)
+				?.multiValue
+		).toEqual(['Reeks A', 'Reeks B']);
+		expect(
+			filters.find(({ field }) => field === IeObjectsSearchFilterField.MAINTAINER_ID)?.multiValue
+		).toEqual(['OR-1', 'OR-2']);
+	});
+
+	it('sends no clause for a filter without a value', () => {
+		expect(mapFiltersToElastic({} as SearchPageQueryParams)).toEqual([]);
+	});
 });

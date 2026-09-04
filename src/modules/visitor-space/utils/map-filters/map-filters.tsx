@@ -4,9 +4,10 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import type { IeObjectsSearchFilter } from '@shared/types/ie-objects';
 import { formatDate } from '@shared/utils/dates';
+import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import type { SearchPageQueryParams } from '@visitor-space/const';
 import { format, parseISO } from 'date-fns';
-import { isString } from 'es-toolkit/compat';
+import { isString, sortBy } from 'es-toolkit/compat';
 
 import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
 import { getMetadataSearchFilters } from '../../const/advanced-filters.consts';
@@ -14,17 +15,17 @@ import { getRightsLabel } from '../../const/rights-filter.const';
 import {
 	type AdvancedFilter,
 	FILTER_LABEL_VALUE_DELIMITER,
+	FilterModalType,
 	FilterProperty,
 	Operator,
 	SearchFilterId,
 	type TagIdentity,
+	type TextFilterCondition,
 } from '../../types';
-import {
-	getAdvancedProperties,
-	getFilterLabel,
-	getOperators,
-	getRegularProperties,
-} from '../advanced-filters';
+import { getAdvancedProperties, getOperators, getRegularProperties } from '../advanced-filters';
+
+/** A pill shows at most this many values, then a counter for the rest. See the FA of ARC-3806. */
+export const MAX_VALUES_PER_TAG = 2;
 
 const getSelectLabel = (
 	options: SelectOption[],
@@ -35,6 +36,10 @@ const getSelectLabel = (
 
 // Prevent duplicate values by prefixing the value with the filter key (e.g. creator--shd)
 export const tagPrefix = (key: string): string => `${key}--`;
+
+/** A stored value can carry its own readable label, eg "OR-rf5kf25---VRT". */
+const valueToLabel = (value: string): string =>
+	value.split(FILTER_LABEL_VALUE_DELIMITER).pop() as string;
 
 const mapBooleanParamToTag = (value: boolean, label: string, key: string): TagIdentity[] => {
 	const unique = `${tagPrefix(key)}${value}`;
@@ -54,6 +59,8 @@ const mapBooleanParamToTag = (value: boolean, label: string, key: string): TagId
 			value: unique,
 			key,
 			id: unique,
+			// This filter is a checkbox in the panel, so there is no modal to open
+			isClickable: false,
 		},
 	];
 };
@@ -73,12 +80,13 @@ const mapArrayParamToTags = (
 				label: (
 					<span>
 						{`${label}: `}
-						<strong>{keyword?.split(FILTER_LABEL_VALUE_DELIMITER).pop() as string}</strong>
+						<strong>{valueToLabel(keyword as string)}</strong>
 					</span>
 				),
 				value: unique,
 				key,
 				id: unique,
+				isClickable: false,
 			};
 		});
 };
@@ -90,6 +98,46 @@ export interface MapFiltersToTagsOptions {
 	 */
 	themeLabelsBySlug?: Record<string, string>;
 }
+
+/**
+ * One pill that gathers every value of one filter: at most two values, alphabetically, then a
+ * counter for the rest. See the "Redesign pills" section of the ARC-3806 FA.
+ */
+const mapValuesToOneTag = (
+	values: string[],
+	filterName: string,
+	operatorLabel: string,
+	key: string,
+	op?: string
+): TagIdentity[] => {
+	if (values.length === 0) {
+		return [];
+	}
+
+	const labels = sortBy(values.map(valueToLabel), (label) => label.toLowerCase());
+	const shown = labels.slice(0, MAX_VALUES_PER_TAG);
+	const remaining = labels.length - shown.length;
+	// One pill per filter, so the operator keeps two pills apart when a text filter mixes them
+	const unique = `${tagPrefix(key)}${op || ''}`;
+
+	return [
+		{
+			label: (
+				<span>
+					{`${filterName} ${operatorLabel}: `}
+					<strong>
+						{shown.join(', ')}
+						{remaining > 0 ? `, +${remaining}` : ''}
+					</strong>
+				</span>
+			),
+			value: unique,
+			key,
+			id: unique,
+			op,
+		},
+	];
+};
 
 const mapAdvancedToTags = (
 	advanced: Array<AdvancedFilter>,
@@ -159,89 +207,88 @@ const mapAdvancedToTags = (
 			value: unique,
 			key,
 			id: unique,
+			// A url from before ARC-3806 keeps one combined pill, which has no modal to open
+			isClickable: key !== SearchFilterId.Advanced,
 			...advanced,
 		};
 	});
 };
 
+const getTextFilterOperatorLabel = (op: Operator): string =>
+	op === Operator.CONTAINS_NOT
+		? tText('modules/visitor-space/utils/map-filters/map-filters___bevat-niet')
+		: tText('modules/visitor-space/utils/map-filters/map-filters___bevat');
+
+/** A text filter gets one pill per operator, so "bevat" and "bevat niet" stay apart. */
+const mapTextFilterToTags = (
+	conditions: TextFilterCondition[],
+	filter: FilterMenuFilterOption
+): TagIdentity[] =>
+	[Operator.CONTAINS, Operator.CONTAINS_NOT].flatMap((op) =>
+		mapValuesToOneTag(
+			conditions.filter((condition) => condition.op === op).map((condition) => condition.val),
+			filter.label,
+			getTextFilterOperatorLabel(op),
+			filter.id,
+			op
+		)
+	);
+
+const mapFilterToTags = (
+	query: SearchPageQueryParams,
+	filter: FilterMenuFilterOption,
+	options: MapFiltersToTagsOptions = {}
+): TagIdentity[] => {
+	const value = query[filter.id];
+
+	if (!value) {
+		return [];
+	}
+
+	switch (filter.modalType) {
+		case FilterModalType.Text:
+			return mapTextFilterToTags(value as TextFilterCondition[], filter);
+
+		case FilterModalType.SearchableCheckbox:
+		case FilterModalType.CheckboxList:
+		case FilterModalType.Autocomplete: {
+			const values = (isString(value) ? [value] : (value as (string | null)[])).filter(
+				Boolean
+			) as string[];
+			return mapValuesToOneTag(
+				// The theme filter stores slugs, so its pill is labelled in the language of the UI. ARC-3797
+				filter.id === SearchFilterId.Theme
+					? values.map((slug) => options.themeLabelsBySlug?.[slug] || slug)
+					: values,
+				filter.label,
+				tText('modules/visitor-space/utils/map-filters/map-filters___is'),
+				filter.id
+			);
+		}
+
+		default:
+			// The date, duration and boolean filters keep the pill they always had
+			if (typeof value === 'boolean') {
+				return mapBooleanParamToTag(value, filter.label, filter.id);
+			}
+			return mapAdvancedToTags((value as AdvancedFilter[]) || [], filter.id);
+	}
+};
+
 export const mapFiltersToTags = (
 	query: SearchPageQueryParams,
+	filters: FilterMenuFilterOption[] = [],
 	options: MapFiltersToTagsOptions = {}
 ): TagIdentity[] => {
 	return [
+		// The search bar keeps one pill per term, since each term is its own search
 		...mapArrayParamToTags(
 			query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY] || [],
 			tText('modules/visitor-space/utils/map-filters/map-filters___trefwoord'),
 			QUERY_PARAM_KEY.SEARCH_QUERY_KEY
 		),
-		...mapArrayParamToTags(
-			query[SearchFilterId.Medium] || [],
-			getFilterLabel(FilterProperty.MEDIUM),
-			SearchFilterId.Medium
-		),
-		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
-		...mapAdvancedToTags(query[SearchFilterId.Duration] || [], SearchFilterId.Duration),
-		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
-		...mapAdvancedToTags(query[SearchFilterId.Created] || [], SearchFilterId.Created),
-		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
-		...mapAdvancedToTags(query[SearchFilterId.Published] || [], SearchFilterId.Published),
-		// Also uses the advanced filters since we encode "between" into 2 separate advanced filters: gt and lt
-		...mapAdvancedToTags(query[SearchFilterId.ReleaseDate] || [], SearchFilterId.ReleaseDate),
-		...mapArrayParamToTags(
-			query[SearchFilterId.Creator] || [],
-			getFilterLabel(FilterProperty.CREATOR),
-			SearchFilterId.Creator
-		),
-		...mapArrayParamToTags(
-			query[SearchFilterId.NewspaperSeriesName] || [],
-			getFilterLabel(FilterProperty.NEWSPAPER_SERIES_NAME),
-			SearchFilterId.NewspaperSeriesName
-		),
-		...mapArrayParamToTags(
-			query[SearchFilterId.LocationCreated] || [],
-			getFilterLabel(FilterProperty.LOCATION_CREATED),
-			SearchFilterId.LocationCreated
-		),
-		...mapArrayParamToTags(
-			query[SearchFilterId.Mentions] || [],
-			getFilterLabel(FilterProperty.MENTIONS),
-			SearchFilterId.Mentions
-		),
-		...mapArrayParamToTags(
-			query[SearchFilterId.Genre] || [],
-			getFilterLabel(FilterProperty.GENRE),
-			SearchFilterId.Genre
-		),
-		...mapArrayParamToTags(
-			query[SearchFilterId.Keywords] || [],
-			getFilterLabel(FilterProperty.KEYWORDS),
-			SearchFilterId.Keywords
-		),
-		...mapArrayParamToTags(
-			query[SearchFilterId.Language] || [],
-			getFilterLabel(FilterProperty.LANGUAGE),
-			SearchFilterId.Language
-		),
-		...mapBooleanParamToTag(
-			query[SearchFilterId.ConsultableOnlyOnLocation] || false,
-			tText('modules/visitor-space/utils/map-filters/map-filters___raadpleegbaar-ter-plaatse'),
-			SearchFilterId.ConsultableOnlyOnLocation
-		),
-		...mapBooleanParamToTag(
-			query[SearchFilterId.ConsultableMedia] || false,
-			tText('modules/visitor-space/utils/map-filters/map-filters___alles-wat-raadpleegbaar-is'),
-			SearchFilterId.ConsultableMedia
-		),
-		...mapArrayParamToTags(
-			query[SearchFilterId.Maintainers] || [],
-			tText('modules/visitor-space/utils/map-filters/map-filters___aanbieders'),
-			SearchFilterId.Maintainers
-		),
-		...mapArrayParamToTags(
-			query[SearchFilterId.Reusability] || [],
-			tText('modules/visitor-space/utils/map-filters/map-filters___herbruikbaarheid'),
-			SearchFilterId.Reusability
-		),
+		...filters.flatMap((filter) => mapFilterToTags(query, filter, options)),
+		// Urls shared before ARC-3806 may still carry the old combined parameter
 		...mapAdvancedToTags(query[SearchFilterId.Advanced] || [], SearchFilterId.Advanced, options),
 	];
 };

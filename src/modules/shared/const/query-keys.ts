@@ -7,6 +7,7 @@ export enum QUERY_KEYS {
 	getIeObjectsThumbnail = 'getIeObjectsThumbnail',
 	getIeObjectsResults = 'getIeObjectsResults',
 	getIeObjectFormatCounts = 'getIeObjectFormatCounts',
+	getIeObjectFilterOptions = 'getIeObjectFilterOptions',
 	getIeObjectsRelated = 'getIeObjectsRelated',
 	getIeObjectsSimilar = 'getIeObjectsSimilar',
 	getNavigationItems = 'getNavigationItems',

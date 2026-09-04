@@ -1,0 +1,23 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-autocomplete-filter-form {
+	&__selection {
+		margin-bottom: abstracts.$spacer-md;
+	}
+
+	&__selection-label {
+		color: abstracts.$neutral;
+		font-size: abstracts.$font-size-sm;
+		margin-bottom: abstracts.$spacer-xs;
+	}
+
+	// A value can be as long as a full newspaper title, so a pill wraps instead of overflowing
+	:global(.c-tag-list) {
+		flex-wrap: wrap;
+	}
+
+	:global(.c-tag__label) {
+		overflow-wrap: anywhere;
+		white-space: normal;
+	}
+}

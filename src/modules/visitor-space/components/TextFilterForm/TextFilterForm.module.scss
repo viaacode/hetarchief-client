@@ -1,0 +1,69 @@
+@use "src/styles/abstracts" as abstracts;
+
+// The design separates the description, every condition and the add CTA with a rule that runs the
+// full width of the modal, so the blocks carry the horizontal padding rather than the form.
+$text-filter-form-padding: 3.2rem;
+
+.c-text-filter-form {
+	&__description {
+		color: abstracts.$neutral;
+		font-size: abstracts.$font-size-sm;
+		padding: 0 $text-filter-form-padding abstracts.$spacer-md;
+	}
+
+	&__condition {
+		border-top: 0.1rem solid abstracts.$platinum;
+		padding: abstracts.$spacer-md $text-filter-form-padding;
+	}
+
+	&__separator {
+		color: abstracts.$neutral;
+		display: block;
+		font-size: abstracts.$font-size-sm;
+		margin-bottom: abstracts.$spacer-sm;
+	}
+
+	// The operator reads as part of the sentence, so it drops the box a select normally has
+	&__operator {
+		:global(.c-react-select__control) {
+			background-color: transparent;
+			border: 0;
+			box-shadow: none;
+			min-height: 0;
+			width: max-content;
+		}
+
+		:global(.c-react-select__value-container) {
+			padding-left: 0;
+		}
+
+		:global(.c-react-select__dropdown-indicator) {
+			padding: 0 0 0 abstracts.$spacer-xs;
+		}
+	}
+
+	&__value {
+		align-items: center;
+		display: flex;
+		gap: abstracts.$spacer-sm;
+		margin-top: abstracts.$spacer-xs;
+
+		> :first-child {
+			flex: 1 1 auto;
+			min-width: 0;
+		}
+	}
+
+	&__add:global(.c-button) {
+		border-radius: 0;
+		border-top: 0.1rem solid abstracts.$platinum;
+		padding: abstracts.$spacer-md $text-filter-form-padding;
+		text-align: left;
+		width: 100%;
+
+		:global(.c-button__content) {
+			justify-content: flex-start;
+			width: 100%;
+		}
+	}
+}

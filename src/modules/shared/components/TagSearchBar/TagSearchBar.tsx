@@ -1,3 +1,6 @@
+import { Tag } from '@meemoo/react-components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import type {
 	OnSearchSingle,
 	TagSearchBarMeta,
@@ -7,13 +10,52 @@ import type {
 import { TagSearchBarButton } from '@shared/components/TagSearchBar/TagSearchBarButton';
 import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
-import { type KeyboardEvent, type ReactElement, useMemo } from 'react';
+import { type KeyboardEvent, type MouseEvent, type ReactElement, useMemo } from 'react';
 import type { InputActionMeta } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { Spinner } from '../Spinner/Spinner';
 import { TAGS_INPUT_COMPONENTS } from '../TagsInput';
 import { TagSearchBarClear } from './TagSearchBarClear';
 import { TagSearchBarValueContainer } from './TagSearchBarValueContainer';
+
+/** The part of a tag a click handler needs. Every caller passes a richer object. */
+export interface ClickableTag {
+	key: string;
+	value?: string;
+	isClickable?: boolean;
+}
+
+/**
+ * Clicking a pill body opens the modal of that filter, clicking its close button removes it.
+ * See the "Redesign pills" section of the FA of ARC-3806.
+ */
+const makeClickableMultiValue =
+	(onTagClick: (tag: ClickableTag) => void) =>
+	// biome-ignore lint/suspicious/noExplicitAny: react-select does not export its component props
+	({ children, className, cx, data, innerProps, isDisabled, removeProps }: any) => (
+		<span {...innerProps} className={cx({ 'multi-value': true }, className)}>
+			<Tag
+				id={data.value}
+				label={children}
+				closeButton={
+					<div
+						{...removeProps}
+						className="c-tag__close"
+						// The whole tag opens the filter, so removing it must not open it as well
+						onClick={(event: MouseEvent<HTMLDivElement>) => {
+							event.stopPropagation();
+							removeProps.onClick?.(event);
+						}}
+					>
+						<Icon name={IconNamesLight.Times} aria-hidden />
+					</div>
+				}
+				disabled={isDisabled}
+				variants="closable"
+				{...(data.isClickable === false ? {} : { onClick: () => onTagClick(data) })}
+			/>
+		</span>
+	);
 
 // Wrap TagsInput with default props and custom search button
 const TagSearchBar = <IsMulti extends boolean>({
@@ -33,6 +75,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 	onCreate,
 	onRemoveValue,
 	onSearch,
+	onTagClick,
 	options,
 	size = undefined,
 	valuePlaceholder,
@@ -40,6 +83,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 }: Partial<TagSearchBarProps<IsMulti>> & {
 	setInputValue: (newInputValue: string) => void;
 	isLoading: boolean;
+	onTagClick?: (tag: ClickableTag) => void;
 }): ReactElement => {
 	const selectValue = useMemo(
 		() => (inputValue ? { label: inputValue, value: inputValue } : null),
@@ -114,6 +158,7 @@ const TagSearchBar = <IsMulti extends boolean>({
 		ClearIndicator: TagSearchBarClear,
 		DropdownIndicator: isLoading ? Spinner : TagSearchBarButton,
 		ValueContainer: TagSearchBarValueContainer,
+		...(onTagClick ? { MultiValue: makeClickableMultiValue(onTagClick) } : {}),
 	};
 	return (
 		<div className="u-flex u-align-center u-justify-between">
