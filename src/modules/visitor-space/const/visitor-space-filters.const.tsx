@@ -181,7 +181,7 @@ export const SEARCH_PAGE_FILTERS = (
 			id: SearchFilterId.LocationCreated,
 			label: tText('modules/visitor-space/const/visitor-space-filters___plaats-van-uitgave'),
 			type: FilterMenuType.Modal,
-			modalType: FilterModalType.CheckboxList,
+			modalType: FilterModalType.SearchableCheckbox,
 			field: IeObjectsSearchFilterField.LOCATION_CREATED,
 			inMainPanelByDefault: true,
 			tabs: NEWSPAPER_TABS,

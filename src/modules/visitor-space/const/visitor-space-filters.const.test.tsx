@@ -40,15 +40,15 @@ const ALL_TABS = [
 	SearchPageMediaType.Newspaper,
 ];
 
-/** The "Allocatie per filter" table of the FA of ARC-3806. */
+/** The "Allocatie per filter" table of the FA of ARC-3806, as amended on 4 Sep 2026. */
 const FA_ALLOCATION_TABLE: [SearchFilterId, FilterModalType][] = [
 	[SearchFilterId.Maintainers, FilterModalType.SearchableCheckbox],
 	[SearchFilterId.Medium, FilterModalType.SearchableCheckbox],
 	[SearchFilterId.Genre, FilterModalType.SearchableCheckbox],
 	[SearchFilterId.Rights, FilterModalType.SearchableCheckbox],
+	[SearchFilterId.LocationCreated, FilterModalType.SearchableCheckbox],
 
 	[SearchFilterId.Reusability, FilterModalType.CheckboxList],
-	[SearchFilterId.LocationCreated, FilterModalType.CheckboxList],
 	[SearchFilterId.Language, FilterModalType.CheckboxList],
 
 	[SearchFilterId.NewspaperSeriesName, FilterModalType.Autocomplete],
