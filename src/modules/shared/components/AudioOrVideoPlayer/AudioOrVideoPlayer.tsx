@@ -8,7 +8,13 @@ import {
 	JSON_FORMATS,
 } from '@ie-objects/ie-objects.consts';
 import type { IeObjectFile } from '@ie-objects/ie-objects.types';
-import { FlowPlayer, type FlowPlayerProps, getValidStartAndEnd } from '@meemoo/react-components';
+import { Color } from '@meemoo/admin-core-ui/admin';
+import {
+	FlowPlayer,
+	type FlowPlayerCustomControlsConfig,
+	type FlowPlayerProps,
+	getValidStartAndEnd,
+} from '@meemoo/react-components';
 import { Loading } from '@shared/components/Loading';
 import getConfig from '@shared/config/public-runtime-config';
 import { useGetFileDuration } from '@shared/hooks/use-get-file-duration';
@@ -134,6 +140,11 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	};
 
 	const [start, end]: [number | null, number | null] = getStartAndEnd();
+	const sharedCustomControls: Partial<FlowPlayerCustomControlsConfig> = {
+		showTitleOverlay: true,
+		peakColorActive: '#00857d',
+		peakColorInactive: Color.White,
+	};
 	const shared: Partial<FlowPlayerProps> = {
 		className,
 		title: currentPlayableFile?.name,
@@ -151,6 +162,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		peakHeightFactor: 0.6,
 		start,
 		end,
+		controlsVariant: 'custom',
 	};
 
 	if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {
@@ -166,6 +178,10 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				renderLoader={() => <Loading locationId="flowplayer suspense" fullscreen mode="light" />}
 				preload="metadata"
 				{...shared}
+				customControlsConfig={{
+					...sharedCustomControls,
+					showFullscreen: true,
+				}}
 			/>
 		);
 	}
@@ -193,6 +209,10 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				waveformData={peakJson?.data || undefined}
 				preload="metadata"
 				{...shared}
+				customControlsConfig={{
+					...sharedCustomControls,
+					showFullscreen: false,
+				}}
 			/>
 		);
 	}
