@@ -2,7 +2,7 @@ import type { IeObjectSearchAggregations } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { type IeObjectsSearchFilter, IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import { useQuery } from '@tanstack/react-query';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import {
@@ -34,25 +34,7 @@ const AGGREGATION_KEY_BY_FIELD: Partial<
 	[IeObjectsSearchFilterField.LOCATION_CREATED]: ElasticsearchFieldNames.LocationCreated,
 };
 
-/**
- * Every clause except the ones on this field.
- * An open filter must offer the values the other filters allow, so its own clauses come out of
- * the query that computes its options.
- */
-export const dropClausesForField = (
-	filters: IeObjectsSearchFilter[],
-	field: IeObjectsSearchFilterField | undefined
-): IeObjectsSearchFilter[] => filters.filter((filter) => filter.field !== field);
-
-/**
- * The values a filter may offer, given every other filter that is active.
- *
- * The filter's own clauses are left out of the query on purpose: an open "Aanbieder" modal must
- * list every provider the other filters allow, not only the providers already selected.
- * See the "Technische input van Bert" section in the FA of ARC-3806.
- * ARC-1882 and ARC-1056 widened this to every filter at once, which listed options with no
- * results. Keep it to the one filter the user opened.
- */
+/** The values a filter may offer, given the filters that are active. */
 export const useGetFilterOptions = (
 	filter: FilterMenuFilterOption,
 	enabled: boolean
@@ -61,26 +43,17 @@ export const useGetFilterOptions = (
 	const searchFilters = useSearchQueryFilters();
 	const field = filter.field;
 
-	const filtersWithoutThisFilter = useMemo(
-		() => dropClausesForField(searchFilters, field),
-		[searchFilters, field]
-	);
-
 	// Themes are not aggregated in elasticsearch, and the url holds a slug rather than a name,
 	// so the options of this filter come from the themes endpoint. ARC-3797
 	const isThemeFilter = field === IeObjectsSearchFilterField.THEME;
 	const { options: themeOptions, isLoading: isLoadingThemes } = useGetThemeFilterOptions();
 
 	const { data: aggregations, isLoading } = useQuery({
-		queryKey: [QUERY_KEYS.getIeObjectFilterOptions, field, filtersWithoutThisFilter],
+		queryKey: [QUERY_KEYS.getIeObjectFilterOptions, field, searchFilters],
 		queryFn: async (): Promise<IeObjectSearchAggregations | undefined> => {
-			const results = await IeObjectsService.getSearchResults(
-				filtersWithoutThisFilter,
-				1,
-				1,
-				undefined,
-				[field as IeObjectsSearchFilterField]
-			);
+			const results = await IeObjectsService.getSearchResults(searchFilters, 1, 1, undefined, [
+				field as IeObjectsSearchFilterField,
+			]);
 			return results.aggregations;
 		},
 		enabled: enabled && !!field && !isThemeFilter,

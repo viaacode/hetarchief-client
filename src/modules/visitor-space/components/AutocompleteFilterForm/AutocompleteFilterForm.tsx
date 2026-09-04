@@ -10,7 +10,7 @@ import { useSearchQueryFilters } from '@visitor-space/hooks/get-search-query-fil
 import type { GenericFilterFormProps } from '@visitor-space/types';
 import clsx from 'clsx';
 import { compact, without } from 'es-toolkit/compat';
-import { type FC, useMemo, useState } from 'react';
+import { type FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { ActionMeta, SingleValue } from 'react-select';
 import AsyncSelect from 'react-select/async';
@@ -42,12 +42,6 @@ export const AutocompleteFilterForm: FC<GenericFilterFormProps> = ({
 
 	const autocompleteField = AUTOCOMPLETE_FIELD_BY_FILTER_ID[filter.id];
 
-	// Leave this filter out of the query, so the user can still widen their own selection
-	const otherFilters = useMemo(
-		() => searchFilters.filter((searchFilter) => searchFilter.field !== filter.field),
-		[searchFilters, filter.field]
-	);
-
 	const loadOptions = (
 		newInputValue: string,
 		callback: (options: SelectOption[]) => void
@@ -57,7 +51,7 @@ export const AutocompleteFilterForm: FC<GenericFilterFormProps> = ({
 			return;
 		}
 
-		IeObjectsService.getAutocompleteFieldOptions(autocompleteField, newInputValue, otherFilters)
+		IeObjectsService.getAutocompleteFieldOptions(autocompleteField, newInputValue, searchFilters)
 			.then((values) => {
 				// A value can be selected only once
 				callback(
