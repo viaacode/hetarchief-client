@@ -259,6 +259,12 @@ $media-card-list-view-height: 13rem;
 
 			&:global([class*="c-media-card__header--no-content"]) {
 				background-color: transparent;
+
+				&:global([class*="c-media-card__header--list"]),
+				&:global([class*="c-media-card__header--blade"]) {
+					// Keep the same grey placeholder as video/audio when there is no thumbnail
+					background-color: $silver;
+				}
 			}
 
 			img {
