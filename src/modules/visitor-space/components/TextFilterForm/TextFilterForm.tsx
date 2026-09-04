@@ -82,7 +82,12 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 
 				{/* A text filter takes any number of conditions, so the list scrolls on its own and
 				    leaves the footer alone */}
-				<div className="c-filter-form__body--scrollable">
+				<div
+					className={clsx(
+						'c-filter-form__body--scrollable',
+						styles['c-text-filter-form__conditions']
+					)}
+				>
 					{conditions.map((condition, index) => (
 						// biome-ignore lint/suspicious/noArrayIndexKey: a condition has no id of its own
 						<div className={styles['c-text-filter-form__condition']} key={`condition-${index}`}>
