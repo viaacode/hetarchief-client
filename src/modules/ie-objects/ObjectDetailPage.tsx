@@ -1240,6 +1240,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 */
 
 	const isMediaAvailable = useCallback((): boolean => {
+		// Two separate questions: may this user play the essence, and is there anything to play.
+		// The checks below answer the second, off `pages` -- which the proxy strips when essence
+		// access is denied. Ask the permission question explicitly rather than reading it off the
+		// missing data, so this keeps working if `pages` ever stops being essence-gated.
+		if (!mediaInfo?.hasAccessToEssence) {
+			return false;
+		}
+
 		switch (mediaInfo?.dctermsFormat) {
 			case IeObjectType.AUDIO:
 			case IeObjectType.AUDIO_FRAGMENT:
@@ -1255,7 +1263,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			default:
 				return false;
 		}
-	}, [mediaInfo?.dctermsFormat, isFlowPlayerMediaAvailable, getFilesByType]);
+	}, [
+		mediaInfo?.hasAccessToEssence,
+		mediaInfo?.dctermsFormat,
+		isFlowPlayerMediaAvailable,
+		getFilesByType,
+	]);
 
 	const tabs: TabProps[] = useMemo(() => {
 		return OBJECT_DETAIL_TABS(

@@ -128,7 +128,12 @@ export const getNoLicensePlaceholderLabels = (): ObjectPlaceholderProps => ({
 export const OBJECT_DETAIL_TABS = (
 	mediaType: IeObjectType | null,
 	activeTab?: ObjectDetailTabs,
-	mediaAvailable = true,
+	/**
+	 * Whether this visitor can actually play the object: they have essence access AND there is a
+	 * playable file. Decides between the plain and the struck-through ("no-…") icon on the Media
+	 * tab -- the tab itself is always rendered.
+	 */
+	isMediaPlayable = true,
 	ocrAvailable = true
 ): TabProps[] => {
 	const typeWithDefault = mediaType || IeObjectType.VIDEO;
@@ -147,7 +152,7 @@ export const OBJECT_DETAIL_TABS = (
 			// typeWithDefault falls back to VIDEO above, so an icon is always resolved
 			icon: (
 				<Icon
-					name={getIconFromObjectType(typeWithDefault, mediaAvailable) as IconName}
+					name={getIconFromObjectType(typeWithDefault, isMediaPlayable) as IconName}
 					aria-hidden
 				/>
 			),
