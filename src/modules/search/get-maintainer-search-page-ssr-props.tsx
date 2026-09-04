@@ -1,5 +1,4 @@
 import { MIN_LENGTH_SCHEMA_IDENTIFIER_V2 } from '@ie-objects/ie-objects.consts';
-import type { IeObject } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
@@ -7,6 +6,7 @@ import { OrganisationService } from '@shared/services/organisation-service/organ
 import type { Organisation } from '@shared/services/organisation-service/organisation.types';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import type { Locale } from '@shared/utils/i18n';
+import type { HetArchiefIeObject } from '@viaa/avo2-types';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
 import { kebabCase } from 'es-toolkit/compat';
 import type { GetServerSidePropsResult } from 'next';
@@ -46,7 +46,7 @@ export async function getMaintainerSearchPageServerSideProps(
 		};
 	}
 
-	let ieObject: IeObject | null = null;
+	let ieObject: HetArchiefIeObject | null = null;
 	try {
 		let newSchemaIdentifier: string;
 

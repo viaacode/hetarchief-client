@@ -41,6 +41,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	duration,
 	keywords,
 	thumbnail,
+	hasAccessToEssence = true,
 	publishedOrCreatedDate,
 	publishedBy,
 	title,
@@ -274,7 +275,9 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderImage = (imgPath: string | undefined) => {
 		let imagePath: string | undefined = imgPath;
-		if (!imagePath) {
+		// No essence access means there is nothing to show but the struck-through type icon, whatever
+		// the thumbnail happens to hold
+		if (!hasAccessToEssence || !imagePath) {
 			return (
 				<div
 					className={clsx(
@@ -293,9 +296,8 @@ const MediaCard: FC<MediaCardProps> = ({
 		}
 
 		if (type === IeObjectType.AUDIO || type === IeObjectType.AUDIO_FRAGMENT) {
-			// Only render the waveform if the thumbnail is available
-			// The thumbnail is an ugly speaker icon that we never want to show
-			// But if that thumbnail is not available it most likely means this object does not have the BEZOEKERTOOL-CONTENT license
+			// The thumbnail of an audio object is an ugly speaker icon that we never want to show, so
+			// the waveform still stands in for it. Access was already checked above.
 			imagePath = AdminConfigManager.getConfig().components.defaultAudioStill;
 		}
 

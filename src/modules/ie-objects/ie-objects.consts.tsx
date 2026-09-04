@@ -2,20 +2,22 @@ import type { ActionItem, DynamicActionMenuProps } from '@ie-objects/components/
 import type { ObjectPlaceholderProps } from '@ie-objects/components/ObjectPlaceholder';
 import {
 	type ButtonsSortOrder,
-	IeObjectLicense,
-	type IsPartOfCollection,
-	type IsPartOfKey,
 	MediaActions,
 	MetadataExportFormats,
 	ObjectDetailTabs,
 } from '@ie-objects/ie-objects.types';
 import type { MenuItemInfo, TabProps } from '@meemoo/react-components';
-import { Icon } from '@shared/components/Icon';
+import { Icon, type IconName } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import { GET_TYPE_TO_LABEL_MAP, getIconFromObjectType } from '@shared/components/MediaCard';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
+import {
+	HetArchiefIeObjectLicense,
+	type HetArchiefIsPartOfCollection,
+	type HetArchiefIsPartOfKey,
+} from '@viaa/avo2-types';
 import React, { type ReactNode } from 'react';
 
 /**
@@ -126,7 +128,12 @@ export const getNoLicensePlaceholderLabels = (): ObjectPlaceholderProps => ({
 export const OBJECT_DETAIL_TABS = (
 	mediaType: IeObjectType | null,
 	activeTab?: ObjectDetailTabs,
-	mediaAvailable = true,
+	/**
+	 * Whether this visitor can actually play the object: they have essence access AND there is a
+	 * playable file. Decides between the plain and the struck-through ("no-…") icon on the Media
+	 * tab -- the tab itself is always rendered.
+	 */
+	isMediaPlayable = true,
 	ocrAvailable = true
 ): TabProps[] => {
 	const typeWithDefault = mediaType || IeObjectType.VIDEO;
@@ -142,7 +149,13 @@ export const OBJECT_DETAIL_TABS = (
 			id: ObjectDetailTabs.Media,
 			label: GET_TYPE_TO_LABEL_MAP(typeWithDefault),
 			ariaLabel: GET_TYPE_TO_LABEL_MAP(typeWithDefault),
-			icon: <Icon name={getIconFromObjectType(typeWithDefault, mediaAvailable)} aria-hidden />,
+			// typeWithDefault falls back to VIDEO above, so an icon is always resolved
+			icon: (
+				<Icon
+					name={getIconFromObjectType(typeWithDefault, isMediaPlayable) as IconName}
+					aria-hidden
+				/>
+			),
 			active: ObjectDetailTabs.Media === activeTab,
 		},
 		...(ocrAvailable
@@ -359,8 +372,8 @@ export function renderAbrahamLink(
 }
 
 export function renderIsPartOfValue(
-	isPartOfEntries: IsPartOfCollection[] | undefined,
-	key: IsPartOfKey
+	isPartOfEntries: HetArchiefIsPartOfCollection[] | undefined,
+	key: HetArchiefIsPartOfKey
 ): string | null {
 	const value = isPartOfEntries?.find((isPartOfEntry) => isPartOfEntry.collectionType === key);
 	return value?.name || null;
@@ -373,8 +386,8 @@ export function renderDate(date: string | null | undefined): string | null {
 	return formatLongDate(asDate(date));
 }
 
-export const IE_OBJECT_INTRA_CP_LICENSES: Readonly<IeObjectLicense[]> = [
-	IeObjectLicense.INTRA_CP_CONTENT,
-	IeObjectLicense.INTRA_CP_METADATA_ALL,
-	IeObjectLicense.INTRA_CP_METADATA_LTD,
+export const IE_OBJECT_INTRA_CP_LICENSES: Readonly<HetArchiefIeObjectLicense[]> = [
+	HetArchiefIeObjectLicense.INTRA_CP_CONTENT,
+	HetArchiefIeObjectLicense.INTRA_CP_METADATA_ALL,
+	HetArchiefIeObjectLicense.INTRA_CP_METADATA_LTD,
 ];

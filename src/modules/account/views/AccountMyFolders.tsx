@@ -7,7 +7,6 @@ import { AccountLayout } from '@account/layouts';
 import { FoldersService } from '@account/services/folders';
 import type { Folder, FolderIeObject } from '@account/types';
 import { createFolderSlug } from '@account/utils';
-import { IeObjectAccessThrough, IeObjectLicense, IsPartOfKey } from '@ie-objects/ie-objects.types';
 import { Button, FormControl, PaginationBar } from '@meemoo/react-components';
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { Icon } from '@shared/components/Icon';
@@ -33,6 +32,11 @@ import { selectLastScrollPosition, setBreadcrumbs, setLastScrollPosition } from 
 import { Breakpoints } from '@shared/types';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
+import {
+	HetArchiefIeObjectAccessThrough,
+	HetArchiefIeObjectLicense,
+	HetArchiefIsPartOfKey,
+} from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import clsx from 'clsx';
@@ -272,8 +276,8 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 		}
 		return (
 			isEmpty(item.accessThrough) &&
-			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
-				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT))
+			(item.licenses?.includes(HetArchiefIeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
+				item.licenses?.includes(HetArchiefIeObjectLicense.BEZOEKERTOOL_CONTENT))
 		);
 	};
 
@@ -291,8 +295,8 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 		}
 		return (
 			isEmpty(item.accessThrough) &&
-			(item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
-				item.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT))
+			(item.licenses?.includes(HetArchiefIeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
+				item.licenses?.includes(HetArchiefIeObjectLicense.BEZOEKERTOOL_CONTENT))
 		);
 	};
 
@@ -406,8 +410,8 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 
 	const renderDescription = (folderIeObject: FolderIeObject): ReactNode => {
 		const showAccessLabel =
-			folderIeObject?.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL) ||
-			folderIeObject?.accessThrough.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS);
+			folderIeObject?.accessThrough.includes(HetArchiefIeObjectAccessThrough.VISITOR_SPACE_FULL) ||
+			folderIeObject?.accessThrough.includes(HetArchiefIeObjectAccessThrough.VISITOR_SPACE_FOLDERS);
 
 		const metadataEntries: { label: string | ReactNode; value: string }[] = [
 			{
@@ -416,11 +420,11 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___programma'),
-				value: folderIeObject?.isPartOf?.[IsPartOfKey.program]?.join(', ') || '',
+				value: folderIeObject?.isPartOf?.[HetArchiefIsPartOfKey.program]?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___serie'),
-				value: folderIeObject?.isPartOf?.[IsPartOfKey.series]?.join(', ') || '',
+				value: folderIeObject?.isPartOf?.[HetArchiefIsPartOfKey.series]?.join(', ') || '',
 			},
 			{
 				label: tHtml('pages/account/mijn-mappen/folder-slug/index___type'),
@@ -526,9 +530,12 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 							name: media.name,
 							type: media.dctermsFormat,
 							thumbnail: media.thumbnailUrl,
+							hasAccessToEssence: !!media.hasAccessToEssence,
 							duration: media.duration,
 							licenses: media.licenses,
-							showKeyUserLabel: media.accessThrough.includes(IeObjectAccessThrough.SECTOR),
+							showKeyUserLabel: media.accessThrough.includes(
+								HetArchiefIeObjectAccessThrough.SECTOR
+							),
 							showLocallyAvailable: getShowLocallyAvailableLabel(media),
 							showPlanVisitButtons: getShowPlanVisitButtons(media),
 							previousPage: myFoldersPath,

@@ -1,4 +1,4 @@
-import type { IeObject } from '@ie-objects/ie-objects.types';
+import type { HetArchiefIeObject } from '@viaa/avo2-types';
 import { compact, uniq } from 'es-toolkit/compat';
 
 const PRODUCER_ROLE_PARTS = ['producer', 'producent', 'production'];
@@ -53,7 +53,7 @@ function getCreatorValuesByRole(
 	);
 }
 
-function getAttributionCreatorNames(ieObject: IeObject): string[] {
+function getAttributionCreatorNames(ieObject: HetArchiefIeObject): string[] {
 	const copyrightHolderValues = toTextValues(ieObject.copyrightHolder);
 	if (copyrightHolderValues.length > 0) {
 		return copyrightHolderValues;
@@ -104,7 +104,7 @@ export function formatAvRightsAttributionNames(
 }
 
 export function getIeObjectAvRightsAttributionText(
-	ieObject: IeObject,
+	ieObject: HetArchiefIeObject,
 	translations: AvRightsAttributionTranslations,
 	usageCategoryLabel?: string | null
 ): string | null {

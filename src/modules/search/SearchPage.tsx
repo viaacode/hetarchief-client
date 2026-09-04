@@ -3,7 +3,6 @@ import { useGetFolders } from '@account/hooks/get-folders';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
 import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/use-get-ie-object-format-counts';
 import { useGetIeObjects } from '@ie-objects/hooks/use-get-ie-objects';
-import { IeObjectAccessThrough } from '@ie-objects/ie-objects.types';
 import { isInAFolder } from '@ie-objects/utils/folders';
 import {
 	type Breadcrumb,
@@ -71,7 +70,7 @@ import { type VisitRequest, VisitStatus } from '@shared/types/visit-request';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import { scrollTo } from '@shared/utils/scroll-to-top';
-import { AvoSearchOrderDirection } from '@viaa/avo2-types';
+import { AvoSearchOrderDirection, HetArchiefIeObjectAccessThrough } from '@viaa/avo2-types';
 import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
@@ -653,10 +652,10 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {
 		return (searchResults?.items || []).map((item): IdentifiableMediaCard => {
 			const type: IeObjectType | null = item.dctermsFormat;
-			const showKeyUserLabel = item.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
+			const showKeyUserLabel = item.accessThrough?.includes(HetArchiefIeObjectAccessThrough.SECTOR);
 			const hasAccessToVisitorSpaceOfObject = !!intersection(item?.accessThrough, [
-				IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
-				IeObjectAccessThrough.VISITOR_SPACE_FULL,
+				HetArchiefIeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
+				HetArchiefIeObjectAccessThrough.VISITOR_SPACE_FULL,
 			]).length;
 
 			// Only show pill when the public collection is selected (https://meemoo.atlassian.net/browse/ARC-1210?focusedCommentId=39708)
@@ -690,11 +689,12 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				publishedBy: item.maintainerName || '',
 				type,
 				thumbnail: item.thumbnailUrl || undefined,
+				hasAccessToEssence: !!item.hasAccessToEssence,
 				name: item.name,
 				hasRelated: (item.related_count || 0) > 0,
 				hasTempAccess,
 				showKeyUserLabel,
-				icon: type ? getIconFromObjectType(type, !!item.thumbnailUrl) : null,
+				icon: getIconFromObjectType(type, !!item.hasAccessToEssence),
 				link,
 				previousPage: ROUTES_BY_LOCALE[locale].search,
 				numOfChildren: item.children || 0,

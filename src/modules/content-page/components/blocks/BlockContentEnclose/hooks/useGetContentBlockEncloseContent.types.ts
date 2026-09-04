@@ -5,6 +5,8 @@ export interface GetContentBlockEncloseContentReturnType {
 	name?: string;
 	description?: string;
 	thumbnail?: string;
+	/** Ie-objects only: whether the current user may see/play the essence, as reported by the proxy */
+	hasAccessToEssence?: boolean;
 	dateCreated?: string;
 	datePublished?: string;
 	maintainerName?: string;

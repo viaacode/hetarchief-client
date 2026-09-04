@@ -1,6 +1,6 @@
-import { GET_TYPE_TO_ICON_MAP } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose.const';
 import { SmartLink } from '@meemoo/admin-core-ui/client';
 import { Icon, type IconName } from '@shared/components/Icon';
+import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { Button } from '@viaa/avo2-components';
 import { compact } from 'es-toolkit/compat';
 import type { FC } from 'react';
@@ -99,9 +99,13 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 								description={elementInfo.description}
 								publishedOrCreatedDate={elementInfo.datePublished || elementInfo.dateCreated}
 								thumbnail={elementInfo.thumbnail}
-								icon={
-									elementInfo.objectType ? GET_TYPE_TO_ICON_MAP()[elementInfo.objectType] : null
-								}
+								hasAccessToEssence={elementInfo.hasAccessToEssence ?? true}
+								// Only ie-objects carry an objectType -- content pages set it to null, which the
+								// helper answers with no icon at all
+								icon={getIconFromObjectType(
+									elementInfo.objectType,
+									!!elementInfo.hasAccessToEssence
+								)}
 							/>
 						</li>
 					);

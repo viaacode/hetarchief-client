@@ -33,13 +33,7 @@ import {
 } from '@ie-objects/ie-objects.consts';
 import {
 	type ButtonsSortOrder,
-	type IeObject,
-	IeObjectAccessThrough,
-	IeObjectLicense,
-	type IeObjectRightsInfo,
-	IsPartOfKey,
 	MediaActions,
-	type Mention,
 	MetadataExportFormats,
 } from '@ie-objects/ie-objects.types';
 import {
@@ -102,6 +96,14 @@ import { IeObjectType } from '@shared/types/ie-objects';
 import { formatDateTime } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
 import { isMobileSize } from '@shared/utils/is-mobile';
+import {
+	type HetArchiefIeObject,
+	HetArchiefIeObjectAccessThrough,
+	HetArchiefIeObjectLicense,
+	type HetArchiefIeObjectRightsInfo,
+	HetArchiefIsPartOfKey,
+	type HetArchiefMention,
+} from '@viaa/avo2-types';
 import {
 	LANGUAGES,
 	type LanguageCode,
@@ -205,19 +207,23 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	);
 	const canRequestAccess =
 		!canViewObjectVisitorSpace &&
-		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
-		isNil(mediaInfo.thumbnailUrl);
-	const showKeyUserPill = mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.SECTOR);
+		mediaInfo?.licenses?.includes(HetArchiefIeObjectLicense.BEZOEKERTOOL_CONTENT) &&
+		!mediaInfo.hasAccessToEssence;
+	const showKeyUserPill = mediaInfo?.accessThrough?.includes(
+		HetArchiefIeObjectAccessThrough.SECTOR
+	);
 	const ieObjectPermissions = checkIeObjectPermissions({
 		isNewspaper,
 		hasLicensePublicDomainOrCopyrightUndetermined: !!(
-			mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIC_DOMAIN) ||
-			mediaInfo?.licenses?.includes(IeObjectLicense.COPYRIGHT_UNDETERMINED)
+			mediaInfo?.licenses?.includes(HetArchiefIeObjectLicense.PUBLIC_DOMAIN) ||
+			mediaInfo?.licenses?.includes(HetArchiefIeObjectLicense.COPYRIGHT_UNDETERMINED)
 		),
-		hasLicensePublicContent: !!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT),
+		hasLicensePublicContent: !!mediaInfo?.licenses?.includes(
+			HetArchiefIeObjectLicense.PUBLIEK_CONTENT
+		),
 		hasLicenseVisitorToolMetadataAllOrContent:
-			!!mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
-			!!mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT),
+			!!mediaInfo?.licenses?.includes(HetArchiefIeObjectLicense.BEZOEKERTOOL_METADATA_ALL) ||
+			!!mediaInfo?.licenses?.includes(HetArchiefIeObjectLicense.BEZOEKERTOOL_CONTENT),
 		hasAccessToVisitorSpace: hasAccessToVisitorSpaceOfObject,
 		hasPermissionExportObject: useHasAnyPermission(Permission.EXPORT_OBJECT),
 		hasPermissionDownloadObject: useHasAnyPermission(Permission.DOWNLOAD_OBJECT),
@@ -230,7 +236,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	const themes = mediaInfo?.themes ?? [];
 	const showThemes: boolean =
 		!isKiosk &&
-		!!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
+		!!mediaInfo?.licenses?.includes(HetArchiefIeObjectLicense.PUBLIEK_CONTENT) &&
 		themes.length > 0;
 
 	// You need the permission or not to be logged in to download the newspaper
@@ -362,7 +368,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	]);
 
 	const zoomToName = useCallback(
-		(mention: Mention) => {
+		(mention: HetArchiefMention) => {
 			const firstHighlight = getFirstMentionHighlight(mention.highlights);
 
 			if (!firstHighlight) {
@@ -396,7 +402,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	);
 
 	const handleZoomToMention = useCallback(
-		(mention: Mention) => {
+		(mention: HetArchiefMention) => {
 			if (!currentPage) {
 				return;
 			}
@@ -558,7 +564,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		maintainerName,
 		maintainerLogo,
 		maintainerId,
-	}: IeObject): ReactNode => {
+	}: HetArchiefIeObject): ReactNode => {
 		const maintainerSearchLink = stringifyUrl({
 			url: ROUTES_BY_LOCALE[locale].search,
 			query: {
@@ -607,7 +613,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	const renderMaintainerMetaData = ({
 		maintainerDescription,
 		maintainerSiteUrl,
-	}: IeObject): ReactNode => {
+	}: HetArchiefIeObject): ReactNode => {
 		if (!isKiosk) {
 			return (
 				<div className={styles['p-object-detail__sidebar__content-maintainer-data']}>
@@ -741,7 +747,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		);
 	};
 
-	const renderSeriesTitle = (mediaInfo: IeObject) => {
+	const renderSeriesTitle = (mediaInfo: HetArchiefIeObject) => {
 		if (!mediaInfo.collectionName) {
 			return null;
 		}
@@ -762,7 +768,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		return mediaInfo.collectionName;
 	};
 
-	const renderProviderIdentifier = (mediaInfo: IeObject): ReactNode => {
+	const renderProviderIdentifier = (mediaInfo: HetArchiefIeObject): ReactNode => {
 		const linkProps = getIeObjectProviderIdentifierLinkProps(mediaInfo, isKiosk);
 
 		if (!linkProps) {
@@ -876,7 +882,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		[locale]
 	);
 
-	const getRightsInfoForAudioVideo = (mediaInfo: IeObject): IeObjectRightsInfo | null => {
+	const getRightsInfoForAudioVideo = (
+		mediaInfo: HetArchiefIeObject
+	): HetArchiefIeObjectRightsInfo | null => {
 		const isAudioOrVideo = AV_OBJECT_TYPES.includes(mediaInfo.dctermsFormat);
 		return isAudioOrVideo ? mediaInfo.rightsInfo || null : null;
 	};
@@ -890,7 +898,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	 *
 	 * @param mediaInfo
 	 */
-	const renderRightsInfo = (mediaInfo: IeObject) => {
+	const renderRightsInfo = (mediaInfo: HetArchiefIeObject) => {
 		const rightsInfoNewspapers = isNewspaper
 			? getIeObjectRightsStatusInfo(mediaInfo, locale)
 			: null;
@@ -990,7 +998,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		);
 	};
 
-	const renderAuthorRightsHolder = (mediaInfo: IeObject) => {
+	const renderAuthorRightsHolder = (mediaInfo: HetArchiefIeObject) => {
 		const rightsInfoAudioVideo = getRightsInfoForAudioVideo(mediaInfo);
 		if (!rightsInfoAudioVideo) {
 			return renderSimpleMetadataField(
@@ -1279,25 +1287,25 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___archief'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.archive)
+						renderIsPartOfValue(mediaInfo.isPartOf, HetArchiefIsPartOfKey.archive)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___programma'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.program)
+						renderIsPartOfValue(mediaInfo.isPartOf, HetArchiefIsPartOfKey.program)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___serie'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.series)
+						renderIsPartOfValue(mediaInfo.isPartOf, HetArchiefIsPartOfKey.series)
 					)}
 					{renderSimpleMetadataField(
 						tText(
 							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___seizoen'
 						),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.season)
+						renderIsPartOfValue(mediaInfo.isPartOf, HetArchiefIsPartOfKey.season)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___episode'),
-						renderIsPartOfValue(mediaInfo.isPartOf, IsPartOfKey.episode)
+						renderIsPartOfValue(mediaInfo.isPartOf, HetArchiefIsPartOfKey.episode)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___seizoennummer'),

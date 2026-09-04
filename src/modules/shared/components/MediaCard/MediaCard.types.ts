@@ -1,6 +1,6 @@
-import type { IeObjectLicense } from '@ie-objects/ie-objects.types';
 import type { IeObjectsSearchTermObject } from '@shared/types/api';
 import type { IeObjectType } from '@shared/types/ie-objects';
+import type { HetArchiefIeObjectLicense } from '@viaa/avo2-types';
 import type { ReactNode } from 'react';
 
 import type { IconName } from '../Icon';
@@ -18,6 +18,12 @@ export interface MediaCardProps {
 	id?: string;
 	objectId?: string;
 	thumbnail?: string;
+	/**
+	 * Whether the current user may see/play this object's essence, as reported by the proxy.
+	 * Decides between the real image and the struck-through placeholder. Defaults to true so
+	 * cards for things that aren't ie-objects keep rendering their image.
+	 */
+	hasAccessToEssence?: boolean;
 	publishedOrCreatedDate?: string;
 	publishedBy?: string;
 	title?: string | ReactNode;
@@ -39,5 +45,5 @@ export interface MediaCardProps {
 export type IdentifiableMediaCard = MediaCardProps & {
 	schemaIdentifier: string;
 	maintainerSlug: string;
-	licenses?: IeObjectLicense[];
+	licenses?: HetArchiefIeObjectLicense[];
 };

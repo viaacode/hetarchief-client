@@ -1,6 +1,6 @@
-import { type IeObject, IeObjectAccessThrough } from '@ie-objects/ie-objects.types';
 import { IeObjectType } from '@shared/types/ie-objects';
 import { Locale } from '@shared/utils/i18n';
+import { type HetArchiefIeObject, HetArchiefIeObjectAccessThrough } from '@viaa/avo2-types';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -10,19 +10,20 @@ import {
 
 const baseObject = {
 	dctermsFormat: IeObjectType.VIDEO,
-	accessThrough: [IeObjectAccessThrough.PUBLIC_INFO],
+	accessThrough: [HetArchiefIeObjectAccessThrough.PUBLIC_INFO],
 	name: 'Het journaal',
 	dateCreated: '2026-05-21',
 	datePublished: '2026-05-20',
 	maintainerName: 'VRT',
 	thumbnailUrl: 'https://example.com/thumb.jpg',
+	hasAccessToEssence: true,
 	rightsInfo: {
 		reuseLabel: '© VRT',
 		reuseCategoryLabel: 'Auteursrechtelijk beschermd',
 	},
-} as IeObject;
+} as HetArchiefIeObject;
 
-function createIeObject(overrides: Partial<IeObject>): IeObject {
+function createIeObject(overrides: Partial<HetArchiefIeObject>): HetArchiefIeObject {
 	return {
 		...baseObject,
 		...overrides,
@@ -152,9 +153,9 @@ describe('getIeObjectSourceAttribution', () => {
 		expect(
 			getIeObjectSourceAttribution(
 				createIeObject({
-					accessThrough: [IeObjectAccessThrough.PUBLIC_INFO],
+					accessThrough: [HetArchiefIeObjectAccessThrough.PUBLIC_INFO],
 					rightsInfo: null,
-					thumbnailUrl: '',
+					hasAccessToEssence: false,
 				})
 			)
 		).toBeNull();

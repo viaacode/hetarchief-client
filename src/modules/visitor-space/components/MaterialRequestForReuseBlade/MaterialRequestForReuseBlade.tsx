@@ -1,5 +1,4 @@
 import { selectCommonUser } from '@auth/store/user';
-import type { IeObjectFile } from '@ie-objects/ie-objects.types';
 import { GET_BLANK_MATERIAL_REQUEST_REUSE_FORM } from '@material-requests/const';
 import { useGetMaterialRequestsForMediaItem } from '@material-requests/hooks/get-material-requests-for-media-item';
 import { MaterialRequestsService } from '@material-requests/services';
@@ -36,7 +35,7 @@ import { validateForm } from '@shared/helpers/validate-form';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setMaterialRequestCount, setShowMaterialRequestCenter } from '@shared/store/ui';
-import type { AvoUserCommonUser } from '@viaa/avo2-types';
+import type { AvoUserCommonUser, HetArchiefIeObjectFile } from '@viaa/avo2-types';
 import { MATERIAL_REQUEST_REUSE_FORM_VALIDATION_SCHEMA } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade.const';
 import RadioButtonAccordion from '@visitor-space/components/RadioButtonAccordion/RadioButtonAccordion';
 import type { RadioButtonAccordionOption } from '@visitor-space/components/RadioButtonAccordion/RadioButtonAccordion.types';
@@ -88,7 +87,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 		Partial<Record<MaterialRequestReuseFormKey, string | undefined>>
 	>({});
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
-	const [playableFile, setPlayableFile] = useState<IeObjectFile | null>(null);
+	const [playableFile, setPlayableFile] = useState<HetArchiefIeObjectFile | null>(null);
 	const [mediaDuration, setMediaDuration] = useState<number | null>(null);
 	const [isRequestSaved, setIsRequestSaved] = useState(false);
 
