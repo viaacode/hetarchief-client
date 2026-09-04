@@ -1,23 +1,88 @@
 @use "src/styles/abstracts" as abstracts;
 
+$autocomplete-filter-form-padding: 3.2rem;
+
 .c-autocomplete-filter-form {
+	// The body already carries 0.8rem, and the design puts 2.4rem under the title
+	> :first-child {
+		margin-top: abstracts.$spacer-sm;
+	}
+
+	// The selection sits on a tinted block that runs to both edges of the modal
 	&__selection {
+		background-color: abstracts.$platinum;
 		margin-bottom: abstracts.$spacer-md;
+		padding: abstracts.$spacer-md $autocomplete-filter-form-padding;
 	}
 
 	&__selection-label {
 		color: abstracts.$neutral;
-		font-size: abstracts.$font-size-sm;
+		font-size: abstracts.$font-size-base;
+		line-height: 2.4rem;
 		margin-bottom: abstracts.$spacer-xs;
 	}
 
-	// A value can be as long as a full newspaper title, so a pill wraps instead of overflowing
 	:global(.c-tag-list) {
 		flex-wrap: wrap;
+		gap: abstracts.$spacer-xs;
 	}
 
+	// Without this the pill grows past the modal instead of cutting the value off
+	:global(.c-tag-list__item) {
+		max-width: 100%;
+		min-width: 0;
+	}
+
+	:global(.c-tag) {
+		background-color: abstracts.$silver;
+		border-radius: 2.5rem;
+		gap: 0.4rem;
+		margin: 0;
+		max-width: 100%;
+		padding: 0.6rem 1.2rem;
+	}
+
+	// A value can be as long as a full newspaper title, so the pill cuts it off
 	:global(.c-tag__label) {
-		overflow-wrap: anywhere;
-		white-space: normal;
+		@include abstracts.text-ellipsis;
+
+		min-width: 0;
+
+		font-size: abstracts.$font-size-sm;
+		font-weight: abstracts.$font-weight-bold;
+		line-height: 2rem;
+	}
+
+	&__select {
+		padding: 0 $autocomplete-filter-form-padding;
+
+		// The design gives this field the same shape as the search bar of the other filters
+		:global(.c-react-select__control) {
+			background-color: abstracts.$platinum;
+			border-color: abstracts.$platinum;
+			border-radius: 2.4rem;
+			min-height: 4.8rem;
+			padding: 0 abstracts.$spacer-sm;
+		}
+
+		:global(.c-react-select__menu) {
+			margin-top: 0.4rem;
+		}
+
+		:global(.c-react-select__menu-list) {
+			@include abstracts.styled-scrollbar;
+
+			padding: 0.4rem;
+		}
+
+		:global(.c-react-select__option) {
+			padding: 0.6rem 1.2rem;
+		}
+	}
+
+	&__indicators {
+		align-items: center;
+		display: flex;
+		gap: abstracts.$spacer-xs;
 	}
 }

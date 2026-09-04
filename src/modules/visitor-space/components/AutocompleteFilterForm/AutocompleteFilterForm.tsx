@@ -1,5 +1,5 @@
 import { IeObjectsService } from '@ie-objects/services';
-import { type SelectOption, TagList } from '@meemoo/react-components';
+import { Button, type SelectOption, TagList } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -90,7 +90,7 @@ export const AutocompleteFilterForm: FC<GenericFilterFormProps> = ({
 
 	return (
 		<>
-			<div className={clsx(className, styles['c-autocomplete-filter-form'], 'u-px-32 u-px-20-md')}>
+			<div className={clsx(className, styles['c-autocomplete-filter-form'])}>
 				{selectedValues.length > 0 && (
 					<div className={styles['c-autocomplete-filter-form__selection']}>
 						<p className={styles['c-autocomplete-filter-form__selection-label']}>
@@ -102,7 +102,13 @@ export const AutocompleteFilterForm: FC<GenericFilterFormProps> = ({
 							className="u-mb-0"
 							closeIcon={<Icon name={IconNamesLight.Times} aria-hidden />}
 							onTagClosed={(id) => setSelectedValues(without(selectedValues, id as string))}
-							tags={selectedValues.map((value) => ({ label: value, id: value, value }))}
+							// A value can be as long as a full newspaper title, so the pill cuts it off and
+							// hands the whole value to the browser tooltip
+							tags={selectedValues.map((value) => ({
+								label: <span title={value}>{value}</span>,
+								id: value,
+								value,
+							}))}
 							variants="large"
 						/>
 					</div>
@@ -110,8 +116,26 @@ export const AutocompleteFilterForm: FC<GenericFilterFormProps> = ({
 
 				<AsyncSelect<SelectOption>
 					aria-label={filter.label}
-					className="c-react-select"
+					className={clsx('c-react-select', styles['c-autocomplete-filter-form__select'])}
 					classNamePrefix="c-react-select"
+					components={{
+						IndicatorSeparator: () => null,
+						DropdownIndicator: () => (
+							<span className={styles['c-autocomplete-filter-form__indicators']}>
+								{inputValue && (
+									<Button
+										variants={['text', 'icon', 'xxs']}
+										icon={<Icon name={IconNamesLight.Times} aria-hidden />}
+										ariaLabel={tText(
+											'modules/visitor-space/components/autocomplete-filter-form/autocomplete-filter-form___wissen'
+										)}
+										onClick={() => setInputValue('')}
+									/>
+								)}
+								<Icon name={IconNamesLight.Search} aria-hidden />
+							</span>
+						),
+					}}
 					inputId={`autocomplete-filter-form-${filter.id}`}
 					isDisabled={disabled}
 					inputValue={inputValue}
