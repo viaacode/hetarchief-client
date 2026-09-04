@@ -129,7 +129,7 @@ const mapValuesToOneTag = (
 		{
 			label: (
 				<span>
-					{`${filterName}${operatorLabel ? ` ${operatorLabel}` : ''}: `}
+					{`${filterName}${operatorLabel ? ` ${operatorLabel.toLowerCase()}` : ''}: `}
 					<strong>
 						{shown.join(', ')}
 						{remaining > 0 ? `, +${remaining}` : ''}

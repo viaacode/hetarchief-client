@@ -28,9 +28,32 @@
 			word-break: break-word;
 
 			@media (min-width: abstracts.$breakpoint-md) {
-				margin: abstracts.$spacer-xxs abstracts.$spacer-sm abstracts.$spacer-xxs 0;
+				margin: abstracts.$spacer-xxs abstracts.$spacer-xs abstracts.$spacer-xxs 0;
 			}
 		}
+	}
+
+	// The active filter pills of the search bar. See the "Redesign pills" section of the FA
+	// of ARC-3806.
+	.c-tag {
+		background-color: abstracts.$teal-40;
+		border-radius: 2.5rem;
+		gap: 0.4rem;
+		padding: 0.6rem 1.2rem;
+	}
+
+	.c-tag__label {
+		font-size: abstracts.$font-size-sm;
+		font-weight: abstracts.$font-weight-medium;
+		line-height: 2rem;
+	}
+
+	// The icon box is what gives the pill its height in the design
+	.c-tag__close {
+		font-size: abstracts.$font-size-base;
+		height: 2.4rem;
+		margin: 0;
+		padding: 0;
 	}
 
 	.c-tags-input__indicator {
