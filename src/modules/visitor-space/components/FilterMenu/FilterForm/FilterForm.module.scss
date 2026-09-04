@@ -14,8 +14,9 @@
 .c-filter-form__header {
 	padding: $spacer-sm 2rem;
 
+	// The body carries the space under the title, so the header adds none of its own
 	@media (min-width: $breakpoint-md) {
-		padding: 0 $spacer-lg $spacer-1xl;
+		padding: 0 $spacer-lg;
 	}
 }
 
