@@ -160,7 +160,7 @@ describe('Utils', () => {
 			]);
 
 			expect(tags).toHaveLength(1);
-			expect(asText(tags[0].label)).toEqual('Genre is: concert, dans +1');
+			expect(asText(tags[0].label)).toEqual('Genre is: concert, dans, +1');
 		});
 
 		it('leaves "is" off a checkbox list pill', () => {
@@ -208,7 +208,7 @@ describe('Utils', () => {
 			);
 
 			expect(tags).toHaveLength(1);
-			expect(asText(tags[0].label)).toEqual('Titel bevat: Luc Appermont, Magriet Hermans +2');
+			expect(asText(tags[0].label)).toEqual('Titel bevat: Luc Appermont, Magriet Hermans, +2');
 		});
 
 		it('keeps "bevat" and "bevat niet" in pills of their own', () => {
