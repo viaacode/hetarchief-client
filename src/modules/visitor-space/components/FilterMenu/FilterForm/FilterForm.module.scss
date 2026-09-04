@@ -57,10 +57,13 @@
 		overflow: visible;
 	}
 
+	// The scrolling part of a filter modal: the checkbox list, the text conditions
 	:global(.c-filter-form__body--scrollable) {
+		@include styled-scrollbar;
+
 		overflow: auto;
-		margin-top: $spacer-lg !important;
-		margin-bottom: $spacer-lg !important;
+		margin-top: $spacer-md !important;
+		margin-bottom: 0 !important;
 	}
 }
 

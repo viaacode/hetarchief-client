@@ -17,7 +17,6 @@ $text-filter-form-divider: rgb(0 0 0 / 12%);
 	// The conditions and the add CTA sit on one tinted block that runs to both edges of the modal
 	&__conditions {
 		background-color: abstracts.$platinum;
-		margin-bottom: 0 !important;
 	}
 
 	&__condition {

@@ -1,11 +1,10 @@
 @use "src/styles/abstracts" as abstracts;
 
-$scrollbar-width: 1.2rem;
-$scrollbar-thumb-width: 0.8rem;
-
 // The fly-out sits centred in the window, so this cap keeps it clear of both edges and scrolls
 // the rest. See the "Redesign van geavanceerde filters" section of the FA of ARC-3806.
 .c-advanced-filter-flyout {
+	@include abstracts.styled-scrollbar;
+
 	display: flex;
 	flex-direction: column;
 	gap: 2rem;
@@ -14,26 +13,10 @@ $scrollbar-thumb-width: 0.8rem;
 	padding: 2.4rem 1.6rem 2.4rem 2.4rem;
 	overflow-y: auto;
 	list-style: none;
-	scrollbar-color: abstracts.$zinc abstracts.$silver;
-	scrollbar-width: thin;
-
-	&::-webkit-scrollbar {
-		width: $scrollbar-width;
-	}
-
-	&::-webkit-scrollbar-track {
-		background-color: abstracts.$silver;
-		border-radius: 0.8rem;
-	}
-
-	&::-webkit-scrollbar-thumb {
-		background-color: abstracts.$zinc;
-		background-clip: content-box;
-		border: calc(($scrollbar-width - $scrollbar-thumb-width) / 2) solid transparent;
-		border-radius: 2.4rem;
-	}
 
 	&__filter {
+		@include abstracts.focus-outline;
+
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
