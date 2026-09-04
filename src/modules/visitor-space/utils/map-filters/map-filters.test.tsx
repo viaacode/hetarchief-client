@@ -1,5 +1,6 @@
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { Locale } from '@shared/utils/i18n';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { FilterMenuType } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { renderToStaticMarkup } from 'react-dom/server';
@@ -159,7 +160,29 @@ describe('Utils', () => {
 			]);
 
 			expect(tags).toHaveLength(1);
-			expect(asText(tags[0].label)).toEqual('Genre is: concert, dans, +1');
+			expect(asText(tags[0].label)).toEqual('Genre is: concert, dans +1');
+		});
+
+		it('leaves "is" off a checkbox list pill', () => {
+			const languageFilter = filter(
+				SearchFilterId.Language,
+				FilterModalType.CheckboxList,
+				'Taal',
+				IeObjectsSearchFilterField.LANGUAGE
+			);
+			const tags = mapFiltersToTags({ [SearchFilterId.Language]: ['Nederlands'] }, [
+				languageFilter,
+			]);
+
+			expect(asText(tags[0].label)).toEqual('Taal: Nederlands');
+		});
+
+		it('sorts the values in the language of the ui', () => {
+			const tags = mapFiltersToTags({ [SearchFilterId.Genre]: ['Zoo', 'Émile'] }, [GENRE_FILTER], {
+				locale: Locale.nl,
+			});
+
+			expect(asText(tags[0].label)).toEqual('Genre is: Émile, Zoo');
 		});
 
 		it('shows the label half of a value that carries its own label', () => {
@@ -185,7 +208,7 @@ describe('Utils', () => {
 			);
 
 			expect(tags).toHaveLength(1);
-			expect(asText(tags[0].label)).toEqual('Titel bevat: Luc Appermont, Magriet Hermans, +2');
+			expect(asText(tags[0].label)).toEqual('Titel bevat: Luc Appermont, Magriet Hermans +2');
 		});
 
 		it('keeps "bevat" and "bevat niet" in pills of their own', () => {

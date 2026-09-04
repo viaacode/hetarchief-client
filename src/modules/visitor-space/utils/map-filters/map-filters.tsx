@@ -4,10 +4,11 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import type { IeObjectsSearchFilter } from '@shared/types/ie-objects';
 import { formatDate } from '@shared/utils/dates';
+import type { Locale } from '@shared/utils/i18n';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import type { SearchPageQueryParams } from '@visitor-space/const';
 import { format, parseISO } from 'date-fns';
-import { isString, sortBy } from 'es-toolkit/compat';
+import { isString } from 'es-toolkit/compat';
 
 import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
 import { getMetadataSearchFilters } from '../../const/advanced-filters.consts';
@@ -23,6 +24,7 @@ import {
 	type TextFilterCondition,
 } from '../../types';
 import { getAdvancedProperties, getOperators, getRegularProperties } from '../advanced-filters';
+import { compareLabels } from '../compare-labels';
 
 /** A pill shows at most this many values, then a counter for the rest. See the FA of ARC-3806. */
 export const MAX_VALUES_PER_TAG = 2;
@@ -97,6 +99,8 @@ export interface MapFiltersToTagsOptions {
 	 * pill of the theme filter is labelled in whichever language the visitor is using. See ARC-3797
 	 */
 	themeLabelsBySlug?: Record<string, string>;
+	/** The language the pill values are sorted in. Defaults to Dutch. */
+	locale?: Locale;
 }
 
 /**
@@ -106,15 +110,16 @@ export interface MapFiltersToTagsOptions {
 const mapValuesToOneTag = (
 	values: string[],
 	filterName: string,
-	operatorLabel: string,
+	operatorLabel: string | undefined,
 	key: string,
+	locale?: Locale,
 	op?: string
 ): TagIdentity[] => {
 	if (values.length === 0) {
 		return [];
 	}
 
-	const labels = sortBy(values.map(valueToLabel), (label) => label.toLowerCase());
+	const labels = values.map(valueToLabel).sort(compareLabels(locale));
 	const shown = labels.slice(0, MAX_VALUES_PER_TAG);
 	const remaining = labels.length - shown.length;
 	// One pill per filter, so the operator keeps two pills apart when a text filter mixes them
@@ -124,10 +129,10 @@ const mapValuesToOneTag = (
 		{
 			label: (
 				<span>
-					{`${filterName} ${operatorLabel}: `}
+					{`${filterName}${operatorLabel ? ` ${operatorLabel}` : ''}: `}
 					<strong>
 						{shown.join(', ')}
-						{remaining > 0 ? `, +${remaining}` : ''}
+						{remaining > 0 ? ` +${remaining}` : ''}
 					</strong>
 				</span>
 			),
@@ -222,7 +227,8 @@ const getTextFilterOperatorLabel = (op: Operator): string =>
 /** A text filter gets one pill per operator, so "bevat" and "bevat niet" stay apart. */
 const mapTextFilterToTags = (
 	conditions: TextFilterCondition[],
-	filter: FilterMenuFilterOption
+	filter: FilterMenuFilterOption,
+	locale?: Locale
 ): TagIdentity[] =>
 	[Operator.CONTAINS, Operator.CONTAINS_NOT].flatMap((op) =>
 		mapValuesToOneTag(
@@ -230,6 +236,7 @@ const mapTextFilterToTags = (
 			filter.label,
 			getTextFilterOperatorLabel(op),
 			filter.id,
+			locale,
 			op
 		)
 	);
@@ -247,7 +254,7 @@ const mapFilterToTags = (
 
 	switch (filter.modalType) {
 		case FilterModalType.Text:
-			return mapTextFilterToTags(value as TextFilterCondition[], filter);
+			return mapTextFilterToTags(value as TextFilterCondition[], filter, options.locale);
 
 		case FilterModalType.SearchableCheckbox:
 		case FilterModalType.CheckboxList:
@@ -261,8 +268,12 @@ const mapFilterToTags = (
 					? values.map((slug) => options.themeLabelsBySlug?.[slug] || slug)
 					: values,
 				filter.label,
-				tText('modules/visitor-space/utils/map-filters/map-filters___is'),
-				filter.id
+				// Only the searchable checkbox and the autocomplete filters carry "is". ARC-3806
+				filter.modalType === FilterModalType.CheckboxList
+					? undefined
+					: tText('modules/visitor-space/utils/map-filters/map-filters___is'),
+				filter.id,
+				options.locale
 			);
 		}
 

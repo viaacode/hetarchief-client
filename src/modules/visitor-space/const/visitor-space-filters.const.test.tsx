@@ -1,4 +1,9 @@
 import { IeObjectsSearchFilterField, SearchPageMediaType } from '@shared/types/ie-objects';
+import { Locale } from '@shared/utils/i18n';
+import {
+	type FilterMenuFilterOption,
+	FilterMenuType,
+} from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { describe, expect, it, vi } from 'vitest';
 
 import { FilterModalType, SearchFilterId } from '../types';
@@ -178,6 +183,28 @@ describe('getAdvancedFlyoutFilters', () => {
 		const labels = flyoutFilters.map((filter) => filter.label.toLowerCase());
 
 		expect(labels).toEqual([...labels].sort());
+	});
+
+	it('puts an accented label where the language of the ui puts it', () => {
+		const modalFilter = (id: SearchFilterId, label: string): FilterMenuFilterOption => ({
+			id,
+			label,
+			type: FilterMenuType.Modal,
+			modalType: FilterModalType.Text,
+			inMainPanelByDefault: false,
+			tabs: [SearchPageMediaType.All],
+		});
+		const filters = [
+			modalFilter(SearchFilterId.Genre, 'Zoo'),
+			modalFilter(SearchFilterId.Title, 'Émile'),
+			modalFilter(SearchFilterId.Cast, 'Frank'),
+		];
+
+		expect(getAdvancedFlyoutFilters(filters, Locale.nl).map((filter) => filter.label)).toEqual([
+			'Émile',
+			'Frank',
+			'Zoo',
+		]);
 	});
 
 	it('holds the filters that are already in the main panel too', () => {

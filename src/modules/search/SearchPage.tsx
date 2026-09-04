@@ -412,8 +412,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	);
 
 	const flyoutFilters = useMemo(
-		() => getAdvancedFlyoutFilters(availableFilters),
-		[availableFilters]
+		() => getAdvancedFlyoutFilters(availableFilters, locale),
+		[availableFilters, locale]
 	);
 
 	const filters = useMemo(
@@ -647,8 +647,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
 	const showVisitorSpacesDropdown = isUserWithAccount && accessibleVisitorSpaceRequests.length > 0;
 	const activeFilters = useMemo(
-		() => mapFiltersToTags(query, availableFilters, { themeLabelsBySlug }),
-		[query, availableFilters, themeLabelsBySlug]
+		() => mapFiltersToTags(query, availableFilters, { themeLabelsBySlug, locale }),
+		[query, availableFilters, themeLabelsBySlug, locale]
 	);
 
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {

@@ -3,6 +3,7 @@ import { Navigation } from '@navigation/components/Navigation/Navigation';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { AdvancedFilterFlyout } from '@visitor-space/components/AdvancedFilterFlyout/AdvancedFilterFlyout';
 import { useGetThemeFilterOptions } from '@visitor-space/hooks/use-get-theme-filter-options';
@@ -43,6 +44,7 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	const [isSortActive, setIsSortActive] = useState(false);
 	// Only theme slugs live in the url, the names shown in the pills come from this lookup
 	const { labelsBySlug: themeLabelsBySlug } = useGetThemeFilterOptions();
+	const locale = useLocale();
 
 	// re-render form to ensure correct state
 	// e.g. open -> reset -> close -> open === values in url, in form
@@ -62,7 +64,9 @@ const FilterMenuMobile: FC<FilterMenuMobileProps> = ({
 	const goBackToInitial = activeFilter
 		? () => onFilterClick(activeFilter)
 		: () => setIsSortActive(false);
-	const tags = filterValues ? mapFiltersToTags(filterValues, filters, { themeLabelsBySlug }) : [];
+	const tags = filterValues
+		? mapFiltersToTags(filterValues, filters, { themeLabelsBySlug, locale })
+		: [];
 
 	const handleSortClick = (key: SearchSortProp, order?: AvoSearchOrderDirection) => {
 		onSortClick?.(key, order);

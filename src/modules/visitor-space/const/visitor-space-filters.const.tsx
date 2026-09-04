@@ -3,6 +3,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import getConfig from '@shared/config/public-runtime-config';
 import { tText } from '@shared/helpers/translate';
 import { IeObjectsSearchFilterField, SearchPageMediaType } from '@shared/types/ie-objects';
+import type { Locale } from '@shared/utils/i18n';
 import { ConsultableMediaFilterForm } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm';
 import { ConsultableOnlyOnLocationFilterForm } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm';
 import {
@@ -19,7 +20,8 @@ import {
 	SearchFilterId,
 } from '@visitor-space/types';
 import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
-import { isNil, sortBy } from 'es-toolkit/compat';
+import { compareLabels } from '@visitor-space/utils/compare-labels';
+import { isNil } from 'es-toolkit/compat';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -366,14 +368,14 @@ export const getAvailableSearchPageFilters = (
  * main panel. It does not hold the inline checkboxes, nor the fly-out entry itself.
  */
 export const getAdvancedFlyoutFilters = (
-	availableFilters: FilterMenuFilterOption[]
+	availableFilters: FilterMenuFilterOption[],
+	locale?: Locale
 ): FilterMenuFilterOption[] =>
-	sortBy(
-		availableFilters.filter(
+	availableFilters
+		.filter(
 			(filter) => filter.type === FilterMenuType.Modal && filter.id !== SearchFilterId.Advanced
-		),
-		(filter) => filter.label.toLowerCase()
-	);
+		)
+		.sort((filterA, filterB) => compareLabels(locale)(filterA.label, filterB.label));
 
 /**
  * The filters the panel shows, in the order the design puts them.
