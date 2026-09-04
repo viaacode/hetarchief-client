@@ -2,10 +2,7 @@ import {
 	MaterialRequestDurationType,
 	type MaterialRequestReuseForm,
 } from '@material-requests/types';
-import {
-	formatDurationHoursMinutesSeconds,
-	formatDurationMinutesSeconds,
-} from '@meemoo/react-components';
+import { formatDuration } from '@meemoo/react-components';
 import { tText } from '@shared/helpers/translate';
 import { isNil } from 'es-toolkit/compat';
 
@@ -15,10 +12,7 @@ const formatTimeStamp = (value: number | undefined) => {
 		return '';
 	}
 
-	if (value < 60 * 60) {
-		return formatDurationMinutesSeconds(value);
-	}
-	return formatDurationHoursMinutesSeconds(value);
+	return formatDuration(value, { includeHours: 'auto' });
 };
 
 export function formatCuePointsMaterialRequest(
