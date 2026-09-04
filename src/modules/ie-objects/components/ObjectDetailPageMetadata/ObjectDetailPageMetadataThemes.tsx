@@ -1,9 +1,9 @@
 import Metadata from '@ie-objects/components/Metadata/Metadata';
-import type { IeObjectTheme } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { Locale } from '@shared/utils/i18n';
+import type { HetArchiefIeObjectTheme } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
@@ -12,7 +12,7 @@ import styles from './ObjectDetailPageMetadataThemes.module.scss';
 
 export interface ObjectDetailPageMetadataThemesProps {
 	title: ReactNode;
-	themes: IeObjectTheme[];
+	themes: HetArchiefIeObjectTheme[];
 	locale: Locale;
 	className?: string;
 }
@@ -29,7 +29,7 @@ export function ObjectDetailPageMetadataThemes({
 	locale,
 	className,
 }: ObjectDetailPageMetadataThemesProps) {
-	const renderThemeName = (theme: IeObjectTheme) => {
+	const renderThemeName = (theme: HetArchiefIeObjectTheme) => {
 		const name = locale === Locale.en ? theme.nameEn : theme.nameNl;
 		const path = locale === Locale.en ? theme.contentPagePathEn : theme.contentPagePathNl;
 

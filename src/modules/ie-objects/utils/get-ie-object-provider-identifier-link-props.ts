@@ -1,4 +1,4 @@
-import type { IeObject } from '@ie-objects/ie-objects.types';
+import type { HetArchiefIeObject } from '@viaa/avo2-types';
 
 export interface ProviderIdentifierLinkProps {
 	label: string;
@@ -6,7 +6,7 @@ export interface ProviderIdentifierLinkProps {
 }
 
 export const getIeObjectProviderIdentifierLinkProps = (
-	mediaInfo: Pick<IeObject, 'meemooLocalId' | 'providerPurl'>,
+	mediaInfo: Pick<HetArchiefIeObject, 'meemooLocalId' | 'providerPurl'>,
 	isKiosk: boolean
 ): ProviderIdentifierLinkProps | null => {
 	if (!mediaInfo.meemooLocalId) {

@@ -55,5 +55,11 @@ describe('MediaCard consts', () => {
 				IconNamesLight.NoNewspaper
 			);
 		});
+
+		it('should return null when there is no object type to draw an icon for', () => {
+			expect(getIconFromObjectType(undefined, true)).toBeNull();
+			expect(getIconFromObjectType(undefined, false)).toBeNull();
+			expect(getIconFromObjectType(null, true)).toBeNull();
+		});
 	});
 });

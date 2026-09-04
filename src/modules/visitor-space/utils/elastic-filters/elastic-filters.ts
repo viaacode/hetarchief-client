@@ -1,4 +1,3 @@
-import { IeObjectLicense } from '@ie-objects/ie-objects.types';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import {
 	type IeObjectsSearchFilter,
@@ -7,6 +6,7 @@ import {
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
 import type { VisitRequest } from '@shared/types/visit-request';
+import { HetArchiefIeObjectLicense } from '@viaa/avo2-types';
 import { compact, isString } from 'es-toolkit/compat';
 
 import type { SearchPageQueryParams } from '../../const';
@@ -14,8 +14,8 @@ import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '../../types';
 import { mapAdvancedToElastic } from '../map-filters';
 
 export const VISITOR_SPACE_LICENSES = [
-	IeObjectLicense.BEZOEKERTOOL_METADATA_ALL,
-	IeObjectLicense.BEZOEKERTOOL_CONTENT,
+	HetArchiefIeObjectLicense.BEZOEKERTOOL_METADATA_ALL,
+	HetArchiefIeObjectLicense.BEZOEKERTOOL_CONTENT,
 ];
 
 export const mapMaintainerToElastic = (

@@ -6,7 +6,7 @@ import {
 	type UseQueryResult,
 	useQuery,
 } from '@tanstack/react-query';
-import type { IeObject } from './../ie-objects.types';
+import type { HetArchiefIeObject } from '@viaa/avo2-types';
 import { IeObjectsService } from './../services';
 
 /**
@@ -22,10 +22,10 @@ export const useGetIeObjectBySchemaIdentifier = (
 		enabled?: boolean;
 		placeholderData?: typeof keepPreviousData;
 	} = {}
-): UseQueryResult<IeObject | null> => {
+): UseQueryResult<HetArchiefIeObject | null> => {
 	return useQuery({
 		queryKey: [QUERY_KEYS.getIeObjectsInfo, schemaIdentifier],
-		queryFn: async (): Promise<IeObject | null> => {
+		queryFn: async (): Promise<HetArchiefIeObject | null> => {
 			let newSchemaIdentifier: string;
 			if (schemaIdentifier.length > MIN_LENGTH_SCHEMA_IDENTIFIER_V2) {
 				// This is an old schema identifier (v2), we need to convert it to a new one (v3)
@@ -80,7 +80,7 @@ export function makeServerSideRequestGetIeObjectInfo(
 export function setServerSideIeObjectInfo(
 	queryClient: QueryClient,
 	schemaIdentifier: string,
-	ieObject: IeObject
+	ieObject: HetArchiefIeObject
 ): void {
 	queryClient.setQueryData([QUERY_KEYS.getIeObjectsInfo, schemaIdentifier], ieObject);
 }

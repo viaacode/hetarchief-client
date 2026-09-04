@@ -1,9 +1,11 @@
-import type { MentionHighlight } from '@ie-objects/ie-objects.types';
+import type { HetArchiefMentionHighlight } from '@viaa/avo2-types';
 import { isNil, minBy } from 'es-toolkit/compat';
 
 const SAME_LINE_Y_THRESHOLD = 5;
 
-export function getFirstMentionHighlight(highlights: MentionHighlight[]): MentionHighlight | null {
+export function getFirstMentionHighlight(
+	highlights: HetArchiefMentionHighlight[]
+): HetArchiefMentionHighlight | null {
 	if (highlights.length === 0) {
 		return null;
 	}

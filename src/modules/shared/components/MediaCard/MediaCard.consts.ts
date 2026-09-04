@@ -4,10 +4,19 @@ import { tText } from '@shared/helpers/translate';
 import { type IeObjectType, SimpleIeObjectType } from '@shared/types/ie-objects';
 import type { IconName } from '../Icon';
 
+/**
+ * The type icon for an ie-object: the plain one when the essence is within reach, the
+ * struck-through ("no-…") one when it is not. Null when there is no type to draw an icon for, so
+ * callers can hand the result straight to an `icon` prop without guarding first.
+ */
 export function getIconFromObjectType(
-	type: IeObjectType | undefined,
+	type: IeObjectType | undefined | null,
 	accessible: boolean
-): IconName {
+): IconName | null {
+	if (!type) {
+		return null;
+	}
+
 	const simpleType = mapDcTermsFormatToSimpleType(type);
 	if (accessible) {
 		return {

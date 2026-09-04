@@ -7,8 +7,20 @@ $component: "c-related-object";
 	overflow: hidden;
 
 	&__image,
-	&__placeholder {
+	&__placeholder,
+	&__type-icon {
 		width: 12rem;
+	}
+
+	// Stands in for the image of an object the user may see but that has none
+	&__type-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		background-color: $silver;
+		color: $neutral;
+		font-size: $font-size-2xl;
 	}
 
 	:global(.c-card__header-wrapper) {

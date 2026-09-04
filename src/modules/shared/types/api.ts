@@ -1,5 +1,6 @@
-import type { IeObject, IeObjectSearchAggregations } from '@ie-objects/ie-objects.types';
+import type { IeObjectSearchAggregations } from '@ie-objects/ie-objects.types';
 import type { IPagination } from '@studiohyperdrive/pagination';
+import type { HetArchiefIeObject } from '@viaa/avo2-types';
 
 interface ElasticsearchAggregations {
 	aggregations: IeObjectSearchAggregations | undefined;
@@ -17,6 +18,6 @@ interface IeObjectsSearchTerms {
 	searchTermsParsedSuccessfully: boolean;
 }
 
-export type GetIeObjectsResponse = IPagination<IeObject & { related_count?: number }> &
+export type GetIeObjectsResponse = IPagination<HetArchiefIeObject & { related_count?: number }> &
 	ElasticsearchAggregations &
 	IeObjectsSearchTerms;

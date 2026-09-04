@@ -1,9 +1,9 @@
 import { type NamesListProps, ROW_HEIGHT } from '@ie-objects/components/NamesList/NamesList.types';
-import type { Mention } from '@ie-objects/ie-objects.types';
 import { Button, TextInput } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
+import type { HetArchiefMention } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import { compact, sortBy } from 'es-toolkit/compat';
 import React, {
@@ -26,7 +26,7 @@ import { isServerSideRendering } from '@shared/utils/is-browser';
 export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMention }) => {
 	const [searchTermsTemp, setSearchTermsTemp] = useState('');
 	const [searchTerms, setSearchTerms] = useState('');
-	const [filteredNames, setFilteredNames] = useState<Mention[]>(mentions);
+	const [filteredNames, setFilteredNames] = useState<HetArchiefMention[]>(mentions);
 	const ref = useRef<HTMLDivElement | null>(null);
 
 	const handleOnChange = (evt: ChangeEvent<HTMLInputElement>): void => {
@@ -67,7 +67,7 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 	}, [searchNames]);
 
 	const renderMention = useCallback(
-		(mention: Mention, key: string, style: CSSProperties) => {
+		(mention: HetArchiefMention, key: string, style: CSSProperties) => {
 			const firstHighlight = mention.highlights?.[0];
 			return (
 				<div key={key} className={styles['c-names-list__person']} style={style}>

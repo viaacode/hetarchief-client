@@ -1,5 +1,5 @@
-import { type IeObject, IeObjectLicense } from '@ie-objects/ie-objects.types';
 import { IeObjectType } from '@shared/types/ie-objects';
+import { type HetArchiefIeObject, HetArchiefIeObjectLicense } from '@viaa/avo2-types';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -14,14 +14,14 @@ const baseIeObject = {
 	dateCreated: '2023-01-02',
 	datePublished: '2023',
 	dctermsFormat: IeObjectType.VIDEO,
-	licenses: [IeObjectLicense.INTRA_CP_CONTENT],
+	licenses: [HetArchiefIeObjectLicense.INTRA_CP_CONTENT],
 	maintainerName: 'VRT',
 	name: 'Het Huis',
 	rightsInfo: {
 		reuseCategoryLabel: 'Auteursrechtelijk beschermd',
 		reuseLabel: '© VRT',
 	},
-} as IeObject;
+} as HetArchiefIeObject;
 
 const nlTranslations: AvRightsAttributionTranslations = {
 	unknownCreator: 'Onbekende maker',

@@ -10,25 +10,38 @@ import styles from './RelatedObject.module.scss';
 import type { RelatedObjectProps } from './RelatedObject.types';
 
 const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
-	const { thumbnail, type } = object;
+	const { thumbnail, type, hasAccessToEssence = true } = object;
 	const rootCls = clsx(className, styles['c-related-object']);
+	const titleIcon = getIconFromObjectType(type, hasAccessToEssence);
 
 	const renderImage = () => {
-		if (thumbnail) {
-			if (typeof thumbnail === 'string') {
-				return (
-					<CardImage
-						className={styles['c-related-object__image']}
-						name={object.title}
-						id={object.id}
-						size="small"
-						image={type === 'audio' ? '/images/waveform--white.svg' : thumbnail}
-					/>
-				);
-			}
-			return thumbnail;
+		if (!hasAccessToEssence) {
+			return <ObjectPlaceholder className={styles['c-related-object__placeholder']} small />;
 		}
-		return <ObjectPlaceholder className={styles['c-related-object__placeholder']} small />;
+
+		if (!thumbnail) {
+			// The essence is within reach, there just is no image for it. Show the plain type icon
+			// rather than the placeholder, which reads as a permission problem.
+			const typeIcon = getIconFromObjectType(type, true);
+			return (
+				<span className={styles['c-related-object__type-icon']} aria-hidden="true">
+					{typeIcon && <Icon name={typeIcon} />}
+				</span>
+			);
+		}
+
+		if (typeof thumbnail === 'string') {
+			return (
+				<CardImage
+					className={styles['c-related-object__image']}
+					name={object.title}
+					id={object.id}
+					size="small"
+					image={type === 'audio' ? '/images/waveform--white.svg' : thumbnail}
+				/>
+			);
+		}
+		return thumbnail;
 	};
 
 	return (
@@ -40,7 +53,7 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 			subtitle={object.subtitle}
 			title={
 				<>
-					{object.type && <Icon name={getIconFromObjectType(object.type, true)} aria-hidden />}
+					{titleIcon && <Icon name={titleIcon} aria-hidden />}
 					<strong>{object.title}</strong>
 				</>
 			}
