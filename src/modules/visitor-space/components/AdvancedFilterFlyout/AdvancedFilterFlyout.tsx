@@ -1,5 +1,5 @@
+import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { FilterButton } from '@visitor-space/components/FilterMenu/FilterButton';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import type { SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
@@ -15,7 +15,7 @@ export interface AdvancedFilterFlyoutProps {
 
 /**
  * The list behind the "Geavanceerd" button. Picking a filter here puts it in the filter panel and
- * opens its modal. See the "Redesign van geavanceerde filters" section of the ARC-3806 FA.
+ * opens its modal. See the "Redesign van geavanceerde filters" section of the FA of ARC-3806.
  */
 export const AdvancedFilterFlyout: FC<AdvancedFilterFlyoutProps> = ({
 	className,
@@ -25,13 +25,18 @@ export const AdvancedFilterFlyout: FC<AdvancedFilterFlyoutProps> = ({
 	<ul className={clsx(className, styles['c-advanced-filter-flyout'])}>
 		{filters.map((filter) => (
 			<li key={`advanced-filter-flyout-${filter.id}`}>
-				<FilterButton
-					icon={IconNamesLight.AngleRight}
-					isActive={false}
-					label={filter.label}
-					variants={['white', 'block']}
+				<button
+					className={styles['c-advanced-filter-flyout__filter']}
+					type="button"
 					onClick={() => onFilterClick(filter.id)}
-				/>
+				>
+					{filter.label}
+					<Icon
+						className={styles['c-advanced-filter-flyout__icon']}
+						name={IconNamesLight.AngleRight}
+						aria-hidden
+					/>
+				</button>
 			</li>
 		))}
 	</ul>
