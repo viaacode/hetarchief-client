@@ -65,8 +65,12 @@ $autocomplete-filter-form-padding: 3.2rem;
 			padding: 0 abstracts.$spacer-sm;
 		}
 
+		// The padding sits on this wrapper, so the menu has to line up with the field itself
 		:global(.c-react-select__menu) {
+			left: $autocomplete-filter-form-padding;
 			margin-top: 0.4rem;
+			right: $autocomplete-filter-form-padding;
+			width: auto;
 		}
 
 		:global(.c-react-select__menu-list) {
@@ -77,6 +81,15 @@ $autocomplete-filter-form-padding: 3.2rem;
 
 		:global(.c-react-select__option) {
 			padding: 0.6rem 1.2rem;
+		}
+
+		:global(.c-react-select__option--is-focused) {
+			background-color: abstracts.$platinum;
+		}
+
+		:global(.c-react-select__option--is-selected) {
+			background-color: abstracts.$silver;
+			color: abstracts.$black;
 		}
 	}
 
