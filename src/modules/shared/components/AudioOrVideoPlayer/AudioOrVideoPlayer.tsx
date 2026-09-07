@@ -142,8 +142,12 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	const [start, end]: [number | null, number | null] = getStartAndEnd();
 	const sharedCustomControls: Partial<FlowPlayerCustomControlsConfig> = {
 		showTitleOverlay: true,
-		peakColorActive: '#00857d',
+		peakColorActive: Color.Jade,
 		peakColorInactive: Color.White,
+		colors: {
+			progressColor: '#00CCA9',
+			accentColor: '#009991',
+		},
 	};
 	const shared: Partial<FlowPlayerProps> = {
 		className,
@@ -156,9 +160,9 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
 		ui: allowFullScreen ? undefined : 1, // 1 = NO_FULLSCREEN
 		plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
-		peakColorBackground: '#303030', // $shade-darker
-		peakColorInactive: '#adadad', // zinc
-		peakColorActive: '#00857d', // $teal
+		peakColorBackground: Color.Ink,
+		peakColorInactive: Color.Zinc,
+		peakColorActive: Color.Jade,
 		peakHeightFactor: 0.6,
 		start,
 		end,
