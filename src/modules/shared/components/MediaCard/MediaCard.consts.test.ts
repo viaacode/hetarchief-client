@@ -56,10 +56,13 @@ describe('MediaCard consts', () => {
 			);
 		});
 
-		it('should return null when there is no object type to draw an icon for', () => {
-			expect(getIconFromObjectType(undefined, true)).toBeNull();
-			expect(getIconFromObjectType(undefined, false)).toBeNull();
-			expect(getIconFromObjectType(null, true)).toBeNull();
+		it('should fall back to the generic file icon when there is no object type', () => {
+			expect(getIconFromObjectType(undefined, true)).toBe(IconNamesLight.File);
+			expect(getIconFromObjectType(null, true)).toBe(IconNamesLight.File);
+		});
+		it('should fall back to the generic no-file icon when there is no object type and no access', () => {
+			expect(getIconFromObjectType(undefined, false)).toBe(IconNamesLight.NoFile);
+			expect(getIconFromObjectType(null, false)).toBe(IconNamesLight.NoFile);
 		});
 	});
 });

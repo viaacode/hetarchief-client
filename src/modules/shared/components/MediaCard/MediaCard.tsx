@@ -41,7 +41,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	duration,
 	keywords,
 	thumbnail,
-	hasAccessToEssence = true,
+	hasAccessToEssence = false,
 	publishedOrCreatedDate,
 	publishedBy,
 	title,

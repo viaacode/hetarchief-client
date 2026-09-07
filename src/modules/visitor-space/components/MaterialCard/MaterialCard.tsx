@@ -18,7 +18,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 	objectSchemaIdentifier,
 	title,
 	thumbnail,
-	hasAccessToEssence = true,
+	hasAccessToEssence = false,
 	hideThumbnail = false,
 	link,
 	type,

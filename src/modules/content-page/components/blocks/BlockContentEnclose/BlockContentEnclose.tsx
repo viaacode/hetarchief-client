@@ -83,6 +83,11 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 			</div>
 			<ul className={styles['c-block-enclosed-content__cards']}>
 				{elementInfos?.map((elementInfo, index) => {
+					// Content pages are not gated behind essence access, so their image always shows. For
+					// ie-objects we only show it when the proxy says so, never by accident.
+					const hasAccessToEssence =
+						elementInfo.type === 'CONTENT_PAGE' ? true : (elementInfo.hasAccessToEssence ?? false);
+
 					return (
 						<li key={getKey(elementInfo, index)}>
 							<MediaCard
@@ -99,13 +104,13 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 								description={elementInfo.description}
 								publishedOrCreatedDate={elementInfo.datePublished || elementInfo.dateCreated}
 								thumbnail={elementInfo.thumbnail}
-								hasAccessToEssence={elementInfo.hasAccessToEssence ?? true}
-								// Only ie-objects carry an objectType -- content pages set it to null, which the
-								// helper answers with no icon at all
-								icon={getIconFromObjectType(
-									elementInfo.objectType,
-									!!elementInfo.hasAccessToEssence
-								)}
+								hasAccessToEssence={hasAccessToEssence}
+								// Only ie-objects carry an objectType; a content page gets no type icon at all
+								icon={
+									elementInfo.objectType
+										? getIconFromObjectType(elementInfo.objectType, hasAccessToEssence)
+										: null
+								}
 							/>
 						</li>
 					);

@@ -20,8 +20,9 @@ export interface MediaCardProps {
 	thumbnail?: string;
 	/**
 	 * Whether the current user may see/play this object's essence, as reported by the proxy.
-	 * Decides between the real image and the struck-through placeholder. Defaults to true so
-	 * cards for things that aren't ie-objects keep rendering their image.
+	 * Decides between the real image and the struck-through placeholder. Defaults to false so an
+	 * omitted prop never opens up a thumbnail by accident; callers rendering something that isn't
+	 * essence-gated (a content page, say) have to say so explicitly.
 	 */
 	hasAccessToEssence?: boolean;
 	publishedOrCreatedDate?: string;

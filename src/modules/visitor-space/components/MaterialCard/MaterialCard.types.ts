@@ -9,7 +9,8 @@ export interface MaterialCardProps {
 	thumbnail?: string;
 	/**
 	 * Whether the current user may see/play this object's essence, as reported by the proxy.
-	 * Defaults to true so cards for things that aren't ie-objects keep rendering their image.
+	 * Defaults to false so an omitted prop never opens up a thumbnail by accident; callers
+	 * rendering something that isn't essence-gated have to say so explicitly.
 	 */
 	hasAccessToEssence?: boolean;
 	hideThumbnail?: boolean;

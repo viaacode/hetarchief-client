@@ -10,7 +10,7 @@ import styles from './RelatedObject.module.scss';
 import type { RelatedObjectProps } from './RelatedObject.types';
 
 const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
-	const { thumbnail, type, hasAccessToEssence = true } = object;
+	const { thumbnail, type, hasAccessToEssence = false } = object;
 	const rootCls = clsx(className, styles['c-related-object']);
 	const titleIcon = getIconFromObjectType(type, hasAccessToEssence);
 
@@ -22,10 +22,9 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 		if (!thumbnail) {
 			// The essence is within reach, there just is no image for it. Show the plain type icon
 			// rather than the placeholder, which reads as a permission problem.
-			const typeIcon = getIconFromObjectType(type, true);
 			return (
 				<span className={styles['c-related-object__type-icon']} aria-hidden="true">
-					{typeIcon && <Icon name={typeIcon} />}
+					<Icon name={getIconFromObjectType(type, true)} />
 				</span>
 			);
 		}
@@ -53,7 +52,7 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 			subtitle={object.subtitle}
 			title={
 				<>
-					{titleIcon && <Icon name={titleIcon} aria-hidden />}
+					<Icon name={titleIcon} aria-hidden />
 					<strong>{object.title}</strong>
 				</>
 			}
