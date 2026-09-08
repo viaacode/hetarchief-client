@@ -1,11 +1,11 @@
 import { FLOWPLAYER_AUDIO_FORMATS } from '@ie-objects/ie-objects.consts';
-import type { IeObjectFile } from '@ie-objects/ie-objects.types';
 import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { soundwave } from '@shared/components/MediaCard/MediaCard.consts';
 import { tText } from '@shared/helpers/translate';
 import { useElementSize } from '@shared/hooks/use-element-size';
+import type { HetArchiefIeObjectFile } from '@viaa/avo2-types';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { type FC, useEffect, useRef, useState } from 'react';
@@ -65,7 +65,7 @@ export const FragmentSlider: FC<FragmentSliderProps> = ({
 		}
 	}, [fragmentsSize, totalFragments]);
 
-	const renderThumbnail = (file: IeObjectFile) => {
+	const renderThumbnail = (file: HetArchiefIeObjectFile) => {
 		let imageUrl: string;
 		if (FLOWPLAYER_AUDIO_FORMATS.includes(file.mimeType)) {
 			imageUrl = soundwave;

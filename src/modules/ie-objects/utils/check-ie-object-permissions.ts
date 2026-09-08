@@ -62,13 +62,9 @@ export function checkIeObjectPermissions({
 	hasPermissionDownloadObject: boolean;
 	isLoggedOutUser: boolean;
 }): {
-	canViewEssence: boolean;
 	canExportMetadata: boolean;
 	canDownloadEssence: boolean;
 } {
-	// You can view the essence only if it’s public–content
-	const canViewEssence = hasLicensePublicContent;
-
 	// You can export metadata if you have export‐permission AND
 	// (it’s public content license OR you’re in the visitor space on a non-newsletter)
 	const canExportMetadata = checkCanExportMetadata(
@@ -92,5 +88,5 @@ export function checkIeObjectPermissions({
 		isLoggedOutUser
 	);
 
-	return { canViewEssence, canExportMetadata, canDownloadEssence };
+	return { canExportMetadata, canDownloadEssence };
 }

@@ -1,7 +1,7 @@
-import type { IeObject } from '@ie-objects/ie-objects.types';
+import type { HetArchiefIeObject } from '@viaa/avo2-types';
 
 export type IeObjectSeo = Pick<
-	IeObject,
+	HetArchiefIeObject,
 	'name' | 'description' | 'thumbnailUrl' | 'maintainerSlug'
 >;
 

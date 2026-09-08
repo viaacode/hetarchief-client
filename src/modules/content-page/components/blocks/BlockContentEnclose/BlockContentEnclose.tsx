@@ -1,6 +1,6 @@
-import { GET_TYPE_TO_ICON_MAP } from '@content-page/components/blocks/BlockContentEnclose/BlockContentEnclose.const';
 import { SmartLink } from '@meemoo/admin-core-ui/client';
 import { Icon, type IconName } from '@shared/components/Icon';
+import { getIconFromObjectType } from '@shared/components/MediaCard';
 import { Button } from '@viaa/avo2-components';
 import { compact } from 'es-toolkit/compat';
 import type { FC } from 'react';
@@ -83,6 +83,11 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 			</div>
 			<ul className={styles['c-block-enclosed-content__cards']}>
 				{elementInfos?.map((elementInfo, index) => {
+					// Content pages are not gated behind essence access, so their image always shows. For
+					// ie-objects we only show it when the proxy says so, never by accident.
+					const hasAccessToEssence =
+						elementInfo.type === 'CONTENT_PAGE' ? true : (elementInfo.hasAccessToEssence ?? false);
+
 					return (
 						<li key={getKey(elementInfo, index)}>
 							<MediaCard
@@ -99,8 +104,12 @@ export const BlockContentEnclose: FC<BlockContentEncloseProps> = ({
 								description={elementInfo.description}
 								publishedOrCreatedDate={elementInfo.datePublished || elementInfo.dateCreated}
 								thumbnail={elementInfo.thumbnail}
+								hasAccessToEssence={hasAccessToEssence}
+								// Only ie-objects carry an objectType; a content page gets no type icon at all
 								icon={
-									elementInfo.objectType ? GET_TYPE_TO_ICON_MAP()[elementInfo.objectType] : null
+									elementInfo.objectType
+										? getIconFromObjectType(elementInfo.objectType, hasAccessToEssence)
+										: null
 								}
 							/>
 						</li>

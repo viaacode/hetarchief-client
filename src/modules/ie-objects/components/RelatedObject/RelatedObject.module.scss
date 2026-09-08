@@ -7,8 +7,22 @@ $component: "c-related-object";
 	overflow: hidden;
 
 	&__image,
-	&__placeholder {
+	&__placeholder,
+	&__type-icon {
 		width: 12rem;
+	}
+
+	// Stands in for the image of an object the user may see but that has none.
+	// $neutral only reaches 3.85:1 on $silver, so the icon uses $black-pale to stay well clear of
+	// the 4.5:1 contrast threshold.
+	&__type-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 100%;
+		background-color: $silver;
+		color: $black-pale;
+		font-size: $font-size-2xl;
 	}
 
 	:global(.c-card__header-wrapper) {

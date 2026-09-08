@@ -67,7 +67,7 @@ export function checkIsComplexReuseFlow(
 	) {
 		return {
 			isComplexReuseFlow: false,
-			isObjectEssenceAccessibleToUser: !!materialRequest?.objectThumbnailUrl,
+			isObjectEssenceAccessibleToUser: !!materialRequest?.objectHasAccessToEssence,
 		};
 	}
 
@@ -78,10 +78,10 @@ export function checkIsComplexReuseFlow(
 		intersection(materialRequest?.objectLicences || [], IE_OBJECT_INTRA_CP_LICENSES).length > 0;
 
 	// If we're in the complex reuse flow and have a representation, then we know the user is allowed to see this object
-	// If we're in the simple flow, we can check the thumbnail url
+	// If we're in the simple flow, the proxy tells us directly whether the essence is accessible
 	const isObjectEssenceAccessibleToUser: boolean = isComplexReuseFlow
 		? !!materialRequest?.objectRepresentationId
-		: !!materialRequest?.objectThumbnailUrl;
+		: !!materialRequest?.objectHasAccessToEssence;
 	return {
 		isComplexReuseFlow,
 		isObjectEssenceAccessibleToUser,
