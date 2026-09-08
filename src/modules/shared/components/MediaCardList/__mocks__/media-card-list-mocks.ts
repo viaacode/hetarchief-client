@@ -3,7 +3,7 @@ import {
 	type IdentifiableMediaCard,
 	type MediaCardProps,
 } from '@shared/components/MediaCard';
-import { IeObjectType } from '@shared/types/ie-objects';
+import { HetArchiefIeObjectType } from '@viaa/avo2-types';
 import { shuffle } from 'es-toolkit/compat';
 import type { MediaCardListProps } from '../MediaCardList.types';
 
@@ -25,7 +25,7 @@ export const mock = async (
 				const start = new Date();
 				const end = new Date(1990, 0, 1);
 
-				const type = shuffle(Object.values(IeObjectType))[0];
+				const type = shuffle(Object.values(HetArchiefIeObjectType))[0];
 				return {
 					// Capitalize title
 					title: `#${i + 1} - ${item.title?.charAt(0).toUpperCase() + item.title?.slice(1)}`,

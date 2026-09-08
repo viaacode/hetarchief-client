@@ -1,9 +1,9 @@
 import { tText } from '@shared/helpers/translate';
-import type { IeObjectType } from '@shared/types/ie-objects';
 import type {
 	HetArchiefIeObjectAccessThrough,
 	HetArchiefIeObjectLicense,
 	HetArchiefIeObjectRepresentation,
+	HetArchiefIeObjectType,
 } from '@viaa/avo2-types';
 
 export interface MaterialRequest {
@@ -17,7 +17,7 @@ export interface MaterialRequest {
 	maintainerLogo: string;
 	maintainerName: string;
 	maintainerSlug: string;
-	objectDctermsFormat: IeObjectType;
+	objectDctermsFormat: HetArchiefIeObjectType;
 	objectId: string;
 	objectSchemaIdentifier: string;
 	objectSchemaName: string;

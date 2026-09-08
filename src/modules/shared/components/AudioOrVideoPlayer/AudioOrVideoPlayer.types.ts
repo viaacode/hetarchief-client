@@ -1,5 +1,8 @@
-import type { IeObjectType } from '@shared/types/ie-objects';
-import type { HetArchiefIeObjectFile, HetArchiefIeObjectRepresentation } from '@viaa/avo2-types';
+import type {
+	HetArchiefIeObjectFile,
+	HetArchiefIeObjectRepresentation,
+	HetArchiefIeObjectType,
+} from '@viaa/avo2-types';
 
 export interface CuePoints {
 	end: number | null;
@@ -14,7 +17,7 @@ export type AudioOrVideoPlayerProps = {
 	onPause: () => void;
 	onMediaReady: (isAvailable: boolean, playableFile: HetArchiefIeObjectFile | null) => void;
 	onMediaDurationLoaded?: (duration: number) => void;
-	dctermsFormat: IeObjectType | null;
+	dctermsFormat: HetArchiefIeObjectType | null;
 	schemaIdentifier: string | undefined;
 	representation: HetArchiefIeObjectRepresentation | null | undefined;
 	maintainerLogo: string | null | undefined;

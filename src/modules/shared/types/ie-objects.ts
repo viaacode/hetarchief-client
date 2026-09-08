@@ -1,21 +1,3 @@
-export enum IeObjectType {
-	VIDEO = 'video',
-	VIDEO_FRAGMENT = 'videofragment',
-	AUDIO = 'audio',
-	AUDIO_FRAGMENT = 'audiofragment',
-	FILM = 'film',
-	NEWSPAPER = 'newspaper',
-	NEWSPAPER_PAGE = 'newspaperpage', // Should never be used, but does seem to pop up some times
-	IMAGE = 'image', // Should never be used, but does seem to pop up some times
-}
-
-export enum SimpleIeObjectType {
-	VIDEO = 'video',
-	AUDIO = 'audio',
-	NEWSPAPER = 'newspaper',
-	IMAGE = 'image',
-}
-
 export enum SearchPageMediaType {
 	All = 'all',
 	Audio = 'audio',

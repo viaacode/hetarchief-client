@@ -1,6 +1,6 @@
 import { ReactSelect, type ReactSelectProps } from '@meemoo/react-components';
 import { tText } from '@shared/helpers/translate';
-import { IeObjectType } from '@shared/types/ie-objects';
+import { HetArchiefIeObjectType } from '@viaa/avo2-types';
 import type { FC } from 'react';
 
 import type { MediaTypeOptions } from '../../types';
@@ -9,15 +9,15 @@ const MediaTypeSelect: FC<ReactSelectProps> = (props) => {
 	const options: MediaTypeOptions = [
 		{
 			label: tText('modules/visitor-space/components/media-type-select/media-type-select___audio'),
-			value: IeObjectType.AUDIO,
+			value: HetArchiefIeObjectType.AUDIO,
 		},
 		{
 			label: tText('modules/visitor-space/components/media-type-select/media-type-select___video'),
-			value: IeObjectType.VIDEO,
+			value: HetArchiefIeObjectType.VIDEO,
 		},
 		{
 			label: tText('modules/visitor-space/components/media-type-select/media-type-select___krant'),
-			value: IeObjectType.NEWSPAPER,
+			value: HetArchiefIeObjectType.NEWSPAPER,
 		},
 	];
 

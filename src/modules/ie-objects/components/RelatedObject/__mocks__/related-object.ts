@@ -1,11 +1,10 @@
-import { IeObjectType } from '@shared/types/ie-objects';
-
+import { HetArchiefIeObjectType } from '@viaa/avo2-types';
 import type { RelatedObjectProps } from '../RelatedObject.types';
 
 export const relatedObjectVideoMock: RelatedObjectProps = {
 	object: {
 		id: 'relatedObjectVideoMock',
-		type: IeObjectType.VIDEO,
+		type: HetArchiefIeObjectType.VIDEO,
 		title: 'GIVE: Gecoördineerd Initiatief voor Vlaamse Erfgoeddigitalisering',
 		subtitle: 'Digitaliseren | Toegang & hergebruik',
 		thumbnail: '/images/bg-newsletter.jpg',

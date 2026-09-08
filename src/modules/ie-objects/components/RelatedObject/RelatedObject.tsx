@@ -1,10 +1,10 @@
+import { isAudioType } from '@meemoo/admin-core-ui/admin';
 import { Card } from '@meemoo/react-components';
 import { CardImage } from '@shared/components/CardImage';
 import { Icon } from '@shared/components/Icon';
 import { getIconFromObjectType } from '@shared/components/MediaCard';
 import clsx from 'clsx';
 import React, { type FC } from 'react';
-
 import { ObjectPlaceholder } from '../ObjectPlaceholder';
 import styles from './RelatedObject.module.scss';
 import type { RelatedObjectProps } from './RelatedObject.types';
@@ -36,7 +36,7 @@ const RelatedObject: FC<RelatedObjectProps> = ({ className, object }) => {
 					name={object.title}
 					id={object.id}
 					size="small"
-					image={type === 'audio' ? '/images/waveform--white.svg' : thumbnail}
+					image={isAudioType(type) ? '/images/waveform--white.svg' : thumbnail}
 				/>
 			);
 		}

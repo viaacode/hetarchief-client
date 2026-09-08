@@ -1,4 +1,4 @@
-import type { IeObjectType } from '@shared/types/ie-objects';
+import type { HetArchiefIeObjectType } from '@viaa/avo2-types';
 
 export interface GetContentBlockEncloseContentReturnType {
 	id?: string;
@@ -11,7 +11,7 @@ export interface GetContentBlockEncloseContentReturnType {
 	datePublished?: string;
 	maintainerName?: string;
 	maintainerSlug?: string;
-	objectType: IeObjectType | null;
+	objectType: HetArchiefIeObjectType | null;
 	identifier?: string;
 	link: string;
 	pid?: string;

@@ -1,5 +1,8 @@
-import { IeObjectType } from '@shared/types/ie-objects';
-import { type HetArchiefIeObject, HetArchiefIeObjectLicense } from '@viaa/avo2-types';
+import {
+	type HetArchiefIeObject,
+	HetArchiefIeObjectLicense,
+	HetArchiefIeObjectType,
+} from '@viaa/avo2-types';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -13,7 +16,7 @@ const baseIeObject = {
 	creator: undefined,
 	dateCreated: '2023-01-02',
 	datePublished: '2023',
-	dctermsFormat: IeObjectType.VIDEO,
+	dctermsFormat: HetArchiefIeObjectType.VIDEO,
 	licenses: [HetArchiefIeObjectLicense.INTRA_CP_CONTENT],
 	maintainerName: 'VRT',
 	name: 'Het Huis',

@@ -53,7 +53,6 @@ import {
 import { getIeObjectProviderIdentifierLinkProps } from '@ie-objects/utils/get-ie-object-provider-identifier-link-props';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import { getIeObjectSourceAttribution } from '@ie-objects/utils/get-ie-object-source-attribution';
-import { isAudioVideoIeObjectType } from '@ie-objects/utils/is-audio-video-ie-object-type';
 import {
 	mapArrayToMetadataData,
 	mapObjectOrArrayToMetadata,
@@ -61,6 +60,7 @@ import {
 	renderKeywordsAsTags,
 } from '@ie-objects/utils/map-metadata';
 import type { TextLine } from '@iiif-viewer/IiifViewer.types';
+import { isAudioVideoType, isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import {
 	Alert,
 	type Breadcrumb,
@@ -93,7 +93,6 @@ import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectBreadcrumbs } from '@shared/store/ui';
-import { IeObjectType } from '@shared/types/ie-objects';
 import { formatDateTime } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
 import { isMobileSize } from '@shared/utils/is-mobile';
@@ -102,6 +101,7 @@ import {
 	HetArchiefIeObjectAccessThrough,
 	HetArchiefIeObjectLicense,
 	type HetArchiefIeObjectRightsInfo,
+	HetArchiefIeObjectType,
 	HetArchiefIsPartOfKey,
 	type HetArchiefMention,
 } from '@viaa/avo2-types';
@@ -157,7 +157,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	 */
 
 	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
-	const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.NEWSPAPER;
+	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
 	const isPublicNewspaper: boolean = useIsPublicNewspaper(mediaInfo);
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const breadcrumbs = useSelector(selectBreadcrumbs);
@@ -165,9 +165,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		mediaInfo?.collectionId,
 		mediaInfo?.iri,
 
-		mediaInfo?.dctermsFormat === IeObjectType.NEWSPAPER &&
-			!!mediaInfo?.collectionId &&
-			!!mediaInfo?.schemaIdentifier
+		isNewspaper && !!mediaInfo?.collectionId && !!mediaInfo?.schemaIdentifier
 	);
 
 	/**
@@ -744,12 +742,12 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		if (!mediaInfo.collectionName) {
 			return null;
 		}
-		if (mediaInfo.dctermsFormat === IeObjectType.NEWSPAPER) {
+		if (isNewspaperType(mediaInfo.dctermsFormat)) {
 			// Use the series filter
 			return (
 				<SearchLinkTag
 					label={mediaInfo.collectionName}
-					link={`${ROUTES_BY_LOCALE[locale].search}?format=${IeObjectType.NEWSPAPER}&${
+					link={`${ROUTES_BY_LOCALE[locale].search}?format=${HetArchiefIeObjectType.NEWSPAPER}&${
 						SearchFilterId.NewspaperSeriesName
 					}=${encodeURIComponent(mediaInfo.collectionName)}`}
 				/>
@@ -878,7 +876,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	const getRightsInfoForAudioVideo = (
 		mediaInfo: HetArchiefIeObject
 	): HetArchiefIeObjectRightsInfo | null => {
-		const isAudioOrVideo = isAudioVideoIeObjectType(mediaInfo.dctermsFormat);
+		const isAudioOrVideo = isAudioVideoType(mediaInfo.dctermsFormat);
 		return isAudioOrVideo ? mediaInfo.rightsInfo || null : null;
 	};
 

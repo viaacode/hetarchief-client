@@ -39,8 +39,6 @@ import {
 import { filterAltoBySearchTerms } from '@ie-objects/utils/filter-alto-by-search-terms';
 import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-terms-in-transcription';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
-import { isAudioVideoIeObjectType } from '@ie-objects/utils/is-audio-video-ie-object-type';
-import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
 import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination';
@@ -55,6 +53,11 @@ import { IiifViewer } from '@iiif-viewer/IiifViewer';
 import type { ImageInfo, ImageInfoWithToken, Rect, TextLine } from '@iiif-viewer/IiifViewer.types';
 import { GET_BLANK_MATERIAL_REQUEST_REUSE_FORM } from '@material-requests/const';
 import type { MaterialRequest } from '@material-requests/types';
+import {
+	isAudioVideoType,
+	isNewspaperType,
+	mapDcTermsFormatToSimpleType,
+} from '@meemoo/admin-core-ui/admin';
 import { Alert, Button, type TabProps, Tabs } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import type { CuePoints } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer.types';
@@ -89,12 +92,10 @@ import {
 import { toastService } from '@shared/services/toast-service';
 import { selectLastSearchParams, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import type { IeObjectsSearchTermObject } from '@shared/types/api';
-import { IeObjectType } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { isServerSideRendering } from '@shared/utils/is-browser';
 import { isTabletPortraitSize } from '@shared/utils/is-mobile';
-import type { HetArchiefRelatedIeObject } from '@viaa/avo2-types';
 import {
 	type HetArchiefIeObject,
 	HetArchiefIeObjectAccessThrough,
@@ -102,6 +103,8 @@ import {
 	HetArchiefIeObjectLicense,
 	type HetArchiefIeObjectPage,
 	type HetArchiefIeObjectRepresentation,
+	type HetArchiefIeObjectType,
+	type HetArchiefRelatedIeObject,
 } from '@viaa/avo2-types';
 import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
@@ -463,7 +466,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		(visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
-	const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.NEWSPAPER;
+	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
 	const showFragmentSlider = allFilesToDisplayInCurrentPage.length > 1 && !isNewspaper;
 	const isMobile = isTabletPortraitSize(windowSize); // mobile and tablet portrait
 	const hasAccessToVisitorSpaceOfObject =
@@ -475,7 +478,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	// ARC-3824: warn the user that publicly available av content was made within a certain context
 	const showContextDisclaimer =
 		!!mediaInfo?.licenses?.includes(HetArchiefIeObjectLicense.PUBLIEK_CONTENT) &&
-		isAudioVideoIeObjectType(mediaInfo?.dctermsFormat) &&
+		isAudioVideoType(mediaInfo?.dctermsFormat) &&
 		!!isFlowPlayerMediaAvailable;
 
 	const showVisitButton =
@@ -1043,7 +1046,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		const date = ieObject.datePublished ?? ieObject.dateCreated ?? null;
 
 		return {
-			type: ieObject.dctermsFormat as IeObjectType,
+			type: ieObject.dctermsFormat as HetArchiefIeObjectType,
 			title: ieObject.name as string,
 			subtitle: isNil(date)
 				? `${ieObject?.maintainerName ?? ''}`
@@ -1272,21 +1275,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			return false;
 		}
 
-		switch (mediaInfo?.dctermsFormat) {
-			case IeObjectType.AUDIO:
-			case IeObjectType.AUDIO_FRAGMENT:
-			case IeObjectType.VIDEO:
-			case IeObjectType.VIDEO_FRAGMENT:
-			case IeObjectType.FILM:
-				return isFlowPlayerMediaAvailable ?? !!getFilesByType(FLOWPLAYER_FORMATS)?.[0]?.storedAt;
-
-			case IeObjectType.NEWSPAPER: {
-				return !!getFilesByType(IMAGE_API_FORMATS)?.[0]?.storedAt;
-			}
-
-			default:
-				return false;
+		if (isAudioVideoType(mediaInfo?.dctermsFormat)) {
+			return isFlowPlayerMediaAvailable ?? !!getFilesByType(FLOWPLAYER_FORMATS)?.[0]?.storedAt;
 		}
+
+		if (isNewspaperType(mediaInfo?.dctermsFormat)) {
+			return !!getFilesByType(IMAGE_API_FORMATS)?.[0]?.storedAt;
+		}
+
+		return false;
 	}, [
 		mediaInfo?.hasAccessToEssence,
 		mediaInfo?.dctermsFormat,

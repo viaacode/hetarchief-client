@@ -1,9 +1,11 @@
-import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
-import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
+import {
+	AdminConfigManager,
+	isAudioType,
+	mapDcTermsFormatToSimpleType,
+} from '@meemoo/admin-core-ui/admin';
 import { Card } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { tText } from '@shared/helpers/translate';
-import { SimpleIeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import clsx from 'clsx';
 import { isValid } from 'date-fns';
@@ -90,7 +92,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 			);
 		}
 
-		if (simpleType === SimpleIeObjectType.AUDIO) {
+		if (isAudioType(type)) {
 			// The thumbnail of an audio object is an ugly speaker icon that we never want to show, so
 			// the waveform still stands in for it. Access was already checked above.
 			imagePath = AdminConfigManager.getConfig().components.defaultAudioStill;

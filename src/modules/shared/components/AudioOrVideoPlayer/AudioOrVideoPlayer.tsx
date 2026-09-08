@@ -7,7 +7,7 @@ import {
 	getTicketErrorPlaceholderLabels,
 	JSON_FORMATS,
 } from '@ie-objects/ie-objects.consts';
-import { Color } from '@meemoo/admin-core-ui/admin';
+import { Color, isAudioType } from '@meemoo/admin-core-ui/admin';
 import {
 	FlowPlayer,
 	type FlowPlayerCustomControlsConfig,
@@ -18,7 +18,6 @@ import { Loading } from '@shared/components/Loading';
 import getConfig from '@shared/config/public-runtime-config';
 import { useGetFileDuration } from '@shared/hooks/use-get-file-duration';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
-import { IeObjectType } from '@shared/types/ie-objects';
 import type { HetArchiefIeObjectFile } from '@viaa/avo2-types';
 import { isNil } from 'es-toolkit/compat';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
@@ -103,7 +102,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(
 		peakFile?.id,
 		schemaIdentifier,
-		dctermsFormat === IeObjectType.AUDIO || dctermsFormat === IeObjectType.AUDIO_FRAGMENT
+		isAudioType(dctermsFormat)
 	);
 
 	if (isLoadingPlayableUrl || isLoadingMediaDuration) {

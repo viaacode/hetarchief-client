@@ -1,6 +1,5 @@
 import type { IeObjectsSearchTermObject } from '@shared/types/api';
-import type { IeObjectType } from '@shared/types/ie-objects';
-import type { HetArchiefIeObjectLicense } from '@viaa/avo2-types';
+import type { HetArchiefIeObjectLicense, HetArchiefIeObjectType } from '@viaa/avo2-types';
 import type { ReactNode } from 'react';
 
 import type { IconName } from '../Icon';
@@ -28,7 +27,7 @@ export interface MediaCardProps {
 	publishedOrCreatedDate?: string;
 	publishedBy?: string;
 	title?: string | ReactNode;
-	type: IeObjectType | null;
+	type: HetArchiefIeObjectType | null;
 	view?: MediaCardViewMode;
 	hasRelated?: boolean;
 	icon: IconName | null;

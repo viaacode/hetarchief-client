@@ -11,10 +11,10 @@ import { Icon, type IconName } from '@shared/components/Icon';
 import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
 import { GET_TYPE_TO_LABEL_MAP, getIconFromObjectType } from '@shared/components/MediaCard';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate } from '@shared/utils/dates';
 import {
 	HetArchiefIeObjectLicense,
+	HetArchiefIeObjectType,
 	type HetArchiefIsPartOfCollection,
 	type HetArchiefIsPartOfKey,
 } from '@viaa/avo2-types';
@@ -126,7 +126,7 @@ export const getNoLicensePlaceholderLabels = (): ObjectPlaceholderProps => ({
  */
 
 export const OBJECT_DETAIL_TABS = (
-	mediaType: IeObjectType | null,
+	mediaType: HetArchiefIeObjectType | null,
 	activeTab?: ObjectDetailTabs,
 	/**
 	 * Whether this visitor can actually play the object: they have essence access AND there is a
@@ -136,7 +136,7 @@ export const OBJECT_DETAIL_TABS = (
 	isMediaPlayable = true,
 	ocrAvailable = true
 ): TabProps[] => {
-	const typeWithDefault = mediaType || IeObjectType.VIDEO;
+	const typeWithDefault = mediaType || HetArchiefIeObjectType.VIDEO;
 	return [
 		{
 			id: ObjectDetailTabs.Metadata,

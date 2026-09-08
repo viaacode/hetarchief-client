@@ -1,5 +1,4 @@
-import { isAudioVideoIeObjectType } from '@ie-objects/utils/is-audio-video-ie-object-type';
-import { IeObjectType } from '@shared/types/ie-objects';
+import { isAudioVideoType, isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import { asDate, formatDateTime } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
 import {
@@ -139,7 +138,7 @@ export function getIeObjectSourceAttribution(
 		? formatDateTime(preferredDate, locale, 'international', false)
 		: null;
 
-	if (isAudioVideoIeObjectType(ieObject.dctermsFormat) && !!ieObject.hasAccessToEssence) {
+	if (isAudioVideoType(ieObject.dctermsFormat) && !!ieObject.hasAccessToEssence) {
 		return buildAttribution([
 			formatSourceAttributionNames(getCreatorNames(ieObject, locale)),
 			ieObject.name,
@@ -150,7 +149,7 @@ export function getIeObjectSourceAttribution(
 		]);
 	}
 
-	if (ieObject.dctermsFormat === IeObjectType.NEWSPAPER && !!ieObject.hasAccessToEssence) {
+	if (isNewspaperType(ieObject.dctermsFormat) && !!ieObject.hasAccessToEssence) {
 		return buildAttribution([
 			ieObject.name,
 			formattedDate,
