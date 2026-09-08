@@ -13,6 +13,7 @@ import { isString } from 'es-toolkit/compat';
 import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
 import { getMetadataSearchFilters } from '../../const/advanced-filters.consts';
 import { getRightsLabel } from '../../const/rights-filter.const';
+import { getTextFilterOperatorLabel } from '../../const/text-filter-operators.const';
 import {
 	type AdvancedFilter,
 	FILTER_LABEL_VALUE_DELIMITER,
@@ -24,7 +25,7 @@ import {
 	type TextFilterCondition,
 } from '../../types';
 import { getAdvancedProperties, getOperators, getRegularProperties } from '../advanced-filters';
-import { compareLabels } from '../compare-labels';
+import { sortAccentIndependent } from '../sort-labels';
 
 /** A pill shows at most this many values, then a counter for the rest. See the FA of ARC-3806. */
 export const MAX_VALUES_PER_TAG = 2;
@@ -99,8 +100,8 @@ export interface MapFiltersToTagsOptions {
 	 * pill of the theme filter is labelled in whichever language the visitor is using. See ARC-3797
 	 */
 	themeLabelsBySlug?: Record<string, string>;
-	/** The language the pill values are sorted in. Defaults to Dutch. */
-	locale?: Locale;
+	/** The language the pill values are sorted in. */
+	locale: Locale;
 }
 
 /**
@@ -112,14 +113,14 @@ const mapValuesToOneTag = (
 	filterName: string,
 	operatorLabel: string | undefined,
 	key: string,
-	locale?: Locale,
+	locale: Locale,
 	op?: string
 ): TagIdentity[] => {
 	if (values.length === 0) {
 		return [];
 	}
 
-	const labels = values.map(valueToLabel).sort(compareLabels(locale));
+	const labels = sortAccentIndependent(values.map(valueToLabel), locale);
 	const shown = labels.slice(0, MAX_VALUES_PER_TAG);
 	const remaining = labels.length - shown.length;
 	// One pill per filter, so the operator keeps two pills apart when a text filter mixes them
@@ -146,8 +147,8 @@ const mapValuesToOneTag = (
 
 const mapAdvancedToTags = (
 	advanced: Array<AdvancedFilter>,
-	key: SearchFilterId = SearchFilterId.Advanced,
-	options: MapFiltersToTagsOptions = {}
+	key: SearchFilterId,
+	options: MapFiltersToTagsOptions
 ): TagIdentity[] => {
 	return advanced.map((advanced: AdvancedFilter) => {
 		const filterProp = advanced.prop as FilterProperty;
@@ -219,16 +220,11 @@ const mapAdvancedToTags = (
 	});
 };
 
-const getTextFilterOperatorLabel = (op: Operator): string =>
-	op === Operator.CONTAINS_NOT
-		? tText('modules/visitor-space/utils/map-filters/map-filters___bevat-niet')
-		: tText('modules/visitor-space/utils/map-filters/map-filters___bevat');
-
 /** A text filter gets one pill per operator, so "bevat" and "bevat niet" stay apart. */
 const mapTextFilterToTags = (
 	conditions: TextFilterCondition[],
 	filter: FilterMenuFilterOption,
-	locale?: Locale
+	locale: Locale
 ): TagIdentity[] =>
 	[Operator.CONTAINS, Operator.CONTAINS_NOT].flatMap((op) =>
 		mapValuesToOneTag(
@@ -244,7 +240,7 @@ const mapTextFilterToTags = (
 const mapFilterToTags = (
 	query: SearchPageQueryParams,
 	filter: FilterMenuFilterOption,
-	options: MapFiltersToTagsOptions = {}
+	options: MapFiltersToTagsOptions
 ): TagIdentity[] => {
 	const value = query[filter.id];
 
@@ -282,14 +278,14 @@ const mapFilterToTags = (
 			if (typeof value === 'boolean') {
 				return mapBooleanParamToTag(value, filter.label, filter.id);
 			}
-			return mapAdvancedToTags((value as AdvancedFilter[]) || [], filter.id);
+			return mapAdvancedToTags((value as AdvancedFilter[]) || [], filter.id, options);
 	}
 };
 
 export const mapFiltersToTags = (
 	query: SearchPageQueryParams,
-	filters: FilterMenuFilterOption[] = [],
-	options: MapFiltersToTagsOptions = {}
+	filters: FilterMenuFilterOption[],
+	options: MapFiltersToTagsOptions
 ): TagIdentity[] => {
 	return [
 		// The search bar keeps one pill per term, since each term is its own search

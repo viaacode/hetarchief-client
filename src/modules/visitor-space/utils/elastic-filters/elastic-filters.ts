@@ -164,6 +164,7 @@ export const mapFiltersToElastic = (query: SearchPageQueryParams): IeObjectsSear
 		...getFiltersForFormat(query),
 		...ALL_SEARCH_FILTERS().flatMap((filter) => mapFilterToElastic(query, filter)),
 		// Urls shared before ARC-3806 may still carry the old combined parameter
+		// TODO ARC-3806: drop this line in September 2027, together with the migration itself
 		...(query[SearchFilterId.Advanced] || []).flatMap(mapAdvancedToElastic),
 	];
 

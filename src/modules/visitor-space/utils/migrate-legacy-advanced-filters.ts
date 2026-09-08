@@ -12,6 +12,8 @@ import {
  * Before ARC-3806 every advanced filter lived in one "advanced" query parameter, as a list of
  * property, operator and value triples. Now each filter has a parameter of its own. Shared and
  * bookmarked urls still carry the old parameter, so they are converted on load.
+ *
+ * TODO ARC-3806: delete this file in September 2027, a year after the redesign shipped.
  */
 const LEGACY_PROPERTY_TO_FILTER_ID: Partial<Record<FilterProperty, SearchFilterId>> = {
 	[FilterProperty.TITLE]: SearchFilterId.Title,

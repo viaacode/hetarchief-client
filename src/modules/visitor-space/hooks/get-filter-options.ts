@@ -46,7 +46,9 @@ export const useGetFilterOptions = (
 	// Themes are not aggregated in elasticsearch, and the url holds a slug rather than a name,
 	// so the options of this filter come from the themes endpoint. ARC-3797
 	const isThemeFilter = field === IeObjectsSearchFilterField.THEME;
-	const { options: themeOptions, isLoading: isLoadingThemes } = useGetThemeFilterOptions();
+	const { options: themeOptions, isLoading: isLoadingThemes } = useGetThemeFilterOptions(
+		enabled && isThemeFilter
+	);
 
 	const { data: aggregations, isLoading } = useQuery({
 		queryKey: [QUERY_KEYS.getIeObjectFilterOptions, field, searchFilters],

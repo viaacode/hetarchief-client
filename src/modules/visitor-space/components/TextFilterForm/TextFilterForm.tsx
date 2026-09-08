@@ -9,6 +9,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { SEARCH_PAGE_QUERY_PARAM_CONFIG } from '@visitor-space/const';
+import { getTextFilterOperatorOptions } from '@visitor-space/const/text-filter-operators.const';
 import {
 	type GenericFilterFormProps,
 	Operator,
@@ -23,17 +24,6 @@ import { useQueryParams } from 'use-query-params';
 import styles from './TextFilterForm.module.scss';
 
 const emptyCondition = (): TextFilterCondition => ({ op: Operator.CONTAINS, val: '' });
-
-const getOperatorOptions = (): SelectOption[] => [
-	{
-		label: tText('modules/visitor-space/components/text-filter-form/text-filter-form___bevat'),
-		value: Operator.CONTAINS,
-	},
-	{
-		label: tText('modules/visitor-space/components/text-filter-form/text-filter-form___bevat-niet'),
-		value: Operator.CONTAINS_NOT,
-	},
-];
 
 /**
  * A filter over a free text field: a list of "Bevat" / "Bevat niet" conditions on one field.
@@ -54,7 +44,7 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 	);
 
 	const { reset, handleSubmit } = useForm({ defaultValues: {} });
-	const operatorOptions = getOperatorOptions();
+	const operatorOptions = getTextFilterOperatorOptions();
 
 	const changeCondition = (index: number, change: Partial<TextFilterCondition>): void => {
 		setConditions(

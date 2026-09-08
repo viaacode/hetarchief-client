@@ -16,6 +16,7 @@ import {
 	ROUTE_PREFIXES_BY_LOCALE,
 	ROUTES_BY_LOCALE,
 } from '@shared/const/routes';
+import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
 import { SearchPageMediaType } from '@shared/types/ie-objects';
@@ -372,7 +373,7 @@ const getDynamicHeaderLinks = (
 				const isSearchNavItem = contentPath === ROUTES_BY_LOCALE[locale].search;
 				const searchUrl =
 					isSearchNavItem && hasActiveVisits && !isMeemooAdmin
-						? `${ROUTES_BY_LOCALE[locale].search}?aanbieder=${activeVisits[0].spaceSlug}`
+						? getSearchLink(locale, { [SearchFilterId.Maintainer]: activeVisits[0].spaceSlug })
 						: contentPath;
 				const isMyMaterialRequestsNavItem =
 					contentPath === ROUTES_BY_LOCALE[locale].accountMyMaterialRequests;

@@ -92,6 +92,7 @@ import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper'
 import { Pill } from '@shared/components/Pill';
 import getConfig from '@shared/config/public-runtime-config';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
+import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
@@ -704,7 +705,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									label: mediaInfo?.maintainerName,
 									to: isKiosk
 										? ROUTES_BY_LOCALE[locale].search
-										: `${ROUTES_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${mediaInfo?.maintainerSlug}`,
+										: getSearchLink(locale, {
+												[SearchFilterId.Maintainer]: mediaInfo?.maintainerSlug ?? '',
+											}),
 								},
 							]
 						: []),
@@ -734,9 +737,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			return (
 				<SearchLinkTag
 					label={mediaInfo.collectionName}
-					link={`${ROUTES_BY_LOCALE[locale].search}?format=${IeObjectType.NEWSPAPER}&${
-						SearchFilterId.NewspaperSeriesName
-					}=${encodeURIComponent(mediaInfo.collectionName)}`}
+					link={getSearchLink(locale, {
+						format: IeObjectType.NEWSPAPER,
+						[SearchFilterId.NewspaperSeriesName]: mediaInfo.collectionName,
+					})}
 				/>
 			);
 		}
@@ -1116,7 +1120,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									<SearchLinkTag
 										key={genre}
 										label={genre}
-										link={`${ROUTES_BY_LOCALE[locale].search}?${SearchFilterId.Genre}=${encodeURIComponent(genre)}`}
+										link={getSearchLink(locale, { [SearchFilterId.Genre]: genre })}
 									/>
 								))}
 							</div>

@@ -14,11 +14,11 @@ vi.mock('@shared/helpers/translate', () => ({
 }));
 
 import { FilterModalType, FilterProperty, Operator, SearchFilterId } from '../../types';
-import { mapFiltersToTags, tagPrefix } from './map-filters';
+import { type MapFiltersToTagsOptions, mapFiltersToTags, tagPrefix } from './map-filters';
 
 const filter = (
 	id: SearchFilterId,
-	modalType: FilterModalType,
+	modalType: FilterModalType | undefined,
 	label: string,
 	field: IeObjectsSearchFilterField
 ): FilterMenuFilterOption => ({
@@ -60,7 +60,7 @@ const THEME_FILTER = filter(
 const CONSULTABLE_MEDIA_FILTER: FilterMenuFilterOption = {
 	...filter(
 		SearchFilterId.ConsultableMedia,
-		FilterModalType.Unchanged,
+		undefined,
 		'Alles wat raadpleegbaar is',
 		IeObjectsSearchFilterField.CONSULTABLE_MEDIA
 	),
@@ -69,10 +69,17 @@ const CONSULTABLE_MEDIA_FILTER: FilterMenuFilterOption = {
 
 const RELEASE_DATE_FILTER = filter(
 	SearchFilterId.ReleaseDate,
-	FilterModalType.Unchanged,
+	undefined,
 	'Uitgavedatum',
 	IeObjectsSearchFilterField.RELEASE_DATE
 );
+
+/** Every pill is sorted in a language, so the tests name one and override it where it matters. */
+const toTags = (
+	query: Parameters<typeof mapFiltersToTags>[0],
+	filters: FilterMenuFilterOption[] = [],
+	options: Partial<MapFiltersToTagsOptions> = {}
+) => mapFiltersToTags(query, filters, { locale: Locale.nl, ...options });
 
 const asText = (tagLabel: unknown): string =>
 	renderToStaticMarkup(tagLabel as React.ReactElement).replace(/<[^>]*>/g, '');
@@ -85,7 +92,7 @@ describe('Utils', () => {
 				format: '',
 				start: 0,
 			};
-			const filters = mapFiltersToTags(query);
+			const filters = toTags(query);
 
 			expect(filters).toHaveLength(query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY].length);
 			expect(filters[0].value).toBe(
@@ -94,11 +101,9 @@ describe('Utils', () => {
 		});
 
 		it('should label the theme filter with the theme name in the language of the UI', () => {
-			const tags = mapFiltersToTags(
-				{ [SearchFilterId.Theme]: ['education-learning'] },
-				[THEME_FILTER],
-				{ themeLabelsBySlug: { 'education-learning': 'Onderwijs en leren' } }
-			);
+			const tags = toTags({ [SearchFilterId.Theme]: ['education-learning'] }, [THEME_FILTER], {
+				themeLabelsBySlug: { 'education-learning': 'Onderwijs en leren' },
+			});
 
 			expect(tags).toHaveLength(1);
 			// Only the slug travels through the url, so the same url can be labelled in either language
@@ -106,7 +111,7 @@ describe('Utils', () => {
 		});
 
 		it('should label a theme filter of an url from before ARC-3806', () => {
-			const tags = mapFiltersToTags(
+			const tags = toTags(
 				{
 					[SearchFilterId.Advanced]: [
 						{
@@ -126,9 +131,7 @@ describe('Utils', () => {
 		});
 
 		it('should fall back to the theme slug when the themes are not loaded yet', () => {
-			const tags = mapFiltersToTags({ [SearchFilterId.Theme]: ['education-learning'] }, [
-				THEME_FILTER,
-			]);
+			const tags = toTags({ [SearchFilterId.Theme]: ['education-learning'] }, [THEME_FILTER]);
 
 			expect(asText(tags[0].label)).toContain('education-learning');
 		});
@@ -140,7 +143,7 @@ describe('Utils', () => {
 				format: '',
 				start: 0,
 			};
-			const filters = mapFiltersToTags(query);
+			const filters = toTags(query);
 
 			expect(filters).toHaveLength(1);
 			expect(filters[0].value).toBe(tagPrefix(QUERY_PARAM_KEY.SEARCH_QUERY_KEY) + value);
@@ -148,16 +151,14 @@ describe('Utils', () => {
 
 		// The "Redesign pills" section of the FA of ARC-3806
 		it('gives one filter with one value one pill', () => {
-			const tags = mapFiltersToTags({ [SearchFilterId.Genre]: ['concert'] }, [GENRE_FILTER]);
+			const tags = toTags({ [SearchFilterId.Genre]: ['concert'] }, [GENRE_FILTER]);
 
 			expect(tags).toHaveLength(1);
 			expect(asText(tags[0].label)).toEqual('Genre is: concert');
 		});
 
 		it('gathers every value of one filter in one pill, alphabetically, with a counter', () => {
-			const tags = mapFiltersToTags({ [SearchFilterId.Genre]: ['dans', 'concert', 'drama'] }, [
-				GENRE_FILTER,
-			]);
+			const tags = toTags({ [SearchFilterId.Genre]: ['dans', 'concert', 'drama'] }, [GENRE_FILTER]);
 
 			expect(tags).toHaveLength(1);
 			expect(asText(tags[0].label)).toEqual('Genre is: concert, dans, +1');
@@ -170,15 +171,13 @@ describe('Utils', () => {
 				'Taal',
 				IeObjectsSearchFilterField.LANGUAGE
 			);
-			const tags = mapFiltersToTags({ [SearchFilterId.Language]: ['Nederlands'] }, [
-				languageFilter,
-			]);
+			const tags = toTags({ [SearchFilterId.Language]: ['Nederlands'] }, [languageFilter]);
 
 			expect(asText(tags[0].label)).toEqual('Taal: Nederlands');
 		});
 
 		it('sorts the values in the language of the ui', () => {
-			const tags = mapFiltersToTags({ [SearchFilterId.Genre]: ['Zoo', 'Émile'] }, [GENRE_FILTER], {
+			const tags = toTags({ [SearchFilterId.Genre]: ['Zoo', 'Émile'] }, [GENRE_FILTER], {
 				locale: Locale.nl,
 			});
 
@@ -186,16 +185,15 @@ describe('Utils', () => {
 		});
 
 		it('shows the label half of a value that carries its own label', () => {
-			const tags = mapFiltersToTags(
-				{ [SearchFilterId.Maintainers]: ['OR-1---VRT', 'OR-2---Amsab-ISG'] },
-				[MAINTAINERS_FILTER]
-			);
+			const tags = toTags({ [SearchFilterId.Maintainers]: ['OR-1---VRT', 'OR-2---Amsab-ISG'] }, [
+				MAINTAINERS_FILTER,
+			]);
 
 			expect(asText(tags[0].label)).toEqual('Aanbieder is: Amsab-ISG, VRT');
 		});
 
 		it('writes "bevat" on a text filter pill', () => {
-			const tags = mapFiltersToTags(
+			const tags = toTags(
 				{
 					[SearchFilterId.Title]: [
 						{ op: Operator.CONTAINS, val: 'Magriet Hermans' },
@@ -212,7 +210,7 @@ describe('Utils', () => {
 		});
 
 		it('keeps "bevat" and "bevat niet" in pills of their own', () => {
-			const tags = mapFiltersToTags(
+			const tags = toTags(
 				{
 					[SearchFilterId.Title]: [
 						{ op: Operator.CONTAINS, val: 'concert' },
@@ -230,8 +228,8 @@ describe('Utils', () => {
 
 		// A search term has no filter modal behind it, so its pill must not offer to open one
 		it('marks a search term pill as not clickable, and a filter pill as clickable', () => {
-			const [searchTerm] = mapFiltersToTags({ [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: ['concert'] });
-			const [genre] = mapFiltersToTags({ [SearchFilterId.Genre]: ['concert'] }, [GENRE_FILTER]);
+			const [searchTerm] = toTags({ [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: ['concert'] });
+			const [genre] = toTags({ [SearchFilterId.Genre]: ['concert'] }, [GENRE_FILTER]);
 
 			expect(searchTerm.isClickable).toBe(false);
 			expect(genre.isClickable).not.toBe(false);
@@ -239,10 +237,10 @@ describe('Utils', () => {
 
 		// Neither of these has a modal behind it either, so neither pill may offer to open one
 		it('marks a boolean filter pill and a legacy advanced pill as not clickable', () => {
-			const [consultable] = mapFiltersToTags({ [SearchFilterId.ConsultableMedia]: true }, [
+			const [consultable] = toTags({ [SearchFilterId.ConsultableMedia]: true }, [
 				CONSULTABLE_MEDIA_FILTER,
 			]);
-			const [legacy] = mapFiltersToTags({
+			const [legacy] = toTags({
 				[SearchFilterId.Advanced]: [
 					{
 						prop: FilterProperty.TITLE,
@@ -259,7 +257,7 @@ describe('Utils', () => {
 
 		// A date filter does have a modal, so its pill keeps opening it
 		it('keeps a date filter pill clickable', () => {
-			const [releaseDate] = mapFiltersToTags(
+			const [releaseDate] = toTags(
 				{
 					[SearchFilterId.ReleaseDate]: [
 						{
@@ -277,7 +275,7 @@ describe('Utils', () => {
 		});
 
 		it('gives a filter without a value no pill', () => {
-			expect(mapFiltersToTags({}, [GENRE_FILTER, TITLE_FILTER])).toEqual([]);
+			expect(toTags({}, [GENRE_FILTER, TITLE_FILTER])).toEqual([]);
 		});
 	});
 });

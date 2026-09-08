@@ -24,6 +24,7 @@ import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
 import type { FC } from 'react';
 import DurationInput from '../components/DurationInput/DurationInput';
 import { FilterProperty, Operator } from '../types';
+import { getTextFilterOperatorLabel } from './text-filter-operators.const';
 
 type FilterInputComponent =
 	| FC<TextInputProps>
@@ -122,12 +123,8 @@ const GET_OPERATOR_LABELS = (): Record<string, string> => ({
 	between: tText(
 		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tussen'
 	),
-	contains: tText(
-		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat'
-	),
-	excludes: tText(
-		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
-	),
+	contains: getTextFilterOperatorLabel(Operator.CONTAINS),
+	excludes: getTextFilterOperatorLabel(Operator.CONTAINS_NOT),
 	equals: tText(
 		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is'
 	),
