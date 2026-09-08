@@ -7,7 +7,6 @@ import {
 	getTicketErrorPlaceholderLabels,
 	JSON_FORMATS,
 } from '@ie-objects/ie-objects.consts';
-import type { IeObjectFile } from '@ie-objects/ie-objects.types';
 import { Color } from '@meemoo/admin-core-ui/admin';
 import {
 	FlowPlayer,
@@ -20,6 +19,7 @@ import getConfig from '@shared/config/public-runtime-config';
 import { useGetFileDuration } from '@shared/hooks/use-get-file-duration';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import { IeObjectType } from '@shared/types/ie-objects';
+import type { HetArchiefIeObjectFile } from '@viaa/avo2-types';
 import { isNil } from 'es-toolkit/compat';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
 import type { AudioOrVideoPlayerProps } from './AudioOrVideoPlayer.types';
@@ -50,13 +50,14 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		representation?.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType)) || [];
 
 	const getFilesByType = useCallback(
-		(mimeTypes: string[]): IeObjectFile[] => {
+		(mimeTypes: string[]): HetArchiefIeObjectFile[] => {
 			return representation?.files?.filter((file) => mimeTypes.includes(file.mimeType)) || [];
 		},
 		[representation]
 	);
 
-	const currentPlayableFile: IeObjectFile | null = allFilesToInRepresentation?.[0] || null;
+	const currentPlayableFile: HetArchiefIeObjectFile | null =
+		allFilesToInRepresentation?.[0] || null;
 
 	const fileId: string | null = currentPlayableFile?.id ?? null;
 	const {
@@ -98,7 +99,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	}, [mediaDuration, onMediaDurationLoaded, isLoadingMediaDuration, isErrorMediaDuration]);
 
 	// peak file
-	const peakFile: IeObjectFile | null = getFilesByType(JSON_FORMATS)?.[0] || null;
+	const peakFile: HetArchiefIeObjectFile | null = getFilesByType(JSON_FORMATS)?.[0] || null;
 	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(
 		peakFile?.id,
 		schemaIdentifier,

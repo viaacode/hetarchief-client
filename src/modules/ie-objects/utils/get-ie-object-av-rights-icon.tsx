@@ -1,7 +1,7 @@
-import type { IeObjectRightsInfo } from '@ie-objects/ie-objects.types';
 import Icon from '@shared/components/Icon/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
+import type { HetArchiefIeObjectRightsInfo } from '@viaa/avo2-types';
 import { compact } from 'es-toolkit/compat';
 import type { ReactNode } from 'react';
 
@@ -45,7 +45,7 @@ function normalizeRightsValue(value: string): string {
 		.toLowerCase();
 }
 
-function getRightsSearchText(rightsInfo?: IeObjectRightsInfo | null): string {
+function getRightsSearchText(rightsInfo?: HetArchiefIeObjectRightsInfo | null): string {
 	return normalizeRightsValue(
 		compact([
 			rightsInfo?.reuseLabel,
@@ -58,7 +58,7 @@ function getRightsSearchText(rightsInfo?: IeObjectRightsInfo | null): string {
 }
 
 function getRightsCategoryConfig(
-	rightsInfo?: IeObjectRightsInfo | null
+	rightsInfo?: HetArchiefIeObjectRightsInfo | null
 ): RightsCategoryConfig | null {
 	const rightsUrl = normalizeRightsValue(
 		rightsInfo?.reuseCategoryUrl || rightsInfo?.reuseCategoryId || ''
@@ -75,7 +75,9 @@ function getRightsCategoryLabel(config: RightsCategoryConfig): string {
 	return config.labelValue || config.fallbackLabel;
 }
 
-export function getIeObjectAvRightsUrl(rightsInfo?: IeObjectRightsInfo | null): string | undefined {
+export function getIeObjectAvRightsUrl(
+	rightsInfo?: HetArchiefIeObjectRightsInfo | null
+): string | undefined {
 	if (getRightsSearchText(rightsInfo).includes('geen rechteninformatie')) {
 		return undefined;
 	}
@@ -83,7 +85,9 @@ export function getIeObjectAvRightsUrl(rightsInfo?: IeObjectRightsInfo | null): 
 	return rightsInfo?.reuseCategoryUrl || rightsInfo?.reuseCategoryId || undefined;
 }
 
-export function getIeObjectAvRightsLabel(rightsInfo?: IeObjectRightsInfo | null): string | null {
+export function getIeObjectAvRightsLabel(
+	rightsInfo?: HetArchiefIeObjectRightsInfo | null
+): string | null {
 	const rightsText = getRightsSearchText(rightsInfo);
 	const rightsCategoryConfig = getRightsCategoryConfig(rightsInfo);
 
@@ -130,7 +134,9 @@ export function getIeObjectAvRightsLabel(rightsInfo?: IeObjectRightsInfo | null)
 	return rightsInfo?.reuseCategoryLabel || rightsInfo?.reuseLabel || null;
 }
 
-export function getIeObjectAvRightsIcon(rightsInfo?: IeObjectRightsInfo | null): ReactNode | null {
+export function getIeObjectAvRightsIcon(
+	rightsInfo?: HetArchiefIeObjectRightsInfo | null
+): ReactNode | null {
 	const rightsText = getRightsSearchText(rightsInfo);
 	const rightsCategoryConfig = getRightsCategoryConfig(rightsInfo);
 

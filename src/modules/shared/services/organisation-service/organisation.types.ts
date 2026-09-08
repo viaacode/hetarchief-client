@@ -1,4 +1,4 @@
-import type { IeObjectSector } from '@ie-objects/ie-objects.types';
+import type { HetArchiefIeObjectSector } from '@viaa/avo2-types';
 
 export interface Organisation {
 	schemaIdentifier: string;
@@ -9,7 +9,7 @@ export interface Organisation {
 	schemaName: string;
 	createdAt: string;
 	updatedAt: string;
-	sector: IeObjectSector | null;
+	sector: HetArchiefIeObjectSector | null;
 	formUrl: string | null;
 }
 

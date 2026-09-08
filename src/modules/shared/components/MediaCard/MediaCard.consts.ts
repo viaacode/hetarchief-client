@@ -4,8 +4,16 @@ import { tText } from '@shared/helpers/translate';
 import { type IeObjectType, SimpleIeObjectType } from '@shared/types/ie-objects';
 import type { IconName } from '../Icon';
 
+/**
+ * The type icon for an ie-object: the plain one when the essence is within reach, the
+ * struck-through ("no-…") one when it is not. A missing or unrecognised type falls back to the
+ * generic (no-)file icon.
+ *
+ * Callers that render something which has no object type at all -- a content page, say -- should
+ * skip this helper instead of relying on it to return nothing.
+ */
 export function getIconFromObjectType(
-	type: IeObjectType | undefined,
+	type: IeObjectType | undefined | null,
 	accessible: boolean
 ): IconName {
 	const simpleType = mapDcTermsFormatToSimpleType(type);

@@ -315,7 +315,7 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 			objectThumbnailUrl = AdminConfigManager.getConfig().components.defaultAudioStill;
 		}
 
-		if (!objectThumbnailUrl || !isObjectEssenceAccessibleToUser) {
+		if (!isObjectEssenceAccessibleToUser) {
 			return null;
 		}
 

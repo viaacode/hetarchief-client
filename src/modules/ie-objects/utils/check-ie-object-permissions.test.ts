@@ -15,7 +15,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -30,7 +29,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -44,7 +42,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -59,7 +56,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -73,7 +69,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -88,7 +83,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -102,7 +96,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -117,7 +110,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -131,7 +123,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -146,7 +137,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -160,7 +150,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -175,7 +164,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -189,7 +177,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -204,7 +191,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -218,7 +204,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -233,7 +218,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -247,7 +231,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -262,7 +245,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -276,7 +258,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -291,7 +272,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -305,7 +285,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -320,7 +299,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -334,7 +312,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -349,7 +326,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -363,7 +339,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -378,7 +353,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -392,7 +366,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -407,7 +380,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -421,7 +393,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -436,7 +407,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -450,7 +420,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -465,7 +434,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -479,7 +447,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -494,7 +461,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -508,7 +474,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -523,7 +488,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -537,7 +501,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -552,7 +515,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -566,7 +528,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -581,7 +542,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -595,7 +555,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -610,7 +569,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -624,7 +582,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -639,7 +596,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -653,7 +609,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -668,7 +623,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -682,7 +636,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -697,7 +650,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -711,7 +663,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -726,7 +677,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -740,7 +690,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -755,7 +704,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -769,7 +717,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -784,7 +731,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -798,7 +744,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -813,7 +758,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -827,7 +771,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -842,7 +785,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -856,7 +798,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -871,7 +812,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -885,7 +825,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -900,7 +839,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -914,7 +852,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -929,7 +866,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -943,7 +879,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -958,7 +893,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -972,7 +906,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -987,7 +920,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1001,7 +933,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1016,7 +947,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1030,7 +960,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1045,7 +974,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1059,7 +987,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1074,7 +1001,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1088,7 +1014,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1103,7 +1028,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1117,7 +1041,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1132,7 +1055,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1146,7 +1068,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1161,7 +1082,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1175,7 +1095,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1190,7 +1109,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1204,7 +1122,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1219,7 +1136,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1233,7 +1149,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1248,7 +1163,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1262,7 +1176,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1277,7 +1190,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1291,7 +1203,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1306,7 +1217,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1320,7 +1230,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1335,7 +1244,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1349,7 +1257,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1364,7 +1271,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1378,7 +1284,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1393,7 +1298,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1407,7 +1311,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1422,7 +1325,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1436,7 +1338,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1451,7 +1352,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1465,7 +1365,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1480,7 +1379,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1494,7 +1392,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1509,7 +1406,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1523,7 +1419,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1538,7 +1433,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1552,7 +1446,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1567,7 +1460,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1581,7 +1473,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1596,7 +1487,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1610,7 +1500,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1625,7 +1514,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1639,7 +1527,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1654,7 +1541,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1668,7 +1554,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -1683,7 +1568,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: true,
 			canDownloadEssence: false,
 		});
@@ -1697,7 +1581,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: true
 	}`, () => {
@@ -1712,7 +1595,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: true,
 		});
@@ -1726,7 +1608,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: true
 	}`, () => {
@@ -1741,7 +1622,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: true,
 			canDownloadEssence: true,
 		});
@@ -1755,7 +1635,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1770,7 +1649,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1784,7 +1662,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -1799,7 +1676,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: true,
 			canDownloadEssence: false,
 		});
@@ -1813,7 +1689,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: true
 	}`, () => {
@@ -1828,7 +1703,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: true,
 		});
@@ -1842,7 +1716,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: true
 	}`, () => {
@@ -1857,7 +1730,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: true,
 			canDownloadEssence: true,
 		});
@@ -1871,7 +1743,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1886,7 +1757,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1900,7 +1770,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1915,7 +1784,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1929,7 +1797,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1944,7 +1811,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1958,7 +1824,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -1973,7 +1838,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -1987,7 +1851,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2002,7 +1865,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2016,7 +1878,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -2031,7 +1892,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2045,7 +1905,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2060,7 +1919,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2074,7 +1932,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -2089,7 +1946,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2103,7 +1959,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2118,7 +1973,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2132,7 +1986,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2147,7 +2000,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2161,7 +2013,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2176,7 +2027,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2190,7 +2040,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2205,7 +2054,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2219,7 +2067,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2234,7 +2081,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2248,7 +2094,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -2263,7 +2108,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2277,7 +2121,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2292,7 +2135,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2306,7 +2148,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -2321,7 +2162,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2335,7 +2175,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2350,7 +2189,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2364,7 +2202,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2379,7 +2216,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2393,7 +2229,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2408,7 +2243,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2422,7 +2256,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2437,7 +2270,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2451,7 +2283,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2466,7 +2297,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2480,7 +2310,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -2495,7 +2324,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2509,7 +2337,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2524,7 +2351,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2538,7 +2364,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -2553,7 +2378,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2567,7 +2391,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2582,7 +2405,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2596,7 +2418,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2611,7 +2432,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2625,7 +2445,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2640,7 +2459,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2654,7 +2472,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2669,7 +2486,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2683,7 +2499,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2698,7 +2513,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2712,7 +2526,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -2727,7 +2540,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2741,7 +2553,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2756,7 +2567,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2770,7 +2580,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -2785,7 +2594,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2799,7 +2607,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2814,7 +2621,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2828,7 +2634,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2843,7 +2648,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2857,7 +2661,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2872,7 +2675,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2886,7 +2688,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2901,7 +2702,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2915,7 +2715,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2930,7 +2729,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2944,7 +2742,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -2959,7 +2756,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -2973,7 +2769,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -2988,7 +2783,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3002,7 +2796,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -3017,7 +2810,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3031,7 +2823,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3046,7 +2837,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3060,7 +2850,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3075,7 +2864,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3089,7 +2877,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3104,7 +2891,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3118,7 +2904,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3133,7 +2918,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3147,7 +2931,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3162,7 +2945,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3176,7 +2958,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: false,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -3191,7 +2972,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3205,7 +2985,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3220,7 +2999,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3234,7 +3012,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: false,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -3249,7 +3026,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: false,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3263,7 +3039,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3278,7 +3053,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3292,7 +3066,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3307,7 +3080,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3321,7 +3093,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3336,7 +3107,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3350,7 +3120,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3365,7 +3134,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3379,7 +3147,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3394,7 +3161,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3408,7 +3174,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -3423,7 +3188,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3437,7 +3201,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3452,7 +3215,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3466,7 +3228,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -3481,7 +3242,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3495,7 +3255,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3510,7 +3269,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3524,7 +3282,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -3539,7 +3296,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: true,
 			canDownloadEssence: false,
 		});
@@ -3553,7 +3309,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: true
 	}`, () => {
@@ -3568,7 +3323,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: true,
 		});
@@ -3582,7 +3336,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: true
 	}`, () => {
@@ -3597,7 +3350,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: true,
 			canDownloadEssence: true,
 		});
@@ -3611,7 +3363,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: false
 	}`, () => {
@@ -3626,7 +3377,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: false,
 		});
@@ -3640,7 +3390,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: false
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: false
 	}`, () => {
@@ -3655,7 +3404,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: true,
 			canDownloadEssence: false,
 		});
@@ -3669,7 +3417,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: false,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: false,
 		canDownloadEssence: true
 	}`, () => {
@@ -3684,7 +3431,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: false,
 			canDownloadEssence: true,
 		});
@@ -3698,7 +3444,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 		hasPermissionExportObject: true,
 		hasPermissionDownloadObject: true
 	} => {
-		canViewEssence: true,
 		canExportMetadata: true,
 		canDownloadEssence: true
 	}`, () => {
@@ -3713,7 +3458,6 @@ describe('checkIeObjectPermissions (hard-coded 64 cases)', () => {
 			isLoggedOutUser: false,
 		});
 		expect(result).toEqual({
-			canViewEssence: true,
 			canExportMetadata: true,
 			canDownloadEssence: true,
 		});

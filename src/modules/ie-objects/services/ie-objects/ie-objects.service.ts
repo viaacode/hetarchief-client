@@ -1,4 +1,4 @@
-import type { IeObject, IeObjectSimilar, RelatedIeObjects } from '@ie-objects/ie-objects.types';
+import type { IeObjectSimilar } from '@ie-objects/ie-objects.types';
 import type {
 	IeObjectPreviousNextIds,
 	IeObjectSeo,
@@ -13,6 +13,7 @@ import {
 	IeObjectsSearchOperator,
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
+import type { HetArchiefIeObject, HetArchiefRelatedIeObjects } from '@viaa/avo2-types';
 import type { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { SearchSortProp } from '@visitor-space/types';
 import { isEmpty } from 'es-toolkit/compat';
@@ -85,7 +86,7 @@ export class IeObjectsService {
 	public static async getBySchemaIdentifiers(
 		schemaIdentifiers: string[],
 		resolveThumbnailUrl: boolean
-	): Promise<(IeObject | null)[]> {
+	): Promise<(HetArchiefIeObject | null)[]> {
 		const url = stringifyUrl({
 			url: IE_OBJECTS_SERVICE_BASE_URL,
 			query: {
@@ -104,7 +105,7 @@ export class IeObjectsService {
 	public static async getByIeObjectIds(
 		ieObjectIds: string[],
 		resolveThumbnailUrl: boolean
-	): Promise<(IeObject | null)[]> {
+	): Promise<(HetArchiefIeObject | null)[]> {
 		const url = stringifyUrl({
 			url: IE_OBJECTS_SERVICE_BASE_URL,
 			query: {
@@ -221,7 +222,7 @@ export class IeObjectsService {
 	public static async getRelated(
 		ieObjectIri: string,
 		parentIeObjectIri: string | null
-	): Promise<RelatedIeObjects> {
+	): Promise<HetArchiefRelatedIeObjects> {
 		return await ApiService.getApi()
 			.get(
 				stringifyUrl({
