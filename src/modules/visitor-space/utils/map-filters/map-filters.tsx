@@ -3,6 +3,7 @@ import { SEPARATOR } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import type { IeObjectsSearchFilter } from '@shared/types/ie-objects';
+import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import { formatDate } from '@shared/utils/dates';
 import type { Locale } from '@shared/utils/i18n';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
@@ -12,14 +13,13 @@ import { isString } from 'es-toolkit/compat';
 
 import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
 import { getMetadataSearchFilters } from '../../const/advanced-filters.consts';
+import { getTextFilterOperatorLabel } from '../../const/operator-labels.const';
 import { getRightsLabel } from '../../const/rights-filter.const';
-import { getTextFilterOperatorLabel } from '../../const/text-filter-operators.const';
 import {
 	type AdvancedFilter,
 	FILTER_LABEL_VALUE_DELIMITER,
 	FilterModalType,
 	FilterProperty,
-	Operator,
 	SearchFilterId,
 	type TagIdentity,
 	type TextFilterCondition,
@@ -152,7 +152,7 @@ const mapAdvancedToTags = (
 ): TagIdentity[] => {
 	return advanced.map((advanced: AdvancedFilter) => {
 		const filterProp = advanced.prop as FilterProperty;
-		const filterOp = advanced.op as Operator;
+		const filterOp = advanced.op as IeObjectsSearchOperator;
 
 		const split = (advanced.val || '').split(SEPARATOR);
 
@@ -168,7 +168,10 @@ const mapAdvancedToTags = (
 			case FilterProperty.CREATED_AT:
 			case FilterProperty.PUBLISHED_AT:
 			case FilterProperty.RELEASE_DATE:
-				if (filterOp === Operator.BETWEEN || filterOp === Operator.EQUALS) {
+				if (
+					filterOp === IeObjectsSearchOperator.BETWEEN ||
+					filterOp === IeObjectsSearchOperator.IS
+				) {
 					value = `${formatDate(parseISO(split[0]))} - ${formatDate(parseISO(split[1]))}`;
 					filterOperatorLabel = undefined;
 				} else {
@@ -177,7 +180,7 @@ const mapAdvancedToTags = (
 				break;
 
 			case FilterProperty.DURATION:
-				if (filterOp === Operator.BETWEEN) {
+				if (filterOp === IeObjectsSearchOperator.BETWEEN) {
 					value = `${split[0]} - ${split[1]}`;
 					filterOperatorLabel = undefined;
 				}
@@ -226,7 +229,7 @@ const mapTextFilterToTags = (
 	filter: FilterMenuFilterOption,
 	locale: Locale
 ): TagIdentity[] =>
-	[Operator.CONTAINS, Operator.CONTAINS_NOT].flatMap((op) =>
+	[IeObjectsSearchOperator.CONTAINS, IeObjectsSearchOperator.CONTAINS_NOT].flatMap((op) =>
 		mapValuesToOneTag(
 			conditions.filter((condition) => condition.op === op).map((condition) => condition.val),
 			filter.label,
@@ -303,7 +306,7 @@ export const mapFiltersToTags = (
 export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilter[] => {
 	const values = (item.val || '').split(SEPARATOR);
 	const filterProp = item.prop as FilterProperty;
-	const filterOperator = item.op as Operator;
+	const filterOperator = item.op as IeObjectsSearchOperator;
 	const filters =
 		filterProp && filterOperator ? getMetadataSearchFilters(filterProp, filterOperator) : [];
 
@@ -315,7 +318,7 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 			case FilterProperty.CREATED_AT:
 			case FilterProperty.PUBLISHED_AT:
 			case FilterProperty.RELEASE_DATE:
-				if (item.op === Operator.EQUALS && values.length === 1) {
+				if (item.op === IeObjectsSearchOperator.IS && values.length === 1) {
 					// Manually create a range of equal values: https://meemoo.atlassian.net/browse/ARC-3191
 					values[i] = values[0];
 				}

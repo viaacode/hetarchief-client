@@ -1,5 +1,5 @@
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { IeObjectsSearchFilterField, IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import { Locale } from '@shared/utils/i18n';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { FilterMenuType } from '@visitor-space/components/FilterMenu/FilterMenu.types';
@@ -13,7 +13,7 @@ vi.mock('@shared/helpers/translate', () => ({
 	tHtml: (key: string) => key.split('___').pop()?.replaceAll('-', ' ') || '',
 }));
 
-import { FilterModalType, FilterProperty, Operator, SearchFilterId } from '../../types';
+import { FilterModalType, FilterProperty, SearchFilterId } from '../../types';
 import { type MapFiltersToTagsOptions, mapFiltersToTags, tagPrefix } from './map-filters';
 
 const filter = (
@@ -116,7 +116,7 @@ describe('Utils', () => {
 					[SearchFilterId.Advanced]: [
 						{
 							prop: FilterProperty.THEME,
-							op: Operator.EQUALS,
+							op: IeObjectsSearchOperator.IS,
 							val: 'education-learning',
 							renderKey: 'theme-filter',
 						},
@@ -196,10 +196,10 @@ describe('Utils', () => {
 			const tags = toTags(
 				{
 					[SearchFilterId.Title]: [
-						{ op: Operator.CONTAINS, val: 'Magriet Hermans' },
-						{ op: Operator.CONTAINS, val: 'Luc Appermont' },
-						{ op: Operator.CONTAINS, val: 'Sabine' },
-						{ op: Operator.CONTAINS, val: 'Walter' },
+						{ op: IeObjectsSearchOperator.CONTAINS, val: 'Magriet Hermans' },
+						{ op: IeObjectsSearchOperator.CONTAINS, val: 'Luc Appermont' },
+						{ op: IeObjectsSearchOperator.CONTAINS, val: 'Sabine' },
+						{ op: IeObjectsSearchOperator.CONTAINS, val: 'Walter' },
 					],
 				},
 				[TITLE_FILTER]
@@ -213,8 +213,8 @@ describe('Utils', () => {
 			const tags = toTags(
 				{
 					[SearchFilterId.Title]: [
-						{ op: Operator.CONTAINS, val: 'concert' },
-						{ op: Operator.CONTAINS_NOT, val: 'herhaling' },
+						{ op: IeObjectsSearchOperator.CONTAINS, val: 'concert' },
+						{ op: IeObjectsSearchOperator.CONTAINS_NOT, val: 'herhaling' },
 					],
 				},
 				[TITLE_FILTER]
@@ -244,7 +244,7 @@ describe('Utils', () => {
 				[SearchFilterId.Advanced]: [
 					{
 						prop: FilterProperty.TITLE,
-						op: Operator.CONTAINS,
+						op: IeObjectsSearchOperator.CONTAINS,
 						val: 'concert',
 						renderKey: 'legacy-title',
 					},
@@ -262,7 +262,7 @@ describe('Utils', () => {
 					[SearchFilterId.ReleaseDate]: [
 						{
 							prop: FilterProperty.RELEASE_DATE,
-							op: Operator.GREATER_THAN_OR_EQUAL,
+							op: IeObjectsSearchOperator.GTE,
 							val: '2020-01-01',
 							renderKey: 'release-date',
 						},

@@ -1,4 +1,4 @@
-import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
+import { IeObjectsSearchFilterField, IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { FilterMenuType } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { describe, expect, it, vi } from 'vitest';
@@ -13,7 +13,7 @@ vi.mock('use-query-params', async (importOriginal) => ({
 	useQueryParams: () => [{}, vi.fn()],
 }));
 
-import { FilterModalType, Operator, SearchFilterId } from '@visitor-space/types';
+import { FilterModalType, SearchFilterId } from '@visitor-space/types';
 import { TextFilterForm } from './TextFilterForm';
 
 const TITLE_FILTER = {
@@ -117,7 +117,7 @@ describe('TextFilterForm', () => {
 		fireEvent.click(addConditionButton());
 
 		expect(getParams().values[SearchFilterId.Title]).toEqual([
-			{ op: Operator.CONTAINS, val: 'concert' },
+			{ op: IeObjectsSearchOperator.CONTAINS, val: 'concert' },
 		]);
 	});
 

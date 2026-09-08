@@ -8,13 +8,10 @@ import {
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import { SEARCH_PAGE_QUERY_PARAM_CONFIG } from '@visitor-space/const';
-import { getTextFilterOperatorOptions } from '@visitor-space/const/text-filter-operators.const';
-import {
-	type GenericFilterFormProps,
-	Operator,
-	type TextFilterCondition,
-} from '@visitor-space/types';
+import { getTextFilterOperatorOptions } from '@visitor-space/const/operator-labels.const';
+import type { GenericFilterFormProps, TextFilterCondition } from '@visitor-space/types';
 import { getSelectValue } from '@visitor-space/utils/select';
 import clsx from 'clsx';
 import { type FC, useState } from 'react';
@@ -23,7 +20,10 @@ import type { SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 import styles from './TextFilterForm.module.scss';
 
-const emptyCondition = (): TextFilterCondition => ({ op: Operator.CONTAINS, val: '' });
+const emptyCondition = (): TextFilterCondition => ({
+	op: IeObjectsSearchOperator.CONTAINS,
+	val: '',
+});
 
 /**
  * A filter over a free text field: a list of "Bevat" / "Bevat niet" conditions on one field.
@@ -105,7 +105,7 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 									isDisabled={disabled}
 									onChange={(newValue) =>
 										changeCondition(index, {
-											op: (newValue as SingleValue<SelectOption>)?.value as Operator,
+											op: (newValue as SingleValue<SelectOption>)?.value as IeObjectsSearchOperator,
 										})
 									}
 									options={operatorOptions}

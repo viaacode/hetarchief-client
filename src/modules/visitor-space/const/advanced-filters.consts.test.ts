@@ -6,43 +6,45 @@ import {
 } from '@shared/types/ie-objects';
 import { getAdvancedProperties, getOperators } from '@visitor-space/utils/advanced-filters';
 import { describe, expect, it } from 'vitest';
-import { FilterProperty, Operator } from '../types';
+import { FilterProperty } from '../types';
 import { getMetadataSearchFilters } from './advanced-filters.consts';
 
 describe('advanced filters config', () => {
 	it('should expose rights as an advanced filter with is and is-not operators', () => {
 		expect(getAdvancedProperties().map(({ value }) => value)).toContain(FilterProperty.RIGHTS);
 		expect(getOperators(FilterProperty.RIGHTS).map(({ value }) => value)).toEqual([
-			Operator.EQUALS,
-			Operator.EQUALS_NOT,
+			IeObjectsSearchOperator.IS,
+			IeObjectsSearchOperator.IS_NOT,
 		]);
-		expect(getMetadataSearchFilters(FilterProperty.RIGHTS, Operator.EQUALS)).toEqual([
+		expect(getMetadataSearchFilters(FilterProperty.RIGHTS, IeObjectsSearchOperator.IS)).toEqual([
 			{
 				field: IeObjectsSearchFilterField.RIGHTS,
 				operator: IeObjectsSearchOperator.IS,
 			},
 		]);
-		expect(getMetadataSearchFilters(FilterProperty.RIGHTS, Operator.EQUALS_NOT)).toEqual([
-			{
-				field: IeObjectsSearchFilterField.RIGHTS,
-				operator: IeObjectsSearchOperator.IS_NOT,
-			},
-		]);
+		expect(getMetadataSearchFilters(FilterProperty.RIGHTS, IeObjectsSearchOperator.IS_NOT)).toEqual(
+			[
+				{
+					field: IeObjectsSearchFilterField.RIGHTS,
+					operator: IeObjectsSearchOperator.IS_NOT,
+				},
+			]
+		);
 	});
 
 	it('should expose theme as an advanced filter with is and is-not operators', () => {
 		expect(getAdvancedProperties().map(({ value }) => value)).toContain(FilterProperty.THEME);
 		expect(getOperators(FilterProperty.THEME).map(({ value }) => value)).toEqual([
-			Operator.EQUALS,
-			Operator.EQUALS_NOT,
+			IeObjectsSearchOperator.IS,
+			IeObjectsSearchOperator.IS_NOT,
 		]);
-		expect(getMetadataSearchFilters(FilterProperty.THEME, Operator.EQUALS)).toEqual([
+		expect(getMetadataSearchFilters(FilterProperty.THEME, IeObjectsSearchOperator.IS)).toEqual([
 			{
 				field: IeObjectsSearchFilterField.THEME,
 				operator: IeObjectsSearchOperator.IS,
 			},
 		]);
-		expect(getMetadataSearchFilters(FilterProperty.THEME, Operator.EQUALS_NOT)).toEqual([
+		expect(getMetadataSearchFilters(FilterProperty.THEME, IeObjectsSearchOperator.IS_NOT)).toEqual([
 			{
 				field: IeObjectsSearchFilterField.THEME,
 				operator: IeObjectsSearchOperator.IS_NOT,
