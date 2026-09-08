@@ -17,12 +17,18 @@ import AsyncSelect from 'react-select/async';
 import { useQueryParams } from 'use-query-params';
 import styles from './AutocompleteFilterForm.module.scss';
 
-/** No dropdown before this many characters, per the ARC-3806 FA. */
+/** The dropdown filters from this many characters on, per the ARC-3806 FA. */
 export const AUTOCOMPLETE_MINIMUM_CHARACTERS = 3;
 
+/** An empty field shows the initial list, so only a half typed search holds the dropdown back. */
+const hasTooFewCharacters = (value: string): boolean => {
+	const length = value.trim().length;
+	return length > 0 && length < AUTOCOMPLETE_MINIMUM_CHARACTERS;
+};
+
 /**
- * A filter over a value list too long to show at once: type at least three characters, pick from
- * the dropdown, and the picked values gather as pills above the search field.
+ * A filter over a value list too long to show at once: pick from the dropdown, which filters from
+ * three characters on, and the picked values gather as pills above the search field.
  * See the "Autocomplete filters" section of the ARC-3806 FA.
  */
 export const AutocompleteFilterForm: FC<GenericFilterFormProps> = ({
@@ -46,20 +52,13 @@ export const AutocompleteFilterForm: FC<GenericFilterFormProps> = ({
 		newInputValue: string,
 		callback: (options: SelectOption[]) => void
 	): void => {
-		if (newInputValue.trim().length < AUTOCOMPLETE_MINIMUM_CHARACTERS || !autocompleteField) {
+		if (!autocompleteField || hasTooFewCharacters(newInputValue)) {
 			callback([]);
 			return;
 		}
 
 		IeObjectsService.getAutocompleteFieldOptions(autocompleteField, newInputValue, searchFilters)
-			.then((values) => {
-				// A value can be selected only once
-				callback(
-					values
-						.filter((value) => !selectedValues.includes(value))
-						.map((value) => ({ label: value, value }))
-				);
-			})
+			.then((values) => callback(values.map((value) => ({ label: value, value }))))
 			.catch(() => {
 				toastService.notify({
 					title: tText(
@@ -85,8 +84,6 @@ export const AutocompleteFilterForm: FC<GenericFilterFormProps> = ({
 		}
 		setInputValue('');
 	};
-
-	const hasTooFewCharacters = inputValue.trim().length < AUTOCOMPLETE_MINIMUM_CHARACTERS;
 
 	return (
 		<>
@@ -136,12 +133,17 @@ export const AutocompleteFilterForm: FC<GenericFilterFormProps> = ({
 							</span>
 						),
 					}}
+					// The initial list, as the search filter of this field showed before ARC-3806
+					defaultOptions
+					// A value can be picked only once. The initial list is cached, so this runs on
+					// render rather than on the fetch.
+					filterOption={(option) => !selectedValues.includes(option.value)}
 					inputId={`autocomplete-filter-form-${filter.id}`}
 					isDisabled={disabled}
 					inputValue={inputValue}
 					loadOptions={loadOptions}
 					noOptionsMessage={() =>
-						hasTooFewCharacters
+						hasTooFewCharacters(inputValue)
 							? tText(
 									'modules/visitor-space/components/autocomplete-filter-form/autocomplete-filter-form___geef-minstens-3-karakters-in'
 								)

@@ -60,14 +60,31 @@ const type = (value: string) =>
 	fireEvent.change(screen.getByRole('combobox'), { target: { value } });
 
 describe('AutocompleteFilterForm', () => {
-	it('asks for three characters before it fetches anything', () => {
+	it('shows the initial list before anything is typed', async () => {
+		getAutocompleteFieldOptions.mockClear();
+		renderForm();
+
+		await waitFor(() =>
+			expect(getAutocompleteFieldOptions).toHaveBeenCalledWith('mentions', '', expect.anything())
+		);
+
+		fireEvent.keyDown(screen.getByRole('combobox'), { key: 'ArrowDown' });
+
+		expect(await screen.findByText('Abel Joseph Riviere')).toBeInTheDocument();
+	});
+
+	it('asks for three characters before it filters', () => {
 		getAutocompleteFieldOptions.mockClear();
 		renderForm();
 
 		type('Ab');
 
 		expect(AUTOCOMPLETE_MINIMUM_CHARACTERS).toEqual(3);
-		expect(getAutocompleteFieldOptions).not.toHaveBeenCalled();
+		expect(getAutocompleteFieldOptions).not.toHaveBeenCalledWith(
+			'mentions',
+			'Ab',
+			expect.anything()
+		);
 		expect(screen.getByText('geef minstens 3 karakters in')).toBeInTheDocument();
 	});
 
