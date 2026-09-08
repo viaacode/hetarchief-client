@@ -4,7 +4,6 @@ import { RightsLabel } from '@visitor-space/const/rights-filter.const';
 import {
 	FILTER_LABEL_VALUE_DELIMITER,
 	FilterProperty,
-	Operator,
 	ReusabilityFilterOption,
 	SearchFilterId,
 } from '@visitor-space/types';
@@ -38,7 +37,7 @@ describe('mapFiltersToElastic()', () => {
 			[SearchFilterId.Advanced]: [
 				{
 					prop: FilterProperty.THEME,
-					op: Operator.EQUALS,
+					op: IeObjectsSearchOperator.IS,
 					val: 'education-learning',
 					renderKey: 'theme-filter',
 				},
@@ -57,7 +56,7 @@ describe('mapFiltersToElastic()', () => {
 			[SearchFilterId.Advanced]: [
 				{
 					prop: FilterProperty.RIGHTS,
-					op: Operator.EQUALS,
+					op: IeObjectsSearchOperator.IS,
 					val: RightsLabel.IN_COPYRIGHT,
 					renderKey: 'rights-filter',
 				},
@@ -100,8 +99,8 @@ describe('mapFiltersToElastic()', () => {
 	it('sends one clause per text filter condition, with its own operator', () => {
 		const filters = mapFiltersToElastic({
 			[SearchFilterId.Title]: [
-				{ op: Operator.CONTAINS, val: 'concert' },
-				{ op: Operator.CONTAINS_NOT, val: 'herhaling' },
+				{ op: IeObjectsSearchOperator.CONTAINS, val: 'concert' },
+				{ op: IeObjectsSearchOperator.CONTAINS_NOT, val: 'herhaling' },
 			],
 		} as SearchPageQueryParams);
 

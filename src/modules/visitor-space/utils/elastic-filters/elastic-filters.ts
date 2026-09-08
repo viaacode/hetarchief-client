@@ -16,7 +16,6 @@ import {
 	type AdvancedFilter,
 	FILTER_LABEL_VALUE_DELIMITER,
 	FilterModalType,
-	Operator,
 	SearchFilterId,
 	type TextFilterCondition,
 } from '../../types';
@@ -120,10 +119,7 @@ const mapFilterToElastic = (
 		case FilterModalType.Text:
 			return (value as TextFilterCondition[]).map((condition) => ({
 				field: filter.field as IeObjectsSearchFilterField,
-				operator:
-					condition.op === Operator.CONTAINS_NOT
-						? IeObjectsSearchOperator.CONTAINS_NOT
-						: IeObjectsSearchOperator.CONTAINS,
+				operator: condition.op,
 				value: condition.val,
 			}));
 

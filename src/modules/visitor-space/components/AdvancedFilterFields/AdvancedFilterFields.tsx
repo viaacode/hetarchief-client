@@ -9,6 +9,7 @@ import {
 import { SEPARATOR } from '@shared/const';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import type { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import type { AdvancedFilterFieldsProps } from '@visitor-space/components/AdvancedFilterFields/AdvancedFilterFields.types';
 import { AdvancedRightsSelect } from '@visitor-space/components/AdvancedRightsSelect/AdvancedRightsSelect';
 import AutocompleteFieldInput, {
@@ -40,7 +41,7 @@ import { parseISO } from 'date-fns';
 import { kebabCase } from 'es-toolkit/compat';
 import React, { type FC } from 'react';
 import type { MultiValue, SingleValue } from 'react-select';
-import type { FilterProperty, IdentityAdvancedFilter, Operator } from '../../types';
+import type { FilterProperty, IdentityAdvancedFilter } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
 import styles from './AdvancedFilterFields.module.scss';
@@ -102,7 +103,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 	const renderField = (config?: FilterInputComponentProps) => {
 		const filterConfig: FilterConfig | null = operator
-			? getFilterConfig(filterValue.prop as FilterProperty, operator as Operator)
+			? getFilterConfig(filterValue.prop as FilterProperty, operator as IeObjectsSearchOperator)
 			: null;
 		if (!filterConfig) {
 			console.error('Unknown filter config', filterValue.prop, operator);

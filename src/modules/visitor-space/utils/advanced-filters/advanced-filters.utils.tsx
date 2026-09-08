@@ -1,4 +1,5 @@
 import { tText } from '@shared/helpers/translate';
+import type { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import {
 	ADVANCED_FILTERS,
 	type AdvancedFilterVisibilityContext,
@@ -8,12 +9,7 @@ import {
 } from '@visitor-space/const/advanced-filters.consts';
 import { sortBy } from 'es-toolkit/compat';
 
-import {
-	FilterProperty,
-	type Operator,
-	type OperatorOptions,
-	type PropertyOptions,
-} from '../../types';
+import { FilterProperty, type OperatorOptions, type PropertyOptions } from '../../types';
 
 export const getRegularProperties = (): PropertyOptions => {
 	return sortBy(
@@ -53,8 +49,8 @@ export const getOperators = (prop: FilterProperty): OperatorOptions => {
 	if (property) {
 		return Object.keys(property).map((key) => {
 			return {
-				label: property[key as Operator]?.label || '',
-				value: key as Operator,
+				label: property[key as IeObjectsSearchOperator]?.label || '',
+				value: key as IeObjectsSearchOperator,
 			};
 		});
 	}
@@ -62,7 +58,10 @@ export const getOperators = (prop: FilterProperty): OperatorOptions => {
 	return [];
 };
 
-export const getFilterConfig = (prop: FilterProperty, op: Operator): FilterConfig | null => {
+export const getFilterConfig = (
+	prop: FilterProperty,
+	op: IeObjectsSearchOperator
+): FilterConfig | null => {
 	const property = FILTERS_OPTIONS_CONFIG()[prop];
 
 	if (property?.[op]) {

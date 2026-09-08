@@ -1,5 +1,6 @@
+import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import { describe, expect, it } from 'vitest';
-import { FilterProperty, Operator } from '../types';
+import { FilterProperty } from '../types';
 import { AdvancedFilterArrayParam } from './advanced-filter-array-param';
 import { RightsLabel } from './rights-filter.const';
 
@@ -8,7 +9,7 @@ describe('AdvancedFilterArrayParam', () => {
 		const encoded = AdvancedFilterArrayParam.encode([
 			{
 				prop: FilterProperty.RIGHTS,
-				op: Operator.EQUALS,
+				op: IeObjectsSearchOperator.IS,
 				val: RightsLabel.IN_COPYRIGHT,
 				renderKey: 'rights-filter',
 			},
@@ -18,7 +19,7 @@ describe('AdvancedFilterArrayParam', () => {
 		expect(AdvancedFilterArrayParam.decode(encoded)).toEqual([
 			expect.objectContaining({
 				prop: FilterProperty.RIGHTS,
-				op: Operator.EQUALS,
+				op: IeObjectsSearchOperator.IS,
 				val: RightsLabel.IN_COPYRIGHT,
 			}),
 		]);
@@ -28,7 +29,7 @@ describe('AdvancedFilterArrayParam', () => {
 		const encoded = AdvancedFilterArrayParam.encode([
 			{
 				prop: FilterProperty.THEME,
-				op: Operator.EQUALS,
+				op: IeObjectsSearchOperator.IS,
 				val: 'education-learning',
 				renderKey: 'theme-filter',
 			},
@@ -38,7 +39,7 @@ describe('AdvancedFilterArrayParam', () => {
 		expect(AdvancedFilterArrayParam.decode(encoded)).toEqual([
 			expect.objectContaining({
 				prop: FilterProperty.THEME,
-				op: Operator.EQUALS,
+				op: IeObjectsSearchOperator.IS,
 				val: 'education-learning',
 			}),
 		]);

@@ -1,3 +1,5 @@
+import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
+
 // 2-letter for url parsing
 
 export enum FilterProperty {
@@ -28,15 +30,4 @@ export enum FilterProperty {
 
 export const FILTER_LABEL_VALUE_DELIMITER = '---';
 
-export enum Operator {
-	CONTAINS = 'CONTAINS',
-	CONTAINS_NOT = 'CONTAINS_NOT',
-	EQUALS = 'EQUALS',
-	EQUALS_NOT = 'EQUALS_NOT',
-	LESS_THAN_OR_EQUAL = 'LESS_THAN_OR_EQUAL', // shorter (duration) or until (date)
-	GREATER_THAN_OR_EQUAL = 'GREATER_THAN_OR_EQUAL', // longer (duration) or after (date)
-	BETWEEN = 'BETWEEN', // duration & date
-	EXACT = 'EXACT', // duration
-}
-
-export const isRange = (op?: string): boolean => op === Operator.BETWEEN;
+export const isRange = (op?: string): boolean => op === IeObjectsSearchOperator.BETWEEN;

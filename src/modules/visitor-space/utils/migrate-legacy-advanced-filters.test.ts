@@ -1,3 +1,4 @@
+import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm', () => ({
@@ -21,7 +22,7 @@ vi.mock('@shared/config/public-runtime-config', () => ({
 	}),
 }));
 
-import { FilterProperty, Operator, SearchFilterId } from '../types';
+import { FilterProperty, SearchFilterId } from '../types';
 import { migrateLegacyAdvancedFilters } from './migrate-legacy-advanced-filters';
 
 describe('migrateLegacyAdvancedFilters()', () => {
@@ -32,27 +33,44 @@ describe('migrateLegacyAdvancedFilters()', () => {
 
 	it('turns a text property into a condition of the filter that replaced it', () => {
 		const changes = migrateLegacyAdvancedFilters([
-			{ renderKey: '1', prop: FilterProperty.TITLE, op: Operator.CONTAINS, val: 'concert' },
+			{
+				renderKey: '1',
+				prop: FilterProperty.TITLE,
+				op: IeObjectsSearchOperator.CONTAINS,
+				val: 'concert',
+			},
 		]);
 
-		expect(changes[SearchFilterId.Title]).toEqual([{ op: Operator.CONTAINS, val: 'concert' }]);
+		expect(changes[SearchFilterId.Title]).toEqual([
+			{ op: IeObjectsSearchOperator.CONTAINS, val: 'concert' },
+		]);
 		expect(changes[SearchFilterId.Advanced]).toBeUndefined();
 	});
 
 	it('collapses "is niet" into "bevat niet", the only negative a text filter has', () => {
 		const changes = migrateLegacyAdvancedFilters([
-			{ renderKey: '1', prop: FilterProperty.TITLE, op: Operator.EQUALS_NOT, val: 'herhaling' },
+			{
+				renderKey: '1',
+				prop: FilterProperty.TITLE,
+				op: IeObjectsSearchOperator.IS_NOT,
+				val: 'herhaling',
+			},
 		]);
 
 		expect(changes[SearchFilterId.Title]).toEqual([
-			{ op: Operator.CONTAINS_NOT, val: 'herhaling' },
+			{ op: IeObjectsSearchOperator.CONTAINS_NOT, val: 'herhaling' },
 		]);
 	});
 
 	it('turns a multiselect property into a value list', () => {
 		const changes = migrateLegacyAdvancedFilters([
-			{ renderKey: '1', prop: FilterProperty.GENRE, op: Operator.EQUALS, val: 'concert' },
-			{ renderKey: '2', prop: FilterProperty.GENRE, op: Operator.EQUALS, val: 'dans' },
+			{
+				renderKey: '1',
+				prop: FilterProperty.GENRE,
+				op: IeObjectsSearchOperator.IS,
+				val: 'concert',
+			},
+			{ renderKey: '2', prop: FilterProperty.GENRE, op: IeObjectsSearchOperator.IS, val: 'dans' },
 		]);
 
 		expect(changes[SearchFilterId.Genre]).toEqual(['concert', 'dans']);
@@ -62,7 +80,7 @@ describe('migrateLegacyAdvancedFilters()', () => {
 		const legacyFilter = {
 			renderKey: '1',
 			prop: FilterProperty.CREATED_AT,
-			op: Operator.GREATER_THAN_OR_EQUAL,
+			op: IeObjectsSearchOperator.GTE,
 			val: '2020-01-01',
 		};
 
@@ -74,7 +92,12 @@ describe('migrateLegacyAdvancedFilters()', () => {
 	it('skips an entry without a value', () => {
 		expect(
 			migrateLegacyAdvancedFilters([
-				{ renderKey: '1', prop: FilterProperty.TITLE, op: Operator.CONTAINS, val: '' },
+				{
+					renderKey: '1',
+					prop: FilterProperty.TITLE,
+					op: IeObjectsSearchOperator.CONTAINS,
+					val: '',
+				},
 			])
 		).toEqual({});
 	});

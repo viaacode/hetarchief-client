@@ -64,6 +64,12 @@ export enum IeObjectsSearchOperator {
 	IS = 'is',
 	IS_NOT = 'isNot',
 	LTE = 'lte',
+	/**
+	 * A date or duration range, and an exact duration. The advanced filter config expands both
+	 * into a GTE and an LTE clause, so neither reaches the proxy.
+	 */
+	BETWEEN = 'between',
+	EXACT = 'exact',
 }
 
 export interface IeObjectsSearchFilter {

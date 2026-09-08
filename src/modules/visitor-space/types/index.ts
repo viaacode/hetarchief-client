@@ -1,6 +1,6 @@
 import type { DefaultComponentProps } from '@meemoo/admin-core-ui/admin';
 import type { SelectOption, TagInfo } from '@meemoo/react-components';
-import type { IeObjectType } from '@shared/types/ie-objects';
+import type { IeObjectsSearchOperator, IeObjectType } from '@shared/types/ie-objects';
 import type {
 	FilterMenuFilterOption,
 	OnFilterMenuFormSubmit,
@@ -8,7 +8,7 @@ import type {
 import type { ReactNode } from 'react';
 import type { FieldValues, UseFormHandleSubmit } from 'react-hook-form';
 
-import type { FilterProperty, Operator } from './filter-properties';
+import type { FilterProperty } from './filter-properties';
 
 export * from './filter-properties';
 
@@ -66,7 +66,7 @@ export enum FilterModalType {
 
 /** One "Bevat" / "Bevat niet" row in a text filter. */
 export interface TextFilterCondition {
-	op: Operator;
+	op: IeObjectsSearchOperator;
 	val: string;
 }
 
@@ -178,7 +178,7 @@ export type MediaTypeOptions = Array<
 export type OperatorOptions = Array<
 	SelectOption & {
 		label: string;
-		value: Operator;
+		value: IeObjectsSearchOperator;
 	}
 >;
 
@@ -192,7 +192,7 @@ export type PropertyOptions = Array<
 export interface AdvancedFilter {
 	renderKey: string; // Unique key for the filter, used by react to render the filter in the UI
 	prop?: string; // Which property/field is being filtered on
-	op?: string; // Which operator, see Operator enum
+	op?: string; // Which operator, see IeObjectsSearchOperator enum
 	val?: string; // stringified value, potentially character-separated
 }
 

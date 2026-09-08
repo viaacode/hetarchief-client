@@ -1,9 +1,9 @@
+import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import { ALL_SEARCH_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import {
 	type AdvancedFilter,
 	FilterModalType,
 	FilterProperty,
-	Operator,
 	SearchFilterId,
 	type TextFilterCondition,
 } from '@visitor-space/types';
@@ -69,9 +69,10 @@ export const migrateLegacyAdvancedFilters = (
 					...((changes[filterId] as TextFilterCondition[]) || []),
 					{
 						op:
-							legacyFilter.op === Operator.CONTAINS_NOT || legacyFilter.op === Operator.EQUALS_NOT
-								? Operator.CONTAINS_NOT
-								: Operator.CONTAINS,
+							legacyFilter.op === IeObjectsSearchOperator.CONTAINS_NOT ||
+							legacyFilter.op === IeObjectsSearchOperator.IS_NOT
+								? IeObjectsSearchOperator.CONTAINS_NOT
+								: IeObjectsSearchOperator.CONTAINS,
 						val: legacyFilter.val,
 					},
 				];

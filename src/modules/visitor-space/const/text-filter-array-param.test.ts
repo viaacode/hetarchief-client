@@ -1,12 +1,12 @@
+import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import { describe, expect, it } from 'vitest';
-import { Operator } from '../types';
 import { TextFilterArrayParam } from './text-filter-array-param';
 
 describe('TextFilterArrayParam', () => {
 	it('survives a round trip through the url', () => {
 		const conditions = [
-			{ op: Operator.CONTAINS, val: 'Magriet Hermans' },
-			{ op: Operator.CONTAINS_NOT, val: 'Luc Appermont' },
+			{ op: IeObjectsSearchOperator.CONTAINS, val: 'Magriet Hermans' },
+			{ op: IeObjectsSearchOperator.CONTAINS_NOT, val: 'Luc Appermont' },
 		];
 
 		const encoded = TextFilterArrayParam.encode(conditions);
@@ -16,7 +16,7 @@ describe('TextFilterArrayParam', () => {
 	});
 
 	it('keeps a value that holds a comma whole', () => {
-		const conditions = [{ op: Operator.CONTAINS, val: 'Olmen, Moll, Meerhout' }];
+		const conditions = [{ op: IeObjectsSearchOperator.CONTAINS, val: 'Olmen, Moll, Meerhout' }];
 
 		const encoded = TextFilterArrayParam.encode(conditions);
 
@@ -26,8 +26,8 @@ describe('TextFilterArrayParam', () => {
 	it('leaves out a condition without a value', () => {
 		expect(
 			TextFilterArrayParam.encode([
-				{ op: Operator.CONTAINS, val: '' },
-				{ op: Operator.CONTAINS, val: 'concert' },
+				{ op: IeObjectsSearchOperator.CONTAINS, val: '' },
+				{ op: IeObjectsSearchOperator.CONTAINS, val: 'concert' },
 			])
 		).toEqual('coconcert');
 	});
@@ -41,7 +41,7 @@ describe('TextFilterArrayParam', () => {
 
 	it('drops an unparseable condition rather than throwing on a hand-edited url', () => {
 		expect(TextFilterArrayParam.decode('zzconcert,codans')).toEqual([
-			{ op: Operator.CONTAINS, val: 'dans' },
+			{ op: IeObjectsSearchOperator.CONTAINS, val: 'dans' },
 		]);
 	});
 });
