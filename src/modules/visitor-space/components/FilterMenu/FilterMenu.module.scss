@@ -162,6 +162,33 @@ $checkbox-size: $spacer-sm;
 		}
 	}
 
+	// A filter modal hangs from the row it belongs to, centered on it
+	&__flyout-panel {
+		display: none;
+		position: absolute;
+		top: 50%;
+		left: 100%;
+		width: 46.4rem;
+		background-color: $white;
+		transform: translateY(-50%);
+		z-index: 5;
+
+		// A redesigned modal sits in the middle of the window instead, against the right edge of
+		// the panel. Only the browser can measure that edge, so FilterOption sets `left`.
+		&--centered {
+			position: fixed;
+		}
+
+		// The list of advanced filters is narrower than a filter modal
+		&--narrow {
+			width: 30rem;
+		}
+
+		&--visible {
+			display: block;
+		}
+	}
+
 	&__overlay {
 		z-index: get-z-layer("filter-overlay");
 	}

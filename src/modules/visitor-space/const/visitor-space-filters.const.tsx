@@ -20,7 +20,7 @@ import {
 	SearchFilterId,
 } from '@visitor-space/types';
 import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
-import { compareLabels } from '@visitor-space/utils/compare-labels';
+import { sortAccentIndependent } from '@visitor-space/utils/sort-labels';
 import { isNil } from 'es-toolkit/compat';
 
 const { publicRuntimeConfig } = getConfig();
@@ -96,7 +96,6 @@ export const SEARCH_PAGE_FILTERS = (
 			}[activeTab],
 			form: ConsultableMediaFilterForm,
 			type: FilterMenuType.Checkbox,
-			modalType: FilterModalType.Unchanged,
 			field: IeObjectsSearchFilterField.CONSULTABLE_MEDIA,
 			inMainPanelByDefault: true,
 			tabs: ALL_TABS,
@@ -122,7 +121,6 @@ export const SEARCH_PAGE_FILTERS = (
 			}[activeTab],
 			form: ConsultableOnlyOnLocationFilterForm,
 			type: FilterMenuType.Checkbox,
-			modalType: FilterModalType.Unchanged,
 			field: IeObjectsSearchFilterField.CONSULTABLE_ONLY_ON_LOCATION,
 			inMainPanelByDefault: true,
 			tabs: ALL_TABS,
@@ -156,7 +154,6 @@ export const SEARCH_PAGE_FILTERS = (
 			label: tText('modules/visitor-space/const/visitor-space-filters___uitgavedatum'),
 			form: ReleaseDateFilterForm,
 			type: FilterMenuType.Modal,
-			modalType: FilterModalType.Unchanged,
 			field: IeObjectsSearchFilterField.RELEASE_DATE,
 			property: FilterProperty.RELEASE_DATE,
 			inMainPanelByDefault: true,
@@ -302,7 +299,6 @@ export const SEARCH_PAGE_FILTERS = (
 			label: getFilterLabel(FilterProperty.CREATED_AT),
 			form: SinglePropertyFilterForm,
 			type: FilterMenuType.Modal,
-			modalType: FilterModalType.Unchanged,
 			field: IeObjectsSearchFilterField.CREATED,
 			property: FilterProperty.CREATED_AT,
 			inMainPanelByDefault: false,
@@ -313,7 +309,6 @@ export const SEARCH_PAGE_FILTERS = (
 			label: getFilterLabel(FilterProperty.PUBLISHED_AT),
 			form: SinglePropertyFilterForm,
 			type: FilterMenuType.Modal,
-			modalType: FilterModalType.Unchanged,
 			field: IeObjectsSearchFilterField.PUBLISHED,
 			property: FilterProperty.PUBLISHED_AT,
 			inMainPanelByDefault: false,
@@ -324,7 +319,6 @@ export const SEARCH_PAGE_FILTERS = (
 			label: getFilterLabel(FilterProperty.DURATION),
 			form: SinglePropertyFilterForm,
 			type: FilterMenuType.Modal,
-			modalType: FilterModalType.Unchanged,
 			field: IeObjectsSearchFilterField.DURATION,
 			property: FilterProperty.DURATION,
 			inMainPanelByDefault: false,
@@ -336,7 +330,6 @@ export const SEARCH_PAGE_FILTERS = (
 			icon: IconNamesLight.DotsHorizontal,
 			label: tText('modules/visitor-space/const/index___geavanceerd'),
 			type: FilterMenuType.Modal,
-			modalType: FilterModalType.Unchanged,
 			inMainPanelByDefault: true,
 			tabs: ALL_TABS,
 		},
@@ -369,13 +362,15 @@ export const getAvailableSearchPageFilters = (
  */
 export const getAdvancedFlyoutFilters = (
 	availableFilters: FilterMenuFilterOption[],
-	locale?: Locale
+	locale: Locale
 ): FilterMenuFilterOption[] =>
-	availableFilters
-		.filter(
+	sortAccentIndependent(
+		availableFilters.filter(
 			(filter) => filter.type === FilterMenuType.Modal && filter.id !== SearchFilterId.Advanced
-		)
-		.sort((filterA, filterB) => compareLabels(locale)(filterA.label, filterB.label));
+		),
+		locale,
+		(filter) => filter.label
+	);
 
 /**
  * The filters the panel shows, in the order the design puts them.

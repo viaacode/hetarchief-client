@@ -46,7 +46,7 @@ const ALL_TABS = [
 ];
 
 /** The "Allocatie per filter" table of the FA of ARC-3806, as amended on 4 Sep 2026. */
-const FA_ALLOCATION_TABLE: [SearchFilterId, FilterModalType][] = [
+const FILTER_ID_TO_MODAL_TYPE: [SearchFilterId, FilterModalType | undefined][] = [
 	[SearchFilterId.Maintainers, FilterModalType.SearchableCheckbox],
 	[SearchFilterId.Medium, FilterModalType.SearchableCheckbox],
 	[SearchFilterId.Genre, FilterModalType.SearchableCheckbox],
@@ -70,17 +70,17 @@ const FA_ALLOCATION_TABLE: [SearchFilterId, FilterModalType][] = [
 	[SearchFilterId.Keywords, FilterModalType.Text],
 	[SearchFilterId.Publisher, FilterModalType.Text],
 
-	// "Blijft zoals het nu is"
-	[SearchFilterId.ConsultableMedia, FilterModalType.Unchanged],
-	[SearchFilterId.ConsultableOnlyOnLocation, FilterModalType.Unchanged],
-	[SearchFilterId.ReleaseDate, FilterModalType.Unchanged],
-	[SearchFilterId.Created, FilterModalType.Unchanged],
-	[SearchFilterId.Published, FilterModalType.Unchanged],
-	[SearchFilterId.Duration, FilterModalType.Unchanged],
+	// "Blijft zoals het nu is": no generic modal type, these keep their own form
+	[SearchFilterId.ConsultableMedia, undefined],
+	[SearchFilterId.ConsultableOnlyOnLocation, undefined],
+	[SearchFilterId.ReleaseDate, undefined],
+	[SearchFilterId.Created, undefined],
+	[SearchFilterId.Published, undefined],
+	[SearchFilterId.Duration, undefined],
 ];
 
 describe('SEARCH_PAGE_FILTERS', () => {
-	it.each(FA_ALLOCATION_TABLE)(
+	it.each(FILTER_ID_TO_MODAL_TYPE)(
 		'has exactly one entry for %s, with the modal type the FA gives it',
 		(id, modalType) => {
 			const entries = SEARCH_PAGE_FILTERS(true, false, true, SearchPageMediaType.All).filter(
@@ -178,7 +178,8 @@ describe('SEARCH_PAGE_FILTERS', () => {
 describe('getAdvancedFlyoutFilters', () => {
 	it.each(ALL_TABS)('sorts the list alphabetically by label on the %s tab', (tab) => {
 		const flyoutFilters = getAdvancedFlyoutFilters(
-			getAvailableSearchPageFilters(true, false, true, tab)
+			getAvailableSearchPageFilters(true, false, true, tab),
+			Locale.nl
 		);
 		const labels = flyoutFilters.map((filter) => filter.label.toLowerCase());
 
@@ -209,7 +210,8 @@ describe('getAdvancedFlyoutFilters', () => {
 
 	it('holds the filters that are already in the main panel too', () => {
 		const flyoutIds = getAdvancedFlyoutFilters(
-			getAvailableSearchPageFilters(true, false, true, SearchPageMediaType.All)
+			getAvailableSearchPageFilters(true, false, true, SearchPageMediaType.All),
+			Locale.nl
 		).map((filter) => filter.id);
 
 		// The FA names "maker" as an example of a filter in both places
@@ -220,7 +222,8 @@ describe('getAdvancedFlyoutFilters', () => {
 
 	it('leaves out the inline checkboxes and the fly-out entry itself', () => {
 		const flyoutIds = getAdvancedFlyoutFilters(
-			getAvailableSearchPageFilters(true, false, true, SearchPageMediaType.All)
+			getAvailableSearchPageFilters(true, false, true, SearchPageMediaType.All),
+			Locale.nl
 		).map((filter) => filter.id);
 
 		expect(flyoutIds).not.toContain(SearchFilterId.Advanced);

@@ -57,7 +57,7 @@ export interface FilterMenuFilterOption {
 	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	form?: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps<any>> | FC<any> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
 	type: FilterMenuType;
-	modalType: FilterModalType;
+	modalType?: FilterModalType;
 	/** The elasticsearch field this filter queries. Drives its option list and its query clauses. */
 	field?: IeObjectsSearchFilterField;
 	/** Only for the date and duration filters, which keep their operator dropdown. */

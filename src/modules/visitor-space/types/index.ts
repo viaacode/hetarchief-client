@@ -54,15 +54,14 @@ export enum SearchFilterId {
 
 /**
  * The kind of modal a filter opens. See the "Allocatie per filter" table in the FA of ARC-3806.
- * Unchanged covers the filters the FA leaves alone: the two consultable checkboxes, the date
- * pickers and the duration filter. Those keep their own form component.
+ * A filter without a modal type keeps the form component it always had: the two consultable
+ * checkboxes, the date pickers and the duration filter.
  */
 export enum FilterModalType {
 	SearchableCheckbox = 'searchableCheckbox',
 	CheckboxList = 'checkboxList',
 	Autocomplete = 'autocomplete',
 	Text = 'text',
-	Unchanged = 'unchanged',
 }
 
 /** One "Bevat" / "Bevat niet" row in a text filter. */

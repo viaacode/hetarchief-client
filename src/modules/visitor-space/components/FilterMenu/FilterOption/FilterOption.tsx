@@ -5,7 +5,7 @@ import { Overlay } from '@shared/components/Overlay';
 import { tText } from '@shared/helpers/translate';
 import { AdvancedFilterFlyout } from '@visitor-space/components/AdvancedFilterFlyout/AdvancedFilterFlyout';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
-import { FilterModalType, SearchFilterId } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
 import { type FC, type ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 
@@ -31,9 +31,9 @@ const FilterOption: FC<FilterOptionProps> = ({
 	const filterIsActive = id === activeFilter;
 	const isAdvancedFlyout = id === SearchFilterId.Advanced;
 
-	// The redesigned modals are centred in the window. The date and duration filters keep the
+	// The redesigned modals are centered in the window. The date and duration filters keep the
 	// position they had, since the FA of ARC-3806 leaves them as they are.
-	const isCentred = isAdvancedFlyout || filter.modalType !== FilterModalType.Unchanged;
+	const isCentered = isAdvancedFlyout || !!filter.modalType;
 
 	const onFilterToggle = useCallback(() => onClick?.(id), [id, onClick]);
 	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
@@ -45,14 +45,13 @@ const FilterOption: FC<FilterOptionProps> = ({
 		setOpenedAt(Date.now());
 	}, [filterIsActive]);
 
-	// The fly-out has no close CTA in the design, so escape is the way out of it
 	const closeFlyoutOnEscape = useCallback(
 		(event: KeyboardEvent) => {
-			if (isAdvancedFlyout && filterIsActive && keysEscape.includes(event.key)) {
+			if (filterIsActive && keysEscape.includes(event.key)) {
 				onFilterToggle();
 			}
 		},
-		[isAdvancedFlyout, filterIsActive, onFilterToggle]
+		[filterIsActive, onFilterToggle]
 	);
 
 	useEffect(() => {
@@ -63,9 +62,9 @@ const FilterOption: FC<FilterOptionProps> = ({
 		};
 	}, [closeFlyoutOnEscape]);
 
-	// A centred fly-out needs the right edge of the panel in window coordinates to sit against
+	// A centered fly-out needs the right edge of the panel in window coordinates to sit against
 	useEffect(() => {
-		if (!isCentred || !filterIsActive) {
+		if (!isCentered || !filterIsActive) {
 			return;
 		}
 
@@ -83,7 +82,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 		return () => {
 			window.removeEventListener('resize', measure);
 		};
-	}, [isCentred, filterIsActive]);
+	}, [isCentered, filterIsActive]);
 
 	const renderFilterOptionByType = (): ReactElement => {
 		switch (type) {
@@ -114,12 +113,6 @@ const FilterOption: FC<FilterOptionProps> = ({
 
 	const renderCheckbox = (): ReactElement => renderFilterForm('c-filter-menu__form--inline', true);
 
-	/** Only the filters the FA leaves as they are still hang from their own row. */
-	const FILTER_MENU_HEIGHTS: Partial<Record<SearchFilterId, string>> = {
-		[SearchFilterId.ReleaseDate]: '61.3rem',
-		[SearchFilterId.Duration]: '48.1rem',
-	};
-
 	const renderModal = (): ReactElement => {
 		return (
 			<>
@@ -128,9 +121,6 @@ const FilterOption: FC<FilterOptionProps> = ({
 					id={`c-filter-menu__option__${id}`}
 					key={`filter-menu-btn-${id}`}
 					ref={optionRef}
-					style={{
-						position: 'relative',
-					}}
 				>
 					<FilterButton
 						icon={filterIsActive ? IconNamesLight.AngleLeft : (icon ?? IconNamesLight.AngleRight)}
@@ -141,30 +131,16 @@ const FilterOption: FC<FilterOptionProps> = ({
 
 					<NoServerSideRendering>
 						<div
-							style={{
-								backgroundColor: 'white',
-								zIndex: 5,
-								// A centred fly-out sits against the right edge of the panel, in the middle of
-								// the window. The list of advanced filters is narrower than a filter modal.
-								...(isCentred
-									? {
-											position: 'fixed',
-											left: flyoutLeft,
-											top: '50%',
-											transform: 'translateY(-50%)',
-											width: isAdvancedFlyout ? '30rem' : '46.4rem',
-										}
-									: {
-											position: 'absolute',
-											left: '100%',
-											width: '46.4rem',
-											top: `calc(-${FILTER_MENU_HEIGHTS[id] ?? '40rem'} / 2 + 2rem)`,
-										}),
-								display:
-									filterIsActive && (!isCentred || flyoutLeft !== undefined) ? 'block' : 'none',
-							}}
+							className={clsx(styles['c-filter-menu__flyout-panel'], {
+								[styles['c-filter-menu__flyout-panel--centered']]: isCentered,
+								[styles['c-filter-menu__flyout-panel--narrow']]: isAdvancedFlyout,
+								[styles['c-filter-menu__flyout-panel--visible']]:
+									filterIsActive && (!isCentered || flyoutLeft !== undefined),
+							})}
+							// Only the browser can measure the right edge of the panel
+							style={isCentered ? { left: flyoutLeft } : undefined}
 						>
-							{/* The fly-out closes with escape or by clicking away, so it has no close CTA */}
+							{/* The advanced fly-out closes with escape or by clicking away, so it has no CTA */}
 							{!isAdvancedFlyout && (
 								<Button
 									className={styles['c-filter-menu__flyout-close']}

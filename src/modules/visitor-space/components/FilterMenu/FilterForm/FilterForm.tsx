@@ -15,6 +15,7 @@ import {
 	type SearchFilterId,
 } from '@visitor-space/types';
 import clsx from 'clsx';
+import { noop } from 'es-toolkit/compat';
 import { type FC, type ReactElement, useMemo } from 'react';
 
 import { FilterMenuType } from '../FilterMenu.types';
@@ -71,7 +72,7 @@ const FilterForm: FC<FilterFormProps> = ({
 	};
 
 	const renderCheckbox = (): ReactElement => {
-		const FormComponent = (form as FC<InlineFilterFormProps>) ?? (() => null);
+		const FormComponent = (form as FC<InlineFilterFormProps>) ?? noop;
 
 		return (
 			<div className={clsx(className, styles['c-filter-form--inline'])}>
@@ -92,8 +93,8 @@ const FilterForm: FC<FilterFormProps> = ({
 		// A filter without a form of its own uses the generic form of its modal type.
 		// A form with its own component ignores the filter prop, a generic one reads it.
 		const FormComponent = (form ??
-			GENERIC_FILTER_FORM_BY_MODAL_TYPE[filter.modalType] ??
-			(() => null)) as FC<
+			(filter.modalType ? GENERIC_FILTER_FORM_BY_MODAL_TYPE[filter.modalType] : undefined) ??
+			noop) as FC<
 			// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 			DefaultFilterFormProps<any> & Partial<Pick<GenericFilterFormProps, 'filter'>>
 		>;
