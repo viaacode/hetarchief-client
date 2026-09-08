@@ -1,6 +1,6 @@
 @use "src/styles/abstracts" as abstracts;
 
-$autocomplete-filter-form-padding: 3.2rem;
+$autocomplete-filter-form-padding: abstracts.$spacer-lg;
 
 .c-autocomplete-filter-form {
 	// The body already carries 0.8rem, and the design puts 2.4rem under the title
@@ -35,11 +35,11 @@ $autocomplete-filter-form-padding: 3.2rem;
 
 	:global(.c-tag) {
 		background-color: abstracts.$silver;
-		border-radius: 2.5rem;
-		gap: 0.4rem;
+		border-radius: abstracts.$border-radius-sm;
+		gap: abstracts.$spacer-xxs;
 		margin: 0;
 		max-width: 100%;
-		padding: 0.6rem 1.2rem;
+		padding: abstracts.$filter-pill-padding;
 	}
 
 	// A value can be as long as a full newspaper title, so the pill cuts it off
@@ -47,7 +47,6 @@ $autocomplete-filter-form-padding: 3.2rem;
 		@include abstracts.text-ellipsis;
 
 		min-width: 0;
-
 		font-size: abstracts.$font-size-sm;
 		font-weight: abstracts.$font-weight-bold;
 		line-height: 2rem;
@@ -60,15 +59,15 @@ $autocomplete-filter-form-padding: 3.2rem;
 		:global(.c-react-select__control) {
 			background-color: abstracts.$platinum;
 			border-color: abstracts.$platinum;
-			border-radius: 2.4rem;
-			min-height: 4.8rem;
+			border-radius: abstracts.$border-radius-sm;
+			min-height: abstracts.$button-height;
 			padding: 0 abstracts.$spacer-sm;
 		}
 
 		// The padding sits on this wrapper, so the menu has to line up with the field itself
 		:global(.c-react-select__menu) {
 			left: $autocomplete-filter-form-padding;
-			margin-top: 0.4rem;
+			margin-top: abstracts.$spacer-xxs;
 			right: $autocomplete-filter-form-padding;
 			width: auto;
 		}
@@ -76,11 +75,11 @@ $autocomplete-filter-form-padding: 3.2rem;
 		:global(.c-react-select__menu-list) {
 			@include abstracts.styled-scrollbar;
 
-			padding: 0.4rem;
+			padding: abstracts.$spacer-xxs;
 		}
 
 		:global(.c-react-select__option) {
-			padding: 0.6rem 1.2rem;
+			padding: abstracts.$filter-pill-padding;
 		}
 
 		:global(.c-react-select__option--is-focused) {

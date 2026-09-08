@@ -2,8 +2,8 @@
 
 // The design separates the description, every condition and the add CTA with a rule that runs the
 // full width of the modal, so the blocks carry the horizontal padding rather than the form.
-$text-filter-form-padding: 3.2rem;
-$text-filter-form-divider: rgb(0 0 0 / 12%);
+$text-filter-form-padding: abstracts.$spacer-lg;
+$text-filter-form-divider: 1px solid rgb(0 0 0 / 12%);
 
 .c-text-filter-form {
 	&__description {
@@ -24,7 +24,7 @@ $text-filter-form-divider: rgb(0 0 0 / 12%);
 		position: relative;
 
 		+ .c-text-filter-form__condition {
-			border-top: 0.1rem solid $text-filter-form-divider;
+			border-top: $text-filter-form-divider;
 		}
 	}
 
@@ -60,7 +60,7 @@ $text-filter-form-divider: rgb(0 0 0 / 12%);
 		}
 
 		:global(.c-react-select__dropdown-indicator) {
-			padding: 0 0 0 0.4rem;
+			padding: 0 0 0 abstracts.$spacer-xxs;
 		}
 	}
 
@@ -79,7 +79,7 @@ $text-filter-form-divider: rgb(0 0 0 / 12%);
 	&__add:global(.c-button) {
 		background-color: abstracts.$platinum;
 		border-radius: 0;
-		border-top: 0.1rem solid $text-filter-form-divider;
+		border-top: $text-filter-form-divider;
 		padding: abstracts.$spacer-md $text-filter-form-padding;
 		text-align: left;
 		width: 100%;

@@ -1,16 +1,18 @@
 @use "src/styles/abstracts" as abstracts;
 
-// The fly-out sits centred in the window, so this cap keeps it clear of both edges and scrolls
+// The fly-out sits centered in the window, so this cap keeps it clear of both edges and scrolls
 // the rest. See the "Redesign van geavanceerde filters" section of the FA of ARC-3806.
+$screen-edge-margin: abstracts.$spacer-2xl;
+
 .c-advanced-filter-flyout {
 	@include abstracts.styled-scrollbar;
 
 	display: flex;
 	flex-direction: column;
-	gap: 2rem;
-	max-height: calc(100vh - 8rem);
+	gap: abstracts.$spacer-xxs * 5;
+	max-height: calc(100vh - $screen-edge-margin);
 	margin: 0;
-	padding: 2.4rem 1.6rem 2.4rem 2.4rem;
+	padding: abstracts.$spacer-md abstracts.$spacer-sm abstracts.$spacer-md abstracts.$spacer-md;
 	overflow-y: auto;
 	list-style: none;
 
@@ -20,7 +22,7 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: 1.6rem;
+		gap: abstracts.$spacer-sm;
 		width: 100%;
 		height: 2rem;
 		padding: 0;
