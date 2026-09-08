@@ -2,14 +2,10 @@ import Metadata from '@ie-objects/components/Metadata/Metadata';
 import type { IeObjectTheme } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { ROUTES_BY_LOCALE } from '@shared/const';
+import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tText } from '@shared/helpers/translate';
 import { Locale } from '@shared/utils/i18n';
-import {
-	filterNameToAcronym,
-	operatorToAcronym,
-} from '@visitor-space/const/advanced-filter-array-param';
-import { FilterProperty, Operator } from '@visitor-space/types';
+import { SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
@@ -58,9 +54,7 @@ export function ObjectDetailPageMetadataThemes({
 	};
 
 	const getThemeSearchLink = (theme: IeObjectTheme) =>
-		`${ROUTES_BY_LOCALE[locale].search}?advanced=${filterNameToAcronym(
-			FilterProperty.THEME
-		)}${operatorToAcronym(Operator.EQUALS)}${theme.slug}&page=1`;
+		getSearchLink(locale, { [SearchFilterId.Theme]: theme.slug, page: '1' });
 
 	return (
 		<Metadata title={title} className={className} key="metadata-themes">

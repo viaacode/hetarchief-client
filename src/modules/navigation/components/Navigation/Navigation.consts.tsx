@@ -250,7 +250,9 @@ const getVisitorSpacesDropdown = (
 	const visitPath = ROUTES_BY_LOCALE[locale].visit;
 	if (linkedSpaceOrId) {
 		// Single link to go to linked visitor space (kiosk visitor)
-		const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${linkedSpaceOrId}`;
+		const searchRouteForSpace = getSearchLink(locale, {
+			[SearchFilterId.Maintainer]: linkedSpaceOrId,
+		});
 		return {
 			node: renderLink(
 				tText('modules/navigation/components/navigation/navigation___bezoekersruimte'),
@@ -308,7 +310,9 @@ const getVisitorSpacesDropdown = (
 				isDivider: accessibleVisitorSpaces.length > 0 ? 'md' : undefined,
 			},
 			...accessibleVisitorSpaces.map((visitorSpace: VisitorSpaceInfo): NavigationItem => {
-				const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visitorSpace.slug}`;
+				const searchRouteForSpace = getSearchLink(locale, {
+					[SearchFilterId.Maintainer]: visitorSpace.slug,
+				});
 				return {
 					node: ({ closeDropdowns }) =>
 						renderLink(

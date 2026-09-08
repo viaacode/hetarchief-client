@@ -47,6 +47,7 @@ import {
 } from '@shared/const';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { numberWithCommas } from '@shared/helpers';
+import { getSearchLink } from '@shared/helpers/get-search-link';
 import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -868,7 +869,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			(visitorSpace: VisitorSpaceDropdownOption): ReactNode => (
 				<Link
 					key={visitorSpace.slug}
-					href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visitorSpace?.slug}`}
+					href={getSearchLink(locale, { [SearchFilterId.Maintainer]: visitorSpace?.slug ?? '' })}
 					aria-label={visitorSpace?.label}
 				>
 					{visitorSpace?.label}

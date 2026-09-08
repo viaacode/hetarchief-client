@@ -20,7 +20,7 @@ import {
 	SearchFilterId,
 } from '@visitor-space/types';
 import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
-import { sortAccentIndependent } from '@visitor-space/utils/sort-labels';
+import { getLabelCollator } from '@visitor-space/utils/sort-labels';
 import { isNil } from 'es-toolkit/compat';
 
 const { publicRuntimeConfig } = getConfig();
@@ -363,14 +363,15 @@ export const getAvailableSearchPageFilters = (
 export const getAdvancedFlyoutFilters = (
 	availableFilters: FilterMenuFilterOption[],
 	locale: Locale
-): FilterMenuFilterOption[] =>
-	sortAccentIndependent(
-		availableFilters.filter(
+): FilterMenuFilterOption[] => {
+	const collator = getLabelCollator(locale);
+
+	return availableFilters
+		.filter(
 			(filter) => filter.type === FilterMenuType.Modal && filter.id !== SearchFilterId.Advanced
-		),
-		locale,
-		(filter) => filter.label
-	);
+		)
+		.sort((filterA, filterB) => collator.compare(filterA.label, filterB.label));
+};
 
 /**
  * The filters the panel shows, in the order the design puts them.
