@@ -57,6 +57,12 @@ $context-disclaimer-offset: abstracts.$spacer-sm;
 
 		@include abstracts.focus-outline;
 
+		// The button centers its icon in its own tap-target box by default, which
+		// leaves it sitting lower than the flush-top icon on the left of the label.
+		:global(.c-button__content) {
+			align-items: flex-start;
+		}
+
 		:global(.c-button__icon) {
 			font-size: abstracts.$font-size-lg;
 			color: abstracts.$white;
