@@ -7,7 +7,13 @@ import {
 	getTicketErrorPlaceholderLabels,
 	JSON_FORMATS,
 } from '@ie-objects/ie-objects.consts';
-import { FlowPlayer, type FlowPlayerProps, getValidStartAndEnd } from '@meemoo/react-components';
+import { Color } from '@meemoo/admin-core-ui/admin';
+import {
+	FlowPlayer,
+	type FlowPlayerCustomControlsConfig,
+	type FlowPlayerProps,
+	getValidStartAndEnd,
+} from '@meemoo/react-components';
 import { Loading } from '@shared/components/Loading';
 import getConfig from '@shared/config/public-runtime-config';
 import { useGetFileDuration } from '@shared/hooks/use-get-file-duration';
@@ -135,6 +141,15 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	};
 
 	const [start, end]: [number | null, number | null] = getStartAndEnd();
+	const sharedCustomControls: Partial<FlowPlayerCustomControlsConfig> = {
+		showTitleOverlay: true,
+		peakColorActive: Color.Jade,
+		peakColorInactive: Color.White,
+		colors: {
+			progressColor: '#00CCA9',
+			accentColor: '#009991',
+		},
+	};
 	const shared: Partial<FlowPlayerProps> = {
 		className,
 		title: currentPlayableFile?.name,
@@ -146,12 +161,13 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
 		ui: allowFullScreen ? undefined : 1, // 1 = NO_FULLSCREEN
 		plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
-		peakColorBackground: '#303030', // $shade-darker
-		peakColorInactive: '#adadad', // zinc
-		peakColorActive: '#00857d', // $teal
+		peakColorBackground: Color.Ink,
+		peakColorInactive: Color.Zinc,
+		peakColorActive: Color.Jade,
 		peakHeightFactor: 0.6,
 		start,
 		end,
+		controlsVariant: 'custom',
 	};
 
 	if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {
@@ -167,6 +183,10 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				renderLoader={() => <Loading locationId="flowplayer suspense" fullscreen mode="light" />}
 				preload="metadata"
 				{...shared}
+				customControlsConfig={{
+					...sharedCustomControls,
+					showFullscreen: true,
+				}}
 			/>
 		);
 	}
@@ -194,6 +214,10 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				waveformData={peakJson?.data || undefined}
 				preload="metadata"
 				{...shared}
+				customControlsConfig={{
+					...sharedCustomControls,
+					showFullscreen: false,
+				}}
 			/>
 		);
 	}
