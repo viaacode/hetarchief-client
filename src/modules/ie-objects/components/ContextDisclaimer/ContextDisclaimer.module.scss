@@ -24,6 +24,7 @@ $context-disclaimer-offset: abstracts.$spacer-sm;
 	// The circle itself comes from the c-button--icon variant
 	&--inactive {
 		background-color: abstracts.$black-40;
+		border-color: transparent;
 		cursor: pointer;
 
 		// The button base style paints its icon dark, which is invisible on the dark circle

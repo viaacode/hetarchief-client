@@ -54,7 +54,7 @@ export const ContextDisclaimer: FC<ContextDisclaimerProps> = ({ className }) => 
 			<Button
 				className={styles['c-context-disclaimer__close-button']}
 				icon={<Icon name={IconNamesLight.Times} />}
-				variants={['text']}
+				variants={['text', 'sm']}
 				ariaLabel={tText(
 					'modules/ie-objects/components/context-disclaimer/context-disclaimer___verberg-de-context-van-dit-fragment'
 				)}
