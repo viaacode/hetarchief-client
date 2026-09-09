@@ -1,0 +1,10 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-driekeuzespeler {
+	@media (max-width: abstracts.$breakpoint-md) {
+		&__title {
+			font-size: 4rem !important;
+			line-height: 4.4rem !important;
+		}
+	}
+}
