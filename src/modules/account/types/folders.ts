@@ -1,7 +1,7 @@
-import type { IeObjectType } from '@shared/types/ie-objects';
 import type {
 	HetArchiefIeObjectAccessThrough,
 	HetArchiefIeObjectLicense,
+	HetArchiefIeObjectType,
 	HetArchiefIsPartOfKey,
 } from '@viaa/avo2-types';
 
@@ -26,7 +26,7 @@ export interface FolderIeObject {
 	creator?: unknown;
 	description: string;
 	duration: string;
-	dctermsFormat: IeObjectType | null;
+	dctermsFormat: HetArchiefIeObjectType | null;
 	name: string;
 	numberOfPages?: unknown;
 	termsAvailable: string;

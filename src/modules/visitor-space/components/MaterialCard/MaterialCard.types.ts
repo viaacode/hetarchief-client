@@ -1,5 +1,5 @@
 import type { IconName } from '@shared/components/Icon';
-import type { IeObjectType } from '@shared/types/ie-objects';
+import type { HetArchiefIeObjectType } from '@viaa/avo2-types';
 import type { ReactNode } from 'react';
 
 export interface MaterialCardProps {
@@ -15,7 +15,7 @@ export interface MaterialCardProps {
 	hasAccessToEssence?: boolean;
 	hideThumbnail?: boolean;
 	link: string;
-	type: IeObjectType | null;
+	type: HetArchiefIeObjectType | null;
 	publishedBy?: string;
 	publishedOrCreatedDate?: string;
 	icon: IconName | null;

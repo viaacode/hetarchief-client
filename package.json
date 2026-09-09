@@ -43,7 +43,7 @@
     "@flowplayer/player": "3.32.1",
     "@hookform/resolvers": "2.9.11",
     "@meemoo/admin-core-ui": "6.0.40",
-    "@meemoo/react-components": "6.0.15",
+    "@meemoo/react-components": "6.0.16",
     "@popperjs/core": "2.11.6",
     "@react-hook/resize-observer": "1.2.5",
     "@reduxjs/toolkit": "2.9.0",

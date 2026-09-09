@@ -1,9 +1,9 @@
 import type { DefaultComponentProps } from '@shared/types';
-import type { IeObjectType } from '@shared/types/ie-objects';
+import type { HetArchiefIeObjectType } from '@viaa/avo2-types';
 import type { ReactNode } from 'react';
 
 export interface MediaObject {
-	type: IeObjectType | null;
+	type: HetArchiefIeObjectType | null;
 	title: string;
 	subtitle: string;
 	description: string;

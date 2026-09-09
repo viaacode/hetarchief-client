@@ -1,6 +1,9 @@
-import { IeObjectType } from '@shared/types/ie-objects';
 import { Locale } from '@shared/utils/i18n';
-import { type HetArchiefIeObject, HetArchiefIeObjectAccessThrough } from '@viaa/avo2-types';
+import {
+	type HetArchiefIeObject,
+	HetArchiefIeObjectAccessThrough,
+	HetArchiefIeObjectType,
+} from '@viaa/avo2-types';
 import { describe, expect, it } from 'vitest';
 
 import {
@@ -9,7 +12,7 @@ import {
 } from './get-ie-object-source-attribution';
 
 const baseObject = {
-	dctermsFormat: IeObjectType.VIDEO,
+	dctermsFormat: HetArchiefIeObjectType.VIDEO,
 	accessThrough: [HetArchiefIeObjectAccessThrough.PUBLIC_INFO],
 	name: 'Het journaal',
 	dateCreated: '2026-05-21',
@@ -137,7 +140,7 @@ describe('getIeObjectSourceAttribution', () => {
 		expect(
 			getIeObjectSourceAttribution(
 				createIeObject({
-					dctermsFormat: IeObjectType.NEWSPAPER,
+					dctermsFormat: HetArchiefIeObjectType.NEWSPAPER,
 					thumbnailUrl: 'https://example.com/thumb.jpg',
 					name: 'De krant',
 					rightsInfo: {

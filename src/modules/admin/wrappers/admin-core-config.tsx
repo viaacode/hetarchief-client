@@ -31,10 +31,13 @@ import {
 	PlayEventPageType,
 } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
-import type { IeObjectType } from '@shared/types/ie-objects';
 import type { Locale } from '@shared/utils/i18n';
 import { isServerSideRendering } from '@shared/utils/is-browser/is-browser';
-import { AvoCoreDatabaseType, type AvoUserCommonUser } from '@viaa/avo2-types';
+import {
+	AvoCoreDatabaseType,
+	type AvoUserCommonUser,
+	type HetArchiefIeObjectType,
+} from '@viaa/avo2-types';
 import { clientSearchUrlToApiSearchUrl } from '@visitor-space/utils/search-url-to-api-url/client-search-url-to-api-search-url';
 import { getThemeSearchPath } from '@visitor-space/utils/theme-search-path';
 import { noop } from 'es-toolkit/compat';
@@ -100,8 +103,8 @@ const onIeObjectPlay = (info: IeObjectPlayInfo) => {
 		LogEventType.ITEM_PLAY,
 		window.location.href,
 		mapPlayEventData({
-			// The two IeObjectType enums hold the same formats under differently named members
-			dctermsFormat: info.dctermsFormat as unknown as IeObjectType,
+			// The two HetArchiefIeObjectType enums hold the same formats under differently named members
+			dctermsFormat: info.dctermsFormat as unknown as HetArchiefIeObjectType,
 			schemaIdentifier: info.schemaIdentifier,
 			maintainerId: info.maintainerId,
 			pageType: PlayEventPageType.CONTENT_PAGE,

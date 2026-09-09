@@ -1,7 +1,7 @@
-import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
+import { mapDcTermsFormatToSimpleType } from '@meemoo/admin-core-ui/admin';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
-import { type IeObjectType, SimpleIeObjectType } from '@shared/types/ie-objects';
+import { type HetArchiefIeObjectType, HetArchiefSimpleIeObjectType } from '@viaa/avo2-types';
 import type { IconName } from '../Icon';
 
 /**
@@ -13,40 +13,55 @@ import type { IconName } from '../Icon';
  * skip this helper instead of relying on it to return nothing.
  */
 export function getIconFromObjectType(
-	type: IeObjectType | undefined | null,
+	type: HetArchiefIeObjectType | undefined | null,
 	accessible: boolean
 ): IconName {
 	const simpleType = mapDcTermsFormatToSimpleType(type);
 	if (accessible) {
+		if (!simpleType) {
+			return IconNamesLight.File;
+		}
+
 		return {
-			[SimpleIeObjectType.VIDEO]: IconNamesLight.Video,
-			[SimpleIeObjectType.AUDIO]: IconNamesLight.Audio,
-			[SimpleIeObjectType.NEWSPAPER]: IconNamesLight.Newspaper,
-			[SimpleIeObjectType.IMAGE]: IconNamesLight.Image,
-			unknown: IconNamesLight.File,
+			[HetArchiefSimpleIeObjectType.VIDEO]: IconNamesLight.Video,
+			[HetArchiefSimpleIeObjectType.AUDIO]: IconNamesLight.Audio,
+			[HetArchiefSimpleIeObjectType.NEWSPAPER]: IconNamesLight.Newspaper,
+			[HetArchiefSimpleIeObjectType.IMAGE]: IconNamesLight.Image,
 		}[simpleType];
 	}
+
+	if (!simpleType) {
+		return IconNamesLight.NoFile;
+	}
+
 	return {
-		[SimpleIeObjectType.VIDEO]: IconNamesLight.NoVideo,
-		[SimpleIeObjectType.AUDIO]: IconNamesLight.NoAudio,
-		[SimpleIeObjectType.NEWSPAPER]: IconNamesLight.NoNewspaper,
-		[SimpleIeObjectType.IMAGE]: IconNamesLight.NoImage,
-		unknown: IconNamesLight.NoFile,
+		[HetArchiefSimpleIeObjectType.VIDEO]: IconNamesLight.NoVideo,
+		[HetArchiefSimpleIeObjectType.AUDIO]: IconNamesLight.NoAudio,
+		[HetArchiefSimpleIeObjectType.NEWSPAPER]: IconNamesLight.NoNewspaper,
+		[HetArchiefSimpleIeObjectType.IMAGE]: IconNamesLight.NoImage,
 	}[simpleType];
 }
 
-export function GET_TYPE_TO_LABEL_MAP(type: IeObjectType): string {
+export function GET_TYPE_TO_LABEL_MAP(type: HetArchiefIeObjectType): string {
 	const simpleType = mapDcTermsFormatToSimpleType(type);
+
+	if (!simpleType) {
+		return tText('modules/shared/components/media-card/media-card___object-type-niet-gekend');
+	}
+
 	return {
-		[SimpleIeObjectType.AUDIO]: tText('modules/shared/components/media-card/media-card___audio'),
-		[SimpleIeObjectType.VIDEO]: tText('modules/shared/components/media-card/media-card___video'),
-		[SimpleIeObjectType.NEWSPAPER]: tText(
+		[HetArchiefSimpleIeObjectType.AUDIO]: tText(
+			'modules/shared/components/media-card/media-card___audio'
+		),
+		[HetArchiefSimpleIeObjectType.VIDEO]: tText(
+			'modules/shared/components/media-card/media-card___video'
+		),
+		[HetArchiefSimpleIeObjectType.NEWSPAPER]: tText(
 			'modules/shared/components/media-card/media-card___krant'
 		),
-		[SimpleIeObjectType.IMAGE]: tText(
+		[HetArchiefSimpleIeObjectType.IMAGE]: tText(
 			'modules/shared/components/media-card/media-card___afbeelding'
 		),
-		unknown: tText('modules/shared/components/media-card/media-card___object-type-niet-gekend'),
 	}[simpleType];
 }
 

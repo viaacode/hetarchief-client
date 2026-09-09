@@ -6,7 +6,7 @@ import {
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
-import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
+import { AdminConfigManager, isAudioType } from '@meemoo/admin-core-ui/admin';
 import { Badge, Button, Card } from '@meemoo/react-components';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
@@ -21,7 +21,6 @@ import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setLastScrollPosition } from '@shared/store/ui';
-import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import clsx from 'clsx';
 import { isValid } from 'date-fns';
@@ -316,7 +315,7 @@ const MediaCard: FC<MediaCardProps> = ({
 			);
 		}
 
-		if (type === IeObjectType.AUDIO || type === IeObjectType.AUDIO_FRAGMENT) {
+		if (isAudioType(type)) {
 			// The thumbnail of an audio object is an ugly speaker icon that we never want to show, so
 			// the waveform still stands in for it. Access was already checked above.
 			imagePath = AdminConfigManager.getConfig().components.defaultAudioStill;
