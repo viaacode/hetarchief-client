@@ -128,7 +128,8 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 			isArchived: filters.isArchived === 'true',
 		}),
 	});
-	const { data: unreadSummary } = useGetMaterialRequestsUnreadSummary();
+	const { data: unreadSummary, refetch: refetchUnreadSummary } =
+		useGetMaterialRequestsUnreadSummary();
 	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useQueryParam(
 		QUERY_PARAM_KEY.MATERIAL_REQUEST,
 		StringParam
@@ -306,6 +307,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 					if (statusChanged) {
 						refetchMaterialRequests().then(noop);
 					}
+					refetchUnreadSummary().then(noop);
 					setCurrentMaterialRequestId(undefined);
 				}}
 				currentMaterialRequestDetail={
