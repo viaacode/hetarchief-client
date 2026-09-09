@@ -127,7 +127,8 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 			? { maintainerIds: [commonUser?.organisation?.or_id] }
 			: {}),
 	});
-	const { data: unreadSummary } = useGetMaterialRequestsUnreadSummary();
+	const { data: unreadSummary, refetch: refetchUnreadSummary } =
+		useGetMaterialRequestsUnreadSummary();
 	const [currentMaterialRequestId, setCurrentMaterialRequestId] = useQueryParam(
 		QUERY_PARAM_KEY.MATERIAL_REQUEST,
 		StringParam
@@ -298,6 +299,7 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 					if (statusUpdated) {
 						refetchMaterialRequests().then(noop);
 					}
+					refetchUnreadSummary().then(noop);
 					setCurrentMaterialRequestId(undefined);
 				}}
 				currentMaterialRequestDetail={
