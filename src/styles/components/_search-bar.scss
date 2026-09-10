@@ -44,6 +44,7 @@
 
 	// The icon box is what gives the pill its height in the design
 	.c-tag__close {
+		align-items: center;
 		font-size: $font-size-base;
 		height: 2.4rem;
 		margin: 0;
