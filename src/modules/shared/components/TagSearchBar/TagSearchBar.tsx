@@ -38,17 +38,18 @@ const makeClickableMultiValue =
 				id={data.value}
 				label={children}
 				closeButton={
-					<div
+					<button
+						type="button"
 						{...removeProps}
 						className="c-tag__close"
 						// The whole tag opens the filter, so removing it must not open it as well
-						onClick={(event: MouseEvent<HTMLDivElement>) => {
+						onClick={(event: MouseEvent<HTMLButtonElement>) => {
 							event.stopPropagation();
 							removeProps.onClick?.(event);
 						}}
 					>
 						<Icon name={IconNamesLight.Times} aria-hidden />
-					</div>
+					</button>
 				}
 				disabled={isDisabled}
 				variants="closable"
