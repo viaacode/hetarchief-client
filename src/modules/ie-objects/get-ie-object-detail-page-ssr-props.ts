@@ -1,5 +1,4 @@
 import { MIN_LENGTH_SCHEMA_IDENTIFIER_V2 } from '@ie-objects/ie-objects.consts';
-import type { IeObject } from '@ie-objects/ie-objects.types';
 import { prefetchDetailPageQueries } from '@ie-objects/ObjectDetailPage.helpers';
 import { IeObjectsService } from '@ie-objects/services';
 import type { IeObjectSeo } from '@ie-objects/services/ie-objects/ie-objects.service.types';
@@ -10,6 +9,7 @@ import {
 } from '@shared/helpers/ie-object-urls';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
+import type { HetArchiefIeObject } from '@viaa/avo2-types';
 import type { GetServerSidePropsResult } from 'next';
 import type { GetServerSidePropsContext } from 'next/types';
 
@@ -50,7 +50,7 @@ export async function getIeObjectDetailPageServerSideProps(
 	const schemaIdentifier = context.query.ie as string;
 	let newSchemaIdentifier = schemaIdentifier;
 
-	let ieObject: IeObject | null = null;
+	let ieObject: HetArchiefIeObject | null = null;
 	let showHard404IfNotFound = true;
 	try {
 		if (schemaIdentifier.length > MIN_LENGTH_SCHEMA_IDENTIFIER_V2) {

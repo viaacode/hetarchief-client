@@ -1,9 +1,8 @@
 import { selectCommonUser } from '@auth/store/user';
 import { IE_OBJECT_INTRA_CP_LICENSES } from '@ie-objects/ie-objects.consts';
-import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import type { MaterialRequest } from '@material-requests/types';
+import { isAudioVideoType } from '@meemoo/admin-core-ui/admin';
 import getConfig from '@shared/config/public-runtime-config';
-import { SimpleIeObjectType } from '@shared/types/ie-objects';
 import type { AvoUserCommonUser } from '@viaa/avo2-types';
 import { intersection } from 'es-toolkit/compat';
 import { useSelector } from 'react-redux';
@@ -67,21 +66,20 @@ export function checkIsComplexReuseFlow(
 	) {
 		return {
 			isComplexReuseFlow: false,
-			isObjectEssenceAccessibleToUser: !!materialRequest?.objectThumbnailUrl,
+			isObjectEssenceAccessibleToUser: !!materialRequest?.objectHasAccessToEssence,
 		};
 	}
 
-	const simpleType = mapDcTermsFormatToSimpleType(materialRequest?.objectDctermsFormat);
 	const isComplexReuseFlow: boolean =
-		(simpleType === SimpleIeObjectType.AUDIO || simpleType === SimpleIeObjectType.VIDEO) &&
+		isAudioVideoType(materialRequest?.objectDctermsFormat) &&
 		!!user?.isKeyUser &&
 		intersection(materialRequest?.objectLicences || [], IE_OBJECT_INTRA_CP_LICENSES).length > 0;
 
 	// If we're in the complex reuse flow and have a representation, then we know the user is allowed to see this object
-	// If we're in the simple flow, we can check the thumbnail url
+	// If we're in the simple flow, the proxy tells us directly whether the essence is accessible
 	const isObjectEssenceAccessibleToUser: boolean = isComplexReuseFlow
 		? !!materialRequest?.objectRepresentationId
-		: !!materialRequest?.objectThumbnailUrl;
+		: !!materialRequest?.objectHasAccessToEssence;
 	return {
 		isComplexReuseFlow,
 		isObjectEssenceAccessibleToUser,

@@ -1,9 +1,11 @@
-import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
-import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
+import {
+	AdminConfigManager,
+	isAudioType,
+	mapDcTermsFormatToSimpleType,
+} from '@meemoo/admin-core-ui/admin';
 import { Card } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { tText } from '@shared/helpers/translate';
-import { SimpleIeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import clsx from 'clsx';
 import { isValid } from 'date-fns';
@@ -18,6 +20,7 @@ const MaterialCard: FC<MaterialCardProps> = ({
 	objectSchemaIdentifier,
 	title,
 	thumbnail,
+	hasAccessToEssence = false,
 	hideThumbnail = false,
 	link,
 	type,
@@ -74,7 +77,9 @@ const MaterialCard: FC<MaterialCardProps> = ({
 	const renderImage = (imgPath: string | undefined) => {
 		let imagePath: string | undefined = imgPath;
 
-		if (!imagePath || hideThumbnail) {
+		// No essence access means there is nothing to show but the struck-through type icon,
+		// whatever the thumbnail happens to hold
+		if (!hasAccessToEssence || !imagePath || hideThumbnail) {
 			return (
 				<div
 					className={clsx(
@@ -87,10 +92,9 @@ const MaterialCard: FC<MaterialCardProps> = ({
 			);
 		}
 
-		if (simpleType === SimpleIeObjectType.AUDIO) {
-			// Only render the waveform if the thumbnail is available
-			// The thumbnail is an ugly speaker icon that we never want to show
-			// But if that thumbnail is not available it most likely means this object does not have the BEZOEKERTOOL-CONTENT license
+		if (isAudioType(type)) {
+			// The thumbnail of an audio object is an ugly speaker icon that we never want to show, so
+			// the waveform still stands in for it. Access was already checked above.
 			imagePath = AdminConfigManager.getConfig().components.defaultAudioStill;
 		}
 

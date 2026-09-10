@@ -1,9 +1,16 @@
+@use "../abstracts/variables" as variables;
+
 .p-content-page-publish-modal {
 	.o-form-group__controls {
 		position: relative;
 	}
 
 	.avo__c-datepicker {
+		.react-datepicker,
+		.react-datepicker__current-month {
+			font-size: variables.$font-size-sm;
+		}
+
 		.c-input-with-icon-right {
 			position: relative;
 		}

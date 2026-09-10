@@ -31,18 +31,7 @@ import {
 	OBJECT_DETAIL_TABS,
 	XML_FORMATS,
 } from '@ie-objects/ie-objects.consts';
-import {
-	HighlightMode,
-	type IeObject,
-	IeObjectAccessThrough,
-	type IeObjectFile,
-	IeObjectLicense,
-	type IeObjectPage,
-	type IeObjectRepresentation,
-	MediaActions,
-	ObjectDetailTabs,
-	type RelatedIeObject,
-} from '@ie-objects/ie-objects.types';
+import { HighlightMode, MediaActions, ObjectDetailTabs } from '@ie-objects/ie-objects.types';
 import {
 	IE_OBJECTS_SERVICE_EXPORT,
 	NEWSPAPERS_SERVICE_BASE_URL,
@@ -50,8 +39,6 @@ import {
 import { filterAltoBySearchTerms } from '@ie-objects/utils/filter-alto-by-search-terms';
 import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-terms-in-transcription';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
-import { isAudioVideoIeObjectType } from '@ie-objects/utils/is-audio-video-ie-object-type';
-import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
 import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination';
@@ -66,6 +53,11 @@ import { IiifViewer } from '@iiif-viewer/IiifViewer';
 import type { ImageInfo, ImageInfoWithToken, Rect, TextLine } from '@iiif-viewer/IiifViewer.types';
 import { GET_BLANK_MATERIAL_REQUEST_REUSE_FORM } from '@material-requests/const';
 import type { MaterialRequest } from '@material-requests/types';
+import {
+	isAudioVideoType,
+	isNewspaperType,
+	mapDcTermsFormatToSimpleType,
+} from '@meemoo/admin-core-ui/admin';
 import { Alert, Button, type TabProps, Tabs } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import type { CuePoints } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer.types';
@@ -100,11 +92,20 @@ import {
 import { toastService } from '@shared/services/toast-service';
 import { selectLastSearchParams, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import type { IeObjectsSearchTermObject } from '@shared/types/api';
-import { IeObjectType } from '@shared/types/ie-objects';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
 import { isServerSideRendering } from '@shared/utils/is-browser';
 import { isTabletPortraitSize } from '@shared/utils/is-mobile';
+import {
+	type HetArchiefIeObject,
+	HetArchiefIeObjectAccessThrough,
+	type HetArchiefIeObjectFile,
+	HetArchiefIeObjectLicense,
+	type HetArchiefIeObjectPage,
+	type HetArchiefIeObjectRepresentation,
+	type HetArchiefIeObjectType,
+	type HetArchiefRelatedIeObject,
+} from '@viaa/avo2-types';
 import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
@@ -282,10 +283,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
-	const currentPage: IeObjectPage | null = mediaInfo?.pages?.[currentPageIndex] || null;
+	const currentPage: HetArchiefIeObjectPage | null = mediaInfo?.pages?.[currentPageIndex] || null;
 
 	const getRepresentationByType = useCallback(
-		(mimeTypes: string[]): IeObjectRepresentation | null => {
+		(mimeTypes: string[]): HetArchiefIeObjectRepresentation | null => {
 			return (
 				currentPage?.representations?.find((representation) =>
 					representation?.files?.find((file) => mimeTypes.includes(file.mimeType))
@@ -296,7 +297,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	);
 
 	const getFilesByType = useCallback(
-		(mimeTypes: string[]): IeObjectFile[] => {
+		(mimeTypes: string[]): HetArchiefIeObjectFile[] => {
 			return (
 				getRepresentationByType(mimeTypes)?.files?.filter((file) =>
 					mimeTypes.includes(file.mimeType)
@@ -331,13 +332,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, [mediaInfo, allFilesToDisplayInCurrentPage, currentFileIndex]);
 
 	const getMaterialRequest = useCallback(
-		(mediaInfo: IeObject) => {
+		(mediaInfo: HetArchiefIeObject) => {
 			return {
 				objectSchemaName: mediaInfo.name,
 				objectSchemaIdentifier: mediaInfo.schemaIdentifier,
 				objectId: mediaInfo.iri,
 				objectDctermsFormat: mediaInfo.dctermsFormat,
 				objectThumbnailUrl: mediaInfo.thumbnailUrl,
+				objectHasAccessToEssence: !!mediaInfo.hasAccessToEssence,
 				objectRepresentationId: getRepresentationByCurrentFileIndex()?.id,
 				objectRepresentation: getRepresentationByCurrentFileIndex(),
 				objectPublishedOrCreatedDate: mediaInfo.datePublished || mediaInfo.dateCreated || undefined,
@@ -398,8 +400,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 	// also interesting
 	const userHasAccessToMaintainer =
-		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FOLDERS) ||
-		mediaInfo?.accessThrough?.includes(IeObjectAccessThrough.VISITOR_SPACE_FULL);
+		mediaInfo?.accessThrough?.includes(HetArchiefIeObjectAccessThrough.VISITOR_SPACE_FOLDERS) ||
+		mediaInfo?.accessThrough?.includes(HetArchiefIeObjectAccessThrough.VISITOR_SPACE_FULL);
 	const { data: similarData } = useGetIeObjectsAlsoInteresting(
 		mediaInfo?.schemaIdentifier,
 		isKiosk || userHasAccessToMaintainer ? (mediaInfo?.maintainerId ?? '') : '',
@@ -433,7 +435,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	// ocr alto info
 	const currentPageAltoUrl = useMemo((): string | null => {
 		let altoFileUrl: string | null = null;
-		currentPage?.representations?.some((representation: IeObjectRepresentation) => {
+		currentPage?.representations?.some((representation: HetArchiefIeObjectRepresentation) => {
 			if (representation.schemaTranscriptUrl) {
 				altoFileUrl = representation.schemaTranscriptUrl;
 				return true; // Found the alto.json file
@@ -464,24 +466,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		(visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
-	const isNewspaper = mediaInfo?.dctermsFormat === IeObjectType.NEWSPAPER;
+	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
 	const showFragmentSlider = allFilesToDisplayInCurrentPage.length > 1 && !isNewspaper;
 	const isMobile = isTabletPortraitSize(windowSize); // mobile and tablet portrait
 	const hasAccessToVisitorSpaceOfObject =
 		intersection(mediaInfo?.accessThrough, [
-			IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
-			IeObjectAccessThrough.VISITOR_SPACE_FULL,
+			HetArchiefIeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
+			HetArchiefIeObjectAccessThrough.VISITOR_SPACE_FULL,
 		]).length > 0;
 
 	// ARC-3824: warn the user that publicly available av content was made within a certain context
 	const showContextDisclaimer =
-		!!mediaInfo?.licenses?.includes(IeObjectLicense.PUBLIEK_CONTENT) &&
-		isAudioVideoIeObjectType(mediaInfo?.dctermsFormat) &&
+		!!mediaInfo?.licenses?.includes(HetArchiefIeObjectLicense.PUBLIEK_CONTENT) &&
+		isAudioVideoType(mediaInfo?.dctermsFormat) &&
 		!!isFlowPlayerMediaAvailable;
 
 	const showVisitButton =
-		isNil(mediaInfo?.thumbnailUrl) &&
-		mediaInfo?.licenses?.includes(IeObjectLicense.BEZOEKERTOOL_CONTENT) &&
+		!mediaInfo?.hasAccessToEssence &&
+		mediaInfo?.licenses?.includes(HetArchiefIeObjectLicense.BEZOEKERTOOL_CONTENT) &&
 		visitorSpace?.status === VisitorSpaceStatus.Active &&
 		!isKiosk;
 
@@ -541,7 +543,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			if (!pageOcrTranscripts.length) {
 				// Only show the error if the user has access to the essence of the newspaper
 				// https://meemoo.atlassian.net/browse/ARC-2556
-				if (mediaInfo?.thumbnailUrl) {
+				if (mediaInfo?.hasAccessToEssence) {
 					toastService.notify({
 						maxLines: 3,
 						title: tText('modules/ie-objects/object-detail-page___error'),
@@ -568,7 +570,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			});
 			await router.replace(newUrl, undefined, { shallow: true });
 		},
-		[currentPageIndex, mediaInfo?.thumbnailUrl, pageOcrTranscripts, router]
+		[currentPageIndex, mediaInfo?.hasAccessToEssence, pageOcrTranscripts, router]
 	);
 
 	const handleIsTextOverlayVisibleChange = useCallback(
@@ -1036,7 +1038,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 * Mapping
 	 */
 	const mapRelatedIeObject = (
-		ieObject: Partial<RelatedIeObject> | undefined | null
+		ieObject: Partial<HetArchiefRelatedIeObject> | undefined | null
 	): MediaObject | null => {
 		if (!ieObject) {
 			return null;
@@ -1044,7 +1046,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		const date = ieObject.datePublished ?? ieObject.dateCreated ?? null;
 
 		return {
-			type: ieObject.dctermsFormat as IeObjectType,
+			type: ieObject.dctermsFormat as HetArchiefIeObjectType,
 			title: ieObject.name as string,
 			subtitle: isNil(date)
 				? `${ieObject?.maintainerName ?? ''}`
@@ -1053,6 +1055,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			id: ieObject.schemaIdentifier as string,
 			maintainer_id: ieObject.maintainerId,
 			thumbnail: ieObject.thumbnailUrl,
+			hasAccessToEssence: !!ieObject.hasAccessToEssence,
 		};
 	};
 
@@ -1264,22 +1267,29 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 */
 
 	const isMediaAvailable = useCallback((): boolean => {
-		switch (mediaInfo?.dctermsFormat) {
-			case IeObjectType.AUDIO:
-			case IeObjectType.AUDIO_FRAGMENT:
-			case IeObjectType.VIDEO:
-			case IeObjectType.VIDEO_FRAGMENT:
-			case IeObjectType.FILM:
-				return isFlowPlayerMediaAvailable ?? !!getFilesByType(FLOWPLAYER_FORMATS)?.[0]?.storedAt;
-
-			case IeObjectType.NEWSPAPER: {
-				return !!getFilesByType(IMAGE_API_FORMATS)?.[0]?.storedAt;
-			}
-
-			default:
-				return false;
+		// Two separate questions: may this user play the essence, and is there anything to play.
+		// The checks below answer the second, off `pages` -- which the proxy strips when essence
+		// access is denied. Ask the permission question explicitly rather than reading it off the
+		// missing data, so this keeps working if `pages` ever stops being essence-gated.
+		if (!mediaInfo?.hasAccessToEssence) {
+			return false;
 		}
-	}, [mediaInfo?.dctermsFormat, isFlowPlayerMediaAvailable, getFilesByType]);
+
+		if (isAudioVideoType(mediaInfo?.dctermsFormat)) {
+			return isFlowPlayerMediaAvailable ?? !!getFilesByType(FLOWPLAYER_FORMATS)?.[0]?.storedAt;
+		}
+
+		if (isNewspaperType(mediaInfo?.dctermsFormat)) {
+			return !!getFilesByType(IMAGE_API_FORMATS)?.[0]?.storedAt;
+		}
+
+		return false;
+	}, [
+		mediaInfo?.hasAccessToEssence,
+		mediaInfo?.dctermsFormat,
+		isFlowPlayerMediaAvailable,
+		getFilesByType,
+	]);
 
 	const tabs: TabProps[] = useMemo(() => {
 		return OBJECT_DETAIL_TABS(
@@ -1678,7 +1688,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	};
 
 	const renderObjectMedia = () => {
-		if (mediaInfo?.thumbnailUrl) {
+		if (mediaInfo?.hasAccessToEssence) {
 			return (
 				<>
 					<div
@@ -1686,7 +1696,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						style={thumbnailUrl ? { backgroundImage: `url(${thumbnailUrl})` } : {}}
 					>
 						{renderMedia()}
-						{showContextDisclaimer && <ContextDisclaimer />}
+						{showContextDisclaimer && (
+							<ContextDisclaimer className={styles['p-object-detail__context-disclaimer']} />
+						)}
 					</div>
 					{showFragmentSlider && (
 						<FragmentSlider
@@ -1820,7 +1832,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						)}
 					>
 						{/*
-						 * IeObject metadata
+						 * HetArchiefIeObject metadata
 						 */}
 						{activeTab === ObjectDetailTabs.Metadata && (
 							<ObjectDetailPageMetadata

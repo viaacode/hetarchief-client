@@ -1,11 +1,10 @@
 import Metadata from '@ie-objects/components/Metadata/Metadata';
-import type { IeObjectTheme } from '@ie-objects/ie-objects.types';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tText } from '@shared/helpers/translate';
 import { Locale } from '@shared/utils/i18n';
-import { SearchFilterId } from '@visitor-space/types';
+import type { HetArchiefIeObjectTheme } from '@viaa/avo2-types';
+import { getThemeSearchPath } from '@visitor-space/utils/theme-search-path';
 import clsx from 'clsx';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
@@ -14,7 +13,7 @@ import styles from './ObjectDetailPageMetadataThemes.module.scss';
 
 export interface ObjectDetailPageMetadataThemesProps {
 	title: ReactNode;
-	themes: IeObjectTheme[];
+	themes: HetArchiefIeObjectTheme[];
 	locale: Locale;
 	className?: string;
 }
@@ -31,7 +30,7 @@ export function ObjectDetailPageMetadataThemes({
 	locale,
 	className,
 }: ObjectDetailPageMetadataThemesProps) {
-	const renderThemeName = (theme: IeObjectTheme) => {
+	const renderThemeName = (theme: HetArchiefIeObjectTheme) => {
 		const name = locale === Locale.en ? theme.nameEn : theme.nameNl;
 		const path = locale === Locale.en ? theme.contentPagePathEn : theme.contentPagePathNl;
 
@@ -53,9 +52,6 @@ export function ObjectDetailPageMetadataThemes({
 		);
 	};
 
-	const getThemeSearchLink = (theme: IeObjectTheme) =>
-		getSearchLink(locale, { [SearchFilterId.Theme]: theme.slug, page: '1' });
-
 	return (
 		<Metadata title={title} className={className} key="metadata-themes">
 			<ul className={styles['c-object-detail-page-metadata-themes__list']}>
@@ -63,7 +59,7 @@ export function ObjectDetailPageMetadataThemes({
 					<li key={theme.id} className={styles['c-object-detail-page-metadata-themes__item']}>
 						{renderThemeName(theme)}
 						<Link
-							href={getThemeSearchLink(theme)}
+							href={getThemeSearchPath(locale, theme.slug)}
 							className={styles['c-object-detail-page-metadata-themes__count']}
 						>
 							<Icon

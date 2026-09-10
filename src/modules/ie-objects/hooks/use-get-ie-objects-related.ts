@@ -1,4 +1,3 @@
-import type { RelatedIeObjects } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { QUERY_KEYS } from '@shared/const';
 import {
@@ -7,11 +6,12 @@ import {
 	type UseQueryResult,
 	useQuery,
 } from '@tanstack/react-query';
+import type { HetArchiefRelatedIeObjects } from '@viaa/avo2-types';
 
 async function getIeObjectsRelated(
 	ieObjectIri: string | undefined,
 	parentIeObjectIri: string | null
-): Promise<RelatedIeObjects> {
+): Promise<HetArchiefRelatedIeObjects> {
 	if (!ieObjectIri) {
 		return {
 			parent: null,
@@ -25,13 +25,15 @@ export const useGetIeObjectsRelated = (
 	ieObjectIri: string | undefined,
 	parentIeObjectIri: string | null,
 	enabled: boolean = true
-): UseQueryResult<RelatedIeObjects> => {
+): UseQueryResult<HetArchiefRelatedIeObjects> => {
 	return useQuery({
 		queryKey: [QUERY_KEYS.getIeObjectsRelated, ieObjectIri, parentIeObjectIri],
 		queryFn: () => getIeObjectsRelated(ieObjectIri, parentIeObjectIri),
 		placeholderData: keepPreviousData,
 		enabled,
-		staleTime: 5 * 60 * 1000,
+		// No staleTime: the server side render is always anonymous, so the prefetched data that is
+		// hydrated here reports no essence access and no thumbnails. Let the browser revalidate with
+		// the user's session on mount, the way the "also interesting" query does.
 	});
 };
 

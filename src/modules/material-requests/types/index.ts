@@ -1,10 +1,10 @@
-import type {
-	IeObjectAccessThrough,
-	IeObjectLicense,
-	IeObjectRepresentation,
-} from '@ie-objects/ie-objects.types';
 import { tText } from '@shared/helpers/translate';
-import type { IeObjectType } from '@shared/types/ie-objects';
+import type {
+	HetArchiefIeObjectAccessThrough,
+	HetArchiefIeObjectLicense,
+	HetArchiefIeObjectRepresentation,
+	HetArchiefIeObjectType,
+} from '@viaa/avo2-types';
 
 export interface MaterialRequest {
 	createdAt: string;
@@ -17,16 +17,21 @@ export interface MaterialRequest {
 	maintainerLogo: string;
 	maintainerName: string;
 	maintainerSlug: string;
-	objectDctermsFormat: IeObjectType;
+	objectDctermsFormat: HetArchiefIeObjectType;
 	objectId: string;
 	objectSchemaIdentifier: string;
 	objectSchemaName: string;
 	objectThumbnailUrl: string;
+	/**
+	 * Whether the current user may see/play the essence of the requested object, as reported by
+	 * the proxy. Independent of whether a thumbnail was resolved.
+	 */
+	objectHasAccessToEssence: boolean;
 	objectPublishedOrCreatedDate?: string;
-	objectAccessThrough: IeObjectAccessThrough[];
-	objectLicences: IeObjectLicense[];
+	objectAccessThrough: HetArchiefIeObjectAccessThrough[];
+	objectLicences: HetArchiefIeObjectLicense[];
 	objectRepresentationId?: string;
-	objectRepresentation?: IeObjectRepresentation;
+	objectRepresentation?: HetArchiefIeObjectRepresentation;
 	profileId: string;
 	reason: string;
 	requesterCapacity: MaterialRequestRequesterCapacity;

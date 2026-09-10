@@ -1,12 +1,11 @@
-import {
-	type IeObject,
-	IeObjectAccessThrough,
-	type IeObjectRightsInfo,
-} from '@ie-objects/ie-objects.types';
-import { isAudioVideoIeObjectType } from '@ie-objects/utils/is-audio-video-ie-object-type';
-import { IeObjectType } from '@shared/types/ie-objects';
+import { isAudioVideoType, isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import { asDate, formatDateTime } from '@shared/utils/dates';
 import { Locale } from '@shared/utils/i18n';
+import {
+	type HetArchiefIeObject,
+	HetArchiefIeObjectAccessThrough,
+	type HetArchiefIeObjectRightsInfo,
+} from '@viaa/avo2-types';
 import { compact } from 'es-toolkit/compat';
 
 const MISSING_RIGHTS_INFO = 'geen rechteninformatie beschikbaar';
@@ -15,10 +14,10 @@ const UNKNOWN_CREATOR_BY_LOCALE: Record<Locale, string> = {
 	[Locale.en]: 'Unknown creator',
 };
 const ESSENCE_ACCESS_ROUTES = [
-	IeObjectAccessThrough.PUBLIC_INFO,
-	IeObjectAccessThrough.SECTOR,
-	IeObjectAccessThrough.VISITOR_SPACE_FULL,
-	IeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
+	HetArchiefIeObjectAccessThrough.PUBLIC_INFO,
+	HetArchiefIeObjectAccessThrough.SECTOR,
+	HetArchiefIeObjectAccessThrough.VISITOR_SPACE_FULL,
+	HetArchiefIeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
 ];
 
 function splitNameList(value: string): string[] {
@@ -63,7 +62,7 @@ function getObjectValuesByKey(value: unknown, keys: string[]): string[] {
 	});
 }
 
-function getCreatorNames(ieObject: IeObject, locale: Locale): string[] {
+function getCreatorNames(ieObject: HetArchiefIeObject, locale: Locale): string[] {
 	const copyrightHolders = flattenValue(ieObject.copyrightHolder);
 
 	if (copyrightHolders.length > 0) {
@@ -113,22 +112,14 @@ export function formatSourceAttributionNames(names: string[]): string {
 	return `${uniqueNames.slice(0, 3).join(', ')}, e.a.`;
 }
 
-function getUsageCategory(rightsInfo?: IeObjectRightsInfo | null): string {
+function getUsageCategory(rightsInfo?: HetArchiefIeObjectRightsInfo | null): string {
 	return rightsInfo?.reuseCategoryLabel || MISSING_RIGHTS_INFO;
 }
 
-function hasEssenceAccess(ieObject: IeObject): boolean {
+function hasEssenceAccess(ieObject: HetArchiefIeObject): boolean {
 	return (ieObject.accessThrough || []).some((accessRoute) =>
 		ESSENCE_ACCESS_ROUTES.includes(accessRoute)
 	);
-}
-
-function hasNewspaperEssence(ieObject: IeObject): boolean {
-	return !!ieObject.thumbnailUrl || !!ieObject.pages?.length;
-}
-
-function hasAvEssence(ieObject: IeObject): boolean {
-	return !!ieObject.thumbnailUrl || !!ieObject.meemooMediaObjectId;
 }
 
 function buildAttribution(parts: Array<string | null | undefined>): string {
@@ -136,7 +127,7 @@ function buildAttribution(parts: Array<string | null | undefined>): string {
 }
 
 export function getIeObjectSourceAttribution(
-	ieObject: IeObject,
+	ieObject: HetArchiefIeObject,
 	locale: Locale = Locale.nl
 ): string | null {
 	if (!hasEssenceAccess(ieObject)) {
@@ -147,7 +138,7 @@ export function getIeObjectSourceAttribution(
 		? formatDateTime(preferredDate, locale, 'international', false)
 		: null;
 
-	if (isAudioVideoIeObjectType(ieObject.dctermsFormat) && hasAvEssence(ieObject)) {
+	if (isAudioVideoType(ieObject.dctermsFormat) && !!ieObject.hasAccessToEssence) {
 		return buildAttribution([
 			formatSourceAttributionNames(getCreatorNames(ieObject, locale)),
 			ieObject.name,
@@ -158,7 +149,7 @@ export function getIeObjectSourceAttribution(
 		]);
 	}
 
-	if (ieObject.dctermsFormat === IeObjectType.NEWSPAPER && hasNewspaperEssence(ieObject)) {
+	if (isNewspaperType(ieObject.dctermsFormat) && !!ieObject.hasAccessToEssence) {
 		return buildAttribution([
 			ieObject.name,
 			formattedDate,

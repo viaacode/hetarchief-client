@@ -76,6 +76,7 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	const ieObject = {
 		schemaIdentifier: materialRequest.objectSchemaIdentifier,
 		thumbnailUrl: materialRequest.objectThumbnailUrl,
+		hasAccessToEssence: materialRequest.objectHasAccessToEssence,
 		name: materialRequest.objectSchemaName,
 		dctermsFormat: materialRequest.objectDctermsFormat,
 		datePublished: materialRequest.objectPublishedOrCreatedDate,
@@ -83,7 +84,8 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 	};
 
 	// Only hide the "view object" option when the user is a key user, and they already have access to the object
-	const hideViewTypeOption = user?.isKeyUser && (objectRepresentationId || ieObject?.thumbnailUrl);
+	const hideViewTypeOption =
+		user?.isKeyUser && (objectRepresentationId || ieObject?.hasAccessToEssence);
 
 	const [, setActiveBlade] = useQueryParam(
 		QUERY_PARAM_KEY.ACTIVE_BLADE,
@@ -314,8 +316,9 @@ export const MaterialRequestBlade: FC<MaterialRequestBladeProps> = ({
 				className={styles['c-request-material__material']}
 				objectSchemaIdentifier={ieObject?.schemaIdentifier}
 				title={ieObject?.name}
-				orientation={ieObject?.thumbnailUrl ? 'horizontal' : 'vertical'}
+				orientation={ieObject?.hasAccessToEssence ? 'horizontal' : 'vertical'}
 				thumbnail={ieObject?.thumbnailUrl}
+				hasAccessToEssence={ieObject?.hasAccessToEssence}
 				link={`/${ROUTE_PARTS_BY_LOCALE[locale].search}/${maintainerSlug}/${ieObject?.schemaIdentifier}`}
 				type={ieObject?.dctermsFormat || null}
 				publishedBy={maintainerName}

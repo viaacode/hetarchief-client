@@ -16,7 +16,7 @@ import {
 	type MaterialRequestMessageBodyAdditionalConditions,
 	type MaterialRequestMessageBodyStatusUpdateWithMotivation,
 } from '@material-requests/types';
-import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
+import { AdminConfigManager, isAudioType } from '@meemoo/admin-core-ui/admin';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -24,7 +24,6 @@ import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param
 import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatLongDate, formatMediumDateWithTime } from '@shared/utils/dates';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
@@ -308,14 +307,11 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 		let { objectThumbnailUrl, objectDctermsFormat, objectRepresentation, reuseForm } =
 			currentMaterialRequestDetail;
 
-		if (
-			objectDctermsFormat === IeObjectType.AUDIO ||
-			objectDctermsFormat === IeObjectType.AUDIO_FRAGMENT
-		) {
+		if (isAudioType(objectDctermsFormat)) {
 			objectThumbnailUrl = AdminConfigManager.getConfig().components.defaultAudioStill;
 		}
 
-		if (!objectThumbnailUrl || !isObjectEssenceAccessibleToUser) {
+		if (!isObjectEssenceAccessibleToUser) {
 			return null;
 		}
 

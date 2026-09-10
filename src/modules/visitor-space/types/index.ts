@@ -1,6 +1,7 @@
 import type { DefaultComponentProps } from '@meemoo/admin-core-ui/admin';
 import type { SelectOption, TagInfo } from '@meemoo/react-components';
-import type { IeObjectsSearchOperator, IeObjectType } from '@shared/types/ie-objects';
+import type { IeObjectsSearchOperator } from '@shared/types/ie-objects';
+import type { HetArchiefIeObjectType } from '@viaa/avo2-types';
 import type {
 	FilterMenuFilterOption,
 	OnFilterMenuFormSubmit,
@@ -171,7 +172,7 @@ export enum VisitorSpaceStatus {
 export type MediaTypeOptions = Array<
 	SelectOption & {
 		label: string;
-		value: IeObjectType | null;
+		value: HetArchiefIeObjectType | null;
 	}
 >;
 

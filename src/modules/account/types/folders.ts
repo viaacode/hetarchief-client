@@ -1,9 +1,9 @@
 import type {
-	IeObjectAccessThrough,
-	IeObjectLicense,
-	IsPartOfKey,
-} from '@ie-objects/ie-objects.types';
-import type { IeObjectType } from '@shared/types/ie-objects';
+	HetArchiefIeObjectAccessThrough,
+	HetArchiefIeObjectLicense,
+	HetArchiefIeObjectType,
+	HetArchiefIsPartOfKey,
+} from '@viaa/avo2-types';
 
 export interface Folder {
 	createdAt: string;
@@ -20,24 +20,26 @@ export interface Folder {
 export interface FolderIeObject {
 	schemaIdentifier: string; // Unique id per object
 	meemooLocalId: string;
-	accessThrough: IeObjectAccessThrough[];
+	accessThrough: HetArchiefIeObjectAccessThrough[];
 	premisIsPartOf?: string;
 	folderEntryCreatedAt?: string;
 	creator?: unknown;
 	description: string;
 	duration: string;
-	dctermsFormat: IeObjectType | null;
+	dctermsFormat: HetArchiefIeObjectType | null;
 	name: string;
 	numberOfPages?: unknown;
 	termsAvailable: string;
 	thumbnailUrl: string;
+	/** Whether the current user may see/play this object's essence, as reported by the proxy */
+	hasAccessToEssence?: boolean;
 	maintainerId: string;
 	maintainerName: string;
 	maintainerSlug: string;
-	isPartOf?: Partial<Record<IsPartOfKey, string[]>>;
+	isPartOf?: Partial<Record<HetArchiefIsPartOfKey, string[]>>;
 	datePublished?: string;
 	dateCreatedLowerBound?: string;
-	licenses: IeObjectLicense[];
+	licenses: HetArchiefIeObjectLicense[];
 }
 
 export interface CreateFolderFormState {

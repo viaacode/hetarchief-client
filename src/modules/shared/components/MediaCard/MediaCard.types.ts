@@ -1,6 +1,5 @@
-import type { IeObjectLicense } from '@ie-objects/ie-objects.types';
 import type { IeObjectsSearchTermObject } from '@shared/types/api';
-import type { IeObjectType } from '@shared/types/ie-objects';
+import type { HetArchiefIeObjectLicense, HetArchiefIeObjectType } from '@viaa/avo2-types';
 import type { ReactNode } from 'react';
 
 import type { IconName } from '../Icon';
@@ -18,10 +17,17 @@ export interface MediaCardProps {
 	id?: string;
 	objectId?: string;
 	thumbnail?: string;
+	/**
+	 * Whether the current user may see/play this object's essence, as reported by the proxy.
+	 * Decides between the real image and the struck-through placeholder. Defaults to false so an
+	 * omitted prop never opens up a thumbnail by accident; callers rendering something that isn't
+	 * essence-gated (a content page, say) have to say so explicitly.
+	 */
+	hasAccessToEssence?: boolean;
 	publishedOrCreatedDate?: string;
 	publishedBy?: string;
 	title?: string | ReactNode;
-	type: IeObjectType | null;
+	type: HetArchiefIeObjectType | null;
 	view?: MediaCardViewMode;
 	hasRelated?: boolean;
 	icon: IconName | null;
@@ -40,5 +46,5 @@ export interface MediaCardProps {
 export type IdentifiableMediaCard = MediaCardProps & {
 	schemaIdentifier: string;
 	maintainerSlug: string;
-	licenses?: IeObjectLicense[];
+	licenses?: HetArchiefIeObjectLicense[];
 };

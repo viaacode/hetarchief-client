@@ -2,8 +2,8 @@ import { setServerSideIeObjectInfo } from '@ie-objects/hooks/use-get-ie-object-b
 import { makeServerSideRequestGetIeObjectsRelated } from '@ie-objects/hooks/use-get-ie-objects-related';
 import { makeServerSideRequestGetIeObjectsSimilar } from '@ie-objects/hooks/use-get-ie-objects-similar';
 import { makeServerSideRequestGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
-import type { IeObject } from '@ie-objects/ie-objects.types';
 import { QueryClient } from '@tanstack/react-query';
+import type { HetArchiefIeObject } from '@viaa/avo2-types';
 import { makeServerSideRequestGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { makeServerSideRequestGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 
@@ -25,7 +25,7 @@ import { makeServerSideRequestGetVisitorSpace } from '@visitor-space/hooks/get-v
 export async function prefetchDetailPageQueries(
 	urlSchemaIdentifier: string,
 	urlMaintainerSlug: string | null,
-	ieObject: IeObject | null
+	ieObject: HetArchiefIeObject | null
 ): Promise<QueryClient> {
 	const queryClient = new QueryClient();
 

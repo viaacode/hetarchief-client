@@ -1,4 +1,3 @@
-import { IeObjectLicense } from '@ie-objects/ie-objects.types';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import {
 	type IeObjectsSearchFilter,
@@ -7,6 +6,7 @@ import {
 	SearchPageMediaType,
 } from '@shared/types/ie-objects';
 import type { VisitRequest } from '@shared/types/visit-request';
+import { HetArchiefIeObjectLicense } from '@viaa/avo2-types';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { ALL_SEARCH_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { compact, isNil, isString } from 'es-toolkit/compat';
@@ -22,8 +22,8 @@ import {
 import { mapAdvancedToElastic } from '../map-filters';
 
 export const VISITOR_SPACE_LICENSES = [
-	IeObjectLicense.BEZOEKERTOOL_METADATA_ALL,
-	IeObjectLicense.BEZOEKERTOOL_CONTENT,
+	HetArchiefIeObjectLicense.BEZOEKERTOOL_METADATA_ALL,
+	HetArchiefIeObjectLicense.BEZOEKERTOOL_CONTENT,
 ];
 
 export const mapMaintainerToElastic = (

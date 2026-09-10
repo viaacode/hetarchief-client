@@ -1,4 +1,3 @@
-import type { IeObject } from '@ie-objects/ie-objects.types';
 import { IeObjectsService } from '@ie-objects/services';
 import { AdminConfigManager, fetchWithLogoutJson } from '@meemoo/admin-core-ui/client';
 import getConfig from '@shared/config/public-runtime-config';
@@ -6,7 +5,7 @@ import { QUERY_KEYS } from '@shared/const';
 import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
 import { Locale } from '@shared/utils/i18n';
 import { keepPreviousData, useQueries } from '@tanstack/react-query';
-import type { AvoCorePickerItem } from '@viaa/avo2-types';
+import type { AvoCorePickerItem, HetArchiefIeObject } from '@viaa/avo2-types';
 import { compact } from 'es-toolkit/compat';
 import { stringifyUrl } from 'query-string';
 import { stripHtml } from 'string-strip-html';
@@ -63,29 +62,34 @@ export const useGetContentBlockEncloseContent = (
 					return [];
 				}
 				if (Array.isArray(result.data)) {
-					const ieObjects: IeObject[] = compact(result.data as (IeObject | null)[]);
-					return ieObjects.map((item: IeObject): GetContentBlockEncloseContentReturnType => {
-						return {
-							id: item.maintainerId,
-							name: item.name,
-							description: item.description,
-							thumbnail: item.thumbnailUrl,
-							dateCreated: item.dateCreated || undefined,
-							datePublished: item.datePublished,
-							maintainerName: item.maintainerName,
-							maintainerSlug: item.maintainerSlug,
-							objectType: item.dctermsFormat,
-							identifier: item.schemaIdentifier,
-							pid: item.schemaIdentifier,
-							link: getIeObjectDetailPath(
-								(AdminConfigManager.getConfig().locale as unknown as Locale) || Locale.nl,
-								item.maintainerSlug,
-								item.schemaIdentifier,
-								item.name
-							),
-							type: 'IE_OBJECT' as const,
-						};
-					});
+					const ieObjects: HetArchiefIeObject[] = compact(
+						result.data as (HetArchiefIeObject | null)[]
+					);
+					return ieObjects.map(
+						(item: HetArchiefIeObject): GetContentBlockEncloseContentReturnType => {
+							return {
+								id: item.maintainerId,
+								name: item.name,
+								description: item.description,
+								thumbnail: item.thumbnailUrl,
+								hasAccessToEssence: !!item.hasAccessToEssence,
+								dateCreated: item.dateCreated || undefined,
+								datePublished: item.datePublished,
+								maintainerName: item.maintainerName,
+								maintainerSlug: item.maintainerSlug,
+								objectType: item.dctermsFormat,
+								identifier: item.schemaIdentifier,
+								pid: item.schemaIdentifier,
+								link: getIeObjectDetailPath(
+									(AdminConfigManager.getConfig().locale as unknown as Locale) || Locale.nl,
+									item.maintainerSlug,
+									item.schemaIdentifier,
+									item.name
+								),
+								type: 'IE_OBJECT' as const,
+							};
+						}
+					);
 				}
 
 				const contentPage = result.data as ContentPage;

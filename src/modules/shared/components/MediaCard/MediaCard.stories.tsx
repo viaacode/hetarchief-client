@@ -1,5 +1,5 @@
-import { IeObjectType } from '@shared/types/ie-objects';
 import type { Meta, StoryFn } from '@storybook/react';
+import { HetArchiefIeObjectType } from '@viaa/avo2-types';
 import type { CSSProperties } from 'react';
 import { thumbnail } from './__mocks__/media-card';
 import MediaCard from './MediaCard';
@@ -28,7 +28,7 @@ const Template: StoryFn<typeof MediaCard> = (args) => {
 				<MediaCard
 					{...args}
 					title="Something you can hear"
-					type={IeObjectType.AUDIO}
+					type={HetArchiefIeObjectType.AUDIO}
 					thumbnail={soundwave}
 				/>
 			</div>
@@ -36,7 +36,7 @@ const Template: StoryFn<typeof MediaCard> = (args) => {
 				<MediaCard
 					{...args}
 					title="Something you can watch"
-					type={IeObjectType.VIDEO}
+					type={HetArchiefIeObjectType.VIDEO}
 					thumbnail={thumbnail}
 				/>
 			</div>
@@ -44,14 +44,22 @@ const Template: StoryFn<typeof MediaCard> = (args) => {
 				<MediaCard
 					{...args}
 					title="Something you can hear very little about"
-					type={IeObjectType.AUDIO}
+					type={HetArchiefIeObjectType.AUDIO}
 				/>
 			</div>
 			<div style={column}>
-				<MediaCard {...args} title="Something you can read about" type={IeObjectType.NEWSPAPER} />
+				<MediaCard
+					{...args}
+					title="Something you can read about"
+					type={HetArchiefIeObjectType.NEWSPAPER}
+				/>
 			</div>
 			<div style={column}>
-				<MediaCard {...args} title="Something you can see nothing of" type={IeObjectType.VIDEO} />
+				<MediaCard
+					{...args}
+					title="Something you can see nothing of"
+					type={HetArchiefIeObjectType.VIDEO}
+				/>
 			</div>
 		</section>
 	);
@@ -61,6 +69,7 @@ export const Grid: StoryFn<typeof MediaCard> = Template.bind({});
 Grid.args = {
 	view: 'grid',
 	icon: null,
+	hasAccessToEssence: true,
 	link: undefined,
 	publishedOrCreatedDate: new Date().toDateString(),
 	publishedBy: 'Studio Hyperdrive',

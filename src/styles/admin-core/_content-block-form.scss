@@ -130,6 +130,11 @@
 
 	// Place datepicker icon inside the date picker input field
 	.avo__c-datepicker {
+		.react-datepicker,
+		.react-datepicker__current-month {
+			font-size: $font-size-sm;
+		}
+
 		.c-input-with-icon-right {
 			position: relative;
 		}

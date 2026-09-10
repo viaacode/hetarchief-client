@@ -1,5 +1,5 @@
-import { mapDcTermsFormatToSimpleType } from '@ie-objects/utils/map-dc-terms-format-to-simple-type';
-import type { IeObjectType } from '@shared/types/ie-objects';
+import { mapDcTermsFormatToSimpleType } from '@meemoo/admin-core-ui/admin';
+import type { HetArchiefIeObjectType } from '@viaa/avo2-types';
 
 /**
  * Where the object was played, so plays on an object's own page can be told apart from plays of
@@ -12,7 +12,7 @@ export enum PlayEventPageType {
 }
 
 export interface PlayEventDataInput {
-	dctermsFormat: IeObjectType | null | undefined;
+	dctermsFormat: HetArchiefIeObjectType | null | undefined;
 	schemaIdentifier: string | undefined;
 	maintainerId: string | undefined;
 	pageType: PlayEventPageType;
@@ -32,7 +32,7 @@ export function mapPlayEventData({
 	isBlockSnippet,
 }: PlayEventDataInput): Record<string, unknown> {
 	return {
-		type: mapDcTermsFormatToSimpleType(dctermsFormat),
+		type: mapDcTermsFormatToSimpleType(dctermsFormat) || 'unknown',
 		fragment_id: schemaIdentifier,
 		pid: schemaIdentifier,
 		or_id: maintainerId,

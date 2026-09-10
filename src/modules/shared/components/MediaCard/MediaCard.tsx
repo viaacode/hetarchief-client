@@ -6,7 +6,7 @@ import {
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { extractSnippetBySearchTerm } from '@ie-objects/utils/extract-snippet-by-search-term';
-import { AdminConfigManager } from '@meemoo/admin-core-ui/admin';
+import { AdminConfigManager, isAudioType } from '@meemoo/admin-core-ui/admin';
 import { Badge, Button, Card } from '@meemoo/react-components';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
@@ -21,7 +21,6 @@ import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
 import { setLastScrollPosition } from '@shared/store/ui';
-import { IeObjectType } from '@shared/types/ie-objects';
 import { asDate, formatMediumDate } from '@shared/utils/dates';
 import clsx from 'clsx';
 import { isValid } from 'date-fns';
@@ -41,6 +40,7 @@ const MediaCard: FC<MediaCardProps> = ({
 	duration,
 	keywords,
 	thumbnail,
+	hasAccessToEssence = false,
 	publishedOrCreatedDate,
 	publishedBy,
 	title,
@@ -295,7 +295,9 @@ const MediaCard: FC<MediaCardProps> = ({
 
 	const renderImage = (imgPath: string | undefined) => {
 		let imagePath: string | undefined = imgPath;
-		if (!imagePath) {
+		// No essence access means there is nothing to show but the struck-through type icon, whatever
+		// the thumbnail happens to hold
+		if (!hasAccessToEssence || !imagePath) {
 			return (
 				<div
 					className={clsx(
@@ -313,10 +315,9 @@ const MediaCard: FC<MediaCardProps> = ({
 			);
 		}
 
-		if (type === IeObjectType.AUDIO || type === IeObjectType.AUDIO_FRAGMENT) {
-			// Only render the waveform if the thumbnail is available
-			// The thumbnail is an ugly speaker icon that we never want to show
-			// But if that thumbnail is not available it most likely means this object does not have the BEZOEKERTOOL-CONTENT license
+		if (isAudioType(type)) {
+			// The thumbnail of an audio object is an ugly speaker icon that we never want to show, so
+			// the waveform still stands in for it. Access was already checked above.
 			imagePath = AdminConfigManager.getConfig().components.defaultAudioStill;
 		}
 

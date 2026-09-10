@@ -1,15 +1,17 @@
-import type { IeObjectType } from '@shared/types/ie-objects';
+import type { HetArchiefIeObjectType } from '@viaa/avo2-types';
 
 export interface GetContentBlockEncloseContentReturnType {
 	id?: string;
 	name?: string;
 	description?: string;
 	thumbnail?: string;
+	/** Ie-objects only: whether the current user may see/play the essence, as reported by the proxy */
+	hasAccessToEssence?: boolean;
 	dateCreated?: string;
 	datePublished?: string;
 	maintainerName?: string;
 	maintainerSlug?: string;
-	objectType: IeObjectType | null;
+	objectType: HetArchiefIeObjectType | null;
 	identifier?: string;
 	link: string;
 	pid?: string;

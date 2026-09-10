@@ -1,12 +1,12 @@
 import type { User } from '@auth/types';
-import { type IeObject, IsPartOfKey } from '@ie-objects/ie-objects.types';
+import { type HetArchiefIeObject, HetArchiefIsPartOfKey } from '@viaa/avo2-types';
 
 /**
  * If the maintainer of this ie-object has an external form for material requests, we need to construct that url with certain parameters
  * This currently is only the case for UGent and VRT
  */
 export function getExternalMaterialRequestUrlIfAvailable(
-	mediaInfo: IeObject | null | undefined,
+	mediaInfo: HetArchiefIeObject | null | undefined,
 	isAnonymous: boolean,
 	user: User | null
 ): string | null {
@@ -32,7 +32,7 @@ export function getExternalMaterialRequestUrlIfAvailable(
 				'{title_serie}',
 				encodeOrNotUriComponent(
 					mediaInfo?.isPartOf?.find(
-						(isPartOfEntry) => isPartOfEntry?.collectionType === IsPartOfKey.series
+						(isPartOfEntry) => isPartOfEntry?.collectionType === HetArchiefIsPartOfKey.series
 					)?.name || ''
 				)
 			);

@@ -7,13 +7,18 @@ import {
 	getTicketErrorPlaceholderLabels,
 	JSON_FORMATS,
 } from '@ie-objects/ie-objects.consts';
-import type { IeObjectFile } from '@ie-objects/ie-objects.types';
-import { FlowPlayer, type FlowPlayerProps, getValidStartAndEnd } from '@meemoo/react-components';
+import { Color, isAudioType } from '@meemoo/admin-core-ui/admin';
+import {
+	FlowPlayer,
+	type FlowPlayerCustomControlsConfig,
+	type FlowPlayerProps,
+	getValidStartAndEnd,
+} from '@meemoo/react-components';
 import { Loading } from '@shared/components/Loading';
 import getConfig from '@shared/config/public-runtime-config';
 import { useGetFileDuration } from '@shared/hooks/use-get-file-duration';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
-import { IeObjectType } from '@shared/types/ie-objects';
+import type { HetArchiefIeObjectFile } from '@viaa/avo2-types';
 import { isNil } from 'es-toolkit/compat';
 import React, { type FC, useCallback, useEffect, useState } from 'react';
 import type { AudioOrVideoPlayerProps } from './AudioOrVideoPlayer.types';
@@ -44,13 +49,14 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		representation?.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType)) || [];
 
 	const getFilesByType = useCallback(
-		(mimeTypes: string[]): IeObjectFile[] => {
+		(mimeTypes: string[]): HetArchiefIeObjectFile[] => {
 			return representation?.files?.filter((file) => mimeTypes.includes(file.mimeType)) || [];
 		},
 		[representation]
 	);
 
-	const currentPlayableFile: IeObjectFile | null = allFilesToInRepresentation?.[0] || null;
+	const currentPlayableFile: HetArchiefIeObjectFile | null =
+		allFilesToInRepresentation?.[0] || null;
 
 	const fileId: string | null = currentPlayableFile?.id ?? null;
 	const {
@@ -92,11 +98,11 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	}, [mediaDuration, onMediaDurationLoaded, isLoadingMediaDuration, isErrorMediaDuration]);
 
 	// peak file
-	const peakFile: IeObjectFile | null = getFilesByType(JSON_FORMATS)?.[0] || null;
+	const peakFile: HetArchiefIeObjectFile | null = getFilesByType(JSON_FORMATS)?.[0] || null;
 	const { data: peakJson, isLoading: isLoadingPeakFile } = useGetPeakFile(
 		peakFile?.id,
 		schemaIdentifier,
-		dctermsFormat === IeObjectType.AUDIO || dctermsFormat === IeObjectType.AUDIO_FRAGMENT
+		isAudioType(dctermsFormat)
 	);
 
 	if (isLoadingPlayableUrl || isLoadingMediaDuration) {
@@ -134,6 +140,15 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	};
 
 	const [start, end]: [number | null, number | null] = getStartAndEnd();
+	const sharedCustomControls: Partial<FlowPlayerCustomControlsConfig> = {
+		showTitleOverlay: true,
+		peakColorActive: Color.Jade,
+		peakColorInactive: Color.White,
+		colors: {
+			progressColor: '#00CCA9',
+			accentColor: '#009991',
+		},
+	};
 	const shared: Partial<FlowPlayerProps> = {
 		className,
 		title: currentPlayableFile?.name,
@@ -145,12 +160,13 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
 		ui: allowFullScreen ? undefined : 1, // 1 = NO_FULLSCREEN
 		plugins: ['speed', 'subtitles', 'cuepoints', 'hls', 'ga', 'audio', 'keyboard'],
-		peakColorBackground: '#303030', // $shade-darker
-		peakColorInactive: '#adadad', // zinc
-		peakColorActive: '#00857d', // $teal
+		peakColorBackground: Color.Ink,
+		peakColorInactive: Color.Zinc,
+		peakColorActive: Color.Jade,
 		peakHeightFactor: 0.6,
 		start,
 		end,
+		controlsVariant: 'custom',
 	};
 
 	if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {
@@ -166,6 +182,10 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				renderLoader={() => <Loading locationId="flowplayer suspense" fullscreen mode="light" />}
 				preload="metadata"
 				{...shared}
+				customControlsConfig={{
+					...sharedCustomControls,
+					showFullscreen: true,
+				}}
 			/>
 		);
 	}
@@ -193,6 +213,10 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				waveformData={peakJson?.data || undefined}
 				preload="metadata"
 				{...shared}
+				customControlsConfig={{
+					...sharedCustomControls,
+					showFullscreen: false,
+				}}
 			/>
 		);
 	}
