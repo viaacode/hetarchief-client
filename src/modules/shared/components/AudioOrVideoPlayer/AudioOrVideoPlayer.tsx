@@ -7,7 +7,11 @@ import {
 	getTicketErrorPlaceholderLabels,
 	JSON_FORMATS,
 } from '@ie-objects/ie-objects.consts';
-import { Color, isAudioType } from '@meemoo/admin-core-ui/admin';
+import {
+	Color,
+	FLOWPLAYER_CUSTOM_CONTROL_COLORS_HET_ARCHIEF,
+	isAudioType,
+} from '@meemoo/admin-core-ui/admin';
 import {
 	FlowPlayer,
 	type FlowPlayerCustomControlsConfig,
@@ -144,10 +148,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		showTitleOverlay: true,
 		peakColorActive: Color.Jade,
 		peakColorInactive: Color.White,
-		colors: {
-			progressColor: '#00CCA9',
-			accentColor: '#009991',
-		},
+		colors: FLOWPLAYER_CUSTOM_CONTROL_COLORS_HET_ARCHIEF(),
 	};
 	const shared: Partial<FlowPlayerProps> = {
 		className,
