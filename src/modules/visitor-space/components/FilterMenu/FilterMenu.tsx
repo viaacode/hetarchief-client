@@ -28,6 +28,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	className,
 	filters = [],
 	filterValues,
+	flyoutFilters = [],
 	label,
 	isMobileOpen = false,
 	isOpen = true,
@@ -35,6 +36,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 	toggleOptions = [],
 	onFilterReset = () => null,
 	onFilterSubmit = () => null,
+	onFlyoutFilterClick,
 	onMenuToggle,
 	onSortClick,
 	onViewToggle = () => null,
@@ -128,7 +130,7 @@ const FilterMenu: FC<FilterMenuProps> = ({
 		filters.map(
 			(option: FilterMenuFilterOption): ReactNode => (
 				<FilterOption
-					{...option}
+					filter={option}
 					key={`filter-menu-option-${option.id}`}
 					className={clsx({
 						[styles['c-filter-menu__option--operative']]: !isNil(filterValues?.[option?.id]),
@@ -138,6 +140,8 @@ const FilterMenu: FC<FilterMenuProps> = ({
 					onClick={onFilterClick}
 					onFormReset={onFilterFormReset}
 					onFormSubmit={onFilterFormSubmit}
+					flyoutFilters={flyoutFilters}
+					onFlyoutFilterClick={onFlyoutFilterClick}
 				/>
 			)
 		);
@@ -186,6 +190,8 @@ const FilterMenu: FC<FilterMenuProps> = ({
 				onFilterSubmit={onFilterFormSubmit}
 				filterValues={filterValues}
 				onRemoveValue={onRemoveValue}
+				flyoutFilters={flyoutFilters}
+				onFlyoutFilterClick={onFlyoutFilterClick}
 			/>
 		</div>
 	);

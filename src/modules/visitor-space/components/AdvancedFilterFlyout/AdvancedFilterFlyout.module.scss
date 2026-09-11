@@ -1,0 +1,51 @@
+@use "src/styles/abstracts" as abstracts;
+
+// The fly-out sits centered in the window, so this cap keeps it clear of both edges and scrolls
+// the rest. See the "Redesign van geavanceerde filters" section of the FA of ARC-3806.
+$screen-edge-margin: abstracts.$spacer-2xl;
+
+// One filter row is one line of body text
+$filter-row-height: abstracts.$font-size-base * abstracts.$line-height-1xl;
+
+// The design has no spacing tokens and puts 20px between the rows, which no spacer matches
+$filter-row-gap: 2rem;
+
+.c-advanced-filter-flyout {
+	@include abstracts.styled-scrollbar;
+
+	display: flex;
+	flex-direction: column;
+	gap: $filter-row-gap;
+	max-height: calc(100vh - $screen-edge-margin);
+	margin: 0;
+	padding: abstracts.$spacer-md abstracts.$spacer-sm abstracts.$spacer-md abstracts.$spacer-md;
+	overflow-y: auto;
+	list-style: none;
+
+	&__filter {
+		@include abstracts.focus-outline;
+
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: abstracts.$spacer-sm;
+		width: 100%;
+		height: $filter-row-height;
+		padding: 0;
+		color: abstracts.$black;
+		font-family: inherit;
+		font-size: abstracts.$font-size-base;
+		line-height: abstracts.$line-height-1xl;
+		text-align: left;
+		background: none;
+		border: 0;
+		cursor: pointer;
+	}
+
+	// The chevron is larger than the row it sits on, so it may not stretch the row
+	&__icon {
+		flex-shrink: 0;
+		font-size: abstracts.$font-size-lg;
+		line-height: 0;
+	}
+}

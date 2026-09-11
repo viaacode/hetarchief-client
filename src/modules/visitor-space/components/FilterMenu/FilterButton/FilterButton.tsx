@@ -14,6 +14,7 @@ const FilterButton: FC<FilterButtonProps> = ({
 	icon,
 	isActive,
 	type = 'filter',
+	variants = ['black', 'block'],
 	onClick,
 }) => {
 	const filterBtnCls = clsx(className, styles['c-filter-menu__button'], {
@@ -29,7 +30,7 @@ const FilterButton: FC<FilterButtonProps> = ({
 			iconEnd={<Icon className="u-text-left" name={icon} aria-hidden />}
 			label={label}
 			ariaLabel={ariaLabel || (typeof label === 'string' ? label : undefined)}
-			variants={['black', 'block']}
+			variants={variants}
 			onClick={onClick}
 			type="button"
 			onKeyDown={(e) => e.code === 'Enter' && onClick?.()}

@@ -28,6 +28,29 @@
 		padding-right: 1.4rem;
 	}
 
+	// The active filter pills. See the "Redesign pills" section of the FA of ARC-3806.
+	.c-tag {
+		background-color: $teal-40;
+		border-radius: $border-radius-sm;
+		gap: $spacer-xxs;
+		padding: $filter-pill-padding;
+	}
+
+	.c-tag__label {
+		font-size: $font-size-sm;
+		font-weight: $font-weight-medium;
+		line-height: 2rem;
+	}
+
+	// The icon box is what gives the pill its height in the design
+	.c-tag__close {
+		align-items: center;
+		font-size: $font-size-base;
+		height: 2.4rem;
+		margin: 0;
+		padding: 0;
+	}
+
 	/**
 	* Modifiers
 	*/

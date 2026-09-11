@@ -6,10 +6,11 @@ import {
 	type VisitorSpaceCardProps,
 	VisitorSpaceCardType,
 } from '@shared/components/VisitorSpaceCard';
-import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { toastService } from '@shared/services/toast-service';
+import { SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
 import Link from 'next/link';
 import type { FC, MouseEvent, ReactNode } from 'react';
@@ -147,7 +148,7 @@ const VisitorSpaceCardControls: FC<VisitorSpaceCardProps> = ({
 				)}
 
 				<Link
-					href={`/${ROUTE_PARTS_BY_LOCALE[locale].search}?aanbieder=${room.slug}`}
+					href={getSearchLink(locale, { [SearchFilterId.Maintainer]: room.slug })}
 					passHref
 					aria-label={tText(
 						'modules/shared/components/visitor-space-card/visitor-space-card-controls/visitor-space-card-controls___bezoek-dit-digitaal-archief'

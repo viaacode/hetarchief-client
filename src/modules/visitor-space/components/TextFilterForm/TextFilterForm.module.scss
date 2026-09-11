@@ -1,0 +1,92 @@
+@use "src/styles/abstracts" as abstracts;
+
+// The design separates the description, every condition and the add CTA with a rule that runs the
+// full width of the modal, so the blocks carry the horizontal padding rather than the form.
+$text-filter-form-padding: abstracts.$spacer-lg;
+$text-filter-form-divider: 1px solid rgb(0 0 0 / 12%);
+
+.c-text-filter-form {
+	&__description {
+		color: abstracts.$neutral;
+		font-size: abstracts.$font-size-base;
+		font-weight: abstracts.$font-weight-medium;
+		line-height: 2.4rem;
+		padding: 0 $text-filter-form-padding abstracts.$spacer-lg;
+	}
+
+	// The conditions and the add CTA sit on one tinted block that runs to both edges of the modal
+	&__conditions {
+		background-color: abstracts.$platinum;
+	}
+
+	&__condition {
+		padding: $text-filter-form-padding;
+		position: relative;
+
+		+ .c-text-filter-form__condition {
+			border-top: $text-filter-form-divider;
+		}
+	}
+
+	// "of" sits on the rule between two conditions, with the block color behind it
+	&__separator {
+		background-color: abstracts.$platinum;
+		color: abstracts.$neutral;
+		font-size: abstracts.$font-size-base;
+		left: abstracts.$spacer-md;
+		line-height: 2rem;
+		padding: 0 abstracts.$spacer-xs;
+		position: absolute;
+		top: 0;
+		transform: translateY(-50%);
+	}
+
+	// The operator reads as part of the sentence, so it drops the box a select normally has
+	&__operator {
+		:global(.c-react-select__control) {
+			background-color: transparent;
+			border: 0;
+			box-shadow: none;
+			min-height: 0;
+			width: max-content;
+		}
+
+		:global(.c-react-select__single-value) {
+			font-weight: abstracts.$font-weight-medium;
+		}
+
+		:global(.c-react-select__value-container) {
+			padding-left: 0;
+		}
+
+		:global(.c-react-select__dropdown-indicator) {
+			padding: 0 0 0 abstracts.$spacer-xxs;
+		}
+	}
+
+	&__value {
+		align-items: center;
+		display: flex;
+		gap: abstracts.$spacer-sm;
+		margin-top: abstracts.$spacer-xs;
+
+		> :first-child {
+			flex: 1 1 auto;
+			min-width: 0;
+		}
+	}
+
+	&__add:global(.c-button) {
+		background-color: abstracts.$platinum;
+		border-radius: 0;
+		border-top: $text-filter-form-divider;
+		padding: abstracts.$spacer-md $text-filter-form-padding;
+		text-align: left;
+		width: 100%;
+
+		:global(.c-button__content) {
+			justify-content: flex-start;
+			width: 100%;
+		}
+	}
+}

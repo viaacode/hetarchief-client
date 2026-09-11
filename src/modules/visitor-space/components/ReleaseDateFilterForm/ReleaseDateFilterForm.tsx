@@ -5,15 +5,16 @@ import { SEPARATOR } from '@shared/const';
 import { YEAR_LENGTH } from '@shared/const/date';
 import { convertYearToDate } from '@shared/helpers/convert-year-to-date';
 import { tHtml, tText } from '@shared/helpers/translate';
+import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
+import { getOperators } from '@visitor-space/utils/advanced-filters';
 import clsx from 'clsx';
 import { endOfDay, isValid, parseISO, startOfDay } from 'date-fns';
-import { getOperators } from 'modules/visitor-space/utils/advanced-filters';
 import React, { type ChangeEvent, type FC, useEffect, useMemo, useState } from 'react';
 import { Controller, type UseFormHandleSubmit, useForm } from 'react-hook-form';
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form/dist/types/form';
 import type { MultiValue, SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
-import { FilterProperty, isRange, Operator } from '../../types';
+import { FilterProperty, isRange } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import { DateInput } from '../DateInput';
 import { DateRangeInput } from '../DateRangeInput';
@@ -37,7 +38,7 @@ const labelKeys: Record<keyof ReleaseDateFilterFormState, string> = {
 
 const defaultValues: ReleaseDateFilterFormState = {
 	releaseDate: undefined,
-	operator: Operator.GREATER_THAN_OR_EQUAL,
+	operator: IeObjectsSearchOperator.GTE,
 };
 
 const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
@@ -82,7 +83,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 		if (initialValue) {
 			const { val, op } = initialValue;
 
-			op && setForm((oldForm) => ({ ...oldForm, operator: op as Operator }));
+			op && setForm((oldForm) => ({ ...oldForm, operator: op as IeObjectsSearchOperator }));
 			val && setForm((oldForm) => ({ ...oldForm, releaseDate: val }));
 
 			setShowRange(isRange(op)); // Not covered by other useEffects in time
@@ -118,7 +119,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 			setForm((oldForm) => ({ ...oldForm, releaseDate: undefined }));
 			return;
 		}
-		if (form.operator === Operator.EQUALS) {
+		if (form.operator === IeObjectsSearchOperator.IS) {
 			convertToRange(newDate);
 			return;
 		}
@@ -145,7 +146,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 	const onChangeOperatorSelect = (
 		operator: SingleValue<SelectOption> | MultiValue<SelectOption>
 	) => {
-		const value = (operator as SingleValue<SelectOption>)?.value as Operator;
+		const value = (operator as SingleValue<SelectOption>)?.value as IeObjectsSearchOperator;
 
 		if (value !== form.operator) {
 			setForm({

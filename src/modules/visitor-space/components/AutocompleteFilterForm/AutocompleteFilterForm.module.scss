@@ -1,0 +1,100 @@
+@use "src/styles/abstracts" as abstracts;
+
+$autocomplete-filter-form-padding: abstracts.$spacer-lg;
+
+.c-autocomplete-filter-form {
+	// The body already carries 0.8rem, and the design puts 2.4rem under the title
+	> :first-child {
+		margin-top: abstracts.$spacer-sm;
+	}
+
+	// The selection sits on a tinted block that runs to both edges of the modal
+	&__selection {
+		background-color: abstracts.$platinum;
+		margin-bottom: abstracts.$spacer-md;
+		padding: abstracts.$spacer-md $autocomplete-filter-form-padding;
+	}
+
+	&__selection-label {
+		color: abstracts.$neutral;
+		font-size: abstracts.$font-size-base;
+		line-height: 2.4rem;
+		margin-bottom: abstracts.$spacer-xs;
+	}
+
+	:global(.c-tag-list) {
+		flex-wrap: wrap;
+		gap: abstracts.$spacer-xs;
+	}
+
+	// Without this the pill grows past the modal instead of cutting the value off
+	:global(.c-tag-list__item) {
+		max-width: 100%;
+		min-width: 0;
+	}
+
+	:global(.c-tag) {
+		background-color: abstracts.$silver;
+		border-radius: abstracts.$border-radius-sm;
+		gap: abstracts.$spacer-xxs;
+		margin: 0;
+		max-width: 100%;
+		padding: abstracts.$filter-pill-padding;
+	}
+
+	// A value can be as long as a full newspaper title, so the pill cuts it off
+	:global(.c-tag__label) {
+		@include abstracts.text-ellipsis;
+
+		min-width: 0;
+		font-size: abstracts.$font-size-sm;
+		font-weight: abstracts.$font-weight-bold;
+		line-height: 2rem;
+	}
+
+	&__select {
+		padding: 0 $autocomplete-filter-form-padding;
+
+		// The design gives this field the same shape as the search bar of the other filters
+		:global(.c-react-select__control) {
+			background-color: abstracts.$platinum;
+			border-color: abstracts.$platinum;
+			border-radius: abstracts.$border-radius-sm;
+			min-height: abstracts.$button-height;
+			padding: 0 abstracts.$spacer-sm;
+		}
+
+		// The padding sits on this wrapper, so the menu has to line up with the field itself
+		:global(.c-react-select__menu) {
+			left: $autocomplete-filter-form-padding;
+			margin-top: abstracts.$spacer-xxs;
+			right: $autocomplete-filter-form-padding;
+			width: auto;
+		}
+
+		:global(.c-react-select__menu-list) {
+			@include abstracts.styled-scrollbar;
+
+			padding: abstracts.$spacer-xxs;
+		}
+
+		:global(.c-react-select__option) {
+			padding: abstracts.$filter-pill-padding;
+		}
+
+		:global(.c-react-select__option--is-focused) {
+			background-color: abstracts.$platinum;
+		}
+
+		:global(.c-react-select__option--is-selected) {
+			background-color: abstracts.$silver;
+			color: abstracts.$black;
+		}
+	}
+
+	&__indicators {
+		align-items: center;
+		display: flex;
+		gap: abstracts.$spacer-xs;
+	}
+}

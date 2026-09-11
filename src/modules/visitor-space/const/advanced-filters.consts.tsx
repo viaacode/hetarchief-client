@@ -1,6 +1,5 @@
 import { GroupName } from '@account/const';
 import { type ReactSelectProps, TextInput, type TextInputProps } from '@meemoo/react-components';
-import { tText } from '@shared/helpers/translate';
 import {
 	type IeObjectsSearchFilter,
 	IeObjectsSearchFilterField,
@@ -23,7 +22,8 @@ import { ThemeSelect } from '@visitor-space/components/ThemeSelect';
 import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
 import type { FC } from 'react';
 import DurationInput from '../components/DurationInput/DurationInput';
-import { FilterProperty, Operator } from '../types';
+import { FilterProperty } from '../types';
+import { getOperatorLabels, type OperatorLabels } from './operator-labels.const';
 
 type FilterInputComponent =
 	| FC<TextInputProps>
@@ -46,7 +46,7 @@ export type FilterConfig = {
 };
 
 type OperatorAndFilterConfig = {
-	[key in Operator]?: FilterConfig;
+	[key in IeObjectsSearchOperator]?: FilterConfig;
 };
 
 export type AdvancedFiltersConfig = {
@@ -112,45 +112,12 @@ export const REGULAR_FILTERS: FilterProperty[] = [
 	// TODO Location of publication
 ];
 
-const GET_OPERATOR_LABELS = (): Record<string, string> => ({
-	from: tText(
-		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___vanaf'
-	),
-	until: tText(
-		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tot-en-met'
-	),
-	between: tText(
-		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___tussen'
-	),
-	contains: tText(
-		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat'
-	),
-	excludes: tText(
-		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___bevat-niet'
-	),
-	equals: tText(
-		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is'
-	),
-	differs: tText(
-		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___is-niet'
-	),
-	shorter: tText(
-		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___korter-dan'
-	),
-	longer: tText(
-		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___langer-dan'
-	),
-	exact: tText(
-		'modules/visitor-space/components/advanced-filter-fields/advanced-filter-fields___exact'
-	),
-});
-
 const DATE_GREATER_THAN_EQUALS = (
-	operatorLabels: Record<string, string>,
+	operatorLabels: OperatorLabels,
 	field: IeObjectsSearchFilterField
 ): OperatorAndFilterConfig => {
 	return {
-		[Operator.GREATER_THAN_OR_EQUAL]: {
+		[IeObjectsSearchOperator.GTE]: {
 			label: operatorLabels.from,
 			inputComponent: DateInput,
 			filters: [
@@ -164,11 +131,11 @@ const DATE_GREATER_THAN_EQUALS = (
 };
 
 const DATE_LESS_THAN_OR_EQUALS = (
-	operatorLabels: Record<string, string>,
+	operatorLabels: OperatorLabels,
 	field: IeObjectsSearchFilterField
 ): OperatorAndFilterConfig => {
 	return {
-		[Operator.LESS_THAN_OR_EQUAL]: {
+		[IeObjectsSearchOperator.LTE]: {
 			label: operatorLabels.until,
 			inputComponent: DateInput,
 			filters: [
@@ -182,11 +149,11 @@ const DATE_LESS_THAN_OR_EQUALS = (
 };
 
 const DATE_BETWEEN = (
-	operatorLabels: Record<string, string>,
+	operatorLabels: OperatorLabels,
 	field: IeObjectsSearchFilterField
 ): OperatorAndFilterConfig => {
 	return {
-		[Operator.BETWEEN]: {
+		[IeObjectsSearchOperator.BETWEEN]: {
 			label: operatorLabels.between,
 			inputComponent: DateRangeInput,
 			filters: [
@@ -204,11 +171,11 @@ const DATE_BETWEEN = (
 };
 
 const DATE_EQUALS = (
-	operatorLabels: Record<string, string>,
+	operatorLabels: OperatorLabels,
 	field: IeObjectsSearchFilterField
 ): OperatorAndFilterConfig => {
 	return {
-		[Operator.EQUALS]: {
+		[IeObjectsSearchOperator.IS]: {
 			label: operatorLabels.exact,
 			inputComponent: DateInput,
 			filters: [
@@ -226,11 +193,11 @@ const DATE_EQUALS = (
 };
 
 const DURATION_GREATER_THAN_EQUALS = (
-	operatorLabels: Record<string, string>,
+	operatorLabels: OperatorLabels,
 	field: IeObjectsSearchFilterField
 ): OperatorAndFilterConfig => {
 	return {
-		[Operator.GREATER_THAN_OR_EQUAL]: {
+		[IeObjectsSearchOperator.GTE]: {
 			label: operatorLabels.longer,
 			inputComponent: DurationInput,
 			filters: [
@@ -244,11 +211,11 @@ const DURATION_GREATER_THAN_EQUALS = (
 };
 
 const DURATION_LESS_THAN_OR_EQUALS = (
-	operatorLabels: Record<string, string>,
+	operatorLabels: OperatorLabels,
 	field: IeObjectsSearchFilterField
 ): OperatorAndFilterConfig => {
 	return {
-		[Operator.LESS_THAN_OR_EQUAL]: {
+		[IeObjectsSearchOperator.LTE]: {
 			label: operatorLabels.shorter,
 			inputComponent: DurationInput,
 			filters: [
@@ -262,7 +229,7 @@ const DURATION_LESS_THAN_OR_EQUALS = (
 };
 
 const CONTAINS = (
-	operatorLabels: Record<string, string>,
+	operatorLabels: OperatorLabels,
 	field: IeObjectsSearchFilterField,
 	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponent?: FC<any>,
@@ -270,7 +237,7 @@ const CONTAINS = (
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
-		[Operator.CONTAINS]: {
+		[IeObjectsSearchOperator.CONTAINS]: {
 			label: operatorLabels.contains,
 			inputComponent: inputComponent || TextInput,
 			inputComponentProps: inputComponentProps,
@@ -285,7 +252,7 @@ const CONTAINS = (
 };
 
 const CONTAINS_NOT = (
-	operatorLabels: Record<string, string>,
+	operatorLabels: OperatorLabels,
 	field: IeObjectsSearchFilterField,
 	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponent?: FC<any>,
@@ -293,7 +260,7 @@ const CONTAINS_NOT = (
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
-		[Operator.CONTAINS_NOT]: {
+		[IeObjectsSearchOperator.CONTAINS_NOT]: {
 			label: operatorLabels.excludes,
 			inputComponent: inputComponent || TextInput,
 			inputComponentProps: inputComponentProps,
@@ -308,7 +275,7 @@ const CONTAINS_NOT = (
 };
 
 const EQUALS = (
-	operatorLabels: Record<string, string>,
+	operatorLabels: OperatorLabels,
 	field: IeObjectsSearchFilterField,
 	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponent?: FC<any>,
@@ -316,7 +283,7 @@ const EQUALS = (
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
-		[Operator.EQUALS]: {
+		[IeObjectsSearchOperator.IS]: {
 			label: operatorLabels.equals,
 			inputComponent: inputComponent || TextInput,
 			inputComponentProps: inputComponentProps,
@@ -331,7 +298,7 @@ const EQUALS = (
 };
 
 const EQUALS_NOT = (
-	operatorLabels: Record<string, string>,
+	operatorLabels: OperatorLabels,
 	field: IeObjectsSearchFilterField,
 	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponent?: FC<any>,
@@ -339,7 +306,7 @@ const EQUALS_NOT = (
 	inputComponentProps?: any
 ): OperatorAndFilterConfig => {
 	return {
-		[Operator.EQUALS_NOT]: {
+		[IeObjectsSearchOperator.IS_NOT]: {
 			label: operatorLabels.differs,
 			inputComponent: inputComponent || TextInput,
 			inputComponentProps: inputComponentProps,
@@ -354,7 +321,7 @@ const EQUALS_NOT = (
 };
 
 const CONTAINS_AND_EQUALS = (
-	operatorLabels: Record<string, string>,
+	operatorLabels: OperatorLabels,
 	field: IeObjectsSearchFilterField,
 	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
 	inputComponent?: FC<any>,
@@ -370,7 +337,7 @@ const CONTAINS_AND_EQUALS = (
 };
 
 export const FILTERS_OPTIONS_CONFIG = (): AdvancedFiltersConfig => {
-	const operatorLabels = GET_OPERATOR_LABELS();
+	const operatorLabels = getOperatorLabels();
 
 	return {
 		[FilterProperty.RELEASE_DATE]: {
@@ -517,7 +484,7 @@ export const FILTERS_OPTIONS_CONFIG = (): AdvancedFiltersConfig => {
 
 export const getMetadataSearchFilters = (
 	prop: FilterProperty,
-	operator: Operator
+	operator: IeObjectsSearchOperator
 ): IeObjectsSearchFilter[] => {
 	return FILTERS_OPTIONS_CONFIG()[prop]?.[operator]?.filters || [];
 };

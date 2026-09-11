@@ -1,13 +1,16 @@
+import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import { mixed, object, type Schema, string } from 'yup';
 
 import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
-import { Operator, SearchFilterId } from '../../types';
+import { SearchFilterId } from '../../types';
 
 import type { ReleaseDateFilterFormState } from './ReleaseDateFilterForm.types';
 
 export const RELEASE_DATE_FILTER_FORM_SCHEMA = (): Schema<ReleaseDateFilterFormState> =>
 	object({
-		operator: mixed<Operator>().required().oneOf(Object.values(Operator)),
+		operator: mixed<IeObjectsSearchOperator>()
+			.required()
+			.oneOf(Object.values(IeObjectsSearchOperator)),
 		releaseDate: string().optional(),
 	});
 

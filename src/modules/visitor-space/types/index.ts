@@ -1,11 +1,15 @@
 import type { DefaultComponentProps } from '@meemoo/admin-core-ui/admin';
 import type { SelectOption, TagInfo } from '@meemoo/react-components';
+import type { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import type { HetArchiefIeObjectType } from '@viaa/avo2-types';
-import type { OnFilterMenuFormSubmit } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import type {
+	FilterMenuFilterOption,
+	OnFilterMenuFormSubmit,
+} from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import type { ReactNode } from 'react';
 import type { FieldValues, UseFormHandleSubmit } from 'react-hook-form';
 
-import type { FilterProperty, Operator } from './filter-properties';
+import type { FilterProperty } from './filter-properties';
 
 export * from './filter-properties';
 
@@ -42,6 +46,29 @@ export enum SearchFilterId {
 	SpacialCoverage = 'spacialCoverage',
 	TemporalCoverage = 'temporalCoverage',
 	Identifier = 'identifier',
+	Title = 'title',
+	Description = 'description',
+	Publisher = 'publisher',
+	Rights = 'rights',
+	Theme = 'theme',
+}
+
+/**
+ * The kind of modal a filter opens. See the "Allocatie per filter" table in the FA of ARC-3806.
+ * A filter without a modal type keeps the form component it always had: the two consultable
+ * checkboxes, the date pickers and the duration filter.
+ */
+export enum FilterModalType {
+	SearchableCheckbox = 'searchableCheckbox',
+	CheckboxList = 'checkboxList',
+	Autocomplete = 'autocomplete',
+	Text = 'text',
+}
+
+/** One "Bevat" / "Bevat niet" row in a text filter. */
+export interface TextFilterCondition {
+	op: IeObjectsSearchOperator;
+	val: string;
 }
 
 export enum ReusabilityFilterOption {
@@ -59,6 +86,7 @@ export enum ElasticsearchFieldNames {
 	Maintainer = 'schema_maintainer.schema_identifier',
 	RightsForNewspaper = 'dcterms_rights_statement',
 	RightsForAudioVideo = 'reuse_category.id',
+	LocationCreated = 'schema_location_created',
 }
 
 export enum VisitorSpaceOrderProps {
@@ -88,6 +116,17 @@ export interface DefaultFilterFormProps<Values extends FieldValues>
 	children: ({ values, reset, handleSubmit }: DefaultFilterFormChildrenParams<Values>) => ReactNode;
 	disabled?: boolean;
 	values?: Values;
+}
+
+/**
+ * Props of the generic filter forms of ARC-3806. One component serves every filter of a modal
+ * type, so it reads what it needs from the registry entry instead of from its own constants.
+ */
+export interface GenericFilterFormProps extends Omit<DefaultComponentProps, 'children'> {
+	filter: FilterMenuFilterOption;
+	disabled?: boolean;
+	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
+	children: (params: DefaultFilterFormChildrenParams<any>) => ReactNode;
 }
 
 export interface InlineFilterFormProps<Values = unknown> extends DefaultComponentProps {
@@ -140,7 +179,7 @@ export type MediaTypeOptions = Array<
 export type OperatorOptions = Array<
 	SelectOption & {
 		label: string;
-		value: Operator;
+		value: IeObjectsSearchOperator;
 	}
 >;
 
@@ -154,7 +193,7 @@ export type PropertyOptions = Array<
 export interface AdvancedFilter {
 	renderKey: string; // Unique key for the filter, used by react to render the filter in the UI
 	prop?: string; // Which property/field is being filtered on
-	op?: string; // Which operator, see Operator enum
+	op?: string; // Which operator, see IeObjectsSearchOperator enum
 	val?: string; // stringified value, potentially character-separated
 }
 
@@ -165,4 +204,6 @@ export interface IdentityAdvancedFilter extends AdvancedFilter {
 export interface TagIdentity extends Partial<AdvancedFilter>, TagInfo {
 	key: string;
 	id: string | number;
+	/** False for a pill with no filter behind it to open, such as a search term. */
+	isClickable?: boolean;
 }

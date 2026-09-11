@@ -1,7 +1,9 @@
-import { TEMP_FILTER_KEY_PREFIX } from '@visitor-space/components/AdvancedFilterForm/AdvancedFilterForm.const';
+import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import type { QueryParamConfig } from 'use-query-params';
 import { v4 as uuidV4 } from 'uuid';
-import { type AdvancedFilter, FilterProperty, Operator } from '../types';
+import { type AdvancedFilter, FilterProperty } from '../types';
+
+export const TEMP_FILTER_KEY_PREFIX = 'TEMP_FILTER_ID__';
 
 const divider = ',';
 export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undefined> = {
@@ -11,7 +13,7 @@ export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undef
 					.map((filter) => {
 						const { prop, op, val } = filter;
 						const propertyAcronym = filterNameToAcronym(prop as FilterProperty);
-						const operatorAcronym = operatorToAcronym(op as Operator);
+						const operatorAcronym = operatorToAcronym(op as IeObjectsSearchOperator);
 
 						return `${propertyAcronym}${operatorAcronym}${encodeURIComponent(val || '')}`;
 					})
@@ -90,36 +92,36 @@ function filterAcronymToName(acronym: string | undefined): FilterProperty {
 	return filter[0];
 }
 // 2-letter for url parsing
-const FILTER_OPERATOR_WITH_ACRONYM: [Operator, string][] = [
-	[Operator.CONTAINS, 'co'],
-	[Operator.CONTAINS_NOT, 'nc'],
-	[Operator.EQUALS, 'eq'],
-	[Operator.EQUALS_NOT, 'ne'],
-	[Operator.LESS_THAN_OR_EQUAL, 'lt'], // shorter (duration) or until (date)
-	[Operator.GREATER_THAN_OR_EQUAL, 'gt'], // longer (duration) or after (date)
-	[Operator.BETWEEN, 'bt'], // duration & date
-	[Operator.EXACT, 'ex'], // duration
+const FILTER_OPERATOR_WITH_ACRONYM: [IeObjectsSearchOperator, string][] = [
+	[IeObjectsSearchOperator.CONTAINS, 'co'],
+	[IeObjectsSearchOperator.CONTAINS_NOT, 'nc'],
+	[IeObjectsSearchOperator.IS, 'eq'],
+	[IeObjectsSearchOperator.IS_NOT, 'ne'],
+	[IeObjectsSearchOperator.LTE, 'lt'], // shorter (duration) or until (date)
+	[IeObjectsSearchOperator.GTE, 'gt'], // longer (duration) or after (date)
+	[IeObjectsSearchOperator.BETWEEN, 'bt'], // duration & date
+	[IeObjectsSearchOperator.EXACT, 'ex'], // duration
 ];
 
-export function operatorToAcronym(operator: Operator): string {
+export function operatorToAcronym(operator: IeObjectsSearchOperator): string {
 	const op = FILTER_OPERATOR_WITH_ACRONYM.find(([name]) => name === operator);
 
 	if (!op) {
-		throw new Error(`Operator not found: ${operator}`);
+		throw new Error(`IeObjectsSearchOperator not found: ${operator}`);
 	}
 
 	return op[1];
 }
 
-function operatorAcronymToName(acronym: string | undefined): Operator {
+export function operatorAcronymToName(acronym: string | undefined): IeObjectsSearchOperator {
 	if (!acronym) {
-		throw new Error(`Operator acronym undefined: ${acronym}`);
+		throw new Error(`IeObjectsSearchOperator acronym undefined: ${acronym}`);
 	}
 
 	const op = FILTER_OPERATOR_WITH_ACRONYM.find(([, acr]) => acr === acronym);
 
 	if (!op) {
-		throw new Error(`Operator acronym not found: ${acronym}`);
+		throw new Error(`IeObjectsSearchOperator acronym not found: ${acronym}`);
 	}
 
 	return op[0];
