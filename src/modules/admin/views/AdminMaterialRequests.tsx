@@ -139,7 +139,8 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	}, [isLoadingDetail, currentMaterialRequest, currentMaterialRequestDetail]);
 
 	const { data: maintainers } = useGetMaterialRequestsMaintainers();
-	const { data: unreadSummary } = useGetMaterialRequestsUnreadSummary();
+	const { data: unreadSummary, refetch: refetchUnreadSummary } =
+		useGetMaterialRequestsUnreadSummary();
 
 	const maintainerList = useMemo(() => {
 		if (maintainers) {
@@ -312,6 +313,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 					if (statusUpdated) {
 						refetchMaterialRequests().then(noop);
 					}
+					refetchUnreadSummary().then(noop);
 					setCurrentMaterialRequestId(undefined);
 				}}
 				currentMaterialRequestDetail={

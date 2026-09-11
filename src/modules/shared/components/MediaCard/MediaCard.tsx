@@ -263,6 +263,7 @@ const MediaCard: FC<MediaCardProps> = ({
 		if (numOfChildren === 0 && !isPartOfOtherItem) {
 			return null;
 		}
+
 		return (
 			<div className={styles['c-media-card__header__badges']}>
 				{isPartOfOtherItem && (
@@ -278,15 +279,24 @@ const MediaCard: FC<MediaCardProps> = ({
 				{numOfChildren > 0 && (
 					<div
 						className={styles['c-media-card__header__children']}
-						title={tText(
-							'modules/shared/components/media-card/media-card___dit-object-heeft-childrencount-kind-objecten',
-							{ childrenCount: numOfChildren }
-						)}
+						title={
+							numOfChildren > 1
+								? tText(
+										'modules/shared/components/media-card/media-card___dit-object-heeft-childrencount-kind-objecten',
+										{
+											numOfChildren,
+										}
+									)
+								: tText(
+										'modules/shared/components/media-card/media-card___dit-object-heeft-1-kind-object'
+									)
+						}
 					>
-						{numOfChildren}{' '}
 						{numOfChildren > 1
-							? tText('modules/shared/components/media-card/media-card___num-of-children-items')
-							: tText('modules/shared/components/media-card/media-card___1-item')}
+							? tText('modules/shared/components/media-card/media-card___num-of-children-items', {
+									numOfChildren,
+								})
+							: tText('modules/shared/components/media-card/media-card___num-of-children-1-item')}
 					</div>
 				)}
 			</div>

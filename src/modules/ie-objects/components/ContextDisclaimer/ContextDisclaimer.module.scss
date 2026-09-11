@@ -24,6 +24,7 @@ $context-disclaimer-offset: abstracts.$spacer-sm;
 	// The circle itself comes from the c-button--icon variant
 	&--inactive {
 		background-color: abstracts.$black-40;
+		border-color: transparent;
 		cursor: pointer;
 
 		// The button base style paints its icon dark, which is invisible on the dark circle
@@ -55,6 +56,12 @@ $context-disclaimer-offset: abstracts.$spacer-sm;
 		cursor: pointer;
 
 		@include abstracts.focus-outline;
+
+		// The button centers its icon in its own tap-target box by default, which
+		// leaves it sitting lower than the flush-top icon on the left of the label.
+		:global(.c-button__content) {
+			align-items: flex-start;
+		}
 
 		:global(.c-button__icon) {
 			font-size: abstracts.$font-size-lg;
