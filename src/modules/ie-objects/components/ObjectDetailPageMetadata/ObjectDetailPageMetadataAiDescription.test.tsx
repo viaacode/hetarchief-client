@@ -49,6 +49,25 @@ describe('Component: <ObjectDetailPageMetadataAiDescription />', () => {
 		expect(screen.getByText(`${'a'.repeat(250)}...`)).toBeInTheDocument();
 	});
 
+	it('shows the title on its own when there is no synopsis', () => {
+		render(<ObjectDetailPageMetadataAiDescription name="Titel" onReadMoreClicked={vi.fn()} />);
+
+		expect(screen.getByRole('heading', { name: 'Titel' })).toBeInTheDocument();
+		expect(screen.queryByText(SHORT_SYNOPSIS)).not.toBeInTheDocument();
+	});
+
+	it('shows the synopsis on its own when there is no title', () => {
+		render(
+			<ObjectDetailPageMetadataAiDescription
+				synopsis={SHORT_SYNOPSIS}
+				onReadMoreClicked={vi.fn()}
+			/>
+		);
+
+		expect(screen.getByText(SHORT_SYNOPSIS)).toBeInTheDocument();
+		expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+	});
+
 	it('renders the disclaimer as a labelled button', () => {
 		render(
 			<ObjectDetailPageMetadataAiDescription

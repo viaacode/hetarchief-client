@@ -220,6 +220,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	});
 	const canDownloadMetadata: boolean = ieObjectPermissions.canExportMetadata;
 
+	// The AI title and synopsis are two independent fields: either one on its own is enough to show
+	// the block. Newspapers are out of scope and kiosk visitors never see AI metadata. See ARC-3897.
+	const showAiDescription: boolean =
+		!isNewspaper && !isKiosk && (!!mediaInfo?.nameAi || !!mediaInfo?.synopsisAi);
+
 	// Themes are shown for publicly disclosed objects that belong to at least one theme, to every
 	// user including logged out ones, but never to kiosk visitors. See ARC-3826.
 	const themes = mediaInfo?.themes ?? [];
@@ -1028,7 +1033,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						/>
 					)}
 
-					{!isNewspaper && mediaInfo.nameAi && mediaInfo.synopsisAi && (
+					{showAiDescription && (
 						<ObjectDetailPageMetadataAiDescription
 							name={mediaInfo.nameAi}
 							synopsis={mediaInfo.synopsisAi}

@@ -8,8 +8,8 @@ import styles from './ObjectDetailPageMetadataAiDescription.module.scss';
 import { ObjectDetailPageMetadataDisclaimerTooltip } from './ObjectDetailPageMetadataDisclaimerTooltip';
 
 export interface ObjectDetailPageMetadataAiDescriptionProps {
-	name: string;
-	synopsis: string;
+	name?: string | null;
+	synopsis?: string | null;
 	onReadMoreClicked: (item: MetadataItem) => void;
 	className?: string;
 }
@@ -23,7 +23,9 @@ export function ObjectDetailPageMetadataAiDescription({
 	return (
 		<div className={clsx(styles['c-object-detail-page-metadata-ai-description'], className)}>
 			<div className={styles['c-object-detail-page-metadata-ai-description__header']}>
-				<h2 className={styles['c-object-detail-page-metadata-ai-description__title']}>{name}</h2>
+				{name && (
+					<h2 className={styles['c-object-detail-page-metadata-ai-description__title']}>{name}</h2>
+				)}
 
 				<ObjectDetailPageMetadataDisclaimerTooltip
 					iconName={IconNamesLight.Ai}
@@ -38,15 +40,17 @@ export function ObjectDetailPageMetadataAiDescription({
 				/>
 			</div>
 
-			<MetaDataFieldWithHighlightingAndMaxLength
-				title={tText(
-					'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___samenvatting-ai'
-				)}
-				data={synopsis}
-				maxLength={AI_METADATA_FIELD_MAX_LENGTH}
-				className="u-line-height-1-4 u-font-size-14"
-				onReadMoreClicked={onReadMoreClicked}
-			/>
+			{synopsis && (
+				<MetaDataFieldWithHighlightingAndMaxLength
+					title={tText(
+						'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___samenvatting-ai'
+					)}
+					data={synopsis}
+					maxLength={AI_METADATA_FIELD_MAX_LENGTH}
+					className="u-line-height-1-4 u-font-size-14"
+					onReadMoreClicked={onReadMoreClicked}
+				/>
+			)}
 		</div>
 	);
 }
