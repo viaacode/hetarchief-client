@@ -55,7 +55,6 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 	const [formErrors, setFormErrors] = useState<Record<string, string | undefined>>({});
 
 	const resolvedEmail = user?.email || email;
-	const requesterName = user?.fullName || tText('Niet-ingelogde gebruiker');
 
 	/**
 	 * Methods
@@ -111,14 +110,15 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 				'modules/visitor-space/components/report-blade/report-blade___uw-bericht-werd-succesvol-verstuurd'
 			),
 		});
+		resetForm();
 		onCloseBlade();
 	};
 
 	const onMissingSubmissionData = () => {
 		toastService.notify({
-			title: tHtml('Er ging iets mis'),
+			title: tHtml('modules/visitor-space/components/report-blade/report-blade___er-ging-iets-mis'),
 			description: tHtml(
-				'Dit object kan momenteel niet gerapporteerd worden. Probeer het later opnieuw of neem contact op met meemoo.'
+				'modules/visitor-space/components/report-blade/report-blade___dit-object-kan-momenteel-niet-gerapporteerd-worden-probeer-het-later-opnieuw-of-neem-contact-op-met-meemoo'
 			),
 		});
 	};
@@ -142,7 +142,11 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			locale,
 			url: window.location.href,
 			email: resolvedEmail,
-			name: requesterName,
+			name:
+				user?.fullName ||
+				tText(
+					'modules/visitor-space/components/report-blade/report-blade___niet-ingelogde-gebruiker'
+				),
 			...payload,
 		});
 		onSuccessfulRequest();
@@ -211,7 +215,11 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 
 	const handleSubmit = async () => {
 		if (!selectedReportReason) {
-			setFormErrors({ selectedReportReason: tText('Kies een van de bovenstaande opties') });
+			setFormErrors({
+				selectedReportReason: tText(
+					'modules/visitor-space/components/report-blade/report-blade___kies-een-van-de-bovenstaande-opties'
+				),
+			});
 			return;
 		}
 
@@ -245,14 +253,20 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 	} => {
 		if (selectedReportReason === ReportReason.LEGAL_REMARK) {
 			return {
-				label: tText('Verstuur opmerking'),
-				mobileLabel: tText('Verstuur opmerking - mobiel'),
+				label: tText(
+					'modules/visitor-space/components/report-blade/report-blade___verstuur-opmerking'
+				),
+				mobileLabel: tText(
+					'modules/visitor-space/components/report-blade/report-blade___verstuur-opmerking-mobiel'
+				),
 			};
 		}
 		if (selectedReportReason === ReportReason.METADATA_ISSUE && isOwnOrg) {
 			return {
-				label: tText('Sluiten'),
-				mobileLabel: tText('Sluiten - mobiel'),
+				label: tText('modules/visitor-space/components/report-blade/report-blade___sluiten'),
+				mobileLabel: tText(
+					'modules/visitor-space/components/report-blade/report-blade___sluiten-mobiel'
+				),
 			};
 		}
 		// Default (nothing selected yet), GENERAL_QUESTION, and METADATA_ISSUE (other org)
@@ -336,7 +350,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 				</div>,
 			]}
 			id="reportMessage"
-			label={tHtml('Opmerking')}
+			label={tText('modules/visitor-space/components/report-blade/report-blade___opmerking')}
 		>
 			<TextArea
 				id="reportMessage"
@@ -377,7 +391,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 				</div>,
 			]}
 			id="legalRemarkText"
-			label={tHtml('Opmerking')}
+			label={tText('modules/visitor-space/components/report-blade/report-blade___opmerking')}
 		>
 			<TextArea
 				id="legalRemarkText"
@@ -385,7 +399,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 				value={legalRemarkText}
 				maxLength={REPORT_REMARK_MAX_LENGTH}
 				onChange={(evt) => setLegalRemarkText(evt.target.value)}
-				ariaLabel={tText('Opmerking')}
+				ariaLabel={tText('modules/visitor-space/components/report-blade/report-blade___opmerking')}
 			/>
 		</FormControl>
 	);
@@ -429,18 +443,24 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 					<hr className={styles['c-report-blade__divider']} />
 					<h3 className={styles['c-report-blade__subtitle']}>
 						{tHtml(
-							'Gebruik deze links om de metadata aan te (laten) passen in het meemoo-archiefsysteem of op ai.meemoo.be.'
+							'modules/visitor-space/components/report-blade/report-blade___gebruik-deze-links-om-de-metadata-aan-te-laten-passen-in-het-meemoo-archiefsysteem-of-op-ai-meemoo-be'
 						)}
 					</h3>
 					{renderMetadataIssueLink(
 						mamUrl,
-						tText('Bewerk object in het MAM'),
-						tText('Kopieer link MAM')
+						tText(
+							'modules/visitor-space/components/report-blade/report-blade___bewerk-object-in-het-mam'
+						),
+						tText('modules/visitor-space/components/report-blade/report-blade___kopieer-link-mam')
 					)}
 					{renderMetadataIssueLink(
 						aiMeemooUrl,
-						tText('Bewerk object op ai.meemoo.be'),
-						tText('Kopieer link ai.meemoo.be')
+						tText(
+							'modules/visitor-space/components/report-blade/report-blade___bewerk-object-op-ai-meemoo-be'
+						),
+						tText(
+							'modules/visitor-space/components/report-blade/report-blade___kopieer-link-ai-meemoo-be'
+						)
 					)}
 				</>
 			);
@@ -497,7 +517,11 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			}
 			ariaLabel={props.ariaLabel}
 		>
-			<h3 className={styles['c-report-blade__subtitle']}>{tHtml('Wat wil je rapporteren?')}</h3>
+			<h3 className={styles['c-report-blade__subtitle']}>
+				{tHtml(
+					'modules/visitor-space/components/report-blade/report-blade___wat-wil-je-rapporteren'
+				)}
+			</h3>
 			{GET_REPORT_OPTIONS(isKeyUser, isOwnOrg).map((option) => (
 				<RadioButton
 					key={option.value}
@@ -513,7 +537,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			<ConfirmModalBeforeUnload
 				when={hasUnsavedReportChanges()}
 				message={tText(
-					'Ben je zeker dat je dit venster wilt sluiten? Hiermee gaat je opmerking verloren.'
+					'modules/visitor-space/components/report-blade/report-blade___ben-je-zeker-dat-je-dit-venster-wilt-sluiten-hiermee-gaat-je-opmerking-verloren'
 				)}
 			/>
 		</Blade>

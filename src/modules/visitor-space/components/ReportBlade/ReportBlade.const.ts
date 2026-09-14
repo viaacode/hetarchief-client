@@ -12,7 +12,12 @@ export const REPORT_FORM_SCHEMA = (): Schema<{ reportMessage: string; email: str
 			.required(
 				tText('modules/visitor-space/components/report-blade/report-blade___probleem-is-verplicht')
 			)
-			.max(REPORT_REMARK_MAX_LENGTH, tText('Probleem mag maximaal 1000 karakters bevatten')),
+			.max(
+				REPORT_REMARK_MAX_LENGTH,
+				tText(
+					'modules/visitor-space/components/report-blade/report-blade___probleem-mag-maximaal-1000-karakters-bevatten'
+				)
+			),
 		email: string()
 			.email(
 				tText(
@@ -32,11 +37,22 @@ export const LEGAL_REMARK_SCHEMA = (): Schema<{
 }> => {
 	return object({
 		legalReason: string()
-			.required(tText('Kies een van de bovenstaande opties'))
+			.required(
+				tText(
+					'modules/visitor-space/components/report-blade/report-blade___kies-een-van-de-bovenstaande-opties'
+				)
+			)
 			.oneOf(Object.values(ReportLegalReason)),
 		legalRemarkText: string()
-			.required(tText('Opmerking is verplicht'))
-			.max(REPORT_REMARK_MAX_LENGTH, tText('Opmerking mag maximaal 1000 karakters bevatten')),
+			.required(
+				tText('modules/visitor-space/components/report-blade/report-blade___opmerking-is-verplicht')
+			)
+			.max(
+				REPORT_REMARK_MAX_LENGTH,
+				tText(
+					'modules/visitor-space/components/report-blade/report-blade___opmerking-mag-maximaal-1000-karakters-bevatten'
+				)
+			),
 		email: string()
 			.email(
 				tText(
@@ -55,7 +71,9 @@ export const GET_REPORT_OPTIONS = (
 ): ReportRootOption[] => {
 	const legalOption = () => ({
 		value: ReportReason.LEGAL_REMARK,
-		label: tText('Ik wil een juridische opmerking geven (ivm auteursrecht of GDPR/Privacy)'),
+		label: tText(
+			'modules/visitor-space/components/report-blade/report-blade___ik-wil-een-juridische-opmerking-geven-ivm-auteursrecht-of-gdpr-privacy'
+		),
 	});
 
 	if (!isKeyUser) {
@@ -63,7 +81,9 @@ export const GET_REPORT_OPTIONS = (
 			legalOption(),
 			{
 				value: ReportReason.GENERAL_QUESTION,
-				label: tText('Ik heb een ander probleem met dit object'),
+				label: tText(
+					'modules/visitor-space/components/report-blade/report-blade___ik-heb-een-ander-probleem-met-dit-object'
+				),
 			},
 		];
 	}
@@ -73,12 +93,14 @@ export const GET_REPORT_OPTIONS = (
 			{
 				value: ReportReason.METADATA_ISSUE,
 				label: tText(
-					'Ik vond een probleem dat ik binnen mijn organisatie wil oplossen, geef mij de juiste links om te editeren.'
+					'modules/visitor-space/components/report-blade/report-blade___ik-vond-een-probleem-dat-ik-binnen-mijn-organisatie-wil-oplossen-geef-mij-de-juiste-links-om-te-editeren'
 				),
 			},
 			{
 				value: ReportReason.GENERAL_QUESTION,
-				label: tText('Ik wil een probleem met dit item aan meemoo melden'),
+				label: tText(
+					'modules/visitor-space/components/report-blade/report-blade___ik-wil-een-probleem-met-dit-item-aan-meemoo-melden'
+				),
 			},
 			legalOption(),
 		];
@@ -87,11 +109,15 @@ export const GET_REPORT_OPTIONS = (
 	return [
 		{
 			value: ReportReason.METADATA_ISSUE,
-			label: tText('Ik heb een probleem met de metadata van dit object'),
+			label: tText(
+				'modules/visitor-space/components/report-blade/report-blade___ik-heb-een-probleem-met-de-metadata-van-dit-object'
+			),
 		},
 		{
 			value: ReportReason.GENERAL_QUESTION,
-			label: tText('Ik heb een ander probleem met dit object'),
+			label: tText(
+				'modules/visitor-space/components/report-blade/report-blade___ik-heb-een-ander-probleem-met-dit-object'
+			),
 		},
 		legalOption(),
 	];
@@ -101,19 +127,19 @@ export const GET_LEGAL_REASON_OPTIONS = (): ReportLegalReasonOption[] => [
 	{
 		value: ReportLegalReason.OPT_OUT_OR_REMOVAL,
 		label: tText(
-			'Ik ben rechthebbende en wil een opt-out op de Out-of-Commerce regeling aanvragen voor dit materiaal, of een verwijdering.'
+			'modules/visitor-space/components/report-blade/report-blade___ik-ben-rechthebbende-en-wil-een-opt-out-op-de-out-of-commerce-regeling-aanvragen-voor-dit-materiaal-of-een-verwijdering'
 		),
 	},
 	{
 		value: ReportLegalReason.IP_COMPLAINT,
 		label: tText(
-			'Ik ben rechthebbende en wil een klacht indienen wegens mogelijke inbreuk op intellectuele rechten.'
+			'modules/visitor-space/components/report-blade/report-blade___ik-ben-rechthebbende-en-wil-een-klacht-indienen-wegens-mogelijke-inbreuk-op-intellectuele-rechten'
 		),
 	},
 	{
 		value: ReportLegalReason.GDPR_PRIVACY,
 		label: tText(
-			'Ik wil mijn rechten uitoefenen volgens de GDPR of privacy wetgeving, met betrekking tot dit materiaal (vb. portretrecht)'
+			'modules/visitor-space/components/report-blade/report-blade___ik-wil-mijn-rechten-uitoefenen-volgens-de-gdpr-of-privacy-wetgeving-met-betrekking-tot-dit-materiaal-vb-portretrecht'
 		),
 	},
 ];

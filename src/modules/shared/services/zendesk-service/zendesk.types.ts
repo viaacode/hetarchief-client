@@ -31,8 +31,8 @@ export interface IeObjectSupportPayload {
 	locale: Locale;
 	message: string;
 	url: string;
-	email?: string;
-	name?: string;
+	email: string;
+	name: string;
 	maintainerId?: string;
 	mamUrl?: string;
 	aiMeemooUrl?: string;
