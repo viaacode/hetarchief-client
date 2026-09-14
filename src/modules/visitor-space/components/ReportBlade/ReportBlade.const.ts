@@ -8,13 +8,15 @@ import type {
 } from './ReportBlade.types';
 import { ReportLegalReason, ReportReason } from './ReportBlade.types';
 
-export const REPORT_LEGAL_REMARK_MAX_LENGTH = 1000;
+export const REPORT_REMARK_MAX_LENGTH = 1000;
 
 export const REPORT_FORM_SCHEMA = (): Schema<Pick<ReportFormState, 'reportMessage' | 'email'>> => {
 	return object({
-		reportMessage: string().required(
-			tText('modules/visitor-space/components/report-blade/report-blade___probleem-is-verplicht')
-		),
+		reportMessage: string()
+			.required(
+				tText('modules/visitor-space/components/report-blade/report-blade___probleem-is-verplicht')
+			)
+			.max(REPORT_REMARK_MAX_LENGTH, tText('Probleem mag maximaal 1000 karakters bevatten')),
 		email: string()
 			.email(
 				tText(
@@ -35,11 +37,10 @@ export const LEGAL_REMARK_SCHEMA = (): Schema<{
 	return object({
 		legalReason: string()
 			.required(tText('Kies een van de bovenstaande opties'))
-			.oneOf(Object.values(ReportLegalReason))
-			.required(tText('Kies een van de bovenstaande opties 2222')),
+			.oneOf(Object.values(ReportLegalReason)),
 		legalRemarkText: string()
 			.required(tText('Opmerking is verplicht'))
-			.max(REPORT_LEGAL_REMARK_MAX_LENGTH, tText('Opmerking mag maximaal 1000 karakters bevatten')),
+			.max(REPORT_REMARK_MAX_LENGTH, tText('Opmerking mag maximaal 1000 karakters bevatten')),
 		email: string()
 			.email(
 				tText(
@@ -66,7 +67,7 @@ export const GET_REPORT_OPTIONS = (
 			legalOption(),
 			{
 				value: ReportReason.GENERAL_QUESTION,
-				label: tText('Ik wil een ander probleem met dit item melden'),
+				label: tText('Ik heb een ander probleem met dit object'),
 			},
 		];
 	}
