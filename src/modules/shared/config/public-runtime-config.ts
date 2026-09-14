@@ -29,6 +29,8 @@ export const PUBLIC_ENV_KEYS = [
 	'ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW',
 	'DISABLE_COMPLEX_REUSE_FLOW_FOR_ORGANISATIONS',
 	'ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY',
+	'AI_MEEMOO_FRAGMENT_URL',
+	'MAM_FRAGMENT_URL',
 ] as const;
 
 // Values are typed as `string` (not optional) to mirror the loose typing of the previous
