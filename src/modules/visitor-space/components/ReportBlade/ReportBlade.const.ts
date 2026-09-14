@@ -1,16 +1,12 @@
 import { tText } from '@shared/helpers/translate';
 import { object, type Schema, string } from 'yup';
 
-import type {
-	ReportFormState,
-	ReportLegalReasonOption,
-	ReportRootOption,
-} from './ReportBlade.types';
+import type { ReportLegalReasonOption, ReportRootOption } from './ReportBlade.types';
 import { ReportLegalReason, ReportReason } from './ReportBlade.types';
 
 export const REPORT_REMARK_MAX_LENGTH = 1000;
 
-export const REPORT_FORM_SCHEMA = (): Schema<Pick<ReportFormState, 'reportMessage' | 'email'>> => {
+export const REPORT_FORM_SCHEMA = (): Schema<{ reportMessage: string; email: string }> => {
 	return object({
 		reportMessage: string()
 			.required(

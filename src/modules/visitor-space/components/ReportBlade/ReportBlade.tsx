@@ -40,7 +40,8 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 	const [selectedReportReason, setSelectedReportReason] = useState<ReportReason | null>(null);
 	const [legalReason, setLegalReason] = useState<ReportLegalReason | null>(null);
 	const [legalRemarkText, setLegalRemarkText] = useState<string>('');
-	const [reportMessage, setReportMessage] = useState<string>('');
+	const [generalQuestionMessage, setGeneralQuestionMessage] = useState<string>('');
+	const [metadataIssueMessage, setMetadataIssueMessage] = useState<string>('');
 	const [email, setEmail] = useState<string>('');
 	const [isSubmittingForm, setIsSubmittingForm] = useState(false);
 	const [formErrors, setFormErrors] = useState<Record<string, string | undefined>>({});
@@ -53,7 +54,8 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 		setSelectedReportReason(null);
 		setLegalReason(null);
 		setLegalRemarkText('');
-		setReportMessage('');
+		setGeneralQuestionMessage('');
+		setMetadataIssueMessage('');
 		setEmail(user?.email || '');
 		setFormErrors({});
 	}, [user?.email]);
@@ -112,7 +114,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 
 	const submitGeneralQuestion = async () => {
 		const errors = await validateForm(
-			{ reportMessage, email: user?.email || email },
+			{ reportMessage: generalQuestionMessage, email: user?.email || email },
 			REPORT_FORM_SCHEMA()
 		);
 		if (errors) {
@@ -126,7 +128,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			url: window.location.href,
 			email: user?.email || email,
 			name: user?.fullName || tText('Niet-ingelogde gebruiker'),
-			message: sanitizeReportText(reportMessage),
+			message: sanitizeReportText(generalQuestionMessage),
 		});
 		onSuccessfulRequest();
 	};
@@ -155,7 +157,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 
 	const submitMetadataIssue = async () => {
 		const errors = await validateForm(
-			{ reportMessage, email: user?.email || email },
+			{ reportMessage: metadataIssueMessage, email: user?.email || email },
 			REPORT_FORM_SCHEMA()
 		);
 		if (errors) {
@@ -179,7 +181,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			url: window.location.href,
 			email: user?.email || email,
 			name: user?.fullName || tText('Niet-ingelogde gebruiker'),
-			message: sanitizeReportText(reportMessage),
+			message: sanitizeReportText(metadataIssueMessage),
 			maintainerId,
 			mamUrl,
 			aiMeemooUrl,
@@ -294,13 +296,13 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 		</FormControl>
 	);
 
-	const renderReportMessageField = () => (
+	const renderReportMessageField = (value: string, onChange: (value: string) => void) => (
 		<FormControl
 			className="u-mb-24"
 			errors={[
 				<div className="u-flex" key="form-error--legal-remark">
 					<RedFormWarning error={formErrors.reportMessage} />
-					<MaxLengthIndicator maxLength={REPORT_REMARK_MAX_LENGTH} value={reportMessage} />
+					<MaxLengthIndicator maxLength={REPORT_REMARK_MAX_LENGTH} value={value} />
 				</div>,
 			]}
 			id="reportMessage"
@@ -309,9 +311,9 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			<TextArea
 				id="reportMessage"
 				name="reportMessage"
-				value={reportMessage}
+				value={value}
 				maxLength={REPORT_REMARK_MAX_LENGTH}
-				onChange={(evt) => setReportMessage(evt.target.value)}
+				onChange={(evt) => onChange(evt.target.value)}
 				ariaLabel={tText(
 					'modules/visitor-space/components/report-blade/report-blade___beschrijf-het-probleem-input-aria-label'
 				)}
@@ -424,10 +426,15 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 						'modules/visitor-space/components/report-blade/report-blade___beschrijf-het-probleem'
 					)}
 				</h3>
-				{(selectedReportReason === ReportReason.GENERAL_QUESTION ||
-					selectedReportReason === ReportReason.METADATA_ISSUE) && (
+				{selectedReportReason === ReportReason.GENERAL_QUESTION && (
 					<>
-						{renderReportMessageField()}
+						{renderReportMessageField(generalQuestionMessage, setGeneralQuestionMessage)}
+						{renderEmailField()}
+					</>
+				)}
+				{selectedReportReason === ReportReason.METADATA_ISSUE && (
+					<>
+						{renderReportMessageField(metadataIssueMessage, setMetadataIssueMessage)}
 						{renderEmailField()}
 					</>
 				)}
@@ -442,7 +449,8 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 		);
 	};
 
-	const hasUnsavedReportChanges = (): boolean => !!legalRemarkText || !!reportMessage;
+	const hasUnsavedReportChanges = (): boolean =>
+		!!legalRemarkText || !!generalQuestionMessage || !!metadataIssueMessage;
 
 	return (
 		<Blade

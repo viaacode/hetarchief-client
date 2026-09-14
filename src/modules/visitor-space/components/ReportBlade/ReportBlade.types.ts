@@ -13,7 +13,8 @@ export type ReportBladeProps = FormBladeProps<ReportFormState> & {
 };
 
 export interface ReportFormState {
-	reportMessage: string;
+	generalQuestionMessage: string;
+	metadataIssueMessage: string;
 	email: string;
 	selectedReportReason: ReportReason | null;
 	legalReason: ReportLegalReason | null;
