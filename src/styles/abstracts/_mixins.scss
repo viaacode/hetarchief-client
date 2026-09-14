@@ -34,6 +34,36 @@
 	}
 }
 
+/**
+ * The pill of one applied filter value, in the search bar and in a filter modal.
+ * See the "Redesign pills" section of the FA of ARC-3806.
+ * Set $in-module inside a .module.scss, where these classes need a :global(...) wrapper.
+ */
+@mixin filter-pill($background, $label-weight: variables.$font-weight-medium, $in-module: false) {
+	#{functions.global-class(".c-tag", $in-module)} {
+		background-color: $background;
+		border-radius: variables.$border-radius-sm;
+		gap: variables.$spacer-xxs;
+		padding: variables.$filter-pill-padding;
+	}
+
+	#{functions.global-class(".c-tag__label", $in-module)} {
+		font-size: variables.$font-size-sm;
+		font-weight: $label-weight;
+		line-height: 2rem;
+	}
+
+	// The icon box is what gives the pill its height in the design, and the gap above carries the
+	// space in front of it
+	#{functions.global-class(".c-tag__close", $in-module)} {
+		align-items: center;
+		font-size: variables.$font-size-base;
+		height: 2.4rem;
+		margin: 0;
+		padding: 0;
+	}
+}
+
 @mixin text-ellipsis($block: false) {
 	overflow: hidden;
 	text-overflow: ellipsis;
