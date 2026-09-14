@@ -63,7 +63,6 @@ export const SearchableCheckboxFilterForm: FC<GenericFilterFormProps> = ({
 		<>
 			<div className={clsx(className, 'u-px-32 u-px-20-md')}>
 				<SearchBar
-					className="u-mt-16"
 					id={`${visitorSpaceLabelKeys.filters.title}--${filter.id}`}
 					value={search}
 					variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
