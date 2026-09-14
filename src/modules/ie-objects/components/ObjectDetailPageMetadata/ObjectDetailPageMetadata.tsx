@@ -70,9 +70,6 @@ import {
 	DropdownButton,
 	DropdownContent,
 	MenuContent,
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
 } from '@meemoo/react-components';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { Blade } from '@shared/components/Blade/Blade';
@@ -109,7 +106,6 @@ import {
 	LANGUAGES,
 	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
-import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import {
 	filterNameToAcronym,
 	operatorToAcronym,
@@ -130,6 +126,8 @@ import { useSelector } from 'react-redux';
 import Callout from '../../../shared/components/Callout/Callout';
 import MetadataList from '../Metadata/MetadataList';
 import styles from './ObjectDetailPageMetadata.module.scss';
+import { ObjectDetailPageMetadataAiDescription } from './ObjectDetailPageMetadataAiDescription';
+import { ObjectDetailPageMetadataDisclaimerTooltip } from './ObjectDetailPageMetadataDisclaimerTooltip';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -938,30 +936,18 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		}
 	};
 
-	const renderSourceAttributionDisclaimerTooltip = () => {
-		const sourceAttributionDisclaimer = tHtml(
-			'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
-		);
-
-		return (
-			<NoServerSideRendering>
-				<Tooltip position="top" offset={10}>
-					<TooltipTrigger>
-						<button
-							type="button"
-							className={styles['p-object-detail__source-attribution-info']}
-							aria-label={tText(
-								'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
-							)}
-						>
-							<Icon name={IconNamesLight.Info} aria-hidden />
-						</button>
-					</TooltipTrigger>
-					<TooltipContent>{sourceAttributionDisclaimer}</TooltipContent>
-				</Tooltip>
-			</NoServerSideRendering>
-		);
-	};
+	const renderSourceAttributionDisclaimerTooltip = () => (
+		<ObjectDetailPageMetadataDisclaimerTooltip
+			iconName={IconNamesLight.Info}
+			className={styles['p-object-detail__source-attribution-info']}
+			ariaLabel={tText(
+				'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
+			)}
+			content={tHtml(
+				'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
+			)}
+		/>
+	);
 
 	const renderRightsAttributionText = (rightsAttributionText: string | null) => {
 		if (!rightsAttributionText) {
@@ -1039,6 +1025,14 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								'pages/bezoekersruimte/visitor-space-slug/object-id/index___geen-beschrijving'
 							)}
 							title=""
+						/>
+					)}
+
+					{!isNewspaper && mediaInfo.nameAi && mediaInfo.synopsisAi && (
+						<ObjectDetailPageMetadataAiDescription
+							name={mediaInfo.nameAi}
+							synopsis={mediaInfo.synopsisAi}
+							onReadMoreClicked={setSelectedMetadataField}
 						/>
 					)}
 
