@@ -765,11 +765,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		border-bottom: abstracts.$divider-black;
 	}
 
-	&__visit-button {
-		margin-top: abstracts.$spacer-sm;
-		max-width: fit-content;
-	}
-
 	&__metadata-blade {
 		:global(span) {
 			word-break: break-word !important;
