@@ -12,6 +12,7 @@ export interface ObjectDetailPageMetadataDisclaimerTooltipProps {
 	ariaLabel: string;
 	content: ReactNode;
 	position?: 'top' | 'top-end';
+	iconSize?: 'base' | 'lg';
 	className?: string;
 }
 
@@ -20,6 +21,7 @@ export function ObjectDetailPageMetadataDisclaimerTooltip({
 	ariaLabel,
 	content,
 	position = 'top',
+	iconSize = 'base',
 	className,
 }: ObjectDetailPageMetadataDisclaimerTooltipProps) {
 	return (
@@ -28,7 +30,11 @@ export function ObjectDetailPageMetadataDisclaimerTooltip({
 				<TooltipTrigger>
 					<button
 						type="button"
-						className={clsx(styles['c-object-detail-page-metadata-disclaimer-tooltip'], className)}
+						className={clsx(
+							styles['c-object-detail-page-metadata-disclaimer-tooltip'],
+							styles[`c-object-detail-page-metadata-disclaimer-tooltip--icon-${iconSize}`],
+							className
+						)}
 						aria-label={ariaLabel}
 					>
 						<Icon name={iconName} aria-hidden />

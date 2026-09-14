@@ -24,8 +24,4 @@
 .c-object-detail-page-metadata-ai-description__disclaimer {
 	flex-shrink: 0;
 	margin-left: auto;
-
-	:global([class*="c-icon"]) {
-		font-size: $font-size-lg;
-	}
 }

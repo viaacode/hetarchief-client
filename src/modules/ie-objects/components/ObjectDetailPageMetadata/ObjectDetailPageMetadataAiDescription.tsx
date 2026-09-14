@@ -30,6 +30,7 @@ export function ObjectDetailPageMetadataAiDescription({
 				<ObjectDetailPageMetadataDisclaimerTooltip
 					iconName={IconNamesLight.Ai}
 					position="top-end"
+					iconSize="lg"
 					className={styles['c-object-detail-page-metadata-ai-description__disclaimer']}
 					ariaLabel={tText(
 						'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-ai-gegenereerde-titel-en-samenvatting'
