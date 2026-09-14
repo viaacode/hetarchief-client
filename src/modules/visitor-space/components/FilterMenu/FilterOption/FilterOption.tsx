@@ -7,7 +7,15 @@ import { AdvancedFilterFlyout } from '@visitor-space/components/AdvancedFilterFl
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import { SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
-import { type FC, type ReactElement, useCallback, useEffect, useRef, useState } from 'react';
+import {
+	type FC,
+	type ReactElement,
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from 'react';
 
 import { FilterButton } from '../FilterButton';
 import FilterForm from '../FilterForm/FilterForm';
@@ -15,6 +23,14 @@ import styles from '../FilterMenu.module.scss';
 import { FilterMenuType } from '../FilterMenu.types';
 
 import type { FilterOptionProps } from './FilterOption.types';
+
+interface FlyoutPosition {
+	left: number;
+	top: number;
+}
+
+/** Matches the max-height of the fly-out panel, so a clamped fly-out keeps clear of both edges. */
+const FLYOUT_SCREEN_EDGE_MARGIN = 40;
 
 const FilterOption: FC<FilterOptionProps> = ({
 	activeFilter,
@@ -33,8 +49,9 @@ const FilterOption: FC<FilterOptionProps> = ({
 
 	const onFilterToggle = useCallback(() => onClick?.(id), [id, onClick]);
 	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
-	const [flyoutLeft, setFlyoutLeft] = useState<number | undefined>(undefined);
+	const [flyoutPosition, setFlyoutPosition] = useState<FlyoutPosition | undefined>(undefined);
 	const optionRef = useRef<HTMLDivElement>(null);
+	const flyoutRef = useRef<HTMLDivElement>(null);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: re-render form to ensure correct state,  e.g. open -> reset -> close -> open === values in url, in form
 	useEffect(() => {
@@ -58,25 +75,43 @@ const FilterOption: FC<FilterOptionProps> = ({
 		};
 	}, [closeFlyoutOnEscape]);
 
-	// A centered fly-out needs the right edge of the panel in window coordinates to sit against
-	useEffect(() => {
+	// The fly-out hangs from the row that opened it, against the right edge of the filter panel.
+	// Only the browser knows where that row sits and how tall the fly-out turned out.
+	useLayoutEffect(() => {
 		if (!filterIsActive) {
 			return;
 		}
 
 		const measure = (): void => {
-			const right = optionRef.current?.getBoundingClientRect().right;
+			const row = optionRef.current?.getBoundingClientRect();
+			const flyoutHeight = flyoutRef.current?.offsetHeight;
 
-			if (right !== undefined) {
-				setFlyoutLeft(right);
+			if (!row || flyoutHeight === undefined) {
+				return;
 			}
+
+			const lowestTop = window.innerHeight - flyoutHeight - FLYOUT_SCREEN_EDGE_MARGIN;
+
+			setFlyoutPosition({
+				left: row.right,
+				top: Math.max(FLYOUT_SCREEN_EDGE_MARGIN, Math.min(row.top, lowestTop)),
+			});
 		};
 
 		measure();
+
+		// The fly-out grows and shrinks with its content, e.g. a text filter gaining a condition
+		const observer = new ResizeObserver(measure);
+		if (flyoutRef.current) {
+			observer.observe(flyoutRef.current);
+		}
 		window.addEventListener('resize', measure);
+		window.addEventListener('scroll', measure, true);
 
 		return () => {
+			observer.disconnect();
 			window.removeEventListener('resize', measure);
+			window.removeEventListener('scroll', measure, true);
 		};
 	}, [filterIsActive]);
 
@@ -127,13 +162,12 @@ const FilterOption: FC<FilterOptionProps> = ({
 
 					<NoServerSideRendering>
 						<div
+							ref={flyoutRef}
 							className={clsx(styles['c-filter-menu__flyout-panel'], {
 								[styles['c-filter-menu__flyout-panel--narrow']]: isAdvancedFlyout,
-								[styles['c-filter-menu__flyout-panel--visible']]:
-									filterIsActive && flyoutLeft !== undefined,
+								[styles['c-filter-menu__flyout-panel--visible']]: filterIsActive,
 							})}
-							// Only the browser can measure the right edge of the panel
-							style={{ left: flyoutLeft }}
+							style={flyoutPosition}
 						>
 							{/* The advanced fly-out closes with escape or by clicking away, so it has no CTA */}
 							{!isAdvancedFlyout && (
