@@ -26,15 +26,23 @@ import {
 } from '@visitor-space/components/ReportBlade/ReportBlade.helpers';
 import clsx from 'clsx';
 import { type FC, type ReactNode, useCallback, useEffect, useState } from 'react';
+import type { Schema } from 'yup';
 
 import styles from './ReportBlade.module.scss';
-import { type ReportBladeProps, type ReportLegalReason, ReportReason } from './ReportBlade.types';
+import type {
+	IeObjectSupportPayload,
+	ReportBladeProps,
+	ReportLegalReason,
+} from './ReportBlade.types';
+import { ReportReason } from './ReportBlade.types';
 
 const ReportBlade: FC<ReportBladeProps> = (props) => {
 	const { user, mediaInfo } = props;
 	const locale = useLocale();
 	const isKeyUser = useIsKeyUser();
 	const isOwnOrg = isOwnOrganisation(user, mediaInfo?.maintainerId);
+	const mamUrl = buildMamUrl(mediaInfo?.fragmentId);
+	const aiMeemooUrl = buildAiMeemooUrl(mediaInfo?.fragmentId);
 	const { mutateAsync: createIeObjectSupportTicket } = useIeObjectSupportTicket();
 
 	const [selectedReportReason, setSelectedReportReason] = useState<ReportReason | null>(null);
@@ -45,6 +53,9 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 	const [email, setEmail] = useState<string>('');
 	const [isSubmittingForm, setIsSubmittingForm] = useState(false);
 	const [formErrors, setFormErrors] = useState<Record<string, string | undefined>>({});
+
+	const resolvedEmail = user?.email || email;
+	const requesterName = user?.fullName || tText('Niet-ingelogde gebruiker');
 
 	/**
 	 * Methods
@@ -112,62 +123,76 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 		});
 	};
 
-	const submitGeneralQuestion = async () => {
-		const errors = await validateForm(
-			{ reportMessage: generalQuestionMessage, email: user?.email || email },
-			REPORT_FORM_SCHEMA()
-		);
+	const validateAndSetErrors = async (
+		formValues: Record<string, unknown>,
+		schema: Schema<unknown>
+	): Promise<boolean> => {
+		const errors = await validateForm(formValues, schema);
 		if (errors) {
 			setFormErrors(errors);
+			return false;
+		}
+		return true;
+	};
+
+	const submitReport = async (
+		payload: Omit<IeObjectSupportPayload, 'locale' | 'url' | 'email' | 'name'>
+	): Promise<void> => {
+		await createIeObjectSupportTicket({
+			locale,
+			url: window.location.href,
+			email: resolvedEmail,
+			name: requesterName,
+			...payload,
+		});
+		onSuccessfulRequest();
+	};
+
+	const submitGeneralQuestion = async () => {
+		const sanitizedMessage = sanitizeReportText(generalQuestionMessage);
+		const isValid = await validateAndSetErrors(
+			{ reportMessage: sanitizedMessage, email: resolvedEmail },
+			REPORT_FORM_SCHEMA()
+		);
+		if (!isValid) {
 			return;
 		}
 
-		await createIeObjectSupportTicket({
-			reportReason: ReportReason.GENERAL_QUESTION,
-			locale,
-			url: window.location.href,
-			email: user?.email || email,
-			name: user?.fullName || tText('Niet-ingelogde gebruiker'),
-			message: sanitizeReportText(generalQuestionMessage),
-		});
-		onSuccessfulRequest();
+		await submitReport({ reportReason: ReportReason.GENERAL_QUESTION, message: sanitizedMessage });
 	};
 
 	const submitLegalRemark = async () => {
-		const errors = await validateForm(
-			{ legalReason: legalReason || undefined, legalRemarkText, email: user?.email || email },
+		const sanitizedMessage = sanitizeReportText(legalRemarkText);
+		const isValid = await validateAndSetErrors(
+			{
+				legalReason: legalReason || undefined,
+				legalRemarkText: sanitizedMessage,
+				email: resolvedEmail,
+			},
 			LEGAL_REMARK_SCHEMA()
 		);
-		if (errors) {
-			setFormErrors(errors);
+		if (!isValid) {
 			return;
 		}
 
-		await createIeObjectSupportTicket({
+		await submitReport({
 			reportReason: ReportReason.LEGAL_REMARK,
 			reportLegalReason: legalReason as ReportLegalReason,
-			locale,
-			url: window.location.href,
-			email: user?.email || email,
-			name: user?.fullName || tText('Niet-ingelogde gebruiker'),
-			message: sanitizeReportText(legalRemarkText),
+			message: sanitizedMessage,
 		});
-		onSuccessfulRequest();
 	};
 
 	const submitMetadataIssue = async () => {
-		const errors = await validateForm(
-			{ reportMessage: metadataIssueMessage, email: user?.email || email },
+		const sanitizedMessage = sanitizeReportText(metadataIssueMessage);
+		const isValid = await validateAndSetErrors(
+			{ reportMessage: sanitizedMessage, email: resolvedEmail },
 			REPORT_FORM_SCHEMA()
 		);
-		if (errors) {
-			setFormErrors(errors);
+		if (!isValid) {
 			return;
 		}
 
 		const maintainerId = mediaInfo?.maintainerId;
-		const mamUrl = buildMamUrl(mediaInfo?.fragmentId);
-		const aiMeemooUrl = buildAiMeemooUrl(mediaInfo?.fragmentId);
 		if (!maintainerId || !mamUrl || !aiMeemooUrl) {
 			// Must never silently happen: the provider email needs both links and a
 			// resolvable maintainer, so block submission entirely instead.
@@ -175,29 +200,18 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 			return;
 		}
 
-		await createIeObjectSupportTicket({
+		await submitReport({
 			reportReason: ReportReason.METADATA_ISSUE,
-			locale,
-			url: window.location.href,
-			email: user?.email || email,
-			name: user?.fullName || tText('Niet-ingelogde gebruiker'),
-			message: sanitizeReportText(metadataIssueMessage),
+			message: sanitizedMessage,
 			maintainerId,
 			mamUrl,
 			aiMeemooUrl,
 		});
-		onSuccessfulRequest();
 	};
 
 	const handleSubmit = async () => {
 		if (!selectedReportReason) {
 			setFormErrors({ selectedReportReason: tText('Kies een van de bovenstaande opties') });
-			return;
-		}
-
-		// Own-org metadata issue is purely informational (just the two links) — its primary
-		// button is "Sluiten" and closes directly, never reaching this handler.
-		if (selectedReportReason === ReportReason.METADATA_ISSUE && isOwnOrg) {
 			return;
 		}
 
@@ -225,23 +239,39 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 	 * Render
 	 */
 
-	const getPrimaryButtonLabel = (): string => {
+	const getPrimaryButtonLabels = (): {
+		label: string;
+		mobileLabel: string;
+	} => {
 		if (selectedReportReason === ReportReason.LEGAL_REMARK) {
-			return tText('Verstuur opmerking');
+			return {
+				label: tText('Verstuur opmerking'),
+				mobileLabel: tText('Verstuur opmerking - mobiel'),
+			};
 		}
 		if (selectedReportReason === ReportReason.METADATA_ISSUE && isOwnOrg) {
-			return tText('Sluiten');
+			return {
+				label: tText('Sluiten'),
+				mobileLabel: tText('Sluiten - mobiel'),
+			};
 		}
 		// Default (nothing selected yet), GENERAL_QUESTION, and METADATA_ISSUE (other org)
-		return tText('modules/visitor-space/components/report-blade/report-blade___rapporteer');
+		return {
+			label: tText('modules/visitor-space/components/report-blade/report-blade___rapporteer'),
+			mobileLabel: tText(
+				'modules/visitor-space/components/report-blade/report-blade___rapporteer-mobiel'
+			),
+		};
 	};
 
 	const getFooterButtons = (): BladeFooterButtonProps => {
+		const { label, mobileLabel } = getPrimaryButtonLabels();
+
 		if (selectedReportReason === ReportReason.METADATA_ISSUE && isOwnOrg) {
 			return [
 				{
-					label: getPrimaryButtonLabel(),
-					mobileLabel: getPrimaryButtonLabel(),
+					label,
+					mobileLabel,
 					type: 'primary',
 					onClick: onCloseBlade,
 				},
@@ -250,8 +280,8 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 
 		return [
 			{
-				label: getPrimaryButtonLabel(),
-				mobileLabel: getPrimaryButtonLabel(),
+				label,
+				mobileLabel,
 				type: 'primary',
 				onClick: handleSubmit,
 				disabled: !selectedReportReason || isSubmittingForm,
@@ -282,7 +312,7 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 				name="email"
 				autoComplete="email"
 				disabled={!!user?.email}
-				value={user?.email || email}
+				value={resolvedEmail}
 				onChange={(evt) => {
 					if (user?.email) {
 						return;
@@ -394,8 +424,6 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 		}
 
 		if (selectedReportReason === ReportReason.METADATA_ISSUE && isOwnOrg) {
-			const mamUrl = buildMamUrl(mediaInfo?.fragmentId);
-			const aiMeemooUrl = buildAiMeemooUrl(mediaInfo?.fragmentId);
 			return (
 				<>
 					<hr className={styles['c-report-blade__divider']} />

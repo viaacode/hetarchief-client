@@ -1,5 +1,6 @@
 import type { User } from '@auth/types';
 import { publicRuntimeConfig } from '@shared/config/public-runtime-config';
+import { stripHtml } from 'string-strip-html';
 
 const FRAGMENT_ID_PLACEHOLDER = '{mh_fragment_identifier}';
 
@@ -39,5 +40,5 @@ export function isOwnOrganisation(
  * control and should be confirmed separately with whoever configures Zendesk.
  */
 export function sanitizeReportText(value: string): string {
-	return value.replace(/<[^>]*>/g, '').trim();
+	return stripHtml(value).result.trim();
 }
