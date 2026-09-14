@@ -30,7 +30,7 @@ export const AdvancedFilterFlyout: FC<AdvancedFilterFlyoutProps> = ({
 					type="button"
 					onClick={() => onFilterClick(filter.id)}
 				>
-					{filter.label}
+					{filter.flyoutLabel ?? filter.label}
 					<Icon
 						className={styles['c-advanced-filter-flyout__icon']}
 						name={IconNamesLight.AngleRight}

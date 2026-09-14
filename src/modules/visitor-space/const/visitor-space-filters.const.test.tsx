@@ -181,9 +181,39 @@ describe('getAdvancedFlyoutFilters', () => {
 			getAvailableSearchPageFilters(true, false, true, tab),
 			Locale.nl
 		);
-		const labels = flyoutFilters.map((filter) => filter.label.toLowerCase());
+		const labels = flyoutFilters.map((filter) =>
+			(filter.flyoutLabel ?? filter.label).toLowerCase()
+		);
 
 		expect(labels).toEqual([...labels].sort());
+	});
+
+	// The panel calls the medium filter "Fysieke drager", the fly-out "Analoge drager"
+	it('sorts a filter the fly-out names differently by the name the fly-out gives it', () => {
+		const modalFilter = (
+			id: SearchFilterId,
+			label: string,
+			flyoutLabel?: string
+		): FilterMenuFilterOption => ({
+			id,
+			label,
+			flyoutLabel,
+			type: FilterMenuType.Modal,
+			modalType: FilterModalType.Text,
+			inMainPanelByDefault: false,
+			tabs: [SearchPageMediaType.All],
+		});
+		const filters = [
+			modalFilter(SearchFilterId.Genre, 'Genre'),
+			modalFilter(SearchFilterId.Medium, 'Fysieke drager', 'Analoge drager'),
+			modalFilter(SearchFilterId.Cast, 'Cast'),
+		];
+
+		expect(
+			getAdvancedFlyoutFilters(filters, Locale.nl).map(
+				(filter) => filter.flyoutLabel ?? filter.label
+			)
+		).toEqual(['Analoge drager', 'Cast', 'Genre']);
 	});
 
 	it('puts an accented label where the language of the ui puts it', () => {

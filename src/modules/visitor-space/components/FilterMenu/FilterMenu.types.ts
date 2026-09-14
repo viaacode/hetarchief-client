@@ -50,6 +50,8 @@ export interface FilterMenuFilterOption {
 	id: SearchFilterId;
 	icon?: IconName;
 	label: string;
+	/** For a filter the advanced fly-out names differently than the panel does, e.g. ARC-3806. */
+	flyoutLabel?: string;
 	/**
 	 * A form component of its own. Leave it out for the four generic modal types of ARC-3806;
 	 * FilterForm then picks the generic form that belongs to `modalType`.

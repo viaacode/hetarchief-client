@@ -188,6 +188,7 @@ export const SEARCH_PAGE_FILTERS = (
 		{
 			id: SearchFilterId.Medium,
 			label: tText('modules/visitor-space/const/index___analoge-drager'),
+			flyoutLabel: getFilterLabel(FilterProperty.MEDIUM),
 			type: FilterMenuType.Modal,
 			modalType: FilterModalType.SearchableCheckbox,
 			field: IeObjectsSearchFilterField.MEDIUM,
@@ -370,7 +371,9 @@ export const getAdvancedFlyoutFilters = (
 		.filter(
 			(filter) => filter.type === FilterMenuType.Modal && filter.id !== SearchFilterId.Advanced
 		)
-		.sort((filterA, filterB) => collator.compare(filterA.label, filterB.label));
+		.sort((filterA, filterB) =>
+			collator.compare(filterA.flyoutLabel ?? filterA.label, filterB.flyoutLabel ?? filterB.label)
+		);
 };
 
 /**
