@@ -129,7 +129,11 @@ export const AutocompleteFilterForm: FC<GenericFilterFormProps> = ({
 										onClick={() => setInputValue('')}
 									/>
 								)}
-								<Icon name={IconNamesLight.Search} aria-hidden />
+								<Icon
+									className={styles['c-autocomplete-filter-form__search-icon']}
+									name={IconNamesLight.Search}
+									aria-hidden
+								/>
 							</span>
 						),
 					}}

@@ -3,11 +3,6 @@
 $autocomplete-filter-form-padding: abstracts.$spacer-lg;
 
 .c-autocomplete-filter-form {
-	// The body already carries 0.8rem, and the design puts 2.4rem under the title
-	> :first-child {
-		margin-top: abstracts.$spacer-sm;
-	}
-
 	// The selection sits on a tinted block that runs to both edges of the modal
 	&__selection {
 		background-color: abstracts.$platinum;
@@ -33,13 +28,15 @@ $autocomplete-filter-form-padding: abstracts.$spacer-lg;
 		min-width: 0;
 	}
 
+	@include abstracts.filter-pill(
+		abstracts.$silver,
+		$label-weight: abstracts.$font-weight-bold,
+		$in-module: true
+	);
+
 	:global(.c-tag) {
-		background-color: abstracts.$silver;
-		border-radius: abstracts.$border-radius-sm;
-		gap: abstracts.$spacer-xxs;
 		margin: 0;
 		max-width: 100%;
-		padding: abstracts.$filter-pill-padding;
 	}
 
 	// A value can be as long as a full newspaper title, so the pill cuts it off
@@ -47,9 +44,6 @@ $autocomplete-filter-form-padding: abstracts.$spacer-lg;
 		@include abstracts.text-ellipsis;
 
 		min-width: 0;
-		font-size: abstracts.$font-size-sm;
-		font-weight: abstracts.$font-weight-bold;
-		line-height: 2rem;
 	}
 
 	&__select {
@@ -57,8 +51,8 @@ $autocomplete-filter-form-padding: abstracts.$spacer-lg;
 
 		// The design gives this field the same shape as the search bar of the other filters
 		:global(.c-react-select__control) {
-			background-color: abstracts.$platinum;
-			border-color: abstracts.$platinum;
+			background-color: abstracts.$silver;
+			border-color: abstracts.$silver;
 			border-radius: abstracts.$border-radius-sm;
 			min-height: abstracts.$button-height;
 			padding: 0 abstracts.$spacer-sm;
@@ -96,5 +90,9 @@ $autocomplete-filter-form-padding: abstracts.$spacer-lg;
 		align-items: center;
 		display: flex;
 		gap: abstracts.$spacer-xs;
+	}
+
+	&__search-icon {
+		font-size: abstracts.$font-size-lg;
 	}
 }
