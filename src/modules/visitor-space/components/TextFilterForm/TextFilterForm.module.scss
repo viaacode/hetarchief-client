@@ -6,12 +6,13 @@ $text-filter-form-padding: abstracts.$spacer-lg;
 $text-filter-form-divider: 1px solid rgb(0 0 0 / 12%);
 
 .c-text-filter-form {
+	// The conditions block carries the space under the description, so this adds none of its own
 	&__description {
 		color: abstracts.$neutral;
 		font-size: abstracts.$font-size-base;
 		font-weight: abstracts.$font-weight-medium;
 		line-height: 2.4rem;
-		padding: 0 $text-filter-form-padding abstracts.$spacer-lg;
+		padding: 0 $text-filter-form-padding;
 	}
 
 	// The conditions and the add CTA sit on one tinted block that runs to both edges of the modal
@@ -41,27 +42,42 @@ $text-filter-form-divider: 1px solid rgb(0 0 0 / 12%);
 		transform: translateY(-50%);
 	}
 
-	// The operator reads as part of the sentence, so it drops the box a select normally has
+	// The operator reads as part of the sentence, so it drops the box a select normally has. The
+	// control still runs the full width, which is what the user clicks and how wide the menu opens.
 	&__operator {
 		:global(.c-react-select__control) {
 			background-color: transparent;
 			border: 0;
 			box-shadow: none;
+			justify-content: flex-start;
 			min-height: 0;
-			width: max-content;
+		}
+
+		// The shared react-select style paints a grey outline on hover, which a borderless
+		// operator should not get. That rule carries !important, so this one has to outweigh it.
+		:global(.c-react-select:not(:focus-within):hover .c-react-select__control) {
+			outline-color: transparent !important;
+		}
+
+		// Other selects mark focus with a teal border, which a borderless operator cannot show
+		:global(.c-react-select__control--is-focused) {
+			outline-color: abstracts.$teal !important;
 		}
 
 		:global(.c-react-select__single-value) {
 			font-weight: abstracts.$font-weight-medium;
 		}
 
+		// The value keeps the caret at its side instead of pushing it to the far edge
 		:global(.c-react-select__value-container) {
+			flex: 0 0 auto;
 			padding-left: 0;
 		}
+	}
 
-		:global(.c-react-select__dropdown-indicator) {
-			padding: 0 0 0 abstracts.$spacer-xxs;
-		}
+	&__operator-icon {
+		color: abstracts.$black;
+		font-size: abstracts.$font-size-lg;
 	}
 
 	&__value {

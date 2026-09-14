@@ -98,7 +98,16 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 								)}
 							>
 								<ReactSelect
-									components={{ IndicatorSeparator: () => null }}
+									components={{
+										IndicatorSeparator: () => null,
+										DropdownIndicator: () => (
+											<Icon
+												className={styles['c-text-filter-form__operator-icon']}
+												name={IconNamesLight.AngleDown}
+												aria-hidden
+											/>
+										),
+									}}
 									// The list of conditions scrolls, which would otherwise cut the menu off
 									menuPosition="fixed"
 									inputId={`text-filter-form-${filter.id}-operator-${index}`}
