@@ -169,6 +169,9 @@ $checkbox-size: $spacer-sm;
 		position: fixed;
 		top: 50%;
 		width: 46.4rem;
+
+		// Keeps a modal clear of both edges of a short window, and its own content scrolls
+		max-height: calc(100vh - #{$spacer-2xl});
 		background-color: $white;
 		transform: translateY(-50%);
 		z-index: 5;
@@ -179,7 +182,8 @@ $checkbox-size: $spacer-sm;
 		}
 
 		&--visible {
-			display: block;
+			display: flex;
+			flex-direction: column;
 		}
 	}
 

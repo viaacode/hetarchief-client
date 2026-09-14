@@ -5,6 +5,9 @@
 	display: flex;
 	flex-direction: column;
 	height: max-content;
+
+	// Lets the modal shrink inside a short window instead of running off it
+	min-height: 0;
 }
 
 /**
@@ -21,7 +24,9 @@
 }
 
 .c-filter-form__title {
-	margin-top: 6.4rem;
+	// The design puts 6.4rem above the title. A window too short for that gives up part of it,
+	// so the modal keeps room for its own content.
+	margin-top: min(6.4rem, 8vh);
 
 	@media (max-width: $breakpoint-md) {
 		margin-top: unset;
@@ -33,6 +38,7 @@
 .c-filter-form__body {
 	// The text filter shows two conditions and the add CTA without scrolling, as the design does
 	max-height: 50vh;
+	min-height: 0;
 	overflow-y: visible;
 	display: flex;
 	flex-direction: column;
