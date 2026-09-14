@@ -31,10 +31,6 @@ const FilterOption: FC<FilterOptionProps> = ({
 	const filterIsActive = id === activeFilter;
 	const isAdvancedFlyout = id === SearchFilterId.Advanced;
 
-	// The redesigned modals are centered in the window. The date and duration filters keep the
-	// position they had, since the FA of ARC-3806 leaves them as they are.
-	const isCentered = isAdvancedFlyout || !!filter.modalType;
-
 	const onFilterToggle = useCallback(() => onClick?.(id), [id, onClick]);
 	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
 	const [flyoutLeft, setFlyoutLeft] = useState<number | undefined>(undefined);
@@ -64,7 +60,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 
 	// A centered fly-out needs the right edge of the panel in window coordinates to sit against
 	useEffect(() => {
-		if (!isCentered || !filterIsActive) {
+		if (!filterIsActive) {
 			return;
 		}
 
@@ -82,7 +78,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 		return () => {
 			window.removeEventListener('resize', measure);
 		};
-	}, [isCentered, filterIsActive]);
+	}, [filterIsActive]);
 
 	const renderFilterOptionByType = (): ReactElement => {
 		switch (type) {
@@ -132,13 +128,12 @@ const FilterOption: FC<FilterOptionProps> = ({
 					<NoServerSideRendering>
 						<div
 							className={clsx(styles['c-filter-menu__flyout-panel'], {
-								[styles['c-filter-menu__flyout-panel--centered']]: isCentered,
 								[styles['c-filter-menu__flyout-panel--narrow']]: isAdvancedFlyout,
 								[styles['c-filter-menu__flyout-panel--visible']]:
-									filterIsActive && (!isCentered || flyoutLeft !== undefined),
+									filterIsActive && flyoutLeft !== undefined,
 							})}
 							// Only the browser can measure the right edge of the panel
-							style={isCentered ? { left: flyoutLeft } : undefined}
+							style={{ left: flyoutLeft }}
 						>
 							{/* The advanced fly-out closes with escape or by clicking away, so it has no CTA */}
 							{!isAdvancedFlyout && (
