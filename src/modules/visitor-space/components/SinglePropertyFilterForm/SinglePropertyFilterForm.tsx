@@ -7,7 +7,7 @@ import type {
 	GenericFilterFormProps,
 	IdentityAdvancedFilter,
 } from '@visitor-space/types';
-import { getOperators } from '@visitor-space/utils/advanced-filters';
+import { getDefaultOperator } from '@visitor-space/utils/advanced-filters';
 import clsx from 'clsx';
 import { type FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -31,7 +31,7 @@ export const SinglePropertyFilterForm: FC<GenericFilterFormProps> = ({
 		renderKey: TEMP_FILTER_KEY_PREFIX + uuidV4(),
 		id: getRandomId(),
 		prop: filter.id,
-		op: initialValue?.op || getOperators(filter.id)?.[0]?.value,
+		op: initialValue?.op || getDefaultOperator(filter.id),
 		val: initialValue?.val,
 	}));
 
@@ -59,7 +59,7 @@ export const SinglePropertyFilterForm: FC<GenericFilterFormProps> = ({
 						renderKey: TEMP_FILTER_KEY_PREFIX + uuidV4(),
 						id: getRandomId(),
 						prop: filter.id,
-						op: getOperators(filter.id)?.[0]?.value,
+						op: getDefaultOperator(filter.id),
 						val: undefined,
 					});
 				},
