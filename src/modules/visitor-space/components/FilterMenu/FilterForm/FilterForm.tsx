@@ -1,4 +1,4 @@
-import { Button } from '@meemoo/react-components';
+import { Button, keysEnter, onKey } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
@@ -16,7 +16,7 @@ import {
 } from '@visitor-space/types';
 import clsx from 'clsx';
 import { noop } from 'es-toolkit/compat';
-import { type FC, type ReactElement, useMemo } from 'react';
+import { type FC, type KeyboardEvent, type ReactElement, useMemo, useRef } from 'react';
 
 import { FilterMenuType } from '../FilterMenu.types';
 
@@ -52,6 +52,27 @@ const FilterForm: FC<FilterFormProps> = ({
 
 	const onFilterFormSubmit = (id: SearchFilterId, values: unknown) => {
 		onFormSubmit(id, values);
+	};
+
+	// The children render prop owns the submit handler, so we keep a reference to it
+	// to be able to submit from the enter key handler on the form wrapper.
+	const submitFormRef = useRef<() => void>(noop);
+
+	const onFilterFormKeyDown = (evt: KeyboardEvent<HTMLDivElement>) => {
+		// Let components that already handle enter themselves win, eg: react-select picking an option
+		if (evt.defaultPrevented) {
+			return;
+		}
+
+		const target = evt.target as HTMLElement;
+		if (target.tagName === 'TEXTAREA' || target.tagName === 'BUTTON') {
+			return;
+		}
+
+		onKey(evt, [...keysEnter], () => {
+			evt.preventDefault();
+			submitFormRef.current();
+		});
 	};
 
 	const showOverflow = useMemo(
@@ -100,7 +121,12 @@ const FilterForm: FC<FilterFormProps> = ({
 		>;
 
 		return (
-			<div className={clsx(className, styles['c-filter-form'])} id={`c-filter-form--${id}`}>
+			// biome-ignore lint/a11y/noStaticElementInteractions: The keydown handler is only a shortcut for the already focusable form fields inside
+			<div
+				className={clsx(className, styles['c-filter-form'])}
+				id={`c-filter-form--${id}`}
+				onKeyDown={onFilterFormKeyDown}
+			>
 				<div className={styles['c-filter-form__header']}>
 					<h2 className={styles['c-filter-form__title']}>
 						<label htmlFor={`${visitorSpaceLabelKeys.filters.title}--${id}`}>{title}</label>
@@ -115,34 +141,39 @@ const FilterForm: FC<FilterFormProps> = ({
 					})}
 					values={{ [id]: values }}
 				>
-					{({ reset, values, handleSubmit }) => (
-						<div className={styles['c-filter-form__footer']}>
-							<Button
-								className={clsx(styles['c-filter-form__reset'], 'u-p-0 u-mr-40')}
-								iconStart={
-									<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
-								}
-								label={tText(
-									'modules/visitor-space/components/filter-menu/filter-form/filter-form___reset'
-								)}
-								variants="text"
-								onClick={() => onFilterFormReset(id, reset)}
-							/>
-							<Button
-								className={styles['c-filter-form__submit']}
-								label={tText(
-									'modules/visitor-space/components/filter-menu/filter-form/filter-form___pas-toe'
-								)}
-								variants={['black']}
-								onClick={() => {
-									handleSubmit(
-										() => onFilterFormSubmit(id, values),
-										(...args) => console.error(args)
-									)();
-								}}
-							/>
-						</div>
-					)}
+					{({ reset, values, handleSubmit }) => {
+						const submitForm = () => {
+							handleSubmit(
+								() => onFilterFormSubmit(id, values),
+								(...args) => console.error(args)
+							)();
+						};
+						submitFormRef.current = submitForm;
+
+						return (
+							<div className={styles['c-filter-form__footer']}>
+								<Button
+									className={clsx(styles['c-filter-form__reset'], 'u-p-0 u-mr-40')}
+									iconStart={
+										<Icon className="u-font-size-22" name={IconNamesLight.Redo} aria-hidden />
+									}
+									label={tText(
+										'modules/visitor-space/components/filter-menu/filter-form/filter-form___reset'
+									)}
+									variants="text"
+									onClick={() => onFilterFormReset(id, reset)}
+								/>
+								<Button
+									className={styles['c-filter-form__submit']}
+									label={tText(
+										'modules/visitor-space/components/filter-menu/filter-form/filter-form___pas-toe'
+									)}
+									variants={['black']}
+									onClick={submitForm}
+								/>
+							</div>
+						);
+					}}
 				</FormComponent>
 			</div>
 		);
