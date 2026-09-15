@@ -52,12 +52,12 @@ describe('Component: <ObjectDetailPageMetadataThemes />', () => {
 	});
 
 	it('renders the name as plain text when the theme has no detail page', () => {
-		const { container } = render(
+		render(
 			<ObjectDetailPageMetadataThemes title="Thema's" themes={[memorial]} locale={Locale.nl} />
 		);
 
 		expect(screen.getByText('Memorial Van Damme')).toBeInTheDocument();
-		expect(container.querySelector('a')).not.toBeInTheDocument();
+		expect(screen.queryByRole('link', { name: 'Memorial Van Damme' })).not.toBeInTheDocument();
 	});
 
 	it('shows the linked object count per theme, keeping the given order', () => {

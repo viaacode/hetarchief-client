@@ -1,1 +1,1 @@
-export { useZendesk } from './use-zendesk';
+export { useIeObjectSupportTicket, useZendesk } from './use-zendesk';

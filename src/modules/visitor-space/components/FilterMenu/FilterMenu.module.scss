@@ -162,6 +162,29 @@ $checkbox-size: $spacer-sm;
 		}
 	}
 
+	// A modal hangs from the row that opened it, against the right edge of the filter panel, and
+	// slides up when that would push it off the window. FilterOption measures and sets both.
+	&__flyout-panel {
+		display: none;
+		position: fixed;
+		width: 46.4rem;
+
+		// Keeps a modal clear of both edges of a short window, and its own content scrolls
+		max-height: calc(100vh - #{$spacer-2xl});
+		background-color: $white;
+		z-index: 5;
+
+		// The list of advanced filters is narrower than a filter modal
+		&--narrow {
+			width: 30rem;
+		}
+
+		&--visible {
+			display: flex;
+			flex-direction: column;
+		}
+	}
+
 	&__overlay {
 		z-index: get-z-layer("filter-overlay");
 	}
