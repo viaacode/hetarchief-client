@@ -70,6 +70,10 @@
 		.c-table__cell {
 			text-align: left;
 			word-break: break-word;
+
+			&:has(> .p-material-requests__table-unread-indicator){
+				text-overflow: unset;
+			}
 		}
 
 		&-titel-material{
