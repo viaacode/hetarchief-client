@@ -60,9 +60,3 @@
 @function module-class-selector($component, $local-class, $suffix: "__") {
 	@return "#{module-class-selector-webpack($component, $local-class, $suffix)}, #{module-class-selector-turbopack($component, $local-class, $suffix)}";
 }
-
-// A class of react-components needs a :global(...) wrapper inside a .module.scss file, and must
-// stay plain in a global stylesheet. Lets one mixin serve both.
-@function global-class($class, $in-module) {
-	@return if($in-module, ":global(#{$class})", $class);
-}
