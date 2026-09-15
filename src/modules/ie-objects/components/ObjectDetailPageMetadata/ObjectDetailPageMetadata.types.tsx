@@ -13,12 +13,10 @@ export interface ObjectDetailPageMetadataProps {
 	goToPage: (pageIndex: number) => void;
 	currentPage: HetArchiefIeObjectPage | null;
 	hasAccessToVisitorSpaceOfObject: boolean;
-	showVisitButton: boolean;
 	visitRequest: VisitRequest | null;
 	activeFile: HetArchiefIeObjectFile | null;
 	simplifiedAltoInfo: SimplifiedAlto | null;
 	onClickAction: (id: MediaActions) => Promise<void>;
-	openRequestAccessBlade: () => void;
 	iiifZoomTo: (x: number, y: number) => void;
 	setActiveMentionHighlights: (mentionHighlights: {
 		pageIndex: number;
