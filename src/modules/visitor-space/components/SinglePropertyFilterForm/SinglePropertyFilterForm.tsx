@@ -4,7 +4,6 @@ import { SEARCH_PAGE_QUERY_PARAM_CONFIG } from '@visitor-space/const';
 import { TEMP_FILTER_KEY_PREFIX } from '@visitor-space/const/advanced-filter-array-param';
 import type {
 	AdvancedFilter,
-	FilterProperty,
 	GenericFilterFormProps,
 	IdentityAdvancedFilter,
 } from '@visitor-space/types';
@@ -26,15 +25,13 @@ export const SinglePropertyFilterForm: FC<GenericFilterFormProps> = ({
 	filter,
 }) => {
 	const [query] = useQueryParams(SEARCH_PAGE_QUERY_PARAM_CONFIG);
-	const property = filter.property as FilterProperty;
-
 	const initialValue = (query[filter.id] as AdvancedFilter[] | undefined)?.[0];
 
 	const [filterValue, setFilterValue] = useState<IdentityAdvancedFilter>(() => ({
 		renderKey: TEMP_FILTER_KEY_PREFIX + uuidV4(),
 		id: getRandomId(),
-		prop: property,
-		op: initialValue?.op || getDefaultOperator(property),
+		prop: filter.id,
+		op: initialValue?.op || getDefaultOperator(filter.id),
 		val: initialValue?.val,
 	}));
 
@@ -61,8 +58,8 @@ export const SinglePropertyFilterForm: FC<GenericFilterFormProps> = ({
 					setFilterValue({
 						renderKey: TEMP_FILTER_KEY_PREFIX + uuidV4(),
 						id: getRandomId(),
-						prop: property,
-						op: getDefaultOperator(property),
+						prop: filter.id,
+						op: getDefaultOperator(filter.id),
 						val: undefined,
 					});
 				},

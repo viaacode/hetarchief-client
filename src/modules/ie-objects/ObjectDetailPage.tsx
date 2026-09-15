@@ -1838,9 +1838,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							<ObjectDetailPageMetadata
 								onClickAction={onClickAction}
 								mediaInfo={mediaInfo}
-								openRequestAccessBlade={openRequestAccessBlade}
 								visitRequest={visitRequest || null}
-								showVisitButton={showVisitButton || false}
 								hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
 								currentPageIndex={currentPageIndex}
 								goToPage={handleSetCurrentPage}

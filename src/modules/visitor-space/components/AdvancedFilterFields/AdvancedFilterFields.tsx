@@ -41,7 +41,7 @@ import { parseISO } from 'date-fns';
 import { kebabCase } from 'es-toolkit/compat';
 import React, { type FC } from 'react';
 import type { MultiValue, SingleValue } from 'react-select';
-import type { FilterProperty, IdentityAdvancedFilter } from '../../types';
+import type { IdentityAdvancedFilter, SearchFilterId } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import DurationInput, { defaultValue } from '../DurationInput/DurationInput';
 import styles from './AdvancedFilterFields.module.scss';
@@ -64,7 +64,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 	// Computed
 
-	const operators = getOperators(filterValue.prop as FilterProperty);
+	const operators = getOperators(filterValue.prop as SearchFilterId);
 	const operator = filterValue.op || operators?.[0]?.value || null;
 
 	// Events
@@ -103,7 +103,7 @@ export const AdvancedFilterFields: FC<AdvancedFilterFieldsProps> = ({
 
 	const renderField = (config?: FilterInputComponentProps) => {
 		const filterConfig: FilterConfig | null = operator
-			? getFilterConfig(filterValue.prop as FilterProperty, operator as IeObjectsSearchOperator)
+			? getFilterConfig(filterValue.prop as SearchFilterId, operator as IeObjectsSearchOperator)
 			: null;
 		if (!filterConfig) {
 			console.error('Unknown filter config', filterValue.prop, operator);

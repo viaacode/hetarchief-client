@@ -3,7 +3,6 @@ import type { SearchPageQueryParams } from '@visitor-space/const';
 import { RightsLabel } from '@visitor-space/const/rights-filter.const';
 import {
 	FILTER_LABEL_VALUE_DELIMITER,
-	FilterProperty,
 	ReusabilityFilterOption,
 	SearchFilterId,
 } from '@visitor-space/types';
@@ -36,7 +35,7 @@ describe('mapFiltersToElastic()', () => {
 		const filters = mapFiltersToElastic({
 			[SearchFilterId.Advanced]: [
 				{
-					prop: FilterProperty.THEME,
+					prop: SearchFilterId.Theme,
 					op: IeObjectsSearchOperator.IS,
 					val: 'education-learning',
 					renderKey: 'theme-filter',
@@ -55,7 +54,7 @@ describe('mapFiltersToElastic()', () => {
 		const filters = mapFiltersToElastic({
 			[SearchFilterId.Advanced]: [
 				{
-					prop: FilterProperty.RIGHTS,
+					prop: SearchFilterId.Rights,
 					op: IeObjectsSearchOperator.IS,
 					val: RightsLabel.IN_COPYRIGHT,
 					renderKey: 'rights-filter',
@@ -113,6 +112,68 @@ describe('mapFiltersToElastic()', () => {
 			{
 				field: IeObjectsSearchFilterField.NAME,
 				operator: IeObjectsSearchOperator.CONTAINS_NOT,
+				value: 'herhaling',
+			},
+		]);
+	});
+
+	// The identifier is a keyword field in elasticsearch, so the match is on the whole value
+	it('sends the is operators for a text filter on a keyword field', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Identifier]: [
+				{ op: IeObjectsSearchOperator.IS, val: 'abc123' },
+				{ op: IeObjectsSearchOperator.IS_NOT, val: 'def456' },
+			],
+		} as SearchPageQueryParams);
+
+		expect(filters.filter(({ field }) => field === IeObjectsSearchFilterField.IDENTIFIER)).toEqual([
+			{
+				field: IeObjectsSearchFilterField.IDENTIFIER,
+				operator: IeObjectsSearchOperator.IS,
+				value: 'abc123',
+			},
+			{
+				field: IeObjectsSearchFilterField.IDENTIFIER,
+				operator: IeObjectsSearchOperator.IS_NOT,
+				value: 'def456',
+			},
+		]);
+	});
+
+	it('sends the is operators for an identifier url from before the field switched operators', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Identifier]: [
+				{ op: IeObjectsSearchOperator.CONTAINS, val: 'abc123' },
+				{ op: IeObjectsSearchOperator.CONTAINS_NOT, val: 'def456' },
+			],
+		} as SearchPageQueryParams);
+
+		expect(
+			filters
+				.filter(({ field }) => field === IeObjectsSearchFilterField.IDENTIFIER)
+				.map(({ operator }) => operator)
+		).toEqual([IeObjectsSearchOperator.IS, IeObjectsSearchOperator.IS_NOT]);
+	});
+
+	// Before ARC-3806 the text form only ever sent the contains pair, so an "is" on a field that
+	// offers it used to be rewritten. It has to reach the proxy as it stands.
+	it('sends is and is-not untouched on a text field that offers all four operators', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Title]: [
+				{ op: IeObjectsSearchOperator.IS, val: 'concert' },
+				{ op: IeObjectsSearchOperator.IS_NOT, val: 'herhaling' },
+			],
+		} as SearchPageQueryParams);
+
+		expect(filters.filter(({ field }) => field === IeObjectsSearchFilterField.NAME)).toEqual([
+			{
+				field: IeObjectsSearchFilterField.NAME,
+				operator: IeObjectsSearchOperator.IS,
+				value: 'concert',
+			},
+			{
+				field: IeObjectsSearchFilterField.NAME,
+				operator: IeObjectsSearchOperator.IS_NOT,
 				value: 'herhaling',
 			},
 		]);

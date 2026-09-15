@@ -90,6 +90,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	const [playableFile, setPlayableFile] = useState<HetArchiefIeObjectFile | null>(null);
 	const [mediaDuration, setMediaDuration] = useState<number | null>(null);
 	const [isRequestSaved, setIsRequestSaved] = useState(false);
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const isFormValid = useMemo(() => Object.keys(formErrors).length === 0, [formErrors]);
 	const hasUnsavedChanges = useMemo(() => {
@@ -153,6 +154,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			setFormValues(defaultFormValues);
 			refetchPotentialDuplicates().then(noop);
 			setIsRequestSaved(false);
+			setIsSubmitting(false);
 		} else {
 			setFormErrors({});
 		}
@@ -242,14 +244,20 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 	);
 
 	const onAddToList = async () => {
+		if (isSubmitting) {
+			return;
+		}
+		setIsSubmitting(true);
 		try {
 			if (showDuplicateWarning) {
+				setIsSubmitting(false);
 				return;
 			}
 
 			const validFormValues = await getNormalizedAndValidFormValues(formValues);
 
 			if (!validFormValues) {
+				setIsSubmitting(false);
 				return; // Errors have been set in the getNormalizedAndValidFormValues function
 			}
 
@@ -266,6 +274,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					new Error('Failed to create material request because the response was undefined.')
 				);
 				onFailedRequest();
+				setIsSubmitting(false);
 				return;
 			}
 			toastService.notify({
@@ -286,18 +295,25 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			console.error(new Error('Failed to create material request. Unexpected error:'));
 			console.error(err);
 			onFailedRequest();
+			setIsSubmitting(false);
 		}
 	};
 
 	const onEditRequest = async () => {
+		if (isSubmitting) {
+			return;
+		}
+		setIsSubmitting(true);
 		try {
 			if (showDuplicateWarning) {
+				setIsSubmitting(false);
 				return;
 			}
 
 			const isFormValid = await getNormalizedAndValidFormValues(formValues);
 
 			if (!isFormValid) {
+				setIsSubmitting(false);
 				return;
 			}
 
@@ -309,6 +325,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			});
 			if (response === undefined) {
 				onFailedRequest();
+				setIsSubmitting(false);
 				return;
 			}
 			toastService.notify({
@@ -324,6 +341,7 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 			onCloseModal();
 		} catch (_err) {
 			onFailedRequest();
+			setIsSubmitting(false);
 		}
 	};
 
@@ -399,6 +417,8 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 					),
 					type: 'primary',
 					onClick: onEditRequest,
+					disabled: isSubmitting,
+					showSpinner: isSubmitting,
 				},
 			];
 		}
@@ -422,6 +442,8 @@ export const MaterialRequestForReuseBlade: FC<MaterialRequestForReuseBladeProps>
 				),
 				type: 'primary',
 				onClick: onAddToList,
+				disabled: isSubmitting,
+				showSpinner: isSubmitting,
 			},
 		];
 	};

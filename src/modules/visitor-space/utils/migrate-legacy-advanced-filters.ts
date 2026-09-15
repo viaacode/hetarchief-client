@@ -1,9 +1,9 @@
-import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
+import type { IeObjectsSearchOperator } from '@shared/types/ie-objects';
+import { normalizeTextFilterOperator } from '@visitor-space/const/operator-labels.const';
 import { ALL_SEARCH_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import {
 	type AdvancedFilter,
 	FilterModalType,
-	FilterProperty,
 	SearchFilterId,
 	type TextFilterCondition,
 } from '@visitor-space/types';
@@ -13,32 +13,11 @@ import {
  * property, operator and value triples. Now each filter has a parameter of its own. Shared and
  * bookmarked urls still carry the old parameter, so they are converted on load.
  *
+ * The property of a legacy filter decodes to a SearchFilterId already, so only the value needs
+ * reshaping, into whichever form the filter's modal type stores.
+ *
  * TODO ARC-3806: delete this file in September 2027, a year after the redesign shipped.
  */
-const LEGACY_PROPERTY_TO_FILTER_ID: Partial<Record<FilterProperty, SearchFilterId>> = {
-	[FilterProperty.TITLE]: SearchFilterId.Title,
-	[FilterProperty.DESCRIPTION]: SearchFilterId.Description,
-	[FilterProperty.CAST]: SearchFilterId.Cast,
-	[FilterProperty.IDENTIFIER]: SearchFilterId.Identifier,
-	[FilterProperty.SPACIAL_COVERAGE]: SearchFilterId.SpacialCoverage,
-	[FilterProperty.OBJECT_TYPE]: SearchFilterId.ObjectType,
-	[FilterProperty.TEMPORAL_COVERAGE]: SearchFilterId.TemporalCoverage,
-	[FilterProperty.KEYWORDS]: SearchFilterId.Keywords,
-	[FilterProperty.PUBLISHER]: SearchFilterId.Publisher,
-	[FilterProperty.GENRE]: SearchFilterId.Genre,
-	[FilterProperty.LANGUAGE]: SearchFilterId.Language,
-	[FilterProperty.MEDIUM]: SearchFilterId.Medium,
-	[FilterProperty.RIGHTS]: SearchFilterId.Rights,
-	[FilterProperty.THEME]: SearchFilterId.Theme,
-	[FilterProperty.CREATOR]: SearchFilterId.Creator,
-	[FilterProperty.NEWSPAPER_SERIES_NAME]: SearchFilterId.NewspaperSeriesName,
-	[FilterProperty.LOCATION_CREATED]: SearchFilterId.LocationCreated,
-	[FilterProperty.MENTIONS]: SearchFilterId.Mentions,
-	[FilterProperty.CREATED_AT]: SearchFilterId.Created,
-	[FilterProperty.PUBLISHED_AT]: SearchFilterId.Published,
-	[FilterProperty.RELEASE_DATE]: SearchFilterId.ReleaseDate,
-	[FilterProperty.DURATION]: SearchFilterId.Duration,
-};
 
 /**
  * Converts the old combined parameter into the new per-filter parameters.
@@ -56,7 +35,7 @@ export const migrateLegacyAdvancedFilters = (
 	const changes: Record<string, unknown> = {};
 
 	for (const legacyFilter of legacyFilters) {
-		const filterId = LEGACY_PROPERTY_TO_FILTER_ID[legacyFilter.prop as FilterProperty];
+		const filterId = legacyFilter.prop;
 		const filter = filterId ? filtersById.get(filterId) : undefined;
 
 		if (!filterId || !filter || !legacyFilter.val) {
@@ -68,11 +47,8 @@ export const migrateLegacyAdvancedFilters = (
 				changes[filterId] = [
 					...((changes[filterId] as TextFilterCondition[]) || []),
 					{
-						op:
-							legacyFilter.op === IeObjectsSearchOperator.CONTAINS_NOT ||
-							legacyFilter.op === IeObjectsSearchOperator.IS_NOT
-								? IeObjectsSearchOperator.CONTAINS_NOT
-								: IeObjectsSearchOperator.CONTAINS,
+						// The legacy form let a field send an operator it no longer offers
+						op: normalizeTextFilterOperator(legacyFilter.op as IeObjectsSearchOperator, filterId),
 						val: legacyFilter.val,
 					},
 				];

@@ -83,7 +83,6 @@ import type { ConsultableMediaFilterFormState } from '@visitor-space/components/
 import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import type { ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
 import {
 	GLOBAL_ARCHIVE,
 	SEARCH_PAGE_QUERY_PARAM_CONFIG,
@@ -91,7 +90,6 @@ import {
 	VISITOR_SPACE_QUERY_PARAM_INIT,
 	VISITOR_SPACE_SORT_OPTIONS,
 } from '@visitor-space/const';
-import { TEMP_FILTER_KEY_PREFIX } from '@visitor-space/const/advanced-filter-array-param';
 import {
 	getAdvancedFlyoutFilters,
 	getAvailableSearchPageFilters,
@@ -102,13 +100,11 @@ import { useSearchQueryFilters } from '@visitor-space/hooks/get-search-query-fil
 import { useGetThemeFilterOptions } from '@visitor-space/hooks/use-get-theme-filter-options';
 import {
 	type AdvancedFilter,
-	FilterModalType,
-	FilterProperty,
 	SearchFilterId,
 	type TagIdentity,
 	type TextFilterCondition,
 } from '@visitor-space/types';
-import { mapFiltersToTags, tagPrefix } from '@visitor-space/utils/map-filters';
+import { getQueryForRemainingTags, mapFiltersToTags } from '@visitor-space/utils/map-filters';
 import { migrateLegacyAdvancedFilters } from '@visitor-space/utils/migrate-legacy-advanced-filters';
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
@@ -121,7 +117,6 @@ import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useSta
 import { useDispatch, useSelector } from 'react-redux';
 import type { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
-import { v4 as uuidV4 } from 'uuid';
 import styles from './SearchPage.module.scss';
 
 const labelKeys = {
@@ -504,21 +499,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		let data: string[] | string | boolean | AdvancedFilter[] | TextFilterCondition[] | undefined;
 
 		switch (id) {
-			case SearchFilterId.ReleaseDate: {
-				const state = values as ReleaseDateFilterFormState;
-				data = state.releaseDate
-					? [
-							{
-								renderKey: TEMP_FILTER_KEY_PREFIX + uuidV4(),
-								prop: FilterProperty.RELEASE_DATE,
-								op: state.operator,
-								val: state.releaseDate,
-							},
-						]
-					: undefined;
-				break;
-			}
-
 			case SearchFilterId.ConsultableOnlyOnLocation: {
 				// Info: remove query param if false (= set to undefined)
 				const filterValue = (values as ConsultableOnlyOnLocationFilterFormState)[
@@ -560,48 +540,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
 		// The tag list hands back the tags that survive, so the query is rebuilt from those
-		const updatedQuery: Record<string, unknown> = {};
-
-		for (const tag of tags) {
-			if (tag.key === QUERY_PARAM_KEY.SEARCH_QUERY_KEY) {
-				// The search bar keeps one pill per term
-				updatedQuery[tag.key] = [
-					...((updatedQuery[tag.key] as Array<unknown>) || []),
-					`${tag.value}`.replace(tagPrefix(tag.key), ''),
-				];
-				continue;
-			}
-
-			const filter = availableFilters.find((availableFilter) => availableFilter.id === tag.key);
-
-			switch (filter?.modalType) {
-				case FilterModalType.Text:
-					// A text filter has one pill per operator, so keep the conditions of this operator
-					updatedQuery[tag.key] = [
-						...((updatedQuery[tag.key] as TextFilterCondition[]) || []),
-						...(((query[tag.key] as TextFilterCondition[]) || []).filter(
-							(condition) => condition.op === tag.op
-						) as TextFilterCondition[]),
-					];
-					break;
-
-				case FilterModalType.SearchableCheckbox:
-				case FilterModalType.CheckboxList:
-				case FilterModalType.Autocomplete:
-					// One pill holds every value of the filter, so a surviving pill keeps them all
-					updatedQuery[tag.key] = query[tag.key];
-					break;
-
-				default:
-					if (typeof query[tag.key] === 'boolean') {
-						updatedQuery[tag.key] = true;
-					} else {
-						// A date, duration or legacy advanced pill carries its own prop, op and value
-						updatedQuery[tag.key] = [...((updatedQuery[tag.key] as Array<unknown>) || []), tag];
-					}
-					break;
-			}
-		}
+		const updatedQuery = getQueryForRemainingTags(tags, query, availableFilters);
 
 		// Destructure to keyword-able filters
 		// biome-ignore-start lint/correctness/noUnusedVariables: filter it out of the query

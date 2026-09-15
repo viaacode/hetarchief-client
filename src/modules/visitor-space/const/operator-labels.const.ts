@@ -1,7 +1,7 @@
-import type { SelectOption } from '@meemoo/react-components';
 import { tText } from '@shared/helpers/translate';
 import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
-import { SearchFilterId } from '@visitor-space/types';
+import type { SearchFilterId } from '@visitor-space/types';
+import { getOperators } from '@visitor-space/utils/advanced-filters';
 
 /**
  * Every operator label of the search page, in the language of the UI. One operator reads
@@ -23,32 +23,38 @@ export const getOperatorLabels = () => ({
 
 export type OperatorLabels = ReturnType<typeof getOperatorLabels>;
 
+/** The operators that exclude rather than include. Everything else reads as positive. */
+const NEGATIVE_OPERATORS: IeObjectsSearchOperator[] = [
+	IeObjectsSearchOperator.CONTAINS_NOT,
+	IeObjectsSearchOperator.IS_NOT,
+];
+
 /**
- * Text filters whose elasticsearch field is a keyword field rather than an analysed text field.
- * The operator stays CONTAINS / CONTAINS_NOT, but the match is on the whole value, so the wording
- * is "Is" / "Is niet" instead of "Bevat" / "Bevat niet".
+ * Which operators a filter offers is FILTERS_OPTIONS_CONFIG's to say, and `getOperators` reads it.
+ * A url can still carry an operator that is not in that list: a field's operators may have changed
+ * since the url was shared, and a url can be typed by hand. Such an operator is read as positive
+ * or negative and mapped onto the first operator of that polarity the field does offer, so an
+ * `identifier` url carrying "co" opens on "Is" rather than on nothing at all.
+ *
+ * An operator the field does offer is returned untouched.
  */
-const EXACT_TEXT_FILTER_IDS: SearchFilterId[] = [SearchFilterId.Identifier];
+export const normalizeTextFilterOperator = (
+	op: IeObjectsSearchOperator,
+	filterId: SearchFilterId
+): IeObjectsSearchOperator => {
+	const offered = getOperators(filterId).map((operator) => operator.value);
 
-/** The two operators a text filter offers. */
-export const getTextFilterOperatorOptions = (filterId?: SearchFilterId): SelectOption[] => {
-	const labels = getOperatorLabels();
-	const isExact = !!filterId && EXACT_TEXT_FILTER_IDS.includes(filterId);
+	if (offered.includes(op)) {
+		return op;
+	}
 
-	return [
-		{
-			label: isExact ? labels.equals : labels.contains,
-			value: IeObjectsSearchOperator.CONTAINS,
-		},
-		{
-			label: isExact ? labels.differs : labels.excludes,
-			value: IeObjectsSearchOperator.CONTAINS_NOT,
-		},
-	];
+	const isNegative = NEGATIVE_OPERATORS.includes(op);
+
+	return offered.find((offeredOp) => NEGATIVE_OPERATORS.includes(offeredOp) === isNegative) ?? op;
 };
 
+/** The label a filter puts on one of the operators it offers. */
 export const getTextFilterOperatorLabel = (
 	op: IeObjectsSearchOperator,
-	filterId?: SearchFilterId
-): string =>
-	getTextFilterOperatorOptions(filterId).find((option) => option.value === op)?.label as string;
+	filterId: SearchFilterId
+): string => getOperators(filterId).find((operator) => operator.value === op)?.label ?? '';

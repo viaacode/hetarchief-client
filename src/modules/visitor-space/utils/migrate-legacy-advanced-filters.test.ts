@@ -10,8 +10,8 @@ vi.mock(
 		ConsultableOnlyOnLocationFilterForm: () => null,
 	})
 );
-vi.mock('@visitor-space/components/ReleaseDateFilterForm', () => ({
-	ReleaseDateFilterForm: () => null,
+vi.mock('@visitor-space/components/DateFilterForm', () => ({
+	DateFilterForm: () => null,
 }));
 vi.mock('@visitor-space/components/SinglePropertyFilterForm/SinglePropertyFilterForm', () => ({
 	SinglePropertyFilterForm: () => null,
@@ -22,7 +22,7 @@ vi.mock('@shared/config/public-runtime-config', () => ({
 	}),
 }));
 
-import { FilterProperty, SearchFilterId } from '../types';
+import { SearchFilterId } from '../types';
 import { migrateLegacyAdvancedFilters } from './migrate-legacy-advanced-filters';
 
 describe('migrateLegacyAdvancedFilters()', () => {
@@ -35,7 +35,7 @@ describe('migrateLegacyAdvancedFilters()', () => {
 		const changes = migrateLegacyAdvancedFilters([
 			{
 				renderKey: '1',
-				prop: FilterProperty.TITLE,
+				prop: SearchFilterId.Title,
 				op: IeObjectsSearchOperator.CONTAINS,
 				val: 'concert',
 			},
@@ -47,18 +47,45 @@ describe('migrateLegacyAdvancedFilters()', () => {
 		expect(changes[SearchFilterId.Advanced]).toBeUndefined();
 	});
 
-	it('collapses "is niet" into "bevat niet", the only negative a text filter has', () => {
+	it('keeps an operator the field still offers', () => {
 		const changes = migrateLegacyAdvancedFilters([
 			{
 				renderKey: '1',
-				prop: FilterProperty.TITLE,
+				prop: SearchFilterId.Title,
 				op: IeObjectsSearchOperator.IS_NOT,
 				val: 'herhaling',
 			},
 		]);
 
 		expect(changes[SearchFilterId.Title]).toEqual([
+			{ op: IeObjectsSearchOperator.IS_NOT, val: 'herhaling' },
+		]);
+	});
+
+	it('collapses an operator the field does not offer onto one of the same polarity', () => {
+		// "description" offers the contains pair only, so the legacy "is niet" has to land on
+		// "bevat niet" rather than on an operator the field cannot send
+		const changes = migrateLegacyAdvancedFilters([
+			{
+				renderKey: '1',
+				prop: SearchFilterId.Description,
+				op: IeObjectsSearchOperator.IS_NOT,
+				val: 'herhaling',
+			},
+			{
+				renderKey: '2',
+				prop: SearchFilterId.Identifier,
+				op: IeObjectsSearchOperator.CONTAINS,
+				val: 'co15bf1dcfb943aee',
+			},
+		]);
+
+		expect(changes[SearchFilterId.Description]).toEqual([
 			{ op: IeObjectsSearchOperator.CONTAINS_NOT, val: 'herhaling' },
+		]);
+		// "identifier" offers the is pair only
+		expect(changes[SearchFilterId.Identifier]).toEqual([
+			{ op: IeObjectsSearchOperator.IS, val: 'co15bf1dcfb943aee' },
 		]);
 	});
 
@@ -66,11 +93,11 @@ describe('migrateLegacyAdvancedFilters()', () => {
 		const changes = migrateLegacyAdvancedFilters([
 			{
 				renderKey: '1',
-				prop: FilterProperty.GENRE,
+				prop: SearchFilterId.Genre,
 				op: IeObjectsSearchOperator.IS,
 				val: 'concert',
 			},
-			{ renderKey: '2', prop: FilterProperty.GENRE, op: IeObjectsSearchOperator.IS, val: 'dans' },
+			{ renderKey: '2', prop: SearchFilterId.Genre, op: IeObjectsSearchOperator.IS, val: 'dans' },
 		]);
 
 		expect(changes[SearchFilterId.Genre]).toEqual(['concert', 'dans']);
@@ -79,7 +106,7 @@ describe('migrateLegacyAdvancedFilters()', () => {
 	it('keeps a date property as it was, since that filter did not change', () => {
 		const legacyFilter = {
 			renderKey: '1',
-			prop: FilterProperty.CREATED_AT,
+			prop: SearchFilterId.Created,
 			op: IeObjectsSearchOperator.GTE,
 			val: '2020-01-01',
 		};
@@ -94,7 +121,7 @@ describe('migrateLegacyAdvancedFilters()', () => {
 			migrateLegacyAdvancedFilters([
 				{
 					renderKey: '1',
-					prop: FilterProperty.TITLE,
+					prop: SearchFilterId.Title,
 					op: IeObjectsSearchOperator.CONTAINS,
 					val: '',
 				},

@@ -1,7 +1,7 @@
 import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import type { QueryParamConfig } from 'use-query-params';
 import { v4 as uuidV4 } from 'uuid';
-import { type AdvancedFilter, FilterProperty } from '../types';
+import { type AdvancedFilter, SearchFilterId } from '../types';
 
 export const TEMP_FILTER_KEY_PREFIX = 'TEMP_FILTER_ID__';
 
@@ -12,7 +12,7 @@ export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undef
 			? filters
 					.map((filter) => {
 						const { prop, op, val } = filter;
-						const propertyAcronym = filterNameToAcronym(prop as FilterProperty);
+						const propertyAcronym = filterNameToAcronym(prop as SearchFilterId);
 						const operatorAcronym = operatorToAcronym(op as IeObjectsSearchOperator);
 
 						return `${propertyAcronym}${operatorAcronym}${encodeURIComponent(val || '')}`;
@@ -42,33 +42,39 @@ export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undef
 	},
 };
 
-const FILTER_NAME_WITH_ACRONYM: [FilterProperty, string][] = [
-	[FilterProperty.CAST, 'cs'],
-	[FilterProperty.CREATED_AT, 'ca'],
-	[FilterProperty.CREATOR, 'ct'],
-	[FilterProperty.DESCRIPTION, 'de'],
-	[FilterProperty.DURATION, 'du'],
-	[FilterProperty.GENRE, 'ge'],
-	[FilterProperty.IDENTIFIER, 'id'],
-	[FilterProperty.KEYWORDS, 'kw'],
-	[FilterProperty.LANGUAGE, 'la'],
-	[FilterProperty.MEDIA_TYPE, 'ty'],
-	[FilterProperty.MEDIUM, 'me'],
-	[FilterProperty.OBJECT_TYPE, 'ot'],
-	[FilterProperty.PUBLISHED_AT, 'pa'],
-	[FilterProperty.PUBLISHER, 'pu'],
-	[FilterProperty.RELEASE_DATE, 'rd'],
-	[FilterProperty.RIGHTS, 'ri'],
-	[FilterProperty.SPACIAL_COVERAGE, 'sc'],
-	[FilterProperty.TEMPORAL_COVERAGE, 'tc'],
-	[FilterProperty.THEME, 'th'],
-	[FilterProperty.TITLE, 'ti'],
-	[FilterProperty.NEWSPAPER_SERIES_NAME, 'ns'],
-	[FilterProperty.LOCATION_CREATED, 'lc'],
-	[FilterProperty.MENTIONS, 'mn'],
+/**
+ * The 2-letter code each filter carries inside the legacy "advanced" parameter and inside the
+ * date and duration parameters. These codes are url-visible and appear in urls people shared
+ * before ARC-3806, so every one of them has to stay exactly as it is.
+ * `advanced-filter-array-param.test.ts` pins the whole table for that reason.
+ */
+export const FILTER_NAME_WITH_ACRONYM: [SearchFilterId, string][] = [
+	[SearchFilterId.Cast, 'cs'],
+	[SearchFilterId.Created, 'ca'],
+	[SearchFilterId.Creator, 'ct'],
+	[SearchFilterId.Description, 'de'],
+	[SearchFilterId.Duration, 'du'],
+	[SearchFilterId.Genre, 'ge'],
+	[SearchFilterId.Identifier, 'id'],
+	[SearchFilterId.Keywords, 'kw'],
+	[SearchFilterId.Language, 'la'],
+	[SearchFilterId.Format, 'ty'],
+	[SearchFilterId.Medium, 'me'],
+	[SearchFilterId.ObjectType, 'ot'],
+	[SearchFilterId.Published, 'pa'],
+	[SearchFilterId.Publisher, 'pu'],
+	[SearchFilterId.ReleaseDate, 'rd'],
+	[SearchFilterId.Rights, 'ri'],
+	[SearchFilterId.SpacialCoverage, 'sc'],
+	[SearchFilterId.TemporalCoverage, 'tc'],
+	[SearchFilterId.Theme, 'th'],
+	[SearchFilterId.Title, 'ti'],
+	[SearchFilterId.NewspaperSeriesName, 'ns'],
+	[SearchFilterId.LocationCreated, 'lc'],
+	[SearchFilterId.Mentions, 'mn'],
 ];
 
-export function filterNameToAcronym(filterName: FilterProperty): string {
+export function filterNameToAcronym(filterName: SearchFilterId): string {
 	const filter = FILTER_NAME_WITH_ACRONYM.find(([name]) => name === filterName);
 
 	if (!filter) {
@@ -78,7 +84,7 @@ export function filterNameToAcronym(filterName: FilterProperty): string {
 	return filter[1];
 }
 
-function filterAcronymToName(acronym: string | undefined): FilterProperty {
+function filterAcronymToName(acronym: string | undefined): SearchFilterId {
 	if (!acronym) {
 		throw new Error(`Filter name acronym was undefined: ${acronym}`);
 	}

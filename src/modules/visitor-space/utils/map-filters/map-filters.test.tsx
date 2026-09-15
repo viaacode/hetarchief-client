@@ -3,6 +3,7 @@ import { IeObjectsSearchFilterField, IeObjectsSearchOperator } from '@shared/typ
 import { Locale } from '@shared/utils/i18n';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { FilterMenuType } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import type { SearchPageQueryParams } from '@visitor-space/const';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 
@@ -13,8 +14,13 @@ vi.mock('@shared/helpers/translate', () => ({
 	tHtml: (key: string) => key.split('___').pop()?.replaceAll('-', ' ') || '',
 }));
 
-import { FilterModalType, FilterProperty, SearchFilterId } from '../../types';
-import { type MapFiltersToTagsOptions, mapFiltersToTags, tagPrefix } from './map-filters';
+import { FilterModalType, SearchFilterId } from '../../types';
+import {
+	getQueryForRemainingTags,
+	type MapFiltersToTagsOptions,
+	mapFiltersToTags,
+	tagPrefix,
+} from './map-filters';
 
 const filter = (
 	id: SearchFilterId,
@@ -115,7 +121,7 @@ describe('Utils', () => {
 				{
 					[SearchFilterId.Advanced]: [
 						{
-							prop: FilterProperty.THEME,
+							prop: SearchFilterId.Theme,
 							op: IeObjectsSearchOperator.IS,
 							val: 'education-learning',
 							renderKey: 'theme-filter',
@@ -226,6 +232,28 @@ describe('Utils', () => {
 			expect(tags[0].id).not.toEqual(tags[1].id);
 		});
 
+		it('gives a text filter one pill per operator it offers', () => {
+			const tags = toTags(
+				{
+					[SearchFilterId.Title]: [
+						{ op: IeObjectsSearchOperator.CONTAINS, val: 'concert' },
+						{ op: IeObjectsSearchOperator.CONTAINS_NOT, val: 'herhaling' },
+						{ op: IeObjectsSearchOperator.IS, val: 'Nachtwacht' },
+						{ op: IeObjectsSearchOperator.IS_NOT, val: 'Journaal' },
+					],
+				},
+				[TITLE_FILTER]
+			);
+
+			expect(tags.map((tag) => asText(tag.label))).toEqual([
+				'Titel bevat: concert',
+				'Titel bevat niet: herhaling',
+				'Titel is: Nachtwacht',
+				'Titel is niet: Journaal',
+			]);
+			expect(new Set(tags.map((tag) => tag.id)).size).toBe(4);
+		});
+
 		// A search term has no filter modal behind it, so its pill must not offer to open one
 		it('marks a search term pill as not clickable, and a filter pill as clickable', () => {
 			const [searchTerm] = toTags({ [QUERY_PARAM_KEY.SEARCH_QUERY_KEY]: ['concert'] });
@@ -243,7 +271,7 @@ describe('Utils', () => {
 			const [legacy] = toTags({
 				[SearchFilterId.Advanced]: [
 					{
-						prop: FilterProperty.TITLE,
+						prop: SearchFilterId.Title,
 						op: IeObjectsSearchOperator.CONTAINS,
 						val: 'concert',
 						renderKey: 'legacy-title',
@@ -261,7 +289,7 @@ describe('Utils', () => {
 				{
 					[SearchFilterId.ReleaseDate]: [
 						{
-							prop: FilterProperty.RELEASE_DATE,
+							prop: SearchFilterId.ReleaseDate,
 							op: IeObjectsSearchOperator.GTE,
 							val: '2020-01-01',
 							renderKey: 'release-date',
@@ -277,5 +305,77 @@ describe('Utils', () => {
 		it('gives a filter without a value no pill', () => {
 			expect(toTags({}, [GENRE_FILTER, TITLE_FILTER])).toEqual([]);
 		});
+	});
+});
+
+describe('getQueryForRemainingTags()', () => {
+	const IDENTIFIER_FILTER = filter(
+		SearchFilterId.Identifier,
+		FilterModalType.Text,
+		'Identifier',
+		IeObjectsSearchFilterField.IDENTIFIER
+	);
+
+	/**
+	 * A url shared before "identifier" moved to the is operators carries the contains pair. The
+	 * pills are keyed on the normalized operator, so the surviving pill has to be matched on that
+	 * too -- otherwise removing one pill silently dropped the other pill's conditions as well.
+	 */
+	it('keeps the conditions of a surviving pill on a url carrying a stale operator', () => {
+		const query = {
+			[SearchFilterId.Identifier]: [
+				{ op: IeObjectsSearchOperator.CONTAINS, val: 'co15bf1dcfb943aee' },
+				{ op: IeObjectsSearchOperator.CONTAINS_NOT, val: 'def456' },
+			],
+		} as unknown as SearchPageQueryParams;
+
+		const tags = mapFiltersToTags(query, [IDENTIFIER_FILTER], { locale: Locale.nl });
+		expect(tags).toHaveLength(2);
+
+		// The visitor removes the "is niet" pill, so only the "is" pill survives
+		const remaining = tags.filter((tag) => tag.op === IeObjectsSearchOperator.IS);
+		const updated = getQueryForRemainingTags(remaining, query, [IDENTIFIER_FILTER]);
+
+		expect(updated[SearchFilterId.Identifier]).toEqual([
+			{ op: IeObjectsSearchOperator.CONTAINS, val: 'co15bf1dcfb943aee' },
+		]);
+	});
+
+	it('keeps only the conditions of the surviving operator when a field offers four', () => {
+		const query = {
+			[SearchFilterId.Title]: [
+				{ op: IeObjectsSearchOperator.CONTAINS, val: 'concert' },
+				{ op: IeObjectsSearchOperator.IS, val: 'Nachtwacht' },
+				{ op: IeObjectsSearchOperator.IS_NOT, val: 'Journaal' },
+			],
+		} as unknown as SearchPageQueryParams;
+
+		const tags = mapFiltersToTags(query, [TITLE_FILTER], { locale: Locale.nl });
+		const remaining = tags.filter((tag) => tag.op !== IeObjectsSearchOperator.IS);
+		const updated = getQueryForRemainingTags(remaining, query, [TITLE_FILTER]);
+
+		expect(updated[SearchFilterId.Title]).toEqual([
+			{ op: IeObjectsSearchOperator.CONTAINS, val: 'concert' },
+			{ op: IeObjectsSearchOperator.IS_NOT, val: 'Journaal' },
+		]);
+	});
+
+	it('keeps every value of a filter whose pill holds them all', () => {
+		const query = {
+			[SearchFilterId.Genre]: ['jazz', 'klassiek'],
+		} as unknown as SearchPageQueryParams;
+
+		const tags = mapFiltersToTags(query, [GENRE_FILTER], { locale: Locale.nl });
+		const updated = getQueryForRemainingTags(tags, query, [GENRE_FILTER]);
+
+		expect(updated[SearchFilterId.Genre]).toEqual(['jazz', 'klassiek']);
+	});
+
+	it('drops a filter whose pills were all removed', () => {
+		const query = {
+			[SearchFilterId.Title]: [{ op: IeObjectsSearchOperator.CONTAINS, val: 'concert' }],
+		} as unknown as SearchPageQueryParams;
+
+		expect(getQueryForRemainingTags([], query, [TITLE_FILTER])).toEqual({});
 	});
 });
