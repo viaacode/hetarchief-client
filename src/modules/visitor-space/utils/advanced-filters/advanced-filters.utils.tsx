@@ -58,6 +58,14 @@ export const getOperators = (prop: FilterProperty): OperatorOptions => {
 	return [];
 };
 
+/**
+ * The operator a filter falls back on: the first one its config offers.
+ *
+ * A new condition starts here, and so does a filter that is applied without an operator of its own.
+ */
+export const getDefaultOperator = (prop: FilterProperty): IeObjectsSearchOperator | undefined =>
+	getOperators(prop)[0]?.value;
+
 export const getFilterConfig = (
 	prop: FilterProperty,
 	op: IeObjectsSearchOperator
