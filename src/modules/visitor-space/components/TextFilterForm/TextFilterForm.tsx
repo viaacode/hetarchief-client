@@ -14,7 +14,7 @@ import { getTextFilterOperatorOptions } from '@visitor-space/const/operator-labe
 import type { GenericFilterFormProps, TextFilterCondition } from '@visitor-space/types';
 import { getSelectValue } from '@visitor-space/utils/select';
 import clsx from 'clsx';
-import { type FC, useState } from 'react';
+import { type FC, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
@@ -43,8 +43,14 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 		appliedConditions.length > 0 ? appliedConditions : [emptyCondition()]
 	);
 
+	// Only keyboard focus should light up the operator's focus outline. :focus-visible cannot tell
+	// the two apart here, since react-select moves focus to a text input, which the browser always
+	// counts as keyboard focus. So the click is caught before it focuses and remembered instead.
+	const [keyboardFocusedOperator, setKeyboardFocusedOperator] = useState<number | null>(null);
+	const isClickFocus = useRef(false);
+
 	const { reset, handleSubmit } = useForm({ defaultValues: {} });
-	const operatorOptions = getTextFilterOperatorOptions();
+	const operatorOptions = getTextFilterOperatorOptions(filter.id);
 
 	const changeCondition = (index: number, change: Partial<TextFilterCondition>): void => {
 		setConditions(
@@ -79,8 +85,16 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 					)}
 				>
 					{conditions.map((condition, index) => (
-						// biome-ignore lint/suspicious/noArrayIndexKey: a condition has no id of its own
-						<div className={styles['c-text-filter-form__condition']} key={`condition-${index}`}>
+						<div
+							className={styles['c-text-filter-form__condition']}
+							// biome-ignore lint/suspicious/noArrayIndexKey: a condition has no id of its own
+							key={`condition-${index}`}
+							// A mousedown lands before the focus it causes, so the operator's focus handler
+							// below can tell a click apart from a tab
+							onMouseDownCapture={() => {
+								isClickFocus.current = true;
+							}}
+						>
 							{index > 0 && (
 								<span className={styles['c-text-filter-form__separator']}>
 									{tText('modules/visitor-space/components/text-filter-form/text-filter-form___of')}
@@ -90,7 +104,11 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 							<FormControl
 								className={clsx(
 									'c-form-control--label-hidden',
-									styles['c-text-filter-form__operator']
+									styles['c-text-filter-form__operator'],
+									{
+										[styles['c-text-filter-form__operator--keyboard-focus']]:
+											keyboardFocusedOperator === index,
+									}
 								)}
 								id={`text-filter-form-${filter.id}-operator-${index}`}
 								label={tHtml(
@@ -112,6 +130,11 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 									menuPosition="fixed"
 									inputId={`text-filter-form-${filter.id}-operator-${index}`}
 									isDisabled={disabled}
+									onFocus={() => {
+										setKeyboardFocusedOperator(isClickFocus.current ? null : index);
+										isClickFocus.current = false;
+									}}
+									onBlur={() => setKeyboardFocusedOperator(null)}
 									onChange={(newValue) =>
 										changeCondition(index, {
 											op: (newValue as SingleValue<SelectOption>)?.value as IeObjectsSearchOperator,

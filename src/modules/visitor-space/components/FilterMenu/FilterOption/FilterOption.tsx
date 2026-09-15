@@ -51,7 +51,9 @@ const FilterOption: FC<FilterOptionProps> = ({
 	const [openedAt, setOpenedAt] = useState<number | undefined>(undefined);
 	const [flyoutPosition, setFlyoutPosition] = useState<FlyoutPosition | undefined>(undefined);
 	const optionRef = useRef<HTMLDivElement>(null);
-	const flyoutRef = useRef<HTMLDivElement>(null);
+	// A state-backed ref, since the fly-out only mounts client-side: the positioning effect below
+	// has to re-run once the node actually exists, not just when the filter becomes active.
+	const [flyoutEl, setFlyoutEl] = useState<HTMLDivElement | null>(null);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: re-render form to ensure correct state,  e.g. open -> reset -> close -> open === values in url, in form
 	useEffect(() => {
@@ -78,15 +80,15 @@ const FilterOption: FC<FilterOptionProps> = ({
 	// The fly-out hangs from the row that opened it, against the right edge of the filter panel.
 	// Only the browser knows where that row sits and how tall the fly-out turned out.
 	useLayoutEffect(() => {
-		if (!filterIsActive) {
+		if (!filterIsActive || !flyoutEl) {
 			return;
 		}
 
 		const measure = (): void => {
 			const row = optionRef.current?.getBoundingClientRect();
-			const flyoutHeight = flyoutRef.current?.offsetHeight;
+			const flyoutHeight = flyoutEl.offsetHeight;
 
-			if (!row || flyoutHeight === undefined) {
+			if (!row) {
 				return;
 			}
 
@@ -102,9 +104,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 
 		// The fly-out grows and shrinks with its content, e.g. a text filter gaining a condition
 		const observer = new ResizeObserver(measure);
-		if (flyoutRef.current) {
-			observer.observe(flyoutRef.current);
-		}
+		observer.observe(flyoutEl);
 		window.addEventListener('resize', measure);
 		window.addEventListener('scroll', measure, true);
 
@@ -113,7 +113,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 			window.removeEventListener('resize', measure);
 			window.removeEventListener('scroll', measure, true);
 		};
-	}, [filterIsActive]);
+	}, [filterIsActive, flyoutEl]);
 
 	const renderFilterOptionByType = (): ReactElement => {
 		switch (type) {
@@ -162,7 +162,7 @@ const FilterOption: FC<FilterOptionProps> = ({
 
 					<NoServerSideRendering>
 						<div
-							ref={flyoutRef}
+							ref={setFlyoutEl}
 							className={clsx(styles['c-filter-menu__flyout-panel'], {
 								[styles['c-filter-menu__flyout-panel--narrow']]: isAdvancedFlyout,
 								[styles['c-filter-menu__flyout-panel--visible']]: filterIsActive,

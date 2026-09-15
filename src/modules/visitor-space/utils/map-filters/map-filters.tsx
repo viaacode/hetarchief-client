@@ -233,7 +233,7 @@ const mapTextFilterToTags = (
 		mapValuesToOneTag(
 			conditions.filter((condition) => condition.op === op).map((condition) => condition.val),
 			filter.label,
-			getTextFilterOperatorLabel(op),
+			getTextFilterOperatorLabel(op, filter.id),
 			filter.id,
 			locale,
 			op

@@ -53,14 +53,18 @@ $text-filter-form-divider: 1px solid rgb(0 0 0 / 12%);
 			min-height: 0;
 		}
 
-		// The shared react-select style paints a grey outline on hover, which a borderless
-		// operator should not get. That rule carries !important, so this one has to outweigh it.
-		:global(.c-react-select:not(:focus-within):hover .c-react-select__control) {
+		// The shared react-select style paints a grey outline on hover and a teal one on focus,
+		// which a borderless operator should not get. Those rules carry !important, so these have
+		// to outweigh them.
+		:global(.c-react-select .c-react-select__control) {
 			outline-color: transparent !important;
 		}
 
-		// Other selects mark focus with a teal border, which a borderless operator cannot show
-		:global(.c-react-select__control--is-focused) {
+		// Other selects mark focus with a teal border, which a borderless operator cannot show.
+		// Only keyboard focus should get it, and :focus-visible cannot say which it is here, since
+		// react-select moves focus to a text input, which the browser always counts as keyboard
+		// focus. So TextFilterForm sets this class from the events instead.
+		&--keyboard-focus :global(.c-react-select .c-react-select__control) {
 			outline-color: abstracts.$teal !important;
 		}
 

@@ -1,6 +1,7 @@
 import type { SelectOption } from '@meemoo/react-components';
 import { tText } from '@shared/helpers/translate';
 import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
+import { SearchFilterId } from '@visitor-space/types';
 
 /**
  * Every operator label of the search page, in the language of the UI. One operator reads
@@ -22,15 +23,32 @@ export const getOperatorLabels = () => ({
 
 export type OperatorLabels = ReturnType<typeof getOperatorLabels>;
 
+/**
+ * Text filters whose elasticsearch field is a keyword field rather than an analysed text field.
+ * The operator stays CONTAINS / CONTAINS_NOT, but the match is on the whole value, so the wording
+ * is "Is" / "Is niet" instead of "Bevat" / "Bevat niet".
+ */
+const EXACT_TEXT_FILTER_IDS: SearchFilterId[] = [SearchFilterId.Identifier];
+
 /** The two operators a text filter offers. */
-export const getTextFilterOperatorOptions = (): SelectOption[] => {
+export const getTextFilterOperatorOptions = (filterId?: SearchFilterId): SelectOption[] => {
 	const labels = getOperatorLabels();
+	const isExact = !!filterId && EXACT_TEXT_FILTER_IDS.includes(filterId);
 
 	return [
-		{ label: labels.contains, value: IeObjectsSearchOperator.CONTAINS },
-		{ label: labels.excludes, value: IeObjectsSearchOperator.CONTAINS_NOT },
+		{
+			label: isExact ? labels.equals : labels.contains,
+			value: IeObjectsSearchOperator.CONTAINS,
+		},
+		{
+			label: isExact ? labels.differs : labels.excludes,
+			value: IeObjectsSearchOperator.CONTAINS_NOT,
+		},
 	];
 };
 
-export const getTextFilterOperatorLabel = (op: IeObjectsSearchOperator): string =>
-	getTextFilterOperatorOptions().find((option) => option.value === op)?.label as string;
+export const getTextFilterOperatorLabel = (
+	op: IeObjectsSearchOperator,
+	filterId?: SearchFilterId
+): string =>
+	getTextFilterOperatorOptions(filterId).find((option) => option.value === op)?.label as string;
