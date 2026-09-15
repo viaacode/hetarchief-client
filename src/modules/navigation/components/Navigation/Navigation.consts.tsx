@@ -16,6 +16,7 @@ import {
 	ROUTE_PREFIXES_BY_LOCALE,
 	ROUTES_BY_LOCALE,
 } from '@shared/const/routes';
+import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tText } from '@shared/helpers/translate';
 import { Breakpoints } from '@shared/types';
 import { SearchPageMediaType } from '@shared/types/ie-objects';
@@ -249,7 +250,9 @@ const getVisitorSpacesDropdown = (
 	const visitPath = ROUTES_BY_LOCALE[locale].visit;
 	if (linkedSpaceOrId) {
 		// Single link to go to linked visitor space (kiosk visitor)
-		const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${linkedSpaceOrId}`;
+		const searchRouteForSpace = getSearchLink(locale, {
+			[SearchFilterId.Maintainer]: linkedSpaceOrId,
+		});
 		return {
 			node: renderLink(
 				tText('modules/navigation/components/navigation/navigation___bezoekersruimte'),
@@ -307,7 +310,9 @@ const getVisitorSpacesDropdown = (
 				isDivider: accessibleVisitorSpaces.length > 0 ? 'md' : undefined,
 			},
 			...accessibleVisitorSpaces.map((visitorSpace: VisitorSpaceInfo): NavigationItem => {
-				const searchRouteForSpace = `/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visitorSpace.slug}`;
+				const searchRouteForSpace = getSearchLink(locale, {
+					[SearchFilterId.Maintainer]: visitorSpace.slug,
+				});
 				return {
 					node: ({ closeDropdowns }) =>
 						renderLink(
@@ -372,7 +377,7 @@ const getDynamicHeaderLinks = (
 				const isSearchNavItem = contentPath === ROUTES_BY_LOCALE[locale].search;
 				const searchUrl =
 					isSearchNavItem && hasActiveVisits && !isMeemooAdmin
-						? `${ROUTES_BY_LOCALE[locale].search}?aanbieder=${activeVisits[0].spaceSlug}`
+						? getSearchLink(locale, { [SearchFilterId.Maintainer]: activeVisits[0].spaceSlug })
 						: contentPath;
 				const isMyMaterialRequestsNavItem =
 					contentPath === ROUTES_BY_LOCALE[locale].accountMyMaterialRequests;

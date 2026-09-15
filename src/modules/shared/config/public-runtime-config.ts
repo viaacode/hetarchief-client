@@ -44,8 +44,22 @@ declare global {
 	}
 }
 
+// `getConfig()` is called from many components, so only report the missing config once.
+let hasReportedMissingEnv = false;
+
 function readPublicRuntimeConfig(): PublicRuntimeConfig {
 	if (typeof window !== 'undefined') {
+		if (!window.__ENV__ && !hasReportedMissingEnv) {
+			hasReportedMissingEnv = true;
+			console.error(
+				'window.__ENV__ is undefined. Did you run "npm run dev-with-env" for this new setup?\n' +
+					'public/env-config.js is a generated file (not committed) that defines window.__ENV__. ' +
+					'Plain "npm run dev" does not generate it, so /env-config.js returns the Next.js 404 HTML page ' +
+					'and every runtime config value (PROXY_URL, ZENDESK_KEY, ...) is undefined. ' +
+					'With PROXY_URL undefined the API calls go to the client instead of the proxy and fail with ' +
+					'"Unexpected token \'<\'".'
+			);
+		}
 		return (window.__ENV__ ?? {}) as PublicRuntimeConfig;
 	}
 	const config: Record<string, string | undefined> = {};

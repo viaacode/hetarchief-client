@@ -10,7 +10,13 @@ import type {
 export interface FilterMenuMobileProps
 	extends Pick<
 		FilterMenuProps,
-		'activeSort' | 'filters' | 'sortOptions' | 'onSortClick' | 'filterValues'
+		| 'activeSort'
+		| 'filters'
+		| 'sortOptions'
+		| 'onSortClick'
+		| 'filterValues'
+		| 'flyoutFilters'
+		| 'onFlyoutFilterClick'
 	> {
 	children?: ReactNode;
 	activeFilter: string | null | undefined;

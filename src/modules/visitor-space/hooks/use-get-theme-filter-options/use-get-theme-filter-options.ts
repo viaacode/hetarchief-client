@@ -30,14 +30,17 @@ export interface ThemeFilterOptions {
  * Only the slug is stored in the url and sent to elasticsearch, so the same url renders its pills
  * in Dutch or in English depending on the language the visitor is using. See ARC-3797.
  */
-export const useGetThemeFilterOptions = (): ThemeFilterOptions => {
+export const useGetThemeFilterOptions = (enabled = true): ThemeFilterOptions => {
 	const locale = useLocale();
 
-	const { data: themesPaginated, isLoading } = useGetThemes({
-		size: THEME_FILTER_OPTIONS_PAGE_SIZE,
-		orderProp: locale === Locale.en ? ThemeOrderProp.nameEn : ThemeOrderProp.nameNl,
-		orderDirection: AvoSearchOrderDirection.ASC,
-	});
+	const { data: themesPaginated, isLoading } = useGetThemes(
+		{
+			size: THEME_FILTER_OPTIONS_PAGE_SIZE,
+			orderProp: locale === Locale.en ? ThemeOrderProp.nameEn : ThemeOrderProp.nameNl,
+			orderDirection: AvoSearchOrderDirection.ASC,
+		},
+		enabled
+	);
 
 	return useMemo(() => {
 		const getThemeName = (theme: Theme): string =>

@@ -86,6 +86,7 @@ import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper'
 import { Pill } from '@shared/components/Pill';
 import getConfig from '@shared/config/public-runtime-config';
 import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
+import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
@@ -110,16 +111,7 @@ import {
 	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
-import {
-	filterNameToAcronym,
-	operatorToAcronym,
-} from '@visitor-space/const/advanced-filter-array-param';
-import {
-	FILTER_LABEL_VALUE_DELIMITER,
-	FilterProperty,
-	Operator,
-	SearchFilterId,
-} from '@visitor-space/types';
+import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
 import { compact, indexOf, isEmpty, isNil, isString, noop, sortBy } from 'es-toolkit/compat';
 import Link from 'next/link';
@@ -139,12 +131,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	currentPageIndex,
 	goToPage,
 	hasAccessToVisitorSpaceOfObject,
-	showVisitButton,
 	visitRequest,
 	activeFile,
 	simplifiedAltoInfo,
 	onClickAction,
-	openRequestAccessBlade,
 	iiifZoomTo,
 	setActiveMentionHighlights,
 	setIsTextOverlayVisible,
@@ -236,7 +226,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	const canDownloadNewspaper: boolean = ieObjectPermissions.canDownloadEssence;
 
 	const windowSize = useWindowSizeContext();
-	const isMobile = isMobileSize(windowSize);
 	const { data: folders } = useGetFolders();
 
 	/**
@@ -592,15 +581,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		</div>
 	);
 
-	const renderVisitButton = (): ReactNode => (
-		<Button
-			label={tText('modules/ie-objects/components/metadata/metadata___plan-een-bezoek')}
-			variants={['dark', 'sm']}
-			className={styles['p-object-detail__visit-button']}
-			onClick={openRequestAccessBlade}
-		/>
-	);
-
 	const renderMaintainerMetaData = ({
 		maintainerDescription,
 		maintainerSiteUrl,
@@ -621,7 +601,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							<Icon className="u-ml-8" name={IconNamesLight.Extern} aria-hidden />
 						</p>
 					)}
-					{showVisitButton && isMobile && renderVisitButton()}
 				</div>
 			);
 		}
@@ -717,7 +696,9 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									label: mediaInfo?.maintainerName,
 									to: isKiosk
 										? ROUTES_BY_LOCALE[locale].search
-										: `${ROUTES_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${mediaInfo?.maintainerSlug}`,
+										: getSearchLink(locale, {
+												[SearchFilterId.Maintainer]: mediaInfo?.maintainerSlug ?? '',
+											}),
 								},
 							]
 						: []),
@@ -747,9 +728,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			return (
 				<SearchLinkTag
 					label={mediaInfo.collectionName}
-					link={`${ROUTES_BY_LOCALE[locale].search}?format=${HetArchiefIeObjectType.NEWSPAPER}&${
-						SearchFilterId.NewspaperSeriesName
-					}=${encodeURIComponent(mediaInfo.collectionName)}`}
+					link={getSearchLink(locale, {
+						format: HetArchiefIeObjectType.NEWSPAPER,
+						[SearchFilterId.NewspaperSeriesName]: mediaInfo.collectionName,
+					})}
 				/>
 			);
 		}
@@ -1131,9 +1113,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 									<SearchLinkTag
 										key={genre}
 										label={genre}
-										link={`${ROUTES_BY_LOCALE[locale].search}?advanced=${filterNameToAcronym(
-											FilterProperty.GENRE
-										)}${operatorToAcronym(Operator.EQUALS)}${genre}`}
+										link={getSearchLink(locale, { [SearchFilterId.Genre]: genre })}
 									/>
 								))}
 							</div>
