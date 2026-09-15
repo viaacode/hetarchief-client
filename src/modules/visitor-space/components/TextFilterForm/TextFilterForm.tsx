@@ -8,10 +8,15 @@ import {
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
-import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
+import type { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import { SEARCH_PAGE_QUERY_PARAM_CONFIG } from '@visitor-space/const';
-import { getTextFilterOperatorOptions } from '@visitor-space/const/operator-labels.const';
-import type { GenericFilterFormProps, TextFilterCondition } from '@visitor-space/types';
+import { normalizeTextFilterOperator } from '@visitor-space/const/operator-labels.const';
+import type {
+	GenericFilterFormProps,
+	SearchFilterId,
+	TextFilterCondition,
+} from '@visitor-space/types';
+import { getOperators } from '@visitor-space/utils/advanced-filters';
 import { getSelectValue } from '@visitor-space/utils/select';
 import clsx from 'clsx';
 import { type FC, useRef, useState } from 'react';
@@ -20,8 +25,9 @@ import type { SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
 import styles from './TextFilterForm.module.scss';
 
-const emptyCondition = (): TextFilterCondition => ({
-	op: IeObjectsSearchOperator.CONTAINS,
+/** A new condition starts on the first operator the filter's config offers. */
+const emptyCondition = (filterId: SearchFilterId): TextFilterCondition => ({
+	op: getOperators(filterId)[0]?.value as IeObjectsSearchOperator,
 	val: '',
 });
 
@@ -37,10 +43,17 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 }) => {
 	const [query] = useQueryParams(SEARCH_PAGE_QUERY_PARAM_CONFIG);
 
-	const appliedConditions: TextFilterCondition[] = query[filter.id] || [];
+	// A url may carry an operator this field no longer offers, which would leave the dropdown
+	// without a selected option
+	const appliedConditions: TextFilterCondition[] = (
+		(query[filter.id] || []) as TextFilterCondition[]
+	).map((condition) => ({
+		...condition,
+		op: normalizeTextFilterOperator(condition.op, filter.id),
+	}));
 	// The user always starts with one empty condition
 	const [conditions, setConditions] = useState<TextFilterCondition[]>(() =>
-		appliedConditions.length > 0 ? appliedConditions : [emptyCondition()]
+		appliedConditions.length > 0 ? appliedConditions : [emptyCondition(filter.id)]
 	);
 
 	// Only keyboard focus should light up the operator's focus outline. :focus-visible cannot tell
@@ -50,7 +63,7 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 	const isClickFocus = useRef(false);
 
 	const { reset, handleSubmit } = useForm({ defaultValues: {} });
-	const operatorOptions = getTextFilterOperatorOptions(filter.id);
+	const operatorOptions = getOperators(filter.id);
 
 	const changeCondition = (index: number, change: Partial<TextFilterCondition>): void => {
 		setConditions(
@@ -178,7 +191,7 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 						'modules/visitor-space/components/text-filter-form/text-filter-form___voeg-voorwaarde-toe'
 					)}
 					variants="text"
-					onClick={() => setConditions([...conditions, emptyCondition()])}
+					onClick={() => setConditions([...conditions, emptyCondition(filter.id)])}
 				/>
 			</div>
 
@@ -186,7 +199,7 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 				values: { [filter.id]: conditions.filter((condition) => !!condition.val.trim()) },
 				reset: () => {
 					reset();
-					setConditions([emptyCondition()]);
+					setConditions([emptyCondition(filter.id)]);
 				},
 				handleSubmit,
 			})}

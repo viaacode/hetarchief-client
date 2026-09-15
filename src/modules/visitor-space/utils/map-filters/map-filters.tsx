@@ -13,13 +13,15 @@ import { isString } from 'es-toolkit/compat';
 
 import { AdvancedFilterArrayParam } from '../../const/advanced-filter-array-param';
 import { getMetadataSearchFilters } from '../../const/advanced-filters.consts';
-import { getTextFilterOperatorLabel } from '../../const/operator-labels.const';
+import {
+	getTextFilterOperatorLabel,
+	normalizeTextFilterOperator,
+} from '../../const/operator-labels.const';
 import { getRightsLabel } from '../../const/rights-filter.const';
 import {
 	type AdvancedFilter,
 	FILTER_LABEL_VALUE_DELIMITER,
 	FilterModalType,
-	FilterProperty,
 	SearchFilterId,
 	type TagIdentity,
 	type TextFilterCondition,
@@ -151,7 +153,7 @@ const mapAdvancedToTags = (
 	options: MapFiltersToTagsOptions
 ): TagIdentity[] => {
 	return advanced.map((advanced: AdvancedFilter) => {
-		const filterProp = advanced.prop as FilterProperty;
+		const filterProp = advanced.prop as SearchFilterId;
 		const filterOp = advanced.op as IeObjectsSearchOperator;
 
 		const split = (advanced.val || '').split(SEPARATOR);
@@ -165,9 +167,9 @@ const mapAdvancedToTags = (
 		// Convert certain values to be legible
 
 		switch (filterProp) {
-			case FilterProperty.CREATED_AT:
-			case FilterProperty.PUBLISHED_AT:
-			case FilterProperty.RELEASE_DATE:
+			case SearchFilterId.Created:
+			case SearchFilterId.Published:
+			case SearchFilterId.ReleaseDate:
 				if (
 					filterOp === IeObjectsSearchOperator.BETWEEN ||
 					filterOp === IeObjectsSearchOperator.IS
@@ -179,18 +181,18 @@ const mapAdvancedToTags = (
 				}
 				break;
 
-			case FilterProperty.DURATION:
+			case SearchFilterId.Duration:
 				if (filterOp === IeObjectsSearchOperator.BETWEEN) {
 					value = `${split[0]} - ${split[1]}`;
 					filterOperatorLabel = undefined;
 				}
 				break;
 
-			case FilterProperty.RIGHTS:
+			case SearchFilterId.Rights:
 				value = getRightsLabel(value) || value;
 				break;
 
-			case FilterProperty.THEME:
+			case SearchFilterId.Theme:
 				// Only the slug is stored, so the pill is labelled in the language of the UI.
 				// Falls back to the slug while the themes are still loading
 				value = (value && options.themeLabelsBySlug?.[value]) || value;
@@ -223,15 +225,21 @@ const mapAdvancedToTags = (
 	});
 };
 
-/** A text filter gets one pill per operator, so "bevat" and "bevat niet" stay apart. */
+/**
+ * A text filter gets one pill per operator it offers, so "bevat" and "is niet" stay apart. An
+ * operator with no conditions yields no pill: mapValuesToOneTag returns [] for an empty list.
+ */
 const mapTextFilterToTags = (
 	conditions: TextFilterCondition[],
 	filter: FilterMenuFilterOption,
 	locale: Locale
 ): TagIdentity[] =>
-	[IeObjectsSearchOperator.CONTAINS, IeObjectsSearchOperator.CONTAINS_NOT].flatMap((op) =>
+	getOperators(filter.id).flatMap(({ value: op }) =>
 		mapValuesToOneTag(
-			conditions.filter((condition) => condition.op === op).map((condition) => condition.val),
+			conditions
+				// A url may carry an operator this field no longer offers
+				.filter((condition) => normalizeTextFilterOperator(condition.op, filter.id) === op)
+				.map((condition) => condition.val),
 			filter.label,
 			getTextFilterOperatorLabel(op, filter.id),
 			filter.id,
@@ -305,7 +313,7 @@ export const mapFiltersToTags = (
 
 export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilter[] => {
 	const values = (item.val || '').split(SEPARATOR);
-	const filterProp = item.prop as FilterProperty;
+	const filterProp = item.prop as SearchFilterId;
 	const filterOperator = item.op as IeObjectsSearchOperator;
 	const filters =
 		filterProp && filterOperator ? getMetadataSearchFilters(filterProp, filterOperator) : [];
@@ -315,9 +323,9 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 		let parsed: Date;
 
 		switch (item.prop) {
-			case FilterProperty.CREATED_AT:
-			case FilterProperty.PUBLISHED_AT:
-			case FilterProperty.RELEASE_DATE:
+			case SearchFilterId.Created:
+			case SearchFilterId.Published:
+			case SearchFilterId.ReleaseDate:
 				if (item.op === IeObjectsSearchOperator.IS && values.length === 1) {
 					// Manually create a range of equal values: https://meemoo.atlassian.net/browse/ARC-3191
 					values[i] = values[0];
@@ -326,7 +334,7 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 				parsed = parseISO(values[i]);
 				values[i] = (parsed && format(parsed, 'yyyy-MM-dd')) || values[i];
 				break;
-			case FilterProperty.DURATION:
+			case SearchFilterId.Duration:
 				// Manually create a range of equal values
 				// Add milliseconds since elasticsearch requires it: https://meemoo.atlassian.net/browse/ARC-2549
 				values[i] = `${values[0]}.00`;
@@ -337,4 +345,65 @@ export const mapAdvancedToElastic = (item: AdvancedFilter): IeObjectsSearchFilte
 
 		return { ...filter, value: values[i] };
 	});
+};
+
+/**
+ * The query the search page keeps after the visitor removed one or more pills.
+ *
+ * The tag list hands back the pills that survive, so the query is rebuilt from those rather than
+ * from the one that went. What a surviving pill stands for depends on its filter: a text filter
+ * has one pill per operator and keeps only the conditions of that operator, while the filters with
+ * one pill for every value keep all of them.
+ */
+export const getQueryForRemainingTags = (
+	remainingTags: readonly TagIdentity[],
+	query: SearchPageQueryParams,
+	availableFilters: FilterMenuFilterOption[]
+): Record<string, unknown> => {
+	const updatedQuery: Record<string, unknown> = {};
+
+	for (const tag of remainingTags) {
+		if (tag.key === QUERY_PARAM_KEY.SEARCH_QUERY_KEY) {
+			// The search bar keeps one pill per term
+			updatedQuery[tag.key] = [
+				...((updatedQuery[tag.key] as Array<unknown>) || []),
+				`${tag.value}`.replace(tagPrefix(tag.key), ''),
+			];
+			continue;
+		}
+
+		const filter = availableFilters.find((availableFilter) => availableFilter.id === tag.key);
+
+		switch (filter?.modalType) {
+			case FilterModalType.Text:
+				// The pill was keyed on the normalized operator, so compare on that: a url carrying an
+				// operator the field no longer offers would otherwise match no pill at all, and its
+				// conditions would disappear when a neighbouring pill was removed
+				updatedQuery[tag.key] = [
+					...((updatedQuery[tag.key] as TextFilterCondition[]) || []),
+					...((query[tag.key] as TextFilterCondition[]) || []).filter(
+						(condition) => normalizeTextFilterOperator(condition.op, filter.id) === tag.op
+					),
+				];
+				break;
+
+			case FilterModalType.SearchableCheckbox:
+			case FilterModalType.CheckboxList:
+			case FilterModalType.Autocomplete:
+				// One pill holds every value of the filter, so a surviving pill keeps them all
+				updatedQuery[tag.key] = query[tag.key];
+				break;
+
+			default:
+				if (typeof query[tag.key] === 'boolean') {
+					updatedQuery[tag.key] = true;
+				} else {
+					// A date, duration or legacy advanced pill carries its own prop, op and value
+					updatedQuery[tag.key] = [...((updatedQuery[tag.key] as Array<unknown>) || []), tag];
+				}
+				break;
+		}
+	}
+
+	return updatedQuery;
 };

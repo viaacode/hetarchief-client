@@ -8,6 +8,7 @@ import {
 import type { VisitRequest } from '@shared/types/visit-request';
 import { HetArchiefIeObjectLicense } from '@viaa/avo2-types';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import { normalizeTextFilterOperator } from '@visitor-space/const/operator-labels.const';
 import { ALL_SEARCH_FILTERS } from '@visitor-space/const/visitor-space-filters.const';
 import { compact, isNil, isString } from 'es-toolkit/compat';
 
@@ -119,7 +120,8 @@ const mapFilterToElastic = (
 		case FilterModalType.Text:
 			return (value as TextFilterCondition[]).map((condition) => ({
 				field: filter.field as IeObjectsSearchFilterField,
-				operator: condition.op,
+				// An older url may carry the operator pair this field no longer sends
+				operator: normalizeTextFilterOperator(condition.op, filter.id),
 				value: condition.val,
 			}));
 

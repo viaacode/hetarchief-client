@@ -9,8 +9,6 @@ import type {
 import type { ReactNode } from 'react';
 import type { FieldValues, UseFormHandleSubmit } from 'react-hook-form';
 
-import type { FilterProperty } from './filter-properties';
-
 export * from './filter-properties';
 
 export enum SearchSortProp {
@@ -186,13 +184,13 @@ export type OperatorOptions = Array<
 export type PropertyOptions = Array<
 	SelectOption & {
 		label: string;
-		value: FilterProperty;
+		value: SearchFilterId;
 	}
 >;
 
 export interface AdvancedFilter {
 	renderKey: string; // Unique key for the filter, used by react to render the filter in the UI
-	prop?: string; // Which property/field is being filtered on
+	prop?: SearchFilterId; // Which filter this value belongs to
 	op?: string; // Which operator, see IeObjectsSearchOperator enum
 	val?: string; // stringified value, potentially character-separated
 }

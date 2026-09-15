@@ -7,7 +7,6 @@ import type { FC, ReactNode } from 'react';
 import type {
 	DefaultFilterFormProps,
 	FilterModalType,
-	FilterProperty,
 	InlineFilterFormProps,
 	SearchFilterId,
 	SearchSortProp,
@@ -62,8 +61,6 @@ export interface FilterMenuFilterOption {
 	modalType?: FilterModalType;
 	/** The elasticsearch field this filter queries. Drives its option list and its query clauses. */
 	field?: IeObjectsSearchFilterField;
-	/** Only for the date and duration filters, which keep their operator dropdown. */
-	property?: FilterProperty;
 	/** A fixed value list, for a filter whose options do not come from an aggregation. */
 	options?: () => { label: string; value: string }[];
 	/** Does this filter sit in the filter panel before the user picks it from the advanced fly-out? */

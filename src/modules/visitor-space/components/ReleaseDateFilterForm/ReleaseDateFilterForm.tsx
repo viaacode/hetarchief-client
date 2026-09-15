@@ -14,7 +14,7 @@ import { Controller, type UseFormHandleSubmit, useForm } from 'react-hook-form';
 import type { SubmitErrorHandler, SubmitHandler } from 'react-hook-form/dist/types/form';
 import type { MultiValue, SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
-import { FilterProperty, isRange } from '../../types';
+import { isRange, SearchFilterId } from '../../types';
 import { getSelectValue } from '../../utils/select';
 import { DateInput } from '../DateInput';
 import { DateRangeInput } from '../DateRangeInput';
@@ -69,7 +69,7 @@ const ReleaseDateFilterForm: FC<ReleaseDateFilterFormProps> = ({
 		defaultValues,
 	});
 
-	const operators = useMemo(() => getOperators(FilterProperty.RELEASE_DATE), []);
+	const operators = useMemo(() => getOperators(SearchFilterId.ReleaseDate), []);
 
 	// Effects
 

@@ -16,7 +16,6 @@ import { SinglePropertyFilterForm } from '@visitor-space/components/SingleProper
 import {
 	FILTER_LABEL_VALUE_DELIMITER,
 	FilterModalType,
-	FilterProperty,
 	SearchFilterId,
 } from '@visitor-space/types';
 import { getFilterLabel } from '@visitor-space/utils/advanced-filters';
@@ -62,15 +61,13 @@ export const SEARCH_PAGE_FILTERS = (
 
 	const textFilter = (
 		id: SearchFilterId,
-		field: IeObjectsSearchFilterField,
-		property: FilterProperty
+		field: IeObjectsSearchFilterField
 	): FilterMenuFilterOption => ({
 		id,
-		label: getFilterLabel(property),
+		label: getFilterLabel(id),
 		type: FilterMenuType.Modal,
 		modalType: FilterModalType.Text,
 		field,
-		property,
 		inMainPanelByDefault: false,
 		tabs: ALL_TABS,
 	});
@@ -155,7 +152,6 @@ export const SEARCH_PAGE_FILTERS = (
 			form: ReleaseDateFilterForm,
 			type: FilterMenuType.Modal,
 			field: IeObjectsSearchFilterField.RELEASE_DATE,
-			property: FilterProperty.RELEASE_DATE,
 			inMainPanelByDefault: true,
 			tabs: ALL_TABS,
 		},
@@ -188,7 +184,7 @@ export const SEARCH_PAGE_FILTERS = (
 		{
 			id: SearchFilterId.Medium,
 			label: tText('modules/visitor-space/const/index___analoge-drager'),
-			flyoutLabel: getFilterLabel(FilterProperty.MEDIUM),
+			flyoutLabel: getFilterLabel(SearchFilterId.Medium),
 			type: FilterMenuType.Modal,
 			modalType: FilterModalType.SearchableCheckbox,
 			field: IeObjectsSearchFilterField.MEDIUM,
@@ -197,7 +193,7 @@ export const SEARCH_PAGE_FILTERS = (
 		},
 		{
 			id: SearchFilterId.Creator,
-			label: getFilterLabel(FilterProperty.CREATOR),
+			label: getFilterLabel(SearchFilterId.Creator),
 			type: FilterMenuType.Modal,
 			modalType: FilterModalType.Autocomplete,
 			field: IeObjectsSearchFilterField.CREATOR,
@@ -216,7 +212,7 @@ export const SEARCH_PAGE_FILTERS = (
 		// Reachable through the advanced fly-out, which sorts them alphabetically itself.
 		{
 			id: SearchFilterId.Genre,
-			label: getFilterLabel(FilterProperty.GENRE),
+			label: getFilterLabel(SearchFilterId.Genre),
 			type: FilterMenuType.Modal,
 			modalType: FilterModalType.SearchableCheckbox,
 			field: IeObjectsSearchFilterField.GENRE,
@@ -225,7 +221,7 @@ export const SEARCH_PAGE_FILTERS = (
 		},
 		{
 			id: SearchFilterId.Rights,
-			label: getFilterLabel(FilterProperty.RIGHTS),
+			label: getFilterLabel(SearchFilterId.Rights),
 			type: FilterMenuType.Modal,
 			modalType: FilterModalType.SearchableCheckbox,
 			field: IeObjectsSearchFilterField.RIGHTS,
@@ -237,7 +233,7 @@ export const SEARCH_PAGE_FILTERS = (
 		},
 		{
 			id: SearchFilterId.Theme,
-			label: getFilterLabel(FilterProperty.THEME),
+			label: getFilterLabel(SearchFilterId.Theme),
 			type: FilterMenuType.Modal,
 			modalType: FilterModalType.SearchableCheckbox,
 			field: IeObjectsSearchFilterField.THEME,
@@ -251,77 +247,46 @@ export const SEARCH_PAGE_FILTERS = (
 		},
 		{
 			id: SearchFilterId.Language,
-			label: getFilterLabel(FilterProperty.LANGUAGE),
+			label: getFilterLabel(SearchFilterId.Language),
 			type: FilterMenuType.Modal,
 			modalType: FilterModalType.CheckboxList,
 			field: IeObjectsSearchFilterField.LANGUAGE,
 			inMainPanelByDefault: false,
 			tabs: ALL_TABS,
 		},
-		textFilter(SearchFilterId.Title, IeObjectsSearchFilterField.NAME, FilterProperty.TITLE),
-		textFilter(
-			SearchFilterId.Description,
-			IeObjectsSearchFilterField.DESCRIPTION,
-			FilterProperty.DESCRIPTION
-		),
-		textFilter(SearchFilterId.Cast, IeObjectsSearchFilterField.CAST, FilterProperty.CAST),
-		textFilter(
-			SearchFilterId.Identifier,
-			IeObjectsSearchFilterField.IDENTIFIER,
-			FilterProperty.IDENTIFIER
-		),
-		textFilter(
-			SearchFilterId.SpacialCoverage,
-			IeObjectsSearchFilterField.SPACIAL_COVERAGE,
-			FilterProperty.SPACIAL_COVERAGE
-		),
-		textFilter(
-			SearchFilterId.ObjectType,
-			IeObjectsSearchFilterField.OBJECT_TYPE,
-			FilterProperty.OBJECT_TYPE
-		),
-		textFilter(
-			SearchFilterId.TemporalCoverage,
-			IeObjectsSearchFilterField.TEMPORAL_COVERAGE,
-			FilterProperty.TEMPORAL_COVERAGE
-		),
-		textFilter(
-			SearchFilterId.Keywords,
-			IeObjectsSearchFilterField.KEYWORD,
-			FilterProperty.KEYWORDS
-		),
-		textFilter(
-			SearchFilterId.Publisher,
-			IeObjectsSearchFilterField.PUBLISHER,
-			FilterProperty.PUBLISHER
-		),
+		textFilter(SearchFilterId.Title, IeObjectsSearchFilterField.NAME),
+		textFilter(SearchFilterId.Description, IeObjectsSearchFilterField.DESCRIPTION),
+		textFilter(SearchFilterId.Cast, IeObjectsSearchFilterField.CAST),
+		textFilter(SearchFilterId.Identifier, IeObjectsSearchFilterField.IDENTIFIER),
+		textFilter(SearchFilterId.SpacialCoverage, IeObjectsSearchFilterField.SPACIAL_COVERAGE),
+		textFilter(SearchFilterId.ObjectType, IeObjectsSearchFilterField.OBJECT_TYPE),
+		textFilter(SearchFilterId.TemporalCoverage, IeObjectsSearchFilterField.TEMPORAL_COVERAGE),
+		textFilter(SearchFilterId.Keywords, IeObjectsSearchFilterField.KEYWORD),
+		textFilter(SearchFilterId.Publisher, IeObjectsSearchFilterField.PUBLISHER),
 		{
 			id: SearchFilterId.Created,
-			label: getFilterLabel(FilterProperty.CREATED_AT),
+			label: getFilterLabel(SearchFilterId.Created),
 			form: SinglePropertyFilterForm,
 			type: FilterMenuType.Modal,
 			field: IeObjectsSearchFilterField.CREATED,
-			property: FilterProperty.CREATED_AT,
 			inMainPanelByDefault: false,
 			tabs: ALL_TABS,
 		},
 		{
 			id: SearchFilterId.Published,
-			label: getFilterLabel(FilterProperty.PUBLISHED_AT),
+			label: getFilterLabel(SearchFilterId.Published),
 			form: SinglePropertyFilterForm,
 			type: FilterMenuType.Modal,
 			field: IeObjectsSearchFilterField.PUBLISHED,
-			property: FilterProperty.PUBLISHED_AT,
 			inMainPanelByDefault: false,
 			tabs: ALL_TABS,
 		},
 		{
 			id: SearchFilterId.Duration,
-			label: getFilterLabel(FilterProperty.DURATION),
+			label: getFilterLabel(SearchFilterId.Duration),
 			form: SinglePropertyFilterForm,
 			type: FilterMenuType.Modal,
 			field: IeObjectsSearchFilterField.DURATION,
-			property: FilterProperty.DURATION,
 			inMainPanelByDefault: false,
 			tabs: AUDIO_VIDEO_TABS,
 		},
