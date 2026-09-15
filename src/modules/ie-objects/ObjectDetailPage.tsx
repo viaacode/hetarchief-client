@@ -2046,7 +2046,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		return <ErrorNotFound />;
 	};
 
-	const seoDescription = description || capitalize(lowerCase((router.query.slug as string) || ''));
+	// Objects without a maintainer description fall back to the AI generated synopsis, and only
+	// then to the maintainer slug, so the page still gets a meaningful meta description.
+	const seoDescription =
+		description ||
+		mediaInfo?.synopsisAi ||
+		capitalize(lowerCase((router.query.slug as string) || ''));
 	return (
 		<VisitorLayout>
 			<SeoTags
