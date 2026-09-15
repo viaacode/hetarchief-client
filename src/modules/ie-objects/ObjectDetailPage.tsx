@@ -111,7 +111,7 @@ import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
 import { MaterialRequestForReuseBlade } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade';
-import { ReportBlade } from '@visitor-space/components/reportBlade';
+import { ReportBlade } from '@visitor-space/components/ReportBlade';
 import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
@@ -1916,6 +1916,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			)}
 			<ReportBlade
 				user={user}
+				mediaInfo={mediaInfo}
 				isOpen={activeBlade === MediaActions.Report}
 				onClose={onCloseBlade}
 				id="object-detail-page__report-blade"
