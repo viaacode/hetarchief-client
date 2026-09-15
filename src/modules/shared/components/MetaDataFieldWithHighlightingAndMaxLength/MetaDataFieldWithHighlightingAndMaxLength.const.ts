@@ -1,1 +1,3 @@
 export const METADATA_FIELD_MAX_LENGTH = 500;
+
+export const AI_METADATA_FIELD_MAX_LENGTH = 250;

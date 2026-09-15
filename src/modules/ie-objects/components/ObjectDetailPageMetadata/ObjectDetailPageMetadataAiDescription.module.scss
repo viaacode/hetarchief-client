@@ -1,0 +1,27 @@
+@use "src/styles/abstracts" as *;
+
+.c-object-detail-page-metadata-ai-description {
+	display: flex;
+	flex-direction: column;
+	gap: $spacer-xs;
+	padding: $spacer-sm 0 $spacer-lg;
+	border-top: 1px solid $silver;
+}
+
+.c-object-detail-page-metadata-ai-description__header {
+	display: flex;
+	align-items: flex-start;
+	gap: $spacer-md;
+}
+
+.c-object-detail-page-metadata-ai-description__title {
+	flex: 1 0 0;
+	overflow-wrap: break-word;
+	font-size: $font-size-md;
+	line-height: $line-height-lg;
+}
+
+.c-object-detail-page-metadata-ai-description__disclaimer {
+	flex-shrink: 0;
+	margin-left: auto;
+}

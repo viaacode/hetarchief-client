@@ -1,0 +1,29 @@
+@use "src/styles/abstracts" as *;
+
+.c-object-detail-page-metadata-disclaimer-tooltip {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: $black;
+	cursor: pointer;
+
+	&:focus-visible {
+		outline: 0.2rem solid $teal;
+		outline-offset: 0.2rem;
+	}
+}
+
+.c-object-detail-page-metadata-disclaimer-tooltip--icon-base {
+	:global([class*="c-icon"]) {
+		font-size: $font-size-base;
+	}
+}
+
+.c-object-detail-page-metadata-disclaimer-tooltip--icon-lg {
+	:global([class*="c-icon"]) {
+		font-size: $font-size-lg;
+	}
+}
