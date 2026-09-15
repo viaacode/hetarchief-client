@@ -83,7 +83,6 @@ import type { ConsultableMediaFilterFormState } from '@visitor-space/components/
 import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import type { ReleaseDateFilterFormState } from '@visitor-space/components/ReleaseDateFilterForm';
 import {
 	GLOBAL_ARCHIVE,
 	SEARCH_PAGE_QUERY_PARAM_CONFIG,
@@ -91,7 +90,6 @@ import {
 	VISITOR_SPACE_QUERY_PARAM_INIT,
 	VISITOR_SPACE_SORT_OPTIONS,
 } from '@visitor-space/const';
-import { TEMP_FILTER_KEY_PREFIX } from '@visitor-space/const/advanced-filter-array-param';
 import {
 	getAdvancedFlyoutFilters,
 	getAvailableSearchPageFilters,
@@ -119,7 +117,6 @@ import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useSta
 import { useDispatch, useSelector } from 'react-redux';
 import type { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
-import { v4 as uuidV4 } from 'uuid';
 import styles from './SearchPage.module.scss';
 
 const labelKeys = {
@@ -502,21 +499,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		let data: string[] | string | boolean | AdvancedFilter[] | TextFilterCondition[] | undefined;
 
 		switch (id) {
-			case SearchFilterId.ReleaseDate: {
-				const state = values as ReleaseDateFilterFormState;
-				data = state.releaseDate
-					? [
-							{
-								renderKey: TEMP_FILTER_KEY_PREFIX + uuidV4(),
-								prop: SearchFilterId.ReleaseDate,
-								op: state.operator,
-								val: state.releaseDate,
-							},
-						]
-					: undefined;
-				break;
-			}
-
 			case SearchFilterId.ConsultableOnlyOnLocation: {
 				// Info: remove query param if false (= set to undefined)
 				const filterValue = (values as ConsultableOnlyOnLocationFilterFormState)[

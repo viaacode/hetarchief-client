@@ -6,11 +6,11 @@ import { IeObjectsSearchFilterField, SearchPageMediaType } from '@shared/types/i
 import type { Locale } from '@shared/utils/i18n';
 import { ConsultableMediaFilterForm } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm';
 import { ConsultableOnlyOnLocationFilterForm } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm';
+import { DateFilterForm } from '@visitor-space/components/DateFilterForm';
 import {
 	type FilterMenuFilterOption,
 	FilterMenuType,
 } from '@visitor-space/components/FilterMenu/FilterMenu.types';
-import { ReleaseDateFilterForm } from '@visitor-space/components/ReleaseDateFilterForm';
 import { GET_REUSABILITY_OPTIONS } from '@visitor-space/components/ReusabilityFilterForm/ReusabilityFilterForm.const';
 import { SinglePropertyFilterForm } from '@visitor-space/components/SinglePropertyFilterForm/SinglePropertyFilterForm';
 import {
@@ -149,7 +149,7 @@ export const SEARCH_PAGE_FILTERS = (
 		{
 			id: SearchFilterId.ReleaseDate,
 			label: tText('modules/visitor-space/const/visitor-space-filters___uitgavedatum'),
-			form: ReleaseDateFilterForm,
+			form: DateFilterForm,
 			type: FilterMenuType.Modal,
 			field: IeObjectsSearchFilterField.RELEASE_DATE,
 			inMainPanelByDefault: true,
@@ -266,7 +266,7 @@ export const SEARCH_PAGE_FILTERS = (
 		{
 			id: SearchFilterId.Created,
 			label: getFilterLabel(SearchFilterId.Created),
-			form: SinglePropertyFilterForm,
+			form: DateFilterForm,
 			type: FilterMenuType.Modal,
 			field: IeObjectsSearchFilterField.CREATED,
 			inMainPanelByDefault: false,
@@ -275,7 +275,7 @@ export const SEARCH_PAGE_FILTERS = (
 		{
 			id: SearchFilterId.Published,
 			label: getFilterLabel(SearchFilterId.Published),
-			form: SinglePropertyFilterForm,
+			form: DateFilterForm,
 			type: FilterMenuType.Modal,
 			field: IeObjectsSearchFilterField.PUBLISHED,
 			inMainPanelByDefault: false,

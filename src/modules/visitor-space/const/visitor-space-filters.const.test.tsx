@@ -17,8 +17,8 @@ vi.mock(
 		ConsultableOnlyOnLocationFilterForm: () => null,
 	})
 );
-vi.mock('@visitor-space/components/ReleaseDateFilterForm', () => ({
-	ReleaseDateFilterForm: () => null,
+vi.mock('@visitor-space/components/DateFilterForm', () => ({
+	DateFilterForm: () => null,
 }));
 vi.mock('@visitor-space/components/SinglePropertyFilterForm/SinglePropertyFilterForm', () => ({
 	SinglePropertyFilterForm: () => null,
