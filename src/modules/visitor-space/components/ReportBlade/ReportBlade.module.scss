@@ -1,21 +1,21 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-report-blade {
 	:global(.c-input--textarea .c-input__field) {
-		@media (max-width: $breakpoint-sm) {
+		@media (max-width: abstracts.$breakpoint-sm) {
 			min-height: 10rem;
 		}
 	}
 
 	&__input--disabled {
 		input {
-			color: $zinc;
+			color: abstracts.$zinc;
 		}
 	}
 
 	&__radio-button {
-		margin-bottom: $spacer-sm;
+		margin-bottom: abstracts.$spacer-sm;
 
 		&:last-of-type {
 			margin-bottom: 0;
@@ -24,15 +24,15 @@
 
 	&__divider {
 		border: none;
-		border-top: $divider-grey;
-		margin: $spacer-md 0;
+		border-top: abstracts.$divider-grey;
+		margin: abstracts.$spacer-md 0;
 	}
 
 	&__subtitle {
-		font-size: $font-size-base;
-		font-weight: $font-weight-bold;
+		font-size: abstracts.$font-size-base;
+		font-weight: abstracts.$font-weight-bold;
 		line-height: 20px;
-		margin-bottom: $spacer-sm;
+		margin-bottom: abstracts.$spacer-sm;
 	}
 
 	&__hyperlink {
@@ -41,13 +41,13 @@
 		justify-content: space-between;
 
 		a {
-			color: $jade;
+			color: abstracts.$jade;
 		}
 
 		&-text {
 			margin: auto 0;
-			font-size: $font-size-base;
-			font-weight: $font-weight-normal;
+			font-size: abstracts.$font-size-base;
+			font-weight: abstracts.$font-weight-normal;
 			line-height: 24px;
 		}
 	}
