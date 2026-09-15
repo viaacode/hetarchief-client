@@ -137,12 +137,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	currentPageIndex,
 	goToPage,
 	hasAccessToVisitorSpaceOfObject,
-	showVisitButton,
 	visitRequest,
 	activeFile,
 	simplifiedAltoInfo,
 	onClickAction,
-	openRequestAccessBlade,
 	iiifZoomTo,
 	setActiveMentionHighlights,
 	setIsTextOverlayVisible,
@@ -239,7 +237,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	const canDownloadNewspaper: boolean = ieObjectPermissions.canDownloadEssence;
 
 	const windowSize = useWindowSizeContext();
-	const isMobile = isMobileSize(windowSize);
 	const { data: folders } = useGetFolders();
 
 	/**
@@ -595,15 +592,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		</div>
 	);
 
-	const renderVisitButton = (): ReactNode => (
-		<Button
-			label={tText('modules/ie-objects/components/metadata/metadata___plan-een-bezoek')}
-			variants={['dark', 'sm']}
-			className={styles['p-object-detail__visit-button']}
-			onClick={openRequestAccessBlade}
-		/>
-	);
-
 	const renderMaintainerMetaData = ({
 		maintainerDescription,
 		maintainerSiteUrl,
@@ -624,7 +612,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 							<Icon className="u-ml-8" name={IconNamesLight.Extern} aria-hidden />
 						</p>
 					)}
-					{showVisitButton && isMobile && renderVisitButton()}
 				</div>
 			);
 		}
