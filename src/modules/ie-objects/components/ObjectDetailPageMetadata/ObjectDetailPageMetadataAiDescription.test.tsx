@@ -68,6 +68,14 @@ describe('Component: <ObjectDetailPageMetadataAiDescription />', () => {
 		expect(screen.queryByRole('heading')).not.toBeInTheDocument();
 	});
 
+	it('renders nothing when there is neither a title nor a synopsis', () => {
+		const { container } = render(
+			<ObjectDetailPageMetadataAiDescription onReadMoreClicked={vi.fn()} />
+		);
+
+		expect(container).toBeEmptyDOMElement();
+	});
+
 	it('renders the disclaimer as a labelled button', () => {
 		render(
 			<ObjectDetailPageMetadataAiDescription

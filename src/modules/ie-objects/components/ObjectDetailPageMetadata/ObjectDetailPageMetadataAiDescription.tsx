@@ -20,6 +20,10 @@ export function ObjectDetailPageMetadataAiDescription({
 	onReadMoreClicked,
 	className,
 }: ObjectDetailPageMetadataAiDescriptionProps) {
+	if (!name && !synopsis) {
+		return null;
+	}
+
 	return (
 		<div className={clsx(styles['c-object-detail-page-metadata-ai-description'], className)}>
 			<div className={styles['c-object-detail-page-metadata-ai-description__header']}>
