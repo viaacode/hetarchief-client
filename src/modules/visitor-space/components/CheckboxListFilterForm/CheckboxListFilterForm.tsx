@@ -95,6 +95,8 @@ export const CheckboxListFilterForm: FC<GenericFilterFormProps> = ({
 				<div
 					className={clsx(styles['c-checkbox-filter-form__list'], {
 						[styles['c-checkbox-filter-form__list--searchable']]: isSearchable,
+						[styles['c-checkbox-filter-form__list--empty']]:
+							isLoading || matchingOptions.length === 0,
 					})}
 				>
 					{isLoading && (
