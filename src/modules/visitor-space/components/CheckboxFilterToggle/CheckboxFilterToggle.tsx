@@ -4,14 +4,23 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import clsx from 'clsx';
 import type { FC } from 'react';
 
-interface CheckboxFilterFormProps {
+interface CheckboxFilterToggleProps {
 	label: string;
 	value: boolean;
 	onChange: (isChecked: boolean) => void;
 	className?: string;
 }
 
-const CheckboxFilterForm: FC<CheckboxFilterFormProps> = ({ label, value, onChange, className }) => {
+/**
+ * A single checkbox row in the filter panel, for a filter that is on or off. Not to be confused
+ * with the CheckboxListFilterForm, which is the modal that holds a list of checkboxes.
+ */
+const CheckboxFilterToggle: FC<CheckboxFilterToggleProps> = ({
+	label,
+	value,
+	onChange,
+	className,
+}) => {
 	return (
 		<div className={clsx('u-color-white', className)}>
 			<Checkbox
@@ -34,4 +43,4 @@ const CheckboxFilterForm: FC<CheckboxFilterFormProps> = ({ label, value, onChang
 	);
 };
 
-export default CheckboxFilterForm;
+export default CheckboxFilterToggle;

@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
-import CheckboxFilterForm from '@visitor-space/components/CheckboxFilterForm/CheckboxFilterForm';
+import CheckboxFilterToggle from '@visitor-space/components/CheckboxFilterToggle/CheckboxFilterToggle';
 import { SearchFilterId } from '@visitor-space/types';
 import { type FC, useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -60,7 +60,7 @@ export const ConsultableMediaFilterForm: FC<ConsultableMediaFilterFormProps> = (
 	}, [setValue, isChecked]);
 
 	return (
-		<CheckboxFilterForm
+		<CheckboxFilterToggle
 			value={isChecked}
 			onChange={setIsChecked}
 			label={label}
