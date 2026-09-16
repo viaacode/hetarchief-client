@@ -165,6 +165,8 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 									menuPosition="fixed"
 									inputId={`text-filter-form-${filter.id}-operator-${index}`}
 									isDisabled={disabled}
+									// A handful of operators does not need a search box
+									isSearchable={false}
 									onFocus={() => {
 										setKeyboardFocusedOperator(isClickFocus.current ? null : index);
 										isClickFocus.current = false;
