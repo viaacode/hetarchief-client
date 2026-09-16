@@ -29,9 +29,6 @@ interface FlyoutPosition {
 	top: number;
 }
 
-/** Matches the max-height of the fly-out panel, so a clamped fly-out keeps clear of both edges. */
-const FLYOUT_SCREEN_EDGE_MARGIN = 40;
-
 const FilterOption: FC<FilterOptionProps> = ({
 	activeFilter,
 	filter,
@@ -92,11 +89,12 @@ const FilterOption: FC<FilterOptionProps> = ({
 				return;
 			}
 
-			const lowestTop = window.innerHeight - flyoutHeight - FLYOUT_SCREEN_EDGE_MARGIN;
+			// A fly-out may use the full window height, so it sits flush against the edges
+			const lowestTop = window.innerHeight - flyoutHeight;
 
 			setFlyoutPosition({
 				left: row.right,
-				top: Math.max(FLYOUT_SCREEN_EDGE_MARGIN, Math.min(row.top, lowestTop)),
+				top: Math.max(0, Math.min(row.top, lowestTop)),
 			});
 		};
 

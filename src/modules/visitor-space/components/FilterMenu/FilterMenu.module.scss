@@ -169,8 +169,8 @@ $checkbox-size: $spacer-sm;
 		position: fixed;
 		width: 46.4rem;
 
-		// Keeps a modal clear of both edges of a short window, and its own content scrolls
-		max-height: calc(100vh - #{$spacer-2xl});
+		// A modal may fill the window edge to edge in a short window, and its own content scrolls
+		max-height: 100vh;
 		background-color: $white;
 		z-index: 5;
 
