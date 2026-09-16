@@ -16,6 +16,7 @@
     "build:turbo": "biome ci && cross-env NODE_ENV=production next build --turbopack",
     "start-production-locally": "dotenv -e .env.local -- node ./scripts/generate-env-config.js && cross-env NODE_ENV=production next start -p 3200",
     "docker-start": "node ./scripts/generate-env-config.js && node ./scripts/copy-robots-txt-file.js && next start",
+    "update-icon-preview-page": "node ./scripts/generate-icon-font-preview.js",
     "install-pre-commit-hook": "lefthook install",
     "lint": "npm run lint:ts && npm run lint:scss",
     "lint:ts": "biome lint --write",
