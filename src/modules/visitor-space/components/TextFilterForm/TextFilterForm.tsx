@@ -19,7 +19,7 @@ import type {
 import { getOperators } from '@visitor-space/utils/advanced-filters';
 import { getSelectValue } from '@visitor-space/utils/select';
 import clsx from 'clsx';
-import { type FC, useRef, useState } from 'react';
+import { type FC, useLayoutEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import type { SingleValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
@@ -62,6 +62,27 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 	const [keyboardFocusedOperator, setKeyboardFocusedOperator] = useState<number | null>(null);
 	const isClickFocus = useRef(false);
 
+	// A condition added at the bottom of the scrolling list would otherwise stay out of view
+	const conditionsRef = useRef<HTMLDivElement>(null);
+	const shouldScrollToLastCondition = useRef(false);
+
+	// biome-ignore lint/correctness/useExhaustiveDependencies: retrigger effect after every condition added
+	useLayoutEffect(() => {
+		if (!shouldScrollToLastCondition.current) {
+			return;
+		}
+		shouldScrollToLastCondition.current = false;
+		const conditionsElement = conditionsRef.current;
+		if (conditionsElement) {
+			conditionsElement.scrollTop = conditionsElement.scrollHeight;
+		}
+	}, [conditions]);
+
+	const addCondition = (): void => {
+		shouldScrollToLastCondition.current = true;
+		setConditions([...conditions, emptyCondition(filter.id)]);
+	};
+
 	const { reset, handleSubmit } = useForm({ defaultValues: {} });
 	const operatorOptions = getOperators(filter.id);
 
@@ -92,6 +113,7 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 				{/* A text filter takes any number of conditions, so the list scrolls on its own and
 				    leaves the footer alone */}
 				<div
+					ref={conditionsRef}
 					className={clsx(
 						'c-filter-form__body--scrollable',
 						styles['c-text-filter-form__conditions']
@@ -191,7 +213,7 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 						'modules/visitor-space/components/text-filter-form/text-filter-form___voeg-voorwaarde-toe'
 					)}
 					variants="text"
-					onClick={() => setConditions([...conditions, emptyCondition(filter.id)])}
+					onClick={addCondition}
 				/>
 			</div>
 
