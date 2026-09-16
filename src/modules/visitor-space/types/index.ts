@@ -57,8 +57,8 @@ export enum SearchFilterId {
  * checkboxes, the date pickers and the duration filter.
  */
 export enum FilterModalType {
-	SearchableCheckbox = 'searchableCheckbox',
-	CheckboxList = 'checkboxList',
+	/** One checkbox per value. The form adds a search field itself once the list grows past ten. */
+	Checkbox = 'checkbox',
 	Autocomplete = 'autocomplete',
 	Text = 'text',
 }

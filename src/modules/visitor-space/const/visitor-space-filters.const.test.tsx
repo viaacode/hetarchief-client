@@ -47,14 +47,14 @@ const ALL_TABS = [
 
 /** The "Allocatie per filter" table of the FA of ARC-3806, as amended on 4 Sep 2026. */
 const FILTER_ID_TO_MODAL_TYPE: [SearchFilterId, FilterModalType | undefined][] = [
-	[SearchFilterId.Maintainers, FilterModalType.SearchableCheckbox],
-	[SearchFilterId.Medium, FilterModalType.SearchableCheckbox],
-	[SearchFilterId.Genre, FilterModalType.SearchableCheckbox],
-	[SearchFilterId.Rights, FilterModalType.SearchableCheckbox],
-	[SearchFilterId.LocationCreated, FilterModalType.SearchableCheckbox],
+	[SearchFilterId.Maintainers, FilterModalType.Checkbox],
+	[SearchFilterId.Medium, FilterModalType.Checkbox],
+	[SearchFilterId.Genre, FilterModalType.Checkbox],
+	[SearchFilterId.Rights, FilterModalType.Checkbox],
+	[SearchFilterId.LocationCreated, FilterModalType.Checkbox],
 
-	[SearchFilterId.Reusability, FilterModalType.CheckboxList],
-	[SearchFilterId.Language, FilterModalType.CheckboxList],
+	[SearchFilterId.Reusability, FilterModalType.Checkbox],
+	[SearchFilterId.Language, FilterModalType.Checkbox],
 
 	[SearchFilterId.NewspaperSeriesName, FilterModalType.Autocomplete],
 	[SearchFilterId.Creator, FilterModalType.Autocomplete],
@@ -147,7 +147,7 @@ describe('SEARCH_PAGE_FILTERS', () => {
 				({ id }) => id === SearchFilterId.Theme
 			);
 
-			expect(theme?.modalType).toEqual(FilterModalType.SearchableCheckbox);
+			expect(theme?.modalType).toEqual(FilterModalType.Checkbox);
 			expect(theme?.field).toEqual(IeObjectsSearchFilterField.THEME);
 		});
 

@@ -21,13 +21,13 @@ vi.mock('@visitor-space/hooks/get-filter-options', () => ({
 }));
 
 import { FilterModalType, SearchFilterId } from '@visitor-space/types';
-import { CheckboxListFilterForm } from './CheckboxListFilterForm';
+import { CheckboxListFilterForm, MAX_OPTIONS_WITHOUT_SEARCH } from './CheckboxListFilterForm';
 
 const LANGUAGE_FILTER = {
 	id: SearchFilterId.Language,
 	label: 'Taal',
 	field: IeObjectsSearchFilterField.LANGUAGE,
-	modalType: FilterModalType.CheckboxList,
+	modalType: FilterModalType.Checkbox,
 	type: FilterMenuType.Modal,
 	inMainPanelByDefault: false,
 	tabs: [],
@@ -45,6 +45,14 @@ const REUSABILITY_FILTER = {
 	],
 };
 
+const MAINTAINERS_FILTER = {
+	...LANGUAGE_FILTER,
+	id: SearchFilterId.Maintainers,
+	label: 'Aanbieder',
+	field: IeObjectsSearchFilterField.MAINTAINER_ID,
+	inMainPanelByDefault: true,
+};
+
 const renderForm = (filter = LANGUAGE_FILTER) => {
 	// biome-ignore lint/suspicious/noExplicitAny: the children callback shape is checked by the form
 	let latest: any;
@@ -59,6 +67,7 @@ const renderForm = (filter = LANGUAGE_FILTER) => {
 	return () => latest;
 };
 
+const searchField = () => screen.getByRole('textbox');
 const selectedValues = (getParams: () => { values: Record<string, string[]> }, id: string) =>
 	getParams().values[id];
 
@@ -67,16 +76,21 @@ const AGGREGATED_OPTIONS = [
 	{ label: 'Frans', value: 'fr' },
 ];
 
+/** Three named options the search tests use, padded out past the search threshold. */
+const MAINTAINER_OPTIONS = [
+	{ label: 'A Two Dogs Company', value: 'A Two Dogs Company' },
+	{ label: 'Compagnie Cecilia', value: 'Compagnie Cecilia' },
+	{ label: 'Amsab-ISG', value: 'Amsab-ISG' },
+	...Array.from({ length: MAX_OPTIONS_WITHOUT_SEARCH - 2 }, (_, index) => ({
+		label: `Filler ${index}`,
+		value: `filler-${index}`,
+	})),
+];
+
 describe('CheckboxListFilterForm', () => {
 	beforeEach(() => {
 		useGetFilterOptions.mockReset();
 		useGetFilterOptions.mockReturnValue({ options: AGGREGATED_OPTIONS, isLoading: false });
-	});
-
-	it('has no search field, unlike the searchable checkbox filter', () => {
-		renderForm();
-
-		expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
 	});
 
 	it('lists the aggregated options alphabetically', () => {
@@ -142,5 +156,84 @@ describe('CheckboxListFilterForm', () => {
 
 		expect(screen.getByLabelText('Bezig met laden')).toBeInTheDocument();
 		expect(screen.queryByText('geen waarden gevonden')).not.toBeInTheDocument();
+	});
+
+	// The list decides for itself whether it needs a search field: ARC-3806
+	describe('the search field', () => {
+		it('stays away for a list of at most ten options', () => {
+			useGetFilterOptions.mockReturnValue({
+				options: MAINTAINER_OPTIONS.slice(0, MAX_OPTIONS_WITHOUT_SEARCH),
+				isLoading: false,
+			});
+
+			renderForm(MAINTAINERS_FILTER);
+
+			expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+		});
+
+		it('appears once the list holds more than ten options', () => {
+			useGetFilterOptions.mockReturnValue({
+				options: MAINTAINER_OPTIONS,
+				isLoading: false,
+			});
+
+			renderForm(MAINTAINERS_FILTER);
+
+			expect(MAINTAINER_OPTIONS.length).toBeGreaterThan(MAX_OPTIONS_WITHOUT_SEARCH);
+			expect(searchField()).toBeInTheDocument();
+		});
+	});
+
+	describe('a list with a search field', () => {
+		beforeEach(() => {
+			useGetFilterOptions.mockReturnValue({ options: MAINTAINER_OPTIONS, isLoading: false });
+		});
+
+		it('lists every option it is given, alphabetically', () => {
+			renderForm(MAINTAINERS_FILTER);
+
+			const labels = screen
+				.getAllByText(/A Two Dogs Company|Amsab-ISG|Compagnie Cecilia/)
+				.map((element) => element.textContent);
+
+			expect(labels).toEqual(['A Two Dogs Company', 'Amsab-ISG', 'Compagnie Cecilia']);
+		});
+
+		// The FA of ARC-3806: searching and then selecting must not undo the earlier selection
+		it('keeps a selection made before a search', () => {
+			const getParams = renderForm(MAINTAINERS_FILTER);
+
+			fireEvent.click(screen.getByText('A Two Dogs Company'));
+			expect(selectedValues(getParams, SearchFilterId.Maintainers)).toEqual(['A Two Dogs Company']);
+
+			fireEvent.change(searchField(), { target: { value: 'compa' } });
+			expect(screen.queryByText('Amsab-ISG')).not.toBeInTheDocument();
+
+			fireEvent.click(screen.getByText('Compagnie Cecilia'));
+
+			expect(selectedValues(getParams, SearchFilterId.Maintainers)).toEqual([
+				'A Two Dogs Company',
+				'Compagnie Cecilia',
+			]);
+		});
+
+		it('shows nothing found when the search matches no option', () => {
+			renderForm(MAINTAINERS_FILTER);
+
+			fireEvent.change(searchField(), { target: { value: 'zzz' } });
+
+			expect(screen.getByText('geen waarden gevonden')).toBeInTheDocument();
+		});
+
+		it('takes a value out of the selection when it is unticked', () => {
+			const getParams = renderForm(MAINTAINERS_FILTER);
+
+			fireEvent.click(screen.getByText('Amsab-ISG'));
+			expect(selectedValues(getParams, SearchFilterId.Maintainers)).toEqual(['Amsab-ISG']);
+
+			fireEvent.click(screen.getByText('Amsab-ISG'));
+
+			expect(selectedValues(getParams, SearchFilterId.Maintainers)).toEqual([]);
+		});
 	});
 });

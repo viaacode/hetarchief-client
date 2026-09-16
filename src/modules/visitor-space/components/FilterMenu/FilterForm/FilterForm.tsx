@@ -4,7 +4,6 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { AutocompleteFilterForm } from '@visitor-space/components/AutocompleteFilterForm/AutocompleteFilterForm';
 import { CheckboxListFilterForm } from '@visitor-space/components/CheckboxListFilterForm/CheckboxListFilterForm';
-import { SearchableCheckboxFilterForm } from '@visitor-space/components/SearchableCheckboxFilterForm/SearchableCheckboxFilterForm';
 import { TextFilterForm } from '@visitor-space/components/TextFilterForm/TextFilterForm';
 import { visitorSpaceLabelKeys } from '@visitor-space/const/label-keys';
 import {
@@ -28,8 +27,7 @@ import type { FilterFormProps } from './FilterForm.types';
 const GENERIC_FILTER_FORM_BY_MODAL_TYPE: Partial<
 	Record<FilterModalType, FC<GenericFilterFormProps>>
 > = {
-	[FilterModalType.SearchableCheckbox]: SearchableCheckboxFilterForm,
-	[FilterModalType.CheckboxList]: CheckboxListFilterForm,
+	[FilterModalType.Checkbox]: CheckboxListFilterForm,
 	[FilterModalType.Autocomplete]: AutocompleteFilterForm,
 	[FilterModalType.Text]: TextFilterForm,
 };

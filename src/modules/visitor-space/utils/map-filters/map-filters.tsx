@@ -263,8 +263,7 @@ const mapFilterToTags = (
 		case FilterModalType.Text:
 			return mapTextFilterToTags(value as TextFilterCondition[], filter, options.locale);
 
-		case FilterModalType.SearchableCheckbox:
-		case FilterModalType.CheckboxList:
+		case FilterModalType.Checkbox:
 		case FilterModalType.Autocomplete: {
 			const values = (isString(value) ? [value] : (value as (string | null)[])).filter(
 				Boolean
@@ -275,8 +274,8 @@ const mapFilterToTags = (
 					? values.map((slug) => options.themeLabelsBySlug?.[slug] || slug)
 					: values,
 				filter.label,
-				// Only the searchable checkbox and the autocomplete filters carry "is". ARC-3806
-				filter.modalType === FilterModalType.CheckboxList
+				// Only the autocomplete filters carry "is". ARC-3806
+				filter.modalType === FilterModalType.Checkbox
 					? undefined
 					: tText('modules/visitor-space/utils/map-filters/map-filters___is'),
 				filter.id,
@@ -387,8 +386,7 @@ export const getQueryForRemainingTags = (
 				];
 				break;
 
-			case FilterModalType.SearchableCheckbox:
-			case FilterModalType.CheckboxList:
+			case FilterModalType.Checkbox:
 			case FilterModalType.Autocomplete:
 				// One pill holds every value of the filter, so a surviving pill keeps them all
 				updatedQuery[tag.key] = query[tag.key];

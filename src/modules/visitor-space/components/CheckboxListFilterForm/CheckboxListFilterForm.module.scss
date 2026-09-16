@@ -1,0 +1,18 @@
+@use "src/styles/abstracts" as *;
+
+/**
+ * The checkbox area sits on a grey band, between a white title and a white footer. The space the
+ * filter form puts above and below that area is split in half: half stays white, half turns grey.
+ */
+// The class is doubled so it wins from the padding .c-filter-form__body sets, whatever order the
+// two css modules end up in
+.c-checkbox-filter-form__body.c-checkbox-filter-form__body {
+	background-color: $platinum;
+
+	// .c-filter-form__body puts $spacer-md above and $spacer-xs below. Part of each moves out of
+	// the element as margin, so the band starts and ends inside that space.
+	padding-top: 2rem;
+	margin-top: calc($spacer-md / 2);
+	padding-bottom: 2rem;
+	margin-bottom: calc($spacer-xs / 2);
+}
