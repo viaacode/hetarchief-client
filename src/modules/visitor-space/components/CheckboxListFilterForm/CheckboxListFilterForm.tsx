@@ -91,7 +91,11 @@ export const CheckboxListFilterForm: FC<GenericFilterFormProps> = ({
 					/>
 				)}
 
-				<div className={isSearchable ? 'c-filter-form__body--scrollable' : 'c-filter-form__body'}>
+				<div
+					className={clsx(styles['c-checkbox-filter-form__list'], {
+						[styles['c-checkbox-filter-form__list--searchable']]: isSearchable,
+					})}
+				>
 					{isLoading && (
 						<div className="u-text-center">
 							<Spinner />

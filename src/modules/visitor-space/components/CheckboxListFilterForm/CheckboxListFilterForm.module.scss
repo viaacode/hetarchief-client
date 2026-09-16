@@ -16,3 +16,21 @@
 	padding-bottom: 2rem;
 	margin-bottom: calc($spacer-xs / 2);
 }
+
+/**
+ * The checkbox list scrolls inside the band rather than running past the footer. The band itself
+ * is a flex column of at most 50vh, so the list gives up the height the search field takes.
+ */
+.c-checkbox-filter-form__list {
+	@include styled-scrollbar;
+
+	overflow-y: auto;
+
+	// Without this a flex item refuses to shrink below the height of its content
+	min-height: 0;
+
+	&--searchable {
+		// The space the design puts between the search field and the first checkbox
+		margin-top: $spacer-md;
+	}
+}
