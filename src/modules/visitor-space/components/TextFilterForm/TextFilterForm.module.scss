@@ -1,0 +1,112 @@
+@use "src/styles/abstracts" as abstracts;
+
+// The design separates the description, every condition and the add CTA with a rule that runs the
+// full width of the modal, so the blocks carry the horizontal padding rather than the form.
+$text-filter-form-padding: abstracts.$spacer-lg;
+$text-filter-form-divider: 1px solid rgb(0 0 0 / 12%);
+
+.c-text-filter-form {
+	// The conditions block carries the space under the description, so this adds none of its own
+	&__description {
+		color: abstracts.$neutral;
+		font-size: abstracts.$font-size-base;
+		font-weight: abstracts.$font-weight-medium;
+		line-height: 2.4rem;
+		padding: 0 $text-filter-form-padding;
+	}
+
+	// The conditions and the add CTA sit on one tinted block that runs to both edges of the modal
+	&__conditions {
+		background-color: abstracts.$platinum;
+	}
+
+	&__condition {
+		padding: $text-filter-form-padding;
+		position: relative;
+
+		+ .c-text-filter-form__condition {
+			border-top: $text-filter-form-divider;
+		}
+	}
+
+	// "of" sits on the rule between two conditions, with the block color behind it
+	&__separator {
+		background-color: abstracts.$platinum;
+		color: abstracts.$neutral;
+		font-size: abstracts.$font-size-base;
+		left: abstracts.$spacer-md;
+		line-height: 2rem;
+		padding: 0 abstracts.$spacer-xs;
+		position: absolute;
+		top: 0;
+		transform: translateY(-50%);
+	}
+
+	// The operator reads as part of the sentence, so it drops the box a select normally has. The
+	// control still runs the full width, which is what the user clicks and how wide the menu opens.
+	&__operator {
+		:global(.c-react-select__control) {
+			background-color: transparent;
+			border: 0;
+			box-shadow: none;
+			justify-content: flex-start;
+			min-height: 0;
+		}
+
+		// The shared react-select style paints a grey outline on hover and a teal one on focus,
+		// which a borderless operator should not get. Those rules carry !important, so these have
+		// to outweigh them.
+		:global(.c-react-select .c-react-select__control) {
+			outline-color: transparent !important;
+		}
+
+		// Other selects mark focus with a teal border, which a borderless operator cannot show.
+		// Only keyboard focus should get it, and :focus-visible cannot say which it is here, since
+		// react-select moves focus to a text input, which the browser always counts as keyboard
+		// focus. So TextFilterForm sets this class from the events instead.
+		&--keyboard-focus :global(.c-react-select .c-react-select__control) {
+			outline-color: abstracts.$teal !important;
+		}
+
+		:global(.c-react-select__single-value) {
+			font-weight: abstracts.$font-weight-medium;
+		}
+
+		// The value keeps the caret at its side instead of pushing it to the far edge
+		:global(.c-react-select__value-container) {
+			flex: 0 0 auto;
+			padding-left: 0;
+		}
+	}
+
+	&__operator-icon {
+		color: abstracts.$black;
+		font-size: abstracts.$font-size-lg;
+	}
+
+	&__value {
+		align-items: center;
+		display: flex;
+		gap: abstracts.$spacer-sm;
+		margin-top: abstracts.$spacer-xs;
+
+		> :first-child {
+			flex: 1 1 auto;
+			min-width: 0;
+		}
+	}
+
+	&__add:global(.c-button) {
+		background-color: abstracts.$platinum;
+		border-radius: 0;
+		border-top: $text-filter-form-divider;
+		padding: abstracts.$spacer-md $text-filter-form-padding;
+		text-align: left;
+		width: 100%;
+
+		:global(.c-button__content) {
+			justify-content: flex-start;
+			width: 100%;
+		}
+	}
+}

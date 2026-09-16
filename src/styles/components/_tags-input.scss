@@ -26,10 +26,6 @@
 			line-height: inherit;
 			color: inherit;
 			word-break: break-word;
-
-			@media (min-width: abstracts.$breakpoint-md) {
-				margin: abstracts.$spacer-xxs abstracts.$spacer-sm abstracts.$spacer-xxs 0;
-			}
 		}
 	}
 

@@ -1,0 +1,47 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-advanced-filter-flyout {
+	@include abstracts.styled-scrollbar;
+
+	display: flex;
+	flex-direction: column;
+	gap: abstracts.$spacer-xxs;
+
+	// The fly-out sits centered in the window, so this cap keeps it clear of both edges and scrolls
+	// the rest. See the "Redesign van geavanceerde filters" section of the FA of ARC-3806.
+	max-height: calc(100vh - #{abstracts.$spacer-2xl});
+	margin: 0;
+
+	// The hover state runs the full width of the fly-out, so the rows carry the side padding
+	padding: abstracts.$spacer-md 0;
+	overflow-y: auto;
+	list-style: none;
+
+	&__filter {
+		@include abstracts.focus-outline;
+
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: abstracts.$spacer-sm;
+		width: 100%;
+		padding: abstracts.$spacer-xs abstracts.$spacer-md;
+		color: abstracts.$black;
+		font-family: inherit;
+		font-size: abstracts.$font-size-base;
+		line-height: abstracts.$line-height-1xl;
+		text-align: left;
+		background: none;
+		border: 0;
+		cursor: pointer;
+
+		&:hover {
+			background-color: abstracts.$platinum;
+		}
+	}
+
+	&__icon {
+		flex-shrink: 0;
+		font-size: abstracts.$font-size-lg;
+	}
+}

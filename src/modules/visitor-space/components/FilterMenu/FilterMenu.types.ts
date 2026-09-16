@@ -1,11 +1,12 @@
 import type { IconName } from '@shared/components/Icon';
 import type { ToggleOption } from '@shared/components/Toggle';
 import type { DefaultComponentProps, SortObject } from '@shared/types';
-import type { SearchPageMediaType } from '@shared/types/ie-objects';
+import type { IeObjectsSearchFilterField, SearchPageMediaType } from '@shared/types/ie-objects';
 import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import type { FC, ReactNode } from 'react';
 import type {
 	DefaultFilterFormProps,
+	FilterModalType,
 	InlineFilterFormProps,
 	SearchFilterId,
 	SearchSortProp,
@@ -17,6 +18,9 @@ export interface FilterMenuProps extends DefaultComponentProps {
 	activeSort?: SortObject;
 	filters?: FilterMenuFilterOption[];
 	filterValues?: Record<string, unknown>;
+	/** The list the advanced fly-out shows: every filter of this tab that opens a modal. */
+	flyoutFilters?: FilterMenuFilterOption[];
+	onFlyoutFilterClick?: (filterId: SearchFilterId) => void;
 	label?: string;
 	isOpen?: boolean;
 	isMobileOpen?: boolean;
@@ -45,9 +49,22 @@ export interface FilterMenuFilterOption {
 	id: SearchFilterId;
 	icon?: IconName;
 	label: string;
+	/** For a filter the advanced fly-out names differently than the panel does, e.g. ARC-3806. */
+	flyoutLabel?: string;
+	/**
+	 * A form component of its own. Leave it out for the four generic modal types of ARC-3806;
+	 * FilterForm then picks the generic form that belongs to `modalType`.
+	 */
 	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
-	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps<any>> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
+	form?: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps<any>> | FC<any> | null; // eslint-disable-line @typescript-eslint/no-explicit-any
 	type: FilterMenuType;
+	modalType?: FilterModalType;
+	/** The elasticsearch field this filter queries. Drives its option list and its query clauses. */
+	field?: IeObjectsSearchFilterField;
+	/** A fixed value list, for a filter whose options do not come from an aggregation. */
+	options?: () => { label: string; value: string }[];
+	/** Does this filter sit in the filter panel before the user picks it from the advanced fly-out? */
+	inMainPanelByDefault: boolean;
 	isDisabled?: () => boolean;
 	tabs: SearchPageMediaType[];
 }

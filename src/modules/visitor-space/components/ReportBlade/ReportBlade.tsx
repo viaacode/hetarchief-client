@@ -1,0 +1,547 @@
+import { FormControl, RadioButton, TextArea, TextInput } from '@meemoo/react-components';
+import { Blade } from '@shared/components/Blade/Blade';
+import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
+import { ConfirmModalBeforeUnload } from '@shared/components/ConfirmModalBeforeUnload';
+import { CopyButton } from '@shared/components/CopyButton';
+import MaxLengthIndicator from '@shared/components/FormControl/MaxLengthIndicator';
+import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
+import { tHtml, tText } from '@shared/helpers/translate';
+import { validateForm } from '@shared/helpers/validate-form';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
+import { useIeObjectSupportTicket } from '@shared/hooks/use-zendesk';
+import { toastService } from '@shared/services/toast-service';
+import {
+	GET_LEGAL_REASON_OPTIONS,
+	GET_REPORT_OPTIONS,
+	LEGAL_REMARK_SCHEMA,
+	REPORT_FORM_SCHEMA,
+	REPORT_REMARK_MAX_LENGTH,
+} from '@visitor-space/components/ReportBlade/ReportBlade.const';
+import {
+	buildAiMeemooUrl,
+	buildMamUrl,
+	isOwnOrganisation,
+	sanitizeReportText,
+} from '@visitor-space/components/ReportBlade/ReportBlade.helpers';
+import clsx from 'clsx';
+import { type FC, type ReactNode, useCallback, useEffect, useState } from 'react';
+import type { Schema } from 'yup';
+
+import styles from './ReportBlade.module.scss';
+import type {
+	IeObjectSupportPayload,
+	ReportBladeProps,
+	ReportLegalReason,
+} from './ReportBlade.types';
+import { ReportReason } from './ReportBlade.types';
+
+const ReportBlade: FC<ReportBladeProps> = (props) => {
+	const { user, mediaInfo } = props;
+	const locale = useLocale();
+	const isKeyUser = useIsKeyUser();
+	const isOwnOrg = isOwnOrganisation(user, mediaInfo?.maintainerId);
+	const mamUrl = buildMamUrl(mediaInfo?.fragmentId);
+	const aiMeemooUrl = buildAiMeemooUrl(mediaInfo?.fragmentId);
+	const { mutateAsync: createIeObjectSupportTicket } = useIeObjectSupportTicket();
+
+	const [selectedReportReason, setSelectedReportReason] = useState<ReportReason | null>(null);
+	const [legalReason, setLegalReason] = useState<ReportLegalReason | null>(null);
+	const [legalRemarkText, setLegalRemarkText] = useState<string>('');
+	const [generalQuestionMessage, setGeneralQuestionMessage] = useState<string>('');
+	const [metadataIssueMessage, setMetadataIssueMessage] = useState<string>('');
+	const [email, setEmail] = useState<string>('');
+	const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+	const [formErrors, setFormErrors] = useState<Record<string, string | undefined>>({});
+
+	const resolvedEmail = user?.email || email;
+
+	/**
+	 * Methods
+	 */
+
+	const resetForm = useCallback(() => {
+		setSelectedReportReason(null);
+		setLegalReason(null);
+		setLegalRemarkText('');
+		setGeneralQuestionMessage('');
+		setMetadataIssueMessage('');
+		setEmail(user?.email || '');
+		setFormErrors({});
+	}, [user?.email]);
+
+	/**
+	 * Effects
+	 */
+
+	useEffect(() => {
+		if (user?.email) {
+			setEmail(user.email);
+		}
+	}, [user?.email]);
+
+	useEffect(() => {
+		if (props.isOpen) {
+			resetForm();
+		}
+	}, [props.isOpen, resetForm]);
+
+	/**
+	 * Events
+	 */
+
+	const onCloseBlade = () => {
+		props.onClose?.();
+	};
+
+	const onFailedRequest = () => {
+		toastService.notify({
+			title: tHtml('modules/visitor-space/components/report-blade/report-blade___er-ging-iets-mis'),
+			description: tHtml(
+				'modules/visitor-space/components/report-blade/report-blade___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-later-opnieuw'
+			),
+		});
+	};
+
+	const onSuccessfulRequest = () => {
+		toastService.notify({
+			title: tHtml('modules/visitor-space/components/report-blade/report-blade___gerapporteerd'),
+			description: tHtml(
+				'modules/visitor-space/components/report-blade/report-blade___uw-bericht-werd-succesvol-verstuurd'
+			),
+		});
+		resetForm();
+		onCloseBlade();
+	};
+
+	const onMissingSubmissionData = () => {
+		toastService.notify({
+			title: tHtml('modules/visitor-space/components/report-blade/report-blade___er-ging-iets-mis'),
+			description: tHtml(
+				'modules/visitor-space/components/report-blade/report-blade___dit-object-kan-momenteel-niet-gerapporteerd-worden-probeer-het-later-opnieuw-of-neem-contact-op-met-meemoo'
+			),
+		});
+	};
+
+	const validateAndSetErrors = async (
+		formValues: Record<string, unknown>,
+		schema: Schema<unknown>
+	): Promise<boolean> => {
+		const errors = await validateForm(formValues, schema);
+		if (errors) {
+			setFormErrors(errors);
+			return false;
+		}
+		return true;
+	};
+
+	const submitReport = async (
+		payload: Omit<IeObjectSupportPayload, 'locale' | 'url' | 'email' | 'name'>
+	): Promise<void> => {
+		await createIeObjectSupportTicket({
+			locale,
+			url: window.location.href,
+			email: resolvedEmail,
+			name:
+				user?.fullName ||
+				tText(
+					'modules/visitor-space/components/report-blade/report-blade___niet-ingelogde-gebruiker'
+				),
+			...payload,
+		});
+		onSuccessfulRequest();
+	};
+
+	const submitGeneralQuestion = async () => {
+		const sanitizedMessage = sanitizeReportText(generalQuestionMessage);
+		const isValid = await validateAndSetErrors(
+			{ reportMessage: sanitizedMessage, email: resolvedEmail },
+			REPORT_FORM_SCHEMA()
+		);
+		if (!isValid) {
+			return;
+		}
+
+		await submitReport({ reportReason: ReportReason.GENERAL_QUESTION, message: sanitizedMessage });
+	};
+
+	const submitLegalRemark = async () => {
+		const sanitizedMessage = sanitizeReportText(legalRemarkText);
+		const isValid = await validateAndSetErrors(
+			{
+				legalReason: legalReason || undefined,
+				legalRemarkText: sanitizedMessage,
+				email: resolvedEmail,
+			},
+			LEGAL_REMARK_SCHEMA()
+		);
+		if (!isValid) {
+			return;
+		}
+
+		await submitReport({
+			reportReason: ReportReason.LEGAL_REMARK,
+			reportLegalReason: legalReason as ReportLegalReason,
+			message: sanitizedMessage,
+		});
+	};
+
+	const submitMetadataIssue = async () => {
+		const sanitizedMessage = sanitizeReportText(metadataIssueMessage);
+		const isValid = await validateAndSetErrors(
+			{ reportMessage: sanitizedMessage, email: resolvedEmail },
+			REPORT_FORM_SCHEMA()
+		);
+		if (!isValid) {
+			return;
+		}
+
+		const maintainerId = mediaInfo?.maintainerId;
+		if (!maintainerId || !mamUrl || !aiMeemooUrl) {
+			// Must never silently happen: the provider email needs both links and a
+			// resolvable maintainer, so block submission entirely instead.
+			onMissingSubmissionData();
+			return;
+		}
+
+		await submitReport({
+			reportReason: ReportReason.METADATA_ISSUE,
+			message: sanitizedMessage,
+			maintainerId,
+			mamUrl,
+			aiMeemooUrl,
+		});
+	};
+
+	const handleSubmit = async () => {
+		if (!selectedReportReason) {
+			setFormErrors({
+				selectedReportReason: tText(
+					'modules/visitor-space/components/report-blade/report-blade___kies-een-van-de-bovenstaande-opties'
+				),
+			});
+			return;
+		}
+
+		try {
+			setIsSubmittingForm(true);
+			setFormErrors({});
+
+			if (selectedReportReason === ReportReason.GENERAL_QUESTION) {
+				await submitGeneralQuestion();
+				return;
+			}
+			if (selectedReportReason === ReportReason.LEGAL_REMARK) {
+				await submitLegalRemark();
+				return;
+			}
+			await submitMetadataIssue();
+		} catch (_err) {
+			onFailedRequest();
+		} finally {
+			setIsSubmittingForm(false);
+		}
+	};
+
+	/**
+	 * Render
+	 */
+
+	const getPrimaryButtonLabels = (): {
+		label: string;
+		mobileLabel: string;
+	} => {
+		if (selectedReportReason === ReportReason.LEGAL_REMARK) {
+			return {
+				label: tText(
+					'modules/visitor-space/components/report-blade/report-blade___verstuur-opmerking'
+				),
+				mobileLabel: tText(
+					'modules/visitor-space/components/report-blade/report-blade___verstuur-opmerking-mobiel'
+				),
+			};
+		}
+		if (selectedReportReason === ReportReason.METADATA_ISSUE && isOwnOrg) {
+			return {
+				label: tText('modules/visitor-space/components/report-blade/report-blade___sluiten'),
+				mobileLabel: tText(
+					'modules/visitor-space/components/report-blade/report-blade___sluiten-mobiel'
+				),
+			};
+		}
+		// Default (nothing selected yet), GENERAL_QUESTION, and METADATA_ISSUE (other org)
+		return {
+			label: tText('modules/visitor-space/components/report-blade/report-blade___rapporteer'),
+			mobileLabel: tText(
+				'modules/visitor-space/components/report-blade/report-blade___rapporteer-mobiel'
+			),
+		};
+	};
+
+	const getFooterButtons = (): BladeFooterButtonProps => {
+		const { label, mobileLabel } = getPrimaryButtonLabels();
+
+		if (selectedReportReason === ReportReason.METADATA_ISSUE && isOwnOrg) {
+			return [
+				{
+					label,
+					mobileLabel,
+					type: 'primary',
+					onClick: onCloseBlade,
+				},
+			];
+		}
+
+		return [
+			{
+				label,
+				mobileLabel,
+				type: 'primary',
+				onClick: handleSubmit,
+				disabled: !selectedReportReason || isSubmittingForm,
+			},
+			{
+				label: tText('modules/visitor-space/components/report-blade/report-blade___annuleer'),
+				mobileLabel: tText(
+					'modules/visitor-space/components/report-blade/report-blade___annuleer-mobiel'
+				),
+				type: 'secondary',
+				onClick: onCloseBlade,
+			},
+		];
+	};
+
+	const renderEmailField = () => (
+		<FormControl
+			className={clsx({
+				[styles['c-report-blade__input--disabled']]: !!user?.email,
+			})}
+			errors={[<RedFormWarning error={formErrors.email} key="form-error--email" />]}
+			id="email"
+			label={tHtml('modules/visitor-space/components/report-blade/report-blade___email-adres')}
+		>
+			<TextInput
+				type="email"
+				id="email"
+				name="email"
+				autoComplete="email"
+				disabled={!!user?.email}
+				value={resolvedEmail}
+				onChange={(evt) => {
+					if (user?.email) {
+						return;
+					}
+					setEmail(evt.currentTarget.value);
+				}}
+				ariaLabel={tText(
+					'modules/visitor-space/components/report-blade/report-blade___jouw-email-adres-input-aria-label'
+				)}
+			/>
+		</FormControl>
+	);
+
+	const renderReportMessageField = (value: string, onChange: (value: string) => void) => (
+		<FormControl
+			className="u-mb-24"
+			errors={[
+				<div className="u-flex" key="form-error--legal-remark">
+					<RedFormWarning error={formErrors.reportMessage} />
+					<MaxLengthIndicator maxLength={REPORT_REMARK_MAX_LENGTH} value={value} />
+				</div>,
+			]}
+			id="reportMessage"
+			label={tText('modules/visitor-space/components/report-blade/report-blade___opmerking')}
+		>
+			<TextArea
+				id="reportMessage"
+				name="reportMessage"
+				value={value}
+				maxLength={REPORT_REMARK_MAX_LENGTH}
+				onChange={(evt) => onChange(evt.target.value)}
+				ariaLabel={tText(
+					'modules/visitor-space/components/report-blade/report-blade___beschrijf-het-probleem-input-aria-label'
+				)}
+			/>
+		</FormControl>
+	);
+
+	const renderLegalReasonOptions = () => (
+		<>
+			{GET_LEGAL_REASON_OPTIONS().map((option) => (
+				<RadioButton
+					key={option.value}
+					className={styles['c-report-blade__radio-button']}
+					label={option.label}
+					aria-label={option.label}
+					checked={legalReason === option.value}
+					onClick={() => setLegalReason(option.value)}
+				/>
+			))}
+			<RedFormWarning className="u-mt-16" error={formErrors.legalReason} />
+		</>
+	);
+
+	const renderLegalRemarkTextArea = () => (
+		<FormControl
+			className="u-mb-24 u-mt-24"
+			errors={[
+				<div className="u-flex" key="form-error--legal-remark">
+					<RedFormWarning error={formErrors.legalRemarkText} />
+					<MaxLengthIndicator maxLength={REPORT_REMARK_MAX_LENGTH} value={legalRemarkText} />
+				</div>,
+			]}
+			id="legalRemarkText"
+			label={tText('modules/visitor-space/components/report-blade/report-blade___opmerking')}
+		>
+			<TextArea
+				id="legalRemarkText"
+				name="legalRemarkText"
+				value={legalRemarkText}
+				maxLength={REPORT_REMARK_MAX_LENGTH}
+				onChange={(evt) => setLegalRemarkText(evt.target.value)}
+				ariaLabel={tText('modules/visitor-space/components/report-blade/report-blade___opmerking')}
+			/>
+		</FormControl>
+	);
+
+	const renderMetadataIssueLink = (
+		url: string | null,
+		label: string,
+		tooltip: string
+	): ReactNode => (
+		<div className={styles['c-report-blade__hyperlink']}>
+			{url ? (
+				<a
+					href={url}
+					target="_blank"
+					rel="noreferrer"
+					className={styles['c-report-blade__hyperlink-text']}
+				>
+					{label}
+				</a>
+			) : (
+				<span className={styles['c-report-blade__hyperlink-text']}>{label}</span>
+			)}
+			<CopyButton
+				text={url || ''}
+				disabled={!url}
+				variants={['sm', 'text']}
+				tooltipText={tooltip}
+				tooltipPosition="left"
+			/>
+		</div>
+	);
+
+	const renderExtraFieldsSection = () => {
+		if (!selectedReportReason) {
+			return null;
+		}
+
+		if (selectedReportReason === ReportReason.METADATA_ISSUE && isOwnOrg) {
+			return (
+				<>
+					<hr className={styles['c-report-blade__divider']} />
+					<h3 className={styles['c-report-blade__subtitle']}>
+						{tHtml(
+							'modules/visitor-space/components/report-blade/report-blade___gebruik-deze-links-om-de-metadata-aan-te-laten-passen-in-het-meemoo-archiefsysteem-of-op-ai-meemoo-be'
+						)}
+					</h3>
+					{renderMetadataIssueLink(
+						mamUrl,
+						tText(
+							'modules/visitor-space/components/report-blade/report-blade___bewerk-object-in-het-mam'
+						),
+						tText('modules/visitor-space/components/report-blade/report-blade___kopieer-link-mam')
+					)}
+					{renderMetadataIssueLink(
+						aiMeemooUrl,
+						tText(
+							'modules/visitor-space/components/report-blade/report-blade___bewerk-object-op-ai-meemoo-be'
+						),
+						tText(
+							'modules/visitor-space/components/report-blade/report-blade___kopieer-link-ai-meemoo-be'
+						)
+					)}
+				</>
+			);
+		}
+
+		return (
+			<>
+				<hr className={styles['c-report-blade__divider']} />
+				<h3 className={styles['c-report-blade__subtitle']}>
+					{tHtml(
+						'modules/visitor-space/components/report-blade/report-blade___beschrijf-het-probleem'
+					)}
+				</h3>
+				{selectedReportReason === ReportReason.GENERAL_QUESTION && (
+					<>
+						{renderReportMessageField(generalQuestionMessage, setGeneralQuestionMessage)}
+						{renderEmailField()}
+					</>
+				)}
+				{selectedReportReason === ReportReason.METADATA_ISSUE && (
+					<>
+						{renderReportMessageField(metadataIssueMessage, setMetadataIssueMessage)}
+						{renderEmailField()}
+					</>
+				)}
+				{selectedReportReason === ReportReason.LEGAL_REMARK && (
+					<>
+						{renderLegalReasonOptions()}
+						{renderLegalRemarkTextArea()}
+						{renderEmailField()}
+					</>
+				)}
+			</>
+		);
+	};
+
+	const hasUnsavedReportChanges = (): boolean =>
+		!!legalRemarkText || !!generalQuestionMessage || !!metadataIssueMessage;
+
+	return (
+		<Blade
+			id={props.id}
+			className={clsx(props.className, styles['c-report-blade'])}
+			isOpen={props.isOpen}
+			onClose={onCloseBlade}
+			title={tText('modules/visitor-space/components/report-blade/report-blade___rapporteren')}
+			footerButtons={getFooterButtons()}
+			isBladeInvalid={
+				!!formErrors.selectedReportReason ||
+				!!formErrors.reportMessage ||
+				!!formErrors.email ||
+				!!formErrors.legalReason ||
+				!!formErrors.legalRemarkText
+			}
+			ariaLabel={props.ariaLabel}
+		>
+			<h3 className={styles['c-report-blade__subtitle']}>
+				{tHtml(
+					'modules/visitor-space/components/report-blade/report-blade___wat-wil-je-rapporteren'
+				)}
+			</h3>
+			{GET_REPORT_OPTIONS(isKeyUser, isOwnOrg).map((option) => (
+				<RadioButton
+					key={option.value}
+					className={styles['c-report-blade__radio-button']}
+					label={option.label}
+					aria-label={option.label}
+					checked={selectedReportReason === option.value}
+					onClick={() => setSelectedReportReason(option.value)}
+				/>
+			))}
+			<RedFormWarning className="u-mt-16" error={formErrors.selectedReportReason} />
+			{renderExtraFieldsSection()}
+			<ConfirmModalBeforeUnload
+				when={hasUnsavedReportChanges()}
+				message={tText(
+					'modules/visitor-space/components/report-blade/report-blade___ben-je-zeker-dat-je-dit-venster-wilt-sluiten-hiermee-gaat-je-opmerking-verloren'
+				)}
+			/>
+		</Blade>
+	);
+};
+
+export default ReportBlade;

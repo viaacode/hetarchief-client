@@ -20,6 +20,8 @@ declare global {
 			readonly ENABLE_MATERIAL_REQUEST_COMPLEX_REUSE_FLOW: 'true' | 'false';
 			readonly DISABLE_COMPLEX_REUSE_FLOW_FOR_ORGANISATIONS: string;
 			readonly ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY: 'true' | 'false';
+			readonly AI_MEEMOO_FRAGMENT_URL: string;
+			readonly MAM_FRAGMENT_URL: string;
 		}
 	}
 
