@@ -18,6 +18,14 @@
 }
 
 /**
+ * The magnifier the search field ends with. The clear cross sits next to it in the same slot and
+ * keeps its own colour, so only the last button is targeted.
+ */
+.c-checkbox-filter-form__search :global(.c-input__icon--end) > :last-child {
+	color: #757575;
+}
+
+/**
  * The checkbox list scrolls inside the band rather than running past the footer. The band itself
  * is a flex column of at most 50vh, so the list gives up the height the search field takes.
  */

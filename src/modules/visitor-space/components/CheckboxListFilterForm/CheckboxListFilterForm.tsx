@@ -76,6 +76,7 @@ export const CheckboxListFilterForm: FC<GenericFilterFormProps> = ({
 			>
 				{isSearchable && (
 					<SearchBar
+						className={styles['c-checkbox-filter-form__search']}
 						id={`${visitorSpaceLabelKeys.filters.title}--${filter.id}`}
 						value={search}
 						variants={['rounded', 'grey', 'icon--double', 'icon-clickable']}
