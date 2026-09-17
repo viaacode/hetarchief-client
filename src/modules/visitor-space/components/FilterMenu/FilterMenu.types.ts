@@ -78,4 +78,8 @@ export enum AutocompleteField {
 	locationCreated = 'locationCreated',
 	newspaperSeriesName = 'newspaperSeriesName',
 	mentions = 'mentions',
+	// AI detected mentions, split per entity type. Key users only.
+	mentionPerson = 'mentionPerson',
+	mentionPlace = 'mentionPlace',
+	mentionOrganisation = 'mentionOrganisation',
 }

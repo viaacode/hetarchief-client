@@ -210,6 +210,27 @@ export const SEARCH_PAGE_FILTERS = (
 			tabs: NEWSPAPER_TABS,
 		},
 		// Reachable through the advanced fly-out, which sorts them alphabetically itself.
+		// The AI detected mentions, split per entity type. The proxy serves both their autocomplete
+		// options and their search to key users only, so hide them from everybody else.
+		...[
+			{ id: SearchFilterId.MentionPerson, field: IeObjectsSearchFilterField.MENTION_PERSON },
+			{ id: SearchFilterId.MentionPlace, field: IeObjectsSearchFilterField.MENTION_PLACE },
+			{
+				id: SearchFilterId.MentionOrganisation,
+				field: IeObjectsSearchFilterField.MENTION_ORGANISATION,
+			},
+		].map(
+			({ id, field }): FilterMenuFilterOption => ({
+				id,
+				label: getFilterLabel(id),
+				type: FilterMenuType.Modal,
+				modalType: FilterModalType.Autocomplete,
+				field,
+				inMainPanelByDefault: false,
+				tabs: ALL_TABS,
+				isDisabled: () => !isKeyUser,
+			})
+		),
 		{
 			id: SearchFilterId.Genre,
 			label: getFilterLabel(SearchFilterId.Genre),
