@@ -1,7 +1,9 @@
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { FilterMenuType } from '@visitor-space/components/FilterMenu/FilterMenu.types';
+import { FilterModalType, SearchFilterId } from '@visitor-space/types';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { CheckboxListFilterForm, MAX_OPTIONS_WITHOUT_SEARCH } from './CheckboxListFilterForm';
 
 vi.mock('@shared/helpers/translate', () => ({
 	tText: (key: string) => key.split('___').pop()?.replaceAll('-', ' ') || '',
@@ -20,11 +22,9 @@ vi.mock('@visitor-space/hooks/get-filter-options', () => ({
 		(useGetFilterOptions as unknown as (...a: unknown[]) => unknown)(...args),
 }));
 
-import { FilterModalType, SearchFilterId } from '@visitor-space/types';
-import { CheckboxListFilterForm, MAX_OPTIONS_WITHOUT_SEARCH } from './CheckboxListFilterForm';
-
 const LANGUAGE_FILTER = {
 	id: SearchFilterId.Language,
+	// No tText since this is a test file
 	label: 'Taal',
 	field: IeObjectsSearchFilterField.LANGUAGE,
 	modalType: FilterModalType.Checkbox,
@@ -35,22 +35,29 @@ const LANGUAGE_FILTER = {
 
 /** Herbruikbaarheid brings its own list, so it never queries the aggregations. */
 const REUSABILITY_FILTER = {
-	...LANGUAGE_FILTER,
 	id: SearchFilterId.Reusability,
+	// No tText since this is a test file
 	label: 'Herbruikbaarheid',
 	field: IeObjectsSearchFilterField.REUSABILITY,
 	options: () => [
 		{ label: 'Publiek domein', value: 'public-domain' },
 		{ label: 'Copyright onbepaald', value: 'copyright-undetermined' },
 	],
+	modalType: FilterModalType.Checkbox,
+	type: FilterMenuType.Modal,
+	inMainPanelByDefault: false,
+	tabs: [],
 };
 
 const MAINTAINERS_FILTER = {
-	...LANGUAGE_FILTER,
 	id: SearchFilterId.Maintainers,
+	// No tText since this is a test file
 	label: 'Aanbieder',
 	field: IeObjectsSearchFilterField.MAINTAINER_ID,
+	modalType: FilterModalType.Checkbox,
+	type: FilterMenuType.Modal,
 	inMainPanelByDefault: true,
+	tabs: [],
 };
 
 const renderForm = (filter = LANGUAGE_FILTER) => {

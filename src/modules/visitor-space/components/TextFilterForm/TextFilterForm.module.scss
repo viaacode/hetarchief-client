@@ -53,7 +53,7 @@ $text-filter-form-divider: 1px solid rgb(0 0 0 / 12%);
 	// control still runs the full width, which is what the user clicks and how wide the menu opens.
 	&__operator {
 		// The operator labels are short, so the control and the menu it opens stay narrow
-		max-width: 14rem;
+		max-width: 18rem;
 
 		:global(.c-react-select__control) {
 			background-color: transparent;
