@@ -4,9 +4,11 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
-import React, { type FC, useState } from 'react';
+import React, { type FC, useEffect, useState } from 'react';
 
 import styles from './ContextDisclaimer.module.scss';
+
+const AUTO_HIDE_TIMEOUT = 5_000;
 
 /**
  * Tells the user that the content itself was made within a context (historical, societal, ...)
@@ -19,6 +21,11 @@ export const ContextDisclaimer: FC<ContextDisclaimerProps> = ({ className }) => 
 	const showLabel = tText(
 		'modules/ie-objects/components/context-disclaimer/context-disclaimer___toon-de-context-van-dit-fragment'
 	);
+
+	useEffect(() => {
+		const timeoutId = setTimeout(() => setIsActive(false), AUTO_HIDE_TIMEOUT);
+		return () => clearTimeout(timeoutId);
+	}, []);
 
 	if (!isActive) {
 		return (
