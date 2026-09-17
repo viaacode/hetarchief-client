@@ -4,10 +4,16 @@
 .c-filter-form {
 	display: flex;
 	flex-direction: column;
-	height: max-content;
 
 	// Lets the modal shrink inside a short window instead of running off it
 	min-height: 0;
+
+	// The desktop modal is only as tall as its content. On mobile the form fills the blade instead,
+	// so the footer lands against the bottom of the screen: the height the mobile menu sets on this
+	// same element must win.
+	@media (min-width: $breakpoint-md) {
+		height: max-content;
+	}
 }
 
 /**
@@ -49,8 +55,11 @@
 	// Allow three-option dropdowns to not be cut off
 	padding-bottom: $spacer-xs;
 
+	// On mobile the body takes every pixel between the title and the footer, so the 50vh cap of the
+	// desktop modal would keep the footer floating halfway up the screen
 	@media (max-width: $breakpoint-md) {
 		flex-grow: 1;
+		max-height: none;
 	}
 
 	// Ensure dropdowns fit in the minimal body (1 default field & add-new button)

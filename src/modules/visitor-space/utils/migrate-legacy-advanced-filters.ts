@@ -54,8 +54,7 @@ export const migrateLegacyAdvancedFilters = (
 				];
 				break;
 
-			case FilterModalType.SearchableCheckbox:
-			case FilterModalType.CheckboxList:
+			case FilterModalType.Checkbox:
 			case FilterModalType.Autocomplete:
 				changes[filterId] = [...((changes[filterId] as string[]) || []), legacyFilter.val];
 				break;

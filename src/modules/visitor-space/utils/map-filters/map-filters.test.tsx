@@ -39,7 +39,7 @@ const filter = (
 
 const GENRE_FILTER = filter(
 	SearchFilterId.Genre,
-	FilterModalType.SearchableCheckbox,
+	FilterModalType.Checkbox,
 	'Genre',
 	IeObjectsSearchFilterField.GENRE
 );
@@ -51,14 +51,14 @@ const TITLE_FILTER = filter(
 );
 const MAINTAINERS_FILTER = filter(
 	SearchFilterId.Maintainers,
-	FilterModalType.SearchableCheckbox,
+	FilterModalType.Checkbox,
 	'Aanbieder',
 	IeObjectsSearchFilterField.MAINTAINER_ID
 );
 
 const THEME_FILTER = filter(
 	SearchFilterId.Theme,
-	FilterModalType.SearchableCheckbox,
+	FilterModalType.Checkbox,
 	'Thema',
 	IeObjectsSearchFilterField.THEME
 );
@@ -160,26 +160,37 @@ describe('Utils', () => {
 			const tags = toTags({ [SearchFilterId.Genre]: ['concert'] }, [GENRE_FILTER]);
 
 			expect(tags).toHaveLength(1);
-			expect(asText(tags[0].label)).toEqual('Genre is: concert');
+			expect(asText(tags[0].label)).toEqual('Genre: concert');
 		});
 
 		it('gathers every value of one filter in one pill, alphabetically, with a counter', () => {
 			const tags = toTags({ [SearchFilterId.Genre]: ['dans', 'concert', 'drama'] }, [GENRE_FILTER]);
 
 			expect(tags).toHaveLength(1);
-			expect(asText(tags[0].label)).toEqual('Genre is: concert, dans, +1');
+			expect(asText(tags[0].label)).toEqual('Genre: concert, dans, +1');
 		});
 
-		it('leaves "is" off a checkbox list pill', () => {
+		// Every checkbox filter drops "is" now that the searchable and plain variants are one. ARC-3806
+		it('leaves "is" off a checkbox pill, but keeps it on an autocomplete pill', () => {
 			const languageFilter = filter(
 				SearchFilterId.Language,
-				FilterModalType.CheckboxList,
+				FilterModalType.Checkbox,
 				'Taal',
 				IeObjectsSearchFilterField.LANGUAGE
 			);
-			const tags = toTags({ [SearchFilterId.Language]: ['Nederlands'] }, [languageFilter]);
+			const creatorFilter = filter(
+				SearchFilterId.Creator,
+				FilterModalType.Autocomplete,
+				'Maker',
+				IeObjectsSearchFilterField.CREATOR
+			);
 
-			expect(asText(tags[0].label)).toEqual('Taal: Nederlands');
+			expect(
+				asText(toTags({ [SearchFilterId.Language]: ['Nederlands'] }, [languageFilter])[0].label)
+			).toEqual('Taal: Nederlands');
+			expect(
+				asText(toTags({ [SearchFilterId.Creator]: ['Anon'] }, [creatorFilter])[0].label)
+			).toEqual('Maker is: Anon');
 		});
 
 		it('sorts the values in the language of the ui', () => {
@@ -187,7 +198,7 @@ describe('Utils', () => {
 				locale: Locale.nl,
 			});
 
-			expect(asText(tags[0].label)).toEqual('Genre is: Émile, Zoo');
+			expect(asText(tags[0].label)).toEqual('Genre: Émile, Zoo');
 		});
 
 		it('shows the label half of a value that carries its own label', () => {
@@ -195,7 +206,7 @@ describe('Utils', () => {
 				MAINTAINERS_FILTER,
 			]);
 
-			expect(asText(tags[0].label)).toEqual('Aanbieder is: Amsab-ISG, VRT');
+			expect(asText(tags[0].label)).toEqual('Aanbieder: Amsab-ISG, VRT');
 		});
 
 		it('writes "bevat" on a text filter pill', () => {

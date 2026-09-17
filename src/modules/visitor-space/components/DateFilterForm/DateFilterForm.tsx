@@ -274,7 +274,7 @@ const DateFilterForm: FC<DateFilterFormProps> = ({ children, className, disabled
 		<>
 			<div className={clsx(className, 'u-px-32 u-px-20-md')}>
 				<FormControl
-					className={clsx('u-mb-24 c-form-control--label-hidden')}
+					className={clsx('u-mb-8 c-form-control--label-hidden')}
 					errors={[<RedFormWarning error={errors.operator?.message} key="form-error--operator" />]}
 					id={labelKeys.operator}
 					label={tHtml(

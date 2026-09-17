@@ -29,9 +29,6 @@ interface FlyoutPosition {
 	top: number;
 }
 
-/** Matches the max-height of the fly-out panel, so a clamped fly-out keeps clear of both edges. */
-const FLYOUT_SCREEN_EDGE_MARGIN = 40;
-
 const FilterOption: FC<FilterOptionProps> = ({
 	activeFilter,
 	filter,
@@ -77,8 +74,10 @@ const FilterOption: FC<FilterOptionProps> = ({
 		};
 	}, [closeFlyoutOnEscape]);
 
-	// The fly-out hangs from the row that opened it, against the right edge of the filter panel.
-	// Only the browser knows where that row sits and how tall the fly-out turned out.
+	// The fly-out sits against the right edge of the filter panel and grows upwards from the row
+	// that opened it, so it stays visually connected to that row while leaving its content (a
+	// dropdown, a long list) as much room as possible. Only the browser knows where the row sits
+	// and how tall the fly-out turned out.
 	useLayoutEffect(() => {
 		if (!filterIsActive || !flyoutEl) {
 			return;
@@ -86,17 +85,20 @@ const FilterOption: FC<FilterOptionProps> = ({
 
 		const measure = (): void => {
 			const row = optionRef.current?.getBoundingClientRect();
-			const flyoutHeight = flyoutEl.offsetHeight;
+			// The rounded offsetHeight would leave the fly-out a pixel off from the row it hangs on
+			const flyoutHeight = flyoutEl.getBoundingClientRect().height;
 
 			if (!row) {
 				return;
 			}
 
-			const lowestTop = window.innerHeight - flyoutHeight - FLYOUT_SCREEN_EDGE_MARGIN;
+			// A fly-out may be taller than the space above the row, or use the full window height,
+			// in which case it sits flush against the window edges instead.
+			const lowestTop = window.innerHeight - flyoutHeight;
 
 			setFlyoutPosition({
 				left: row.right,
-				top: Math.max(FLYOUT_SCREEN_EDGE_MARGIN, Math.min(row.top, lowestTop)),
+				top: Math.max(0, Math.min(row.bottom - flyoutHeight, lowestTop)),
 			});
 		};
 

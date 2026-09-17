@@ -7,9 +7,9 @@
 	flex-direction: column;
 	gap: abstracts.$spacer-xxs;
 
-	// The fly-out sits centered in the window, so this cap keeps it clear of both edges and scrolls
-	// the rest. See the "Redesign van geavanceerde filters" section of the FA of ARC-3806.
-	max-height: calc(100vh - #{abstracts.$spacer-2xl});
+	// The fly-out may use the full window height, scrolling the rest.
+	// See the "Redesign van geavanceerde filters" section of the FA of ARC-3806.
+	max-height: 100vh;
 	margin: 0;
 
 	// The hover state runs the full width of the fly-out, so the rows carry the side padding

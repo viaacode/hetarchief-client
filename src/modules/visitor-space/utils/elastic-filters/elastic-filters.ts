@@ -125,8 +125,7 @@ const mapFilterToElastic = (
 				value: condition.val,
 			}));
 
-		case FilterModalType.SearchableCheckbox:
-		case FilterModalType.CheckboxList:
+		case FilterModalType.Checkbox:
 		case FilterModalType.Autocomplete:
 			return [
 				{
