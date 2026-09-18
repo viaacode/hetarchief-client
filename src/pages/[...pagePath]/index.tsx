@@ -113,7 +113,10 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	 */
 
 	const renderPageContent = () => {
-		if (isContentPageLoading || !hasCheckedLogin || (isContentPageFetching && !contentPageInfo)) {
+		// Only wait when we have nothing to show yet. hasCheckedLogin is false during SSR, so
+		// including it here unconditionally would render a spinner instead of the content page that
+		// getServerSideProps already prefetched.
+		if (!contentPageInfo && (isContentPageLoading || !hasCheckedLogin || isContentPageFetching)) {
 			return <Loading fullscreen locationId={'/[...pagePath]/index page'} />;
 		}
 
