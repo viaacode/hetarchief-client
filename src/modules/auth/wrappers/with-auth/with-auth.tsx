@@ -30,7 +30,10 @@ export const withAuth = (
 		const router = useRouter();
 		const locale = useLocale();
 
-		const [canView, setCanView] = useState<boolean>(false);
+		// Pages that don't require a login can be rendered right away, also during SSR, where the
+		// effect below never runs. Starting at false would make every public page server-render as a
+		// loading spinner, leaving the content out of the HTML.
+		const [canView, setCanView] = useState<boolean>(!isLoginRequired);
 
 		// biome-ignore lint/correctness/useExhaustiveDependencies: render loop if we add router to the dep array
 		const checkLoginStatus = useCallback(async (): Promise<void> => {
