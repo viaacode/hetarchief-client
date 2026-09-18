@@ -72,6 +72,17 @@ export const SEARCH_PAGE_FILTERS = (
 		tabs: ALL_TABS,
 	});
 
+	const autoCompleteFilter = (id: SearchFilterId, field: IeObjectsSearchFilterField) => ({
+		id,
+		label: getFilterLabel(id),
+		field,
+		type: FilterMenuType.Modal,
+		modalType: FilterModalType.Autocomplete,
+		inMainPanelByDefault: false,
+		tabs: ALL_TABS,
+		isDisabled: () => !isKeyUser,
+	});
+
 	return [
 		// The panel shows these by default. Their order is the order of the design, so it is not
 		// grouped by modal type the way the rest of this list is.
@@ -209,7 +220,12 @@ export const SEARCH_PAGE_FILTERS = (
 			inMainPanelByDefault: true,
 			tabs: NEWSPAPER_TABS,
 		},
-		// Reachable through the advanced fly-out, which sorts them alphabetically itself.
+		autoCompleteFilter(SearchFilterId.MentionPerson, IeObjectsSearchFilterField.MENTION_PERSON),
+		autoCompleteFilter(SearchFilterId.MentionPlace, IeObjectsSearchFilterField.MENTION_PLACE),
+		autoCompleteFilter(
+			SearchFilterId.MentionOrganisation,
+			IeObjectsSearchFilterField.MENTION_ORGANISATION
+		),
 		{
 			id: SearchFilterId.Genre,
 			label: getFilterLabel(SearchFilterId.Genre),

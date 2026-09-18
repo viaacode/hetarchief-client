@@ -25,6 +25,11 @@ export enum IeObjectsSearchFilterField {
 	NEWSPAPER_SERIES_NAME = 'newspaperSeriesName',
 	LOCATION_CREATED = 'locationCreated',
 	MENTIONS = 'mentions',
+	// AI detected mentions, split per entity type. Only available to key users: the proxy rejects
+	// them for anybody else.
+	MENTION_PERSON = 'mentionPerson',
+	MENTION_PLACE = 'mentionPlace',
+	MENTION_ORGANISATION = 'mentionOrganisation',
 	QUERY = 'query',
 	// TODO future: rename maintainer to maintainerId and maintainers to maintainerName and also change this in the client
 	MAINTAINER_ID = 'maintainer', // Contains the OR-id of the maintainer

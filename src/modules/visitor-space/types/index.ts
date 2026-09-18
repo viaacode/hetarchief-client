@@ -32,6 +32,10 @@ export enum SearchFilterId {
 	NewspaperSeriesName = 'newspaperSeriesName',
 	LocationCreated = 'locationCreated',
 	Mentions = 'mentions', // Fallen soldiers named in newspapers
+	// AI detected mentions, split per entity type. Key users only.
+	MentionPerson = 'mentionPerson',
+	MentionPlace = 'mentionPlace',
+	MentionOrganisation = 'mentionOrganisation',
 	Medium = 'medium',
 	Maintainer = 'aanbieder',
 	Maintainers = 'aanbieders',

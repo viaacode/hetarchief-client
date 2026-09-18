@@ -7,4 +7,7 @@ export const AUTOCOMPLETE_FIELD_BY_FILTER_ID: Partial<Record<SearchFilterId, Aut
 	[SearchFilterId.NewspaperSeriesName]: AutocompleteField.newspaperSeriesName,
 	[SearchFilterId.Mentions]: AutocompleteField.mentions,
 	[SearchFilterId.LocationCreated]: AutocompleteField.locationCreated,
+	[SearchFilterId.MentionPerson]: AutocompleteField.mentionPerson,
+	[SearchFilterId.MentionPlace]: AutocompleteField.mentionPlace,
+	[SearchFilterId.MentionOrganisation]: AutocompleteField.mentionOrganisation,
 };

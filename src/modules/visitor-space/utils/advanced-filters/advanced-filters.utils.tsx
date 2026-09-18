@@ -104,6 +104,15 @@ export const getFilterLabel = (prop: SearchFilterId): string => {
 		[SearchFilterId.Mentions]: tText(
 			'modules/visitor-space/utils/advanced-filters/metadata___namenlijst-gesneuvelden'
 		),
+		[SearchFilterId.MentionPerson]: tText(
+			'modules/visitor-space/utils/advanced-filters/metadata___personen-ai'
+		),
+		[SearchFilterId.MentionPlace]: tText(
+			'modules/visitor-space/utils/advanced-filters/metadata___plaatsen-ai'
+		),
+		[SearchFilterId.MentionOrganisation]: tText(
+			'modules/visitor-space/utils/advanced-filters/metadata___organisaties-ai'
+		),
 		[SearchFilterId.Description]: tText(
 			'modules/visitor-space/utils/advanced-filters/metadata___beschrijving'
 		),
