@@ -1,14 +1,10 @@
 import Icon from '@shared/components/Icon/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
-import type { Locale } from '@shared/utils/i18n';
 import { type HetArchiefIeObject, HetArchiefIeObjectLicense } from '@viaa/avo2-types';
 import type { ReactNode } from 'react';
 
-export function getIeObjectRightsStatusInfo(
-	ieObject: HetArchiefIeObject,
-	locale: Locale
-): {
+export function getIeObjectRightsStatusInfo(ieObject: HetArchiefIeObject): {
 	label: string;
 	icon: ReactNode;
 	externalLink: string;
@@ -22,16 +18,10 @@ export function getIeObjectRightsStatusInfo(
 			label: tText('modules/ie-objects/utils/get-ie-object-rights-status___public-domein'),
 			icon: <Icon name={IconNamesLight.CopyrightPublicDomain} aria-hidden />,
 			externalLink: tText(
-				'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-external-link',
-				{
-					languageCode: locale,
-				}
+				'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-external-link'
 			),
 			internalLink: tText(
-				'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-internal-link',
-				{
-					languageCode: locale,
-				}
+				'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-internal-link'
 			),
 		};
 	}
@@ -43,16 +33,10 @@ export function getIeObjectRightsStatusInfo(
 			label: tText('modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined'),
 			icon: <Icon name={IconNamesLight.CopyrightUndetermined} aria-hidden />,
 			externalLink: tText(
-				'modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined-external-link',
-				{
-					languageCode: locale,
-				}
+				'modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined-external-link'
 			),
 			internalLink: tText(
-				'modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined-internal-link',
-				{
-					languageCode: locale,
-				}
+				'modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined-internal-link'
 			),
 		};
 	}
