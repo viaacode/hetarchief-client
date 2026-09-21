@@ -1,9 +1,9 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-rich-text-block {
 	hr {
 		margin: 0;
-		border: 0.1rem solid $black;
+		border: 0.1rem solid abstracts.$black;
 		opacity: 0.12;
 	}
 
