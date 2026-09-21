@@ -113,7 +113,10 @@ const DynamicRouteResolver: NextPage<DefaultSeoInfo & UserProps> = ({
 	 */
 
 	const renderPageContent = () => {
-		if (isContentPageLoading || !hasCheckedLogin || (isContentPageFetching && !contentPageInfo)) {
+		// Only wait when we have nothing to show yet. hasCheckedLogin is false during SSR, so
+		// including it here unconditionally would render a spinner instead of the content page that
+		// getServerSideProps already prefetched.
+		if (!contentPageInfo && (isContentPageLoading || !hasCheckedLogin || isContentPageFetching)) {
 			return <Loading fullscreen locationId={'/[...pagePath]/index page'} />;
 		}
 
@@ -191,13 +194,17 @@ export async function getServerSideProps(
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	const isNextDataReq = context.req.headers['x-nextjs-data'] === '1';
 	const isNextInternalPath =
-		isNextJsInternalPath(context.req.url as string) ||
-		isNextJsInternalPath(context.query.pagePath as string);
+		isNextJsInternalPath(context.req.url) || isNextJsInternalPath(context.query.pagePath);
+
+	if (isNextInternalPath) {
+		// Internal paths (/_next/, /.well-known/, eg: chrome devtools probes) are never content pages
+		return { notFound: true };
+	}
 
 	const queryClient = new QueryClient();
 
-	if (isNextDataReq || isNextInternalPath) {
-		// Not a real page, but a Next.js data request or internal Next.js path
+	if (isNextDataReq) {
+		// Not a real page, but a Next.js data request
 		return getDefaultStaticProps(context, context.resolvedUrl, {
 			queryClient,
 			title: 'Home - Het Archief',

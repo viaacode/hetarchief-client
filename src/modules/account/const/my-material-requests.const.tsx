@@ -154,6 +154,7 @@ const getUnreadCountColumn = (
 					title={tText('modules/account/const/my-material-requests___count-ongelezen-berichten', {
 						count,
 					})}
+					className="p-material-requests__table-unread-indicator"
 				>
 					<UnreadMaterialRequestIndicator count={count} />
 				</span>
