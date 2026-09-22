@@ -140,6 +140,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		align-items: center;
 		background-color: abstracts.$black;
 		border-radius: 0;
+		outline-offset: -1px;
 
 		@media (max-width: abstracts.$breakpoint-lg) {
 			height: auto;
