@@ -161,6 +161,7 @@ export function getAdminCoreConfig(
 				ContentBlockType.Timeline,
 				ContentBlockType.DoubleBanner,
 				ContentBlockType.ThreeChoicesPlayer,
+				ContentBlockType.AankeilerText,
 			],
 			defaultPageWidth: ContentPageWidth.LARGE,
 			onSaveContentPage,

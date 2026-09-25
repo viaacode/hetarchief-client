@@ -6,4 +6,9 @@
 	@media (max-width: $breakpoint-md) {
 		width: 100% !important;
 	}
+
+	p {
+		font-size: $font-size-md;
+		line-height: 2.8rem;
+	}
 }

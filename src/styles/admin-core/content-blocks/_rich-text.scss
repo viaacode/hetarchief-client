@@ -1,19 +1,20 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-.c-rich-text-block {
+.c-rich-text-block,
+.c-rich-text-two-columns-block {
 	hr {
 		margin: 0;
-		border: 0.1rem solid $black;
+		border: 0.1rem solid abstracts.$black;
 		opacity: 0.12;
 	}
 
 	// https://meemoo.atlassian.net/browse/ARC-2906
 	.o-grid {
-		:first-child {
+		> :first-child {
 			margin-left: 0;
 		}
 
-		:last-child {
+		> :last-child {
 			margin-right: 0;
 		}
 	}

@@ -90,7 +90,7 @@ import {
 	PlayEventPageType,
 } from '@shared/services/events-service';
 import { toastService } from '@shared/services/toast-service';
-import { selectLastSearchParams, setShowAuthModal, setShowZendesk } from '@shared/store/ui';
+import { setShowAuthModal, setShowZendesk } from '@shared/store/ui';
 import type { IeObjectsSearchTermObject } from '@shared/types/api';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { asDate, formatMediumDateWithTime, formatSameDayTimeOrDate } from '@shared/utils/dates';
@@ -160,7 +160,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const dispatch = useDispatch();
 	const user: User | null = useSelector(selectUser);
 	const hasCheckedLogin: boolean = useSelector(selectHasCheckedLogin);
-	const lastSearchParams = useSelector(selectLastSearchParams);
 	const { mutateAsync: createVisitRequest } = useCreateVisitRequest();
 	const ieObjectId = router.query.ie as string;
 	const maintainerSlug = router.query.slug as string;
@@ -1737,20 +1736,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 
 		return (
-			<Link
+			<Button
 				className={styles['p-object-detail__back']}
-				href={`${ROUTES_BY_LOCALE[locale].search}${lastSearchParams ? `?${lastSearchParams}` : ''}`}
+				icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
+				variants={['black']}
 				aria-label={tText(
-					'modules/ie-objects/object-detail-page___ga-terug-naar-de-zoekresultaten-button-aria-label'
+					'modules/ie-objects/object-detail-page___aria-label-terug-knop-op-detail-pagina'
 				)}
-			>
-				<Button
-					className={styles['p-object-detail__back']}
-					icon={<Icon name={IconNamesLight.ArrowLeft} aria-hidden />}
-					variants={['black']}
-					tabIndex={-1}
-				/>
-			</Link>
+				onClick={() => router.back()}
+			/>
 		);
 	};
 

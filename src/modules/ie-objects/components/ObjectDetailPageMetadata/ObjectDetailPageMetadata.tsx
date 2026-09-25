@@ -875,9 +875,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	 * @param mediaInfo
 	 */
 	const renderRightsInfo = (mediaInfo: HetArchiefIeObject) => {
-		const rightsInfoNewspapers = isNewspaper
-			? getIeObjectRightsStatusInfo(mediaInfo, locale)
-			: null;
+		const rightsInfoNewspapers = isNewspaper ? getIeObjectRightsStatusInfo(mediaInfo) : null;
 		const rightsInfoAudioVideo = getRightsInfoForAudioVideo(mediaInfo);
 		const avRightsIcon = getIeObjectAvRightsIcon(rightsInfoAudioVideo);
 		const avRightsLabel = getIeObjectAvRightsLabel(rightsInfoAudioVideo);
