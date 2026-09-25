@@ -20,6 +20,7 @@ export enum QUERY_KEYS {
 	getContentPage = 'getContentPage',
 	getThemes = 'getThemes',
 	getThemeIeObjects = 'getThemeIeObjects',
+	getIeObjectAccessDebugReport = 'getIeObjectAccessDebugReport',
 	getContentPartners = 'getContentPartners',
 	getMaterialRequests = 'getMaterialRequests',
 	getMaterialRequestsDuplicates = 'getMaterialRequestsDuplicates',
