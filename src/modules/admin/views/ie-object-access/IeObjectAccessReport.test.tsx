@@ -22,6 +22,7 @@ const anonymousViewer: IeObjectAccessDebugViewer = {
 	organisationName: null,
 	sector: null,
 	isKeyUser: false,
+	isEvaluator: false,
 	fullAccessVisitorSpaceIds: [],
 	folderAccessObjectIds: [],
 };

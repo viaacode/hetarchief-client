@@ -153,6 +153,15 @@ export const IeObjectAccessReport: FC<IeObjectAccessReportProps> = ({ viewer, re
 						<Definition label="Key user">
 							<YesNo value={viewer.isKeyUser} />
 						</Definition>
+						<Definition label="Evaluator">
+							<YesNo value={viewer.isEvaluator} />
+							<div>
+								<Muted>
+									Evaluators can approve or deny material requests for their organisation. This does
+									not change which objects they can see.
+								</Muted>
+							</div>
+						</Definition>
 						<Definition label="Visitor spaces with full access">
 							{viewer.fullAccessVisitorSpaceIds.length ? (
 								viewer.fullAccessVisitorSpaceIds.map((id) => <Tag key={id}>{id}</Tag>)

@@ -46,6 +46,7 @@ export interface IeObjectAccessDebugViewer {
 	organisationName: string | null;
 	sector: string | null;
 	isKeyUser: boolean;
+	isEvaluator: boolean;
 	fullAccessVisitorSpaceIds: string[];
 	folderAccessObjectIds: string[];
 }
