@@ -10,10 +10,12 @@ import { useHasAnyGroup } from '@shared/hooks/has-group';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import type { HTTPError } from 'ky';
 import React, { type FC, type FormEvent, useEffect, useMemo, useState } from 'react';
-import { StringParam, useQueryParams, withDefault } from 'use-query-params';
+import { useQueryParams } from 'use-query-params';
 
+import { PAGE_TITLE, QUERY_PARAM_CONFIG } from './IeObjectAccessPage.consts';
 import styles from './IeObjectAccessPage.module.scss';
 import {
+	CheckAccessFor,
 	IeObjectAccessDebugErrorCode,
 	type IeObjectAccessDebugRequest,
 } from './IeObjectAccessPage.types';
@@ -24,20 +26,6 @@ import { IeObjectAccessReport } from './IeObjectAccessReport';
  * Explains why the platform does or does not show an ie-object to a certain user, and which of its
  * fields that user gets to see. The pid and user are kept in the url, so a report can be shared.
  */
-
-enum CheckAccessFor {
-	ME = 'me',
-	USER = 'user',
-	ANONYMOUS = 'anonymous',
-}
-
-const PAGE_TITLE = 'Object access debugger';
-
-const QUERY_PARAM_CONFIG = {
-	pid: withDefault(StringParam, ''),
-	for: withDefault(StringParam, CheckAccessFor.ME),
-	email: withDefault(StringParam, ''),
-};
 
 const getErrorMessage = (error: unknown): string => {
 	const status = (error as HTTPError)?.response?.status;

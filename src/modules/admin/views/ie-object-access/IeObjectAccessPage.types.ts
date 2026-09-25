@@ -10,6 +10,13 @@ import type {
  * (see build-ie-object-access-report.ts and limit-access-to-object-details.types.ts over there)
  */
 
+// Whose access the debug page checks, kept in the "for" query param
+export enum CheckAccessFor {
+	ME = 'me',
+	USER = 'user',
+	ANONYMOUS = 'anonymous',
+}
+
 export enum IeObjectMetadataSet {
 	EMPTY = 'EMPTY',
 	METADATA_LTD = 'METADATA_LTD',

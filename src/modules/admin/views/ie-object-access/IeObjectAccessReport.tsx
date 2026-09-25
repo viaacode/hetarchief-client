@@ -1,4 +1,3 @@
-import { GroupName } from '@account/const';
 import type {
 	HetArchiefIeObjectFile,
 	HetArchiefIeObjectLicense,
@@ -10,6 +9,7 @@ import React, { type FC, type ReactNode } from 'react';
 import {
 	ACCESS_THROUGH_LABELS,
 	describeFileUsage,
+	EXTRA_VISITOR_SPACE_ACCESS_BY_GROUP,
 	FIELD_LABELS,
 	GRANTED_THROUGH_LABELS,
 	GROUP_LABELS,
@@ -117,13 +117,6 @@ export const IeObjectAccessReport: FC<IeObjectAccessReportProps> = ({ viewer, re
 			),
 		}[viewer.source];
 
-		const extraVisitorSpaceInfo =
-			viewer.groupName === GroupName.CP_ADMIN
-				? ', plus the own organisation for content partner admins'
-				: viewer.groupName === GroupName.MEEMOO_ADMIN
-					? ', meemoo admins always have access to all visitor spaces'
-					: '';
-
 		return (
 			<>
 				<h2>Who is looking?</h2>
@@ -171,7 +164,7 @@ export const IeObjectAccessReport: FC<IeObjectAccessReportProps> = ({ viewer, re
 							<div>
 								<Muted>
 									Through approved visit requests that are active right now
-									{extraVisitorSpaceInfo}.
+									{EXTRA_VISITOR_SPACE_ACCESS_BY_GROUP[viewer.groupName] || ''}.
 								</Muted>
 							</div>
 						</Definition>

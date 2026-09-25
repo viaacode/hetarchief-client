@@ -6,14 +6,24 @@ import {
 	JSON_FORMATS,
 } from '@ie-objects/ie-objects.consts';
 import { HetArchiefIeObjectAccessThrough, HetArchiefIeObjectLicense } from '@viaa/avo2-types';
+import { StringParam, withDefault } from 'use-query-params';
 
 import {
+	CheckAccessFor,
 	IeObjectAccessGrantedThrough,
 	IeObjectMetadataSet,
 	IeObjectNotVisibleReason,
 } from './IeObjectAccessPage.types';
 
 // This is an undocumented debug page for meemoo admins, so the texts are not translated
+
+export const PAGE_TITLE = 'Object access debugger';
+
+export const QUERY_PARAM_CONFIG = {
+	pid: withDefault(StringParam, ''),
+	for: withDefault(StringParam, CheckAccessFor.ME),
+	email: withDefault(StringParam, ''),
+};
 
 export const LICENSE_EXPLANATIONS: Record<string, string> = {
 	[HetArchiefIeObjectLicense.PUBLIEK_METADATA_LTD]:
@@ -55,6 +65,12 @@ export const GROUP_LABELS: Record<string, string> = {
 	[GroupName.KIOSK_VISITOR]: 'Kiosk (computer in a reading room)',
 	[GroupName.CP_ADMIN]: 'Content partner admin',
 	[GroupName.MEEMOO_ADMIN]: 'meemoo admin',
+};
+
+// Visitor spaces some user groups get access to on top of their approved visit requests
+export const EXTRA_VISITOR_SPACE_ACCESS_BY_GROUP: Partial<Record<GroupName, string>> = {
+	[GroupName.CP_ADMIN]: ', plus the own organisation for content partner admins',
+	[GroupName.MEEMOO_ADMIN]: ', meemoo admins always have access to all visitor spaces',
 };
 
 export const ACCESS_THROUGH_LABELS: Record<string, string> = {
