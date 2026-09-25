@@ -21,17 +21,19 @@
 			margin-right: 0 !important;
 		}
 
+		// --bg-text-hyperlink is set on the header from its background color (ARC-3848)
 		.c-tab-item {
-			color: $black;
+			color: var(--bg-text-hyperlink, $black);
 
 			&:hover {
-				color: $teal-light;
+				color: var(--bg-text-hyperlink, $teal-light);
+				text-decoration: underline;
 			}
 
 			&.c-tab-item__active {
 				box-shadow: inset 0 -.2rem $teal;
 				margin-bottom: -.1rem;
-				color: $black;
+				color: var(--bg-text-hyperlink, $black);
 				font-weight: 500;
 				position: relative;
 				z-index: 10;
