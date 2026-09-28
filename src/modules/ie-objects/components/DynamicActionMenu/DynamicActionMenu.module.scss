@@ -28,6 +28,23 @@
 		box-shadow: abstracts.$shadow-24-black-12;
 	}
 
+	// Matches ObjectDetailPageHeader's export dropdown menu styling (borderless, full-width
+	// items with a silver hover) so both header dropdowns look consistent.
+	&__dropdown-menu {
+		padding: 0;
+
+		:global(.c-menu__item) {
+			width: 100%;
+			background: none;
+			border: 0;
+			padding: abstracts.$spacer-sm abstracts.$spacer-md;
+
+			&:hover {
+				background: abstracts.$silver;
+			}
+		}
+	}
+
 	&__button {
 		width: 5rem !important;
 		height: 5rem !important;

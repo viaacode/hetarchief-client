@@ -3,25 +3,48 @@
 .c-object-detail-page-metadata-ai-description {
 	display: flex;
 	flex-direction: column;
+	justify-content: center;
+	align-items: flex-start;
+	align-self: stretch;
 	gap: $spacer-xs;
 	padding: $spacer-sm 0 $spacer-lg;
-	border-top: 1px solid $silver;
+
+	// Divider between the main description and this block: 12% opacity black, per Figma.
+	border-top: 0.1rem solid rgba($black, 0.12);
 }
 
 .c-object-detail-page-metadata-ai-description__header {
 	display: flex;
 	align-items: flex-start;
+	align-self: stretch;
 	gap: $spacer-md;
 }
 
 .c-object-detail-page-metadata-ai-description__title {
 	flex: 1 0 0;
 	overflow-wrap: break-word;
-	font-size: $font-size-md;
-	line-height: $line-height-lg;
+	color: $black;
+	font-family: $font-family-primary;
+	font-size: $font-size-lg;
+	font-weight: 800;
+	line-height: 2.6rem; // 26px at 24px font size (1.0833 ratio) - no existing token matches
 }
 
 .c-object-detail-page-metadata-ai-description__disclaimer {
 	flex-shrink: 0;
 	margin-left: auto;
+}
+
+.c-object-detail-page-metadata-ai-description__synopsis {
+	// Render literal newlines embedded in the text as line breaks instead of collapsing them -
+	// see ObjectDetailPageHeader.module.scss's ".p-object-detail-header__description" for why.
+	p {
+		white-space: pre-line;
+	}
+
+	// Only the last paragraph needs to flow inline with the "Lees meer" button; earlier
+	// paragraphs - from literal newlines in the untruncated part of the text - keep their own line.
+	p:last-of-type {
+		display: inline;
+	}
 }

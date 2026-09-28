@@ -9,10 +9,10 @@ import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
 import { ContextDisclaimer } from '@ie-objects/components/ContextDisclaimer/ContextDisclaimer';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
+import Metadata from '@ie-objects/components/Metadata/Metadata';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
-import Metadata, {
-	ObjectDetailPageMetadata,
-} from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata';
+import { ObjectDetailPageHeader } from '@ie-objects/components/ObjectDetailPageHeader/ObjectDetailPageHeader';
+import { ObjectDetailPageMetadata } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata';
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
 import { type MediaObject, RelatedObject } from '@ie-objects/components/RelatedObject';
 import { useGetAltoJsonFileContent } from '@ie-objects/hooks/use-get-alto-json-file-content';
@@ -136,6 +136,7 @@ import React, {
 	useCallback,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -243,6 +244,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
 		BooleanParamWithDefault(false)
 	);
+
+	// Vertical header collapse ("beperkte header"): driven by an IntersectionObserver watching a
+	// sentinel at the top of the scrollable tab content, rather than the header itself (which is
+	// sticky and never actually leaves the viewport).
+	const [isHeaderCollapsed, setIsHeaderCollapsed] = useState(false);
+	const sidebarContentRef = useRef<HTMLDivElement>(null);
+	const headerCollapseSentinelRef = useRef<HTMLDivElement>(null);
 	const [iiifViewerFocusX] = useQueryParam(
 		QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X,
 		withDefault(NumberParam, undefined)
@@ -276,6 +284,30 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
 	} = useGetIeObjectBySchemaIdentifier(ieObjectId, true);
+
+	/**
+	 * Toggle the compact ("beperkte") header once the top of the active tab's content scrolls
+	 * under the sticky header + tabs, using a sentinel at the top of the scrollable content and
+	 * an IntersectionObserver scoped to that same scroll container (not the window).
+	 * activeTab/mediaInfo aren't read directly below, but the sentinel node gets recreated when
+	 * the tab body (re)renders, so the observer needs to be re-attached when either changes.
+	 */
+	// biome-ignore lint/correctness/useExhaustiveDependencies: see comment above
+	useEffect(() => {
+		const root = sidebarContentRef.current;
+		const sentinel = headerCollapseSentinelRef.current;
+		if (!root || !sentinel) {
+			return;
+		}
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				setIsHeaderCollapsed(!entry.isIntersecting);
+			},
+			{ root, threshold: 0 }
+		);
+		observer.observe(sentinel);
+		return () => observer.disconnect();
+	}, [activeTab, mediaInfo]);
 
 	const { data: thumbnailUrl, isLoading: thumbnailUrlIsLoading } =
 		useGetIeObjectThumbnail(ieObjectId);
@@ -1072,6 +1104,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		setExpandSidebar(!expandSidebar, 'replaceIn');
 	};
 
+	const handleShowHeaderDetails = () => {
+		// Scrolling back to the top is what naturally brings the sentinel below back into view,
+		// which is what flips isHeaderCollapsed back to false via the observer - see the effect
+		// that sets it up. This also covers the FA's "user scrolls fully to top" auto-revert case
+		// with the same single code path.
+		sidebarContentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+	};
+
 	const onCloseBlade = () => {
 		setActiveBlade(null, 'replaceIn');
 	};
@@ -1817,6 +1857,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				{/* Sidebar */}
 				<div className={clsx(styles['p-object-detail__sidebar'])}>
 					<div
+						ref={sidebarContentRef}
 						className={clsx(
 							styles['p-object-detail__sidebar__content'],
 							styles[`p-object-detail__sidebar__content__tab-${activeTab}`],
@@ -1825,16 +1866,30 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							}
 						)}
 					>
+						{/* Zero-height sentinel at the very top of the scrollable content, so the
+						 * IntersectionObserver below fires as soon as the user scrolls at all -
+						 * not only once they've scrolled past the header's own height. */}
+						<div ref={headerCollapseSentinelRef} />
+						{/* Sticky within .p-object-detail__sidebar__content (not a fixed sibling
+						 * outside it), so scrolling anywhere over the header also scrolls the
+						 * content - the user doesn't need to target the content area specifically.
+						 * The header itself additionally collapses to a compact form once the
+						 * sentinel above scrolls out of view (see the IntersectionObserver effect). */}
+						<ObjectDetailPageHeader
+							mediaInfo={mediaInfo}
+							onClickAction={onClickAction}
+							hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
+							currentPageIndex={currentPageIndex}
+							isCollapsed={isHeaderCollapsed}
+							onShowDetails={handleShowHeaderDetails}
+						/>
 						{/*
 						 * HetArchiefIeObject metadata
 						 */}
 						{activeTab === ObjectDetailTabs.Metadata && (
 							<ObjectDetailPageMetadata
-								onClickAction={onClickAction}
 								mediaInfo={mediaInfo}
 								visitRequest={visitRequest || null}
-								hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
-								currentPageIndex={currentPageIndex}
 								goToPage={handleSetCurrentPage}
 								currentPage={currentPage}
 								activeFile={

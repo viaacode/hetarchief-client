@@ -12,6 +12,7 @@ export interface ObjectDetailPageMetadataAiDescriptionProps {
 	synopsis?: string | null;
 	onReadMoreClicked: (item: MetadataItem) => void;
 	className?: string;
+	readMoreButtonClassName?: string;
 }
 
 export function ObjectDetailPageMetadataAiDescription({
@@ -19,6 +20,7 @@ export function ObjectDetailPageMetadataAiDescription({
 	synopsis,
 	onReadMoreClicked,
 	className,
+	readMoreButtonClassName,
 }: ObjectDetailPageMetadataAiDescriptionProps) {
 	if (!name && !synopsis) {
 		return null;
@@ -52,8 +54,12 @@ export function ObjectDetailPageMetadataAiDescription({
 					)}
 					data={synopsis}
 					maxLength={AI_METADATA_FIELD_MAX_LENGTH}
-					className="u-line-height-1-4 u-font-size-14"
+					className={clsx(
+						styles['c-object-detail-page-metadata-ai-description__synopsis'],
+						'u-line-height-1-4 u-font-size-14'
+					)}
 					onReadMoreClicked={onReadMoreClicked}
+					readMoreButtonClassName={readMoreButtonClassName}
 				/>
 			)}
 		</div>

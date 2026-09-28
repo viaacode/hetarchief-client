@@ -1,0 +1,210 @@
+@use "src/styles/abstracts" as *;
+
+// Purple ("Lila") header background per Figma. Close to, but not the same value as, the
+// existing $lila token ($lila: #c6c2e0) - kept as its own local value, set explicitly here
+// rather than as a shared utility class, per design.
+$header-background: #c7c2e3;
+
+// Shrink/grow animation between the expanded and collapsed ("beperkte header") states, reusing
+// the same max-height-transition technique as CollapsableBlade (see its .module.scss): an upper
+// bound for the open state (the transition animates towards it, but real content is expected to
+// stay well under it - anything taller gets silently clipped by this element's overflow:hidden)
+// and a tight one for the closed state. A plain object without an AI description block already
+// measures ~527px, so 200rem leaves generous headroom for a long description + AI title/synopsis
+// combined, without changing how the animation feels (its duration is time-based, not
+// distance-based, so a larger target doesn't make it slower).
+$max-height-expanded: 200rem;
+$max-height-collapsed: 8rem;
+
+.p-object-detail-header {
+	// Sticky (not a fixed sibling outside the scroll container) so it lives inside the same
+	// scrollable box as the tab content below it - scrolling anywhere over the header also
+	// scrolls the content, instead of requiring the mouse to be over the content specifically.
+	// No explicit z-index: `position: sticky` alone already paints this above the plain
+	// (non-positioned) tab content scrolling underneath it. Setting one would tie this against
+	// the expand/collapse sidebar button ($z-layers "foreground" = 1 in _variables.scss), which
+	// must always stay on top of it - see .p-object-detail__expand-button.
+	position: sticky;
+	top: 0;
+
+	// Collapsing/expanding drastically changes this element's own height while it sits inside
+	// the scrollable content; without this, the browser's scroll anchoring "corrects" scrollTop
+	// to compensate, which re-triggers the IntersectionObserver and causes a collapse/expand
+	// flicker loop. See https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-anchor.
+	overflow-anchor: none;
+	overflow: hidden;
+	max-height: $max-height-expanded;
+	background-color: $header-background;
+	color: $black;
+	transition: max-height $animate-default;
+}
+
+.p-object-detail-header--collapsed {
+	max-height: $max-height-collapsed;
+}
+
+// Both states render at once - see ObjectDetailPageHeader.tsx - so this transition has stable
+// content to animate around instead of popping in/out with the ternary it replaced.
+.p-object-detail-header__expanded-content {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: $spacer-xs;
+	padding: $spacer-lg $spacer-lg 0 $spacer-lg;
+
+	.p-object-detail-header--collapsed & {
+		display: none;
+	}
+}
+
+.p-object-detail-header__collapsed-content {
+	display: none;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: $spacer-xs; // 8px
+	padding: 1.2rem $spacer-lg; // 12px 32px - 12px has no matching spacer token
+
+	.p-object-detail-header--collapsed & {
+		display: flex;
+	}
+
+	.p-object-detail__title {
+		min-width: 0;
+		flex: 1 1 auto;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-size: $font-size-md; // 18px
+		line-height: 2rem; // 20px at 18px font size (1.111 ratio) - no exact token match
+	}
+}
+
+.p-object-detail-header__toon-details {
+	flex-shrink: 0;
+	white-space: nowrap;
+	height: auto;
+	padding: 0;
+	color: $black;
+	font-family: $font-family-primary;
+	font-size: $font-size-base; // 16px
+	font-weight: $font-weight-medium;
+	line-height: $line-height-4xl; // 1.5 ratio = 24px at 16px font size, matches Figma exactly
+	text-align: right;
+
+	:global(.c-button__icon--end) {
+		margin-left: $spacer-xs; // 8px between label and icon, per Figma
+		// Otherwise the icon's default styling (meemoocons-light, 24px) already matches Figma.
+		font-size: $font-size-lg;
+	}
+}
+
+.p-object-detail-header__breadcrumbs {
+	align-self: stretch;
+	padding-bottom: $spacer-sm;
+	color: $black;
+}
+
+.p-object-detail__title {
+	overflow-wrap: break-word;
+	color: $black;
+	font-family: $font-family-primary;
+	font-size: $font-size-2xl;
+	font-weight: 800;
+	line-height: $line-height-md; // 1.1 ratio = 44px at 40px font size, matches Figma exactly
+}
+
+.p-object-detail-header__description {
+	align-self: stretch;
+	padding: $spacer-sm 0;
+	color: $black;
+	font-family: $font-family-primary;
+	font-weight: $font-weight-medium;
+
+	// The description is a single paragraph with literal newlines embedded in its text, not one
+	// paragraph per line - render those newlines as line breaks instead of collapsing them, same
+	// as the Metadata tab's own fields (see ObjectDetailPageMetadata.module.scss's
+	// ".p-object-detail__metadata-content"). white-space is inherited, so this also reaches the
+	// nested <span> HighlightSearchTerms renders the text in.
+	p {
+		white-space: pre-line;
+	}
+
+	// Only the last paragraph needs to flow inline with the "Lees meer" button (below); earlier
+	// paragraphs - from literal newlines in the untruncated part of the text - keep their own line.
+	p:last-of-type {
+		display: inline;
+	}
+}
+
+.p-object-detail-header__description-fallback {
+	display: flex;
+	align-items: flex-start;
+	align-self: stretch;
+	gap: $spacer-xs; // 8px minimum gap between the text and the icon, per design
+	padding: $spacer-sm 0;
+
+	&__icon {
+		flex-shrink: 0;
+		margin-left: auto;
+
+		// Matches the AI description block's disclaimer icon (iconSize="lg" there).
+		font-size: $font-size-lg;
+	}
+
+	&__text {
+		p {
+			margin: 0;
+			color: $black;
+			font-family: $font-family-primary;
+			font-size: $font-size-sm; // 14px
+			font-weight: $font-weight-medium;
+			line-height: 2rem; // 20px at 14px font size (1.4286 ratio) - no exact token match
+		}
+
+		a {
+			color: $black;
+			font-family: $font-family-primary;
+			font-size: $font-size-sm; // 14px
+			font-weight: $font-weight-bold;
+			line-height: 2rem; // 20px at 14px font size (1.4286 ratio) - no exact token match
+			text-decoration-line: underline;
+			text-decoration-style: solid;
+			text-decoration-skip-ink: auto;
+			text-decoration-thickness: auto;
+			text-underline-offset: auto;
+			text-underline-position: from-font;
+		}
+	}
+}
+
+.p-object-detail-header__read-more {
+	// Overrides MetaDataFieldWithHighlightingAndMaxLength's site-wide neutral-grey "Lees meer"
+	// styling for this header only - !important because it composes alongside that shared
+	// class on the same element, where a plain class of equal specificity isn't reliable.
+	display: inline;
+	color: $black !important;
+	font-weight: $font-weight-bold !important;
+	margin-top: 0 !important;
+}
+
+.p-object-detail__export-dropdown__menu {
+	padding: 0;
+
+	:global(.c-menu__item) {
+		width: 100%;
+		background: none;
+		border: 0;
+		padding: $spacer-sm $spacer-md;
+
+		&:hover {
+			background: $silver;
+		}
+	}
+}
+
+.p-object-detail__export {
+	:global(.c-menu) {
+		margin: 0;
+	}
+}

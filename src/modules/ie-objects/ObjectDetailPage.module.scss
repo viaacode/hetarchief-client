@@ -216,10 +216,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		// The back button floats over the media's top-left corner here, unlike the smaller
 		// arrow shown when the visitor space navigation bar is visible
 		.p-object-detail__context-disclaimer {
-			top: calc(#{$metadata-media-ocr-tabs-height-desktop} + abstracts.$spacer-sm);
+			top: calc(#{$metadata-media-ocr-tabs-height-desktop} + #{abstracts.$spacer-sm});
 
 			@media (max-width: abstracts.$breakpoint-lg) {
-				top: calc(#{$metadata-media-ocr-tabs-height-mobile} + abstracts.$spacer-sm);
+				top: calc(#{$metadata-media-ocr-tabs-height-mobile} + #{abstracts.$spacer-sm});
 			}
 		}
 
@@ -435,8 +435,19 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	}
 
 	&__sidebar__content {
-		height: 100%;
+		// This panel needs to fill whatever space is left in its flex parent rather than 100% of
+		// it - min-height: 0 is required for overflow-y auto to actually engage in a flex child.
+		// The sticky header (ObjectDetailPageHeader) lives inside this same scrollable box.
+		flex: 1 1 auto;
+		min-height: 0;
 		overflow-y: auto;
+
+		// The sticky header drastically changes height as it collapses/expands. Without this,
+		// the browser's scroll anchoring keeps "correcting" scrollTop to compensate for that
+		// resize, which re-triggers the collapse/expand IntersectionObserver and causes a
+		// flicker loop - most visible on small scroll deltas, which the anchor jump easily
+		// overwhelms. See https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-anchor.
+		overflow-anchor: none;
 		box-shadow: abstracts.$shadow-24-black-12;
 
 		// Breathing room under whatever the last section happens to be (metadata, "ook
