@@ -498,9 +498,8 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 
 		&__tab-ocr {
-			overflow-y: hidden;
-			padding-left: 0;
-			padding-right: 0;
+			// The OCR tab's own pagination bar (position: sticky; bottom: 0) already provides
+			// bottom spacing - avoid doubling it up with this container's own default.
 			padding-bottom: 0;
 		}
 	}
