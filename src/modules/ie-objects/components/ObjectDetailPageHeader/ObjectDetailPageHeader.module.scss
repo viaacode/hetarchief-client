@@ -1,36 +1,23 @@
 @use "src/styles/abstracts" as *;
 
-// Purple ("Lila") header background per Figma. Close to, but not the same value as, the
-// existing $lila token ($lila: #c6c2e0) - kept as its own local value, set explicitly here
-// rather than as a shared utility class, per design.
+// Purple ("Lila") header background per Figma - close to but distinct from the $lila token
 $header-background: #c7c2e3;
 
-// Shrink/grow animation between the expanded and collapsed ("beperkte header") states, reusing
-// the same max-height-transition technique as CollapsableBlade (see its .module.scss): an upper
-// bound for the open state (the transition animates towards it, but real content is expected to
-// stay well under it - anything taller gets silently clipped by this element's overflow:hidden)
-// and a tight one for the closed state. A plain object without an AI description block already
-// measures ~527px, so 200rem leaves generous headroom for a long description + AI title/synopsis
-// combined, without changing how the animation feels (its duration is time-based, not
-// distance-based, so a larger target doesn't make it slower).
+// max-height transition technique (see CollapsableBlade) between expanded/collapsed states.
+// 200rem is generous headroom for expanded content (~527px for a plain object); duration is
+// time-based so a larger target doesn't slow the animation down.
 $max-height-expanded: 200rem;
 $max-height-collapsed: 8rem;
 
 .p-object-detail-header {
-	// Sticky (not a fixed sibling outside the scroll container) so it lives inside the same
-	// scrollable box as the tab content below it - scrolling anywhere over the header also
-	// scrolls the content, instead of requiring the mouse to be over the content specifically.
-	// No explicit z-index: `position: sticky` alone already paints this above the plain
-	// (non-positioned) tab content scrolling underneath it. Setting one would tie this against
-	// the expand/collapse sidebar button ($z-layers "foreground" = 1 in _variables.scss), which
-	// must always stay on top of it - see .p-object-detail__expand-button.
+	// Sticky within the scroll container (not a fixed sibling) so scrolling over the header also
+	// scrolls the content. No explicit z-index needed: sticky alone paints above the tab content,
+	// and must stay below the expand/collapse sidebar button ($z-layers "foreground") regardless.
 	position: sticky;
 	top: 0;
 
-	// Collapsing/expanding drastically changes this element's own height while it sits inside
-	// the scrollable content; without this, the browser's scroll anchoring "corrects" scrollTop
-	// to compensate, which re-triggers the IntersectionObserver and causes a collapse/expand
-	// flicker loop. See https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-anchor.
+	// Without this, scroll anchoring "corrects" scrollTop as this element's height changes on
+	// collapse/expand, re-triggering the IntersectionObserver and causing a flicker loop.
 	overflow-anchor: none;
 	overflow: hidden;
 	max-height: $max-height-expanded;
@@ -43,8 +30,8 @@ $max-height-collapsed: 8rem;
 	max-height: $max-height-collapsed;
 }
 
-// Both states render at once - see ObjectDetailPageHeader.tsx - so this transition has stable
-// content to animate around instead of popping in/out with the ternary it replaced.
+// Both states render at once (see ObjectDetailPageHeader.tsx) so the max-height transition
+// above has stable content to animate around.
 .p-object-detail-header__expanded-content {
 	display: flex;
 	flex-direction: column;
@@ -100,6 +87,11 @@ $max-height-collapsed: 8rem;
 	}
 }
 
+.p-object-detail-header__research-warning {
+	color: $black;
+	padding-bottom: $spacer-sm;
+}
+
 .p-object-detail-header__breadcrumbs {
 	align-self: stretch;
 	padding-bottom: $spacer-sm;
@@ -121,20 +113,7 @@ $max-height-collapsed: 8rem;
 	color: $black;
 	font-weight: $font-weight-medium;
 
-	// The description is a single paragraph with literal newlines embedded in its text, not one
-	// paragraph per line - render those newlines as line breaks instead of collapsing them, same
-	// as the Metadata tab's own fields (see ObjectDetailPageMetadata.module.scss's
-	// ".p-object-detail__metadata-content"). white-space is inherited, so this also reaches the
-	// nested <span> HighlightSearchTerms renders the text in.
-	p {
-		white-space: pre-line;
-	}
-
-	// Only the last paragraph needs to flow inline with the "Lees meer" button (below); earlier
-	// paragraphs - from literal newlines in the untruncated part of the text - keep their own line.
-	p:last-of-type {
-		display: inline;
-	}
+	@include inline-read-more-paragraph-styling;
 }
 
 .p-object-detail-header__description-fallback {
@@ -177,9 +156,7 @@ $max-height-collapsed: 8rem;
 }
 
 .p-object-detail-header__divider {
-	// A real <hr> (flex item of .p-object-detail-header__expanded-content) rather than a border
-	// on the AI description block, so that container's own gap handles the spacing on both
-	// sides instead of separate margin/padding math.
+	// A real <hr> rather than a border on the AI description block, so the parent's gap handles spacing
 	align-self: stretch;
 	width: 100%;
 	height: 0.1rem;
@@ -189,28 +166,39 @@ $max-height-collapsed: 8rem;
 }
 
 .p-object-detail-header__read-more {
-	// Overrides MetaDataFieldWithHighlightingAndMaxLength's site-wide neutral-grey "Lees meer"
-	// styling for this header only - !important because it composes alongside that shared
-	// class on the same element, where a plain class of equal specificity isn't reliable.
+	// Used two ways: (1) composed with MetaDataFieldWithHighlightingAndMaxLength's shared
+	// "Lees meer" class as an override (color/font-weight/margin-top need !important there,
+	// since it composes alongside that class on the same element where a plain class of equal
+	// specificity isn't reliable), and (2) standalone, as on the research warning's "Meer info"
+	// button - so it also carries the shared class's structural properties itself, to render
+	// identically without needing that other class.
 	display: inline;
+	cursor: pointer;
+	padding: 0;
+	height: 2.4rem;
+	border-radius: 0;
 	color: $black !important;
+	font-size: $font-size-sm;
 	font-weight: $font-weight-bold !important;
 	margin-top: 0 !important;
+
+	// The gap before this button comes from a literal space in the text flow (see
+	// MetaDataFieldWithHighlightingAndMaxLength.tsx / Callout.tsx), not a margin - a margin-left
+	// would still render when this button wraps onto its own line, creating a false indent.
+	transition: opacity $animate-default;
+
+	:global(.c-button__content) {
+		text-decoration: underline !important;
+	}
+
+	&:hover,
+	&:focus {
+		opacity: 0.8;
+	}
 }
 
 .p-object-detail__export-dropdown__menu {
-	padding: 0;
-
-	:global(.c-menu__item) {
-		width: 100%;
-		background: none;
-		border: 0;
-		padding: $spacer-sm $spacer-md;
-
-		&:hover {
-			background: $silver;
-		}
-	}
+	@include dropdown-menu-item-styling;
 }
 
 .p-object-detail__export {

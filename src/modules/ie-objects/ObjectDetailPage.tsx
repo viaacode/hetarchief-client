@@ -245,9 +245,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		BooleanParamWithDefault(false)
 	);
 
-	// Vertical header collapse ("beperkte header"): driven by an IntersectionObserver watching a
-	// sentinel at the top of the scrollable tab content, rather than the header itself (which is
-	// sticky and never actually leaves the viewport).
+	// Compact ("beperkte") header state, toggled by the sentinel IntersectionObserver below
 	const [isHeaderCollapsed, setIsHeaderCollapsed] = useState(false);
 	const sidebarContentRef = useRef<HTMLDivElement>(null);
 	const headerCollapseSentinelRef = useRef<HTMLDivElement>(null);
@@ -285,14 +283,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		error: mediaInfoError,
 	} = useGetIeObjectBySchemaIdentifier(ieObjectId, true);
 
-	/**
-	 * Toggle the compact ("beperkte") header once the top of the active tab's content scrolls
-	 * under the sticky header + tabs, using a sentinel at the top of the scrollable content and
-	 * an IntersectionObserver scoped to that same scroll container (not the window).
-	 * activeTab/mediaInfo aren't read directly below, but the sentinel node gets recreated when
-	 * the tab body (re)renders, so the observer needs to be re-attached when either changes.
-	 */
-	// biome-ignore lint/correctness/useExhaustiveDependencies: see comment above
+	// Collapse the header once the sentinel at the top of the scrollable tab content scrolls out
+	// of view. Re-attach when the tab content (re)renders, since the sentinel node can be recreated.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: activeTab/mediaInfo intentionally re-attach the observer, not read directly
 	useEffect(() => {
 		const root = sidebarContentRef.current;
 		const sentinel = headerCollapseSentinelRef.current;
@@ -1105,10 +1098,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	};
 
 	const handleShowHeaderDetails = () => {
-		// Scrolling back to the top is what naturally brings the sentinel below back into view,
-		// which is what flips isHeaderCollapsed back to false via the observer - see the effect
-		// that sets it up. This also covers the FA's "user scrolls fully to top" auto-revert case
-		// with the same single code path.
+		// Scrolling to the top brings the sentinel back into view, which re-expands the header via the observer
 		sidebarContentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
 	};
 
@@ -1866,15 +1856,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							}
 						)}
 					>
-						{/* Zero-height sentinel at the very top of the scrollable content, so the
-						 * IntersectionObserver below fires as soon as the user scrolls at all -
-						 * not only once they've scrolled past the header's own height. */}
+						{/* Sentinel that drives the header's collapse - see the IntersectionObserver effect above */}
 						<div ref={headerCollapseSentinelRef} />
-						{/* Sticky within .p-object-detail__sidebar__content (not a fixed sibling
-						 * outside it), so scrolling anywhere over the header also scrolls the
-						 * content - the user doesn't need to target the content area specifically.
-						 * The header itself additionally collapses to a compact form once the
-						 * sentinel above scrolls out of view (see the IntersectionObserver effect). */}
 						<ObjectDetailPageHeader
 							mediaInfo={mediaInfo}
 							onClickAction={onClickAction}

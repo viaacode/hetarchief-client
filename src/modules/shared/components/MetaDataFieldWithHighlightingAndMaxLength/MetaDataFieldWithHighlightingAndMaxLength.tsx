@@ -15,11 +15,7 @@ interface MetaDataFieldWithHighlightingAndMaxLengthProps extends DefaultComponen
 	onReadMoreClicked: (item: MetadataItem) => void;
 	enableHighlighting?: boolean;
 	maxLength?: number;
-	/**
-	 * Extra class applied to the "Lees meer" button, layered on top of the default styling.
-	 * Used by callers (e.g. the object detail page header) that need this link to look
-	 * different from its site-wide default without changing that default everywhere else.
-	 */
+	/** Extra class applied to the "Lees meer" button, layered on top of the default styling */
 	readMoreButtonClassName?: string;
 }
 
@@ -47,18 +43,24 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 			<HighlightedMetadata title={title} data={parsedFieldData} enabled={enableHighlighting} />
 
 			{isLongFieldData && (
-				<Button
-					variants={['text', 'sm']}
-					className={clsx(styles['c-metadata__field__blade__read-more'], readMoreButtonClassName)}
-					onClick={() => onReadMoreClicked({ title, data })}
-					onKeyUp={(evt) => {
-						if (evt.key === 'Enter') {
-							onReadMoreClicked({ title, data });
-						}
-					}}
-				>
-					{tText('modules/visitor-space/utils/metadata/metadata___lees-meer')}
-				</Button>
+				// A literal space (not CSS margin) before the button: when this wraps onto its own
+				// line, the browser collapses trailing whitespace at the line break, so it doesn't
+				// carry the false indent that a margin-left would render at the start of that line.
+				<>
+					{' '}
+					<Button
+						variants={['text', 'sm']}
+						className={clsx(styles['c-metadata__field__blade__read-more'], readMoreButtonClassName)}
+						onClick={() => onReadMoreClicked({ title, data })}
+						onKeyUp={(evt) => {
+							if (evt.key === 'Enter') {
+								onReadMoreClicked({ title, data });
+							}
+						}}
+					>
+						{tText('modules/visitor-space/utils/metadata/metadata___lees-meer')}
+					</Button>
+				</>
 			)}
 		</div>
 	);

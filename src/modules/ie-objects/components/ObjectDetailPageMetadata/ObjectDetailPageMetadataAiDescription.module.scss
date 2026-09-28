@@ -8,10 +8,8 @@
 	align-self: stretch;
 	gap: $spacer-xs;
 
-	// Top padding is $spacer-xs (not $spacer-sm) because the divider above this block is now a
-	// sibling <hr> in the header, separated from this block by that flex column's own gap
-	// ($spacer-xs) - the two together reproduce the original 16px (spacer-sm) gap after the
-	// divider, without this block needing to know the divider isn't directly attached to it.
+	// Top padding is $spacer-xs, not $spacer-sm: combined with the parent gap it reproduces the
+	// original 16px gap after the divider, which is now a sibling <hr> rather than a border.
 	padding: $spacer-xs 0 $spacer-lg;
 }
 
@@ -38,15 +36,5 @@
 }
 
 .c-object-detail-page-metadata-ai-description__synopsis {
-	// Render literal newlines embedded in the text as line breaks instead of collapsing them -
-	// see ObjectDetailPageHeader.module.scss's ".p-object-detail-header__description" for why.
-	p {
-		white-space: pre-line;
-	}
-
-	// Only the last paragraph needs to flow inline with the "Lees meer" button; earlier
-	// paragraphs - from literal newlines in the untruncated part of the text - keep their own line.
-	p:last-of-type {
-		display: inline;
-	}
+	@include inline-read-more-paragraph-styling;
 }

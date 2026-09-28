@@ -47,6 +47,7 @@ import {
 } from '@meemoo/react-components';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
 import { Blade } from '@shared/components/Blade/Blade';
+import Callout from '@shared/components/Callout/Callout';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 import { Icon } from '@shared/components/Icon';
@@ -55,7 +56,7 @@ import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDa
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
 import getConfig from '@shared/config/public-runtime-config';
-import { ROUTES_BY_LOCALE } from '@shared/const';
+import { KNOWN_STATIC_ROUTES, ROUTES_BY_LOCALE } from '@shared/const';
 import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -69,6 +70,7 @@ import { HetArchiefIeObjectAccessThrough, HetArchiefIeObjectLicense } from '@via
 import { SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
 import { compact, indexOf, isEmpty, isNil, noop, sortBy } from 'es-toolkit/compat';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import React, { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
@@ -113,6 +115,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 	 * Permissions
 	 */
 
+	const showResearchWarning = useHasAllPermission(Permission.SHOW_RESEARCH_WARNING);
 	const canViewAllSpaces = useHasAllPermission(Permission.READ_ALL_SPACES);
 	const { data: accessibleVisitorSpaces } = useGetAccessibleVisitorSpaces({
 		canViewAllSpaces,
@@ -431,6 +434,30 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 		</div>
 	);
 
+	const renderResearchWarning = (): ReactNode => (
+		<Callout
+			className={styles['p-object-detail-header__research-warning']}
+			icon={<Icon name={IconNamesLight.Info} aria-hidden />}
+			text={tHtml(
+				'pages/slug/ie/index___door-gebruik-te-maken-van-deze-applicatie-bevestigt-u-dat-u-het-beschikbare-materiaal-enkel-raadpleegt-voor-wetenschappelijk-of-prive-onderzoek'
+			)}
+			action={
+				<Link
+					passHref
+					href={KNOWN_STATIC_ROUTES[locale].kioskConditions}
+					aria-label={tText('pages/slug/index___meer-info')}
+				>
+					<Button
+						className={styles['p-object-detail-header__read-more']}
+						label={tText('pages/slug/index___meer-info')}
+						variants={['text', 'sm']}
+						tabIndex={-1}
+					/>
+				</Link>
+			}
+		/>
+	);
+
 	const renderKeyUserPill = (): ReactNode => (
 		<Pill
 			isExpanded
@@ -503,9 +530,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 				[styles['p-object-detail-header--collapsed']]: isCollapsed,
 			})}
 		>
-			{/* Both states render at once (rather than a ternary) so the max-height transition
-			 * below has stable content to animate around, matching CollapsableBlade's pattern:
-			 * the outer box smoothly grows/shrinks, the state that isn't active is display:none. */}
+			{/* Both states render at once so the max-height transition has stable content to animate around */}
 			<div className={styles['p-object-detail-header__collapsed-content']}>
 				<h3 className={styles['p-object-detail__title']} title={mediaInfo?.name}>
 					<HighlightSearchTerms toHighlight={mediaInfo?.name} />
@@ -522,6 +547,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 			</div>
 
 			<div className={styles['p-object-detail-header__expanded-content']}>
+				{showResearchWarning && renderResearchWarning()}
 				{renderBreadcrumbs()}
 				{showKeyUserPill && renderKeyUserPill()}
 				<h3 className={styles['p-object-detail__title']}>

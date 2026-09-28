@@ -12,7 +12,10 @@ const Callout: FC<CalloutProps> = ({ className, icon, text, action }) => {
 			{icon && <div className={styles['c-callout__icon']}>{icon}</div>}
 			<div>
 				<span>{text}</span>
-				{action || null}
+				{/* A literal space (not CSS margin) before the action: when it wraps onto its own
+				 * line, the browser collapses trailing whitespace at the line break, so it doesn't
+				 * carry a false indent that a margin-left would render at the start of that line. */}
+				{action && <> {action}</>}
 			</div>
 		</div>
 	);

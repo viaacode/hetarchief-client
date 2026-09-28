@@ -1,5 +1,5 @@
 import type { MediaActions } from '@ie-objects/ie-objects.types';
-import type { DefaultComponentProps } from '@shared/types';
+import type { DefaultComponentProps, VariantsProp } from '@shared/types';
 import type { ReactNode } from 'react';
 
 export interface DynamicActionMenuProps extends DefaultComponentProps {
@@ -8,18 +8,10 @@ export interface DynamicActionMenuProps extends DefaultComponentProps {
 	limit?: number;
 	onClickAction: (id: MediaActions) => void;
 	id: string;
-	/**
-	 * Button variants for the primary action. Defaults to the site-wide teal primary CTA.
-	 * Used by the object detail page header to render its primary CTA in black instead —
-	 * an explicit, single-usage exception, not a new default.
-	 */
-	primaryButtonVariants?: string | string[];
-	/**
-	 * Button variants for secondary (non-primary) actions. Defaults to the site-wide silver
-	 * styling. Used by the object detail page header to render its secondary CTAs in white
-	 * instead — an explicit, single-usage exception, not a new default.
-	 */
-	secondaryButtonVariants?: string | string[];
+	/** Defaults to the site-wide teal primary CTA; overridden by the object detail page header */
+	primaryButtonVariants?: VariantsProp;
+	/** Defaults to the site-wide silver styling; overridden by the object detail page header */
+	secondaryButtonVariants?: VariantsProp;
 }
 
 export interface ActionItem {
