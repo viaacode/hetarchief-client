@@ -19,7 +19,7 @@
 		background-color abstracts.$animate-default,
 		border-color abstracts.$animate-default;
 
-	&:hover {
+	@include abstracts.hover {
 		background-color: abstracts.$shade;
 		border-color: abstracts.$shade;
 	}
@@ -112,7 +112,7 @@
 	border-color: abstracts.$white;
 	color: abstracts.$black;
 
-	&:hover {
+	@include abstracts.hover {
 		background-color: abstracts.$silver;
 		border-color: abstracts.$silver;
 	}
@@ -140,7 +140,7 @@
 	border-color: abstracts.$silver;
 	color: abstracts.$black;
 
-	&:hover {
+	@include abstracts.hover {
 		background-color: abstracts.$shade;
 		border-color: abstracts.$shade;
 		color: abstracts.$white;
@@ -169,7 +169,7 @@
 	border-color: abstracts.$platinum;
 	color: abstracts.$black;
 
-	&:hover {
+	@include abstracts.hover {
 		background-color: abstracts.$shade;
 		border-color: abstracts.$shade;
 		color: abstracts.$white;
@@ -206,7 +206,7 @@
 	border-color: abstracts.$black;
 	color: abstracts.$black;
 
-	&:hover {
+	@include abstracts.hover {
 		background-color: abstracts.$silver;
 	}
 
@@ -238,7 +238,7 @@
 	border-color: transparent;
 	color: abstracts.$black;
 
-	&:hover {
+	@include abstracts.hover {
 		background-color: transparent;
 		border-color: transparent;
 		color: abstracts.$neutral;
@@ -264,7 +264,7 @@
 		font-size: abstracts.$font-size-sm;
 		color: abstracts.$neutral;
 
-		&:hover {
+		@include abstracts.hover {
 			color: abstracts.$shade;
 		}
 
@@ -325,7 +325,7 @@
 }
 
 .c-button--light {
-	&:hover {
+	@include abstracts.hover {
 		border: 0.1rem solid abstracts.$zinc;
 		color: abstracts.$zinc;
 	}
@@ -336,7 +336,7 @@
 	background-color: abstracts.$black;
 	color: abstracts.$white;
 
-	&:hover {
+	@include abstracts.hover {
 		border: 0.1rem solid abstracts.$zinc;
 		background-color: abstracts.$white;
 		color: abstracts.$zinc;
@@ -360,7 +360,7 @@
 		outline: 0.1rem solid transparent;
 	}
 
-	&:hover {
+	@include abstracts.hover {
 		background-color: abstracts.$zinc;
 		border-color: abstracts.$zinc;
 	}
@@ -372,7 +372,7 @@
 	background-color: abstracts.$white;
 	color: abstracts.$black;
 
-	&:hover {
+	@include abstracts.hover {
 		background-color: abstracts.$white;
 		border-color: abstracts.$zinc;
 		color: abstracts.$zinc;
@@ -387,8 +387,13 @@
 	cursor: not-allowed;
 	outline: none;
 
-	&:active,
-	&:hover {
+	&:active {
+		background-color: abstracts.$silver;
+		border-color: abstracts.$silver;
+		color: abstracts.$zinc;
+	}
+
+	@include abstracts.hover {
 		background-color: abstracts.$silver;
 		border-color: abstracts.$silver;
 		color: abstracts.$zinc;
