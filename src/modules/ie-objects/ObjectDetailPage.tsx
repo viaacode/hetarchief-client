@@ -1114,7 +1114,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		// observer deliberately ignores the sentinel coming back into view (see its own comment) to
 		// avoid an expand/collapse loop - which would otherwise also block this explicit click.
 		setIsHeaderCollapsed(false);
-		sidebarContentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+		// behavior: 'auto' (instant), not 'smooth': a smooth scroll racing the header's own
+		// concurrent max-height expand transition can settle a few px short of scrollTop 0 (the
+		// header growing shifts the content it's scrolling through underneath it), which leaves the
+		// sentinel just out of view. The observer then never sees it re-enter, so it never fires
+		// again and the header can no longer collapse on a later scroll. An instant jump lands on
+		// exactly 0 before the transition has a chance to interfere.
+		sidebarContentRef.current?.scrollTo({ top: 0, behavior: 'auto' });
 	};
 
 	const onCloseBlade = () => {

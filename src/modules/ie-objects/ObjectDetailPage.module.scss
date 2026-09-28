@@ -455,6 +455,11 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		// collapses/expands, re-triggering its IntersectionObserver and causing a flicker loop.
 		overflow-anchor: none;
 
+		// Fades alongside the header's own max-height transition (same duration) instead of
+		// snapping in/out the instant the --scrolled modifier toggles.
+		box-shadow: none;
+		transition: box-shadow abstracts.$animate-default;
+
 		&--scrolled {
 			// Cast once content has scrolled underneath this sticky unit (same signal as the header's
 			// own collapse - see the sentinel IntersectionObserver in ObjectDetailPage.tsx), per Figma.

@@ -25,18 +25,16 @@ $max-height-collapsed: 8rem;
 	max-height: $max-height-collapsed;
 }
 
-// Both states render at once (see ObjectDetailPageHeader.tsx) so the max-height transition
-// above has stable content to animate around.
+// Both states render at once (see ObjectDetailPageHeader.tsx) so the max-height transition above
+// has stable content to animate around. Their display is toggled via inline style in JS (not a
+// --collapsed selector here), so hiding the expanded content can be delayed until the shrink
+// transition actually finishes - see the component's own comment for why.
 .p-object-detail-header__expanded-content {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	gap: $spacer-xs;
 	padding: $spacer-lg $spacer-lg 0 $spacer-lg;
-
-	.p-object-detail-header--collapsed & {
-		display: none;
-	}
 }
 
 .p-object-detail-header__collapsed-content {
@@ -46,10 +44,6 @@ $max-height-collapsed: 8rem;
 	justify-content: space-between;
 	gap: $spacer-xs; // 8px
 	padding: 1.2rem $spacer-lg; // 12px 32px - 12px has no matching spacer token
-
-	.p-object-detail-header--collapsed & {
-		display: flex;
-	}
 
 	.p-object-detail__title {
 		min-width: 0;
