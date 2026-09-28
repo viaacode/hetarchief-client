@@ -6,16 +6,16 @@ import {
 	type RequestAccessFormState,
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
-import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
 import { ContextDisclaimer } from '@ie-objects/components/ContextDisclaimer/ContextDisclaimer';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
-import Metadata from '@ie-objects/components/Metadata/Metadata';
 import type { MetadataItem } from '@ie-objects/components/Metadata/Metadata.types';
-import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import { ObjectDetailPageHeader } from '@ie-objects/components/ObjectDetailPageHeader/ObjectDetailPageHeader';
-import { ObjectDetailPageMetadata } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata';
+import { ObjectDetailPageMetadataTab } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataTab';
+import { ObjectDetailPageOcrTab } from '@ie-objects/components/ObjectDetailPageOcrTab/ObjectDetailPageOcrTab';
+import { ObjectDetailPageOverviewTab } from '@ie-objects/components/ObjectDetailPageOverviewTab/ObjectDetailPageOverviewTab';
+import { ObjectDetailPageRelatedTab } from '@ie-objects/components/ObjectDetailPageRelatedTab/ObjectDetailPageRelatedTab';
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
-import { type MediaObject, RelatedObject } from '@ie-objects/components/RelatedObject';
+import type { MediaObject } from '@ie-objects/components/RelatedObject';
 import { useGetAltoJsonFileContent } from '@ie-objects/hooks/use-get-alto-json-file-content';
 import { useGetIeObjectBySchemaIdentifier } from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
 import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/use-get-ie-object-ticket-service-tokens';
@@ -42,7 +42,6 @@ import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-te
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
-import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination';
 import {
 	iiifGoToHome,
 	iiifGoToPage,
@@ -59,7 +58,7 @@ import {
 	isNewspaperType,
 	mapDcTermsFormatToSimpleType,
 } from '@meemoo/admin-core-ui/admin';
-import { Alert, Button, type TabProps, Tabs } from '@meemoo/react-components';
+import { Button, type TabProps, Tabs } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import type { CuePoints } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer.types';
 import { Blade } from '@shared/components/Blade/Blade';
@@ -118,22 +117,12 @@ import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNa
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 import clsx from 'clsx';
-import {
-	capitalize,
-	compact,
-	intersection,
-	isEqual,
-	isNil,
-	lowerCase,
-	noop,
-} from 'es-toolkit/compat';
+import { capitalize, compact, intersection, isNil, lowerCase, noop } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
 import React, {
 	type FC,
-	Fragment,
 	type ReactNode,
 	useCallback,
 	useEffect,
@@ -195,7 +184,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, []);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
-	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
 	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
 	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
 	/**
@@ -299,6 +287,21 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 		const observer = new IntersectionObserver(
 			([entry]) => {
+				if (entry.isIntersecting) {
+					// The sentinel can come back into view for two different reasons: the user
+					// genuinely scrolled back to the top (real overflow, should re-expand), or
+					// collapsing the header just now made the remaining content short enough to
+					// fit without scrolling at all - the browser then clamps scrollTop back to 0
+					// on its own, which brings the sentinel back into view even though nothing
+					// was scrolled. Re-expanding in that second case would recreate the overflow
+					// that triggered the collapse, which the clamp immediately undoes again,
+					// forever looping and leaving any content below the header unreachable with
+					// tabs that have little content (e.g. a short Overzicht tab).
+					const hasOverflow = root.scrollHeight - root.clientHeight > 1;
+					if (!hasOverflow) {
+						return;
+					}
+				}
 				setIsHeaderCollapsed(!entry.isIntersecting);
 			},
 			{ root, threshold: 0 }
@@ -448,6 +451,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		mediaInfo?.premisIsPartOf || null,
 		!!mediaInfo
 	);
+	// Same condition as getMappedRelatedIeObjects() below, without needing its mapping — just
+	// whether the Gerelateerd tab has anything to show.
+	const hasRelated: boolean = !!relatedIeObjects?.parent || !!relatedIeObjects?.children?.length;
 
 	// visit info
 	const { data: visitRequest, error: visitRequestError } = useGetActiveVisitRequestForUserAndSpace(
@@ -1103,7 +1109,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	};
 
 	const handleShowHeaderDetails = () => {
-		// Scrolling to the top brings the sentinel back into view, which re-expands the header via the observer
+		// Expand directly rather than relying on the scroll-to-top to re-trigger the sentinel's
+		// IntersectionObserver: when the tab's content fits on screen without a scrollbar, that
+		// observer deliberately ignores the sentinel coming back into view (see its own comment) to
+		// avoid an expand/collapse loop - which would otherwise also block this explicit click.
+		setIsHeaderCollapsed(false);
 		sidebarContentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
 	};
 
@@ -1330,9 +1340,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			mediaInfo?.dctermsFormat || null,
 			activeTab as ObjectDetailTabs,
 			isMediaAvailable(),
-			arePagesOcrTextsAvailable
+			arePagesOcrTextsAvailable,
+			hasRelated
 		);
-	}, [mediaInfo?.dctermsFormat, activeTab, isMediaAvailable, arePagesOcrTextsAvailable]);
+	}, [
+		mediaInfo?.dctermsFormat,
+		activeTab,
+		isMediaAvailable,
+		arePagesOcrTextsAvailable,
+		hasRelated,
+	]);
 
 	const accessEndDate = useMemo(() => {
 		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
@@ -1505,222 +1522,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		);
 	};
 
-	// Metadata
-	const renderCard = (item: MediaObject, isHidden: boolean) => (
-		<li>
-			<Link
-				passHref
-				href={`${ROUTES_BY_LOCALE[locale].search}/${router.query.slug}/${item.id}`}
-				tabIndex={isHidden ? -1 : 0}
-				className={clsx(styles['p-object-detail__metadata-card-link'], 'u-text-no-decoration')}
-				aria-label={item.title}
-			>
-				<RelatedObject object={item} />
-			</Link>
-		</li>
-	);
-
-	const renderIeObjectCards = (
-		type: 'similar' | 'related',
-		items: MediaObject[],
-		isHidden = false
-	): ReactNode => (
-		<div className="u-m-0">
-			{
-				<ul
-					className={clsx(
-						'u-bg-platinum',
-						'u-list-reset',
-						styles['p-object-detail__metadata-list'],
-						`p-object-detail__metadata-list--${type}`
-					)}
-				>
-					{items.map((item, index) => {
-						return (
-							<Fragment key={`${type}-object-${item.id}-${index}`}>
-								{renderCard(item, isHidden)}
-							</Fragment>
-						);
-					})}
-				</ul>
-			}
-		</div>
-	);
-
-	const renderCollapsableBladeTitle = (mappedRelatedIeObjects: MediaObject[]): string => {
-		if (relatedIeObjects?.parent) {
-			return tText(
-				'modules/ie-objects/object-detail-page___dit-object-is-onderdeel-van-dit-hoofdobject'
-			);
-		}
-		if (mappedRelatedIeObjects.length === 1) {
-			return tText('modules/ie-objects/object-detail-page___dit-object-heeft-1-fragment');
-		}
-		return tText('modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten', {
-			amount: mappedRelatedIeObjects.length,
-		});
-	};
-
-	const renderRelatedObjectsBlade = () => {
-		const mappedRelatedIeObjects = getMappedRelatedIeObjects();
-		if (!mappedRelatedIeObjects.length || (!expandSidebar && isMobile)) {
-			return null;
-		}
-		return (
-			<CollapsableBlade
-				className={clsx('p-object-detail__related')}
-				isOpen={isRelatedObjectsBladeOpen}
-				setIsOpen={setIsRelatedObjectsBladeOpen}
-				icon={
-					<Icon
-						className="u-font-size-24 u-mr-8 u-text-left"
-						name={IconNamesLight.RelatedObjects}
-						aria-hidden
-					/>
-				}
-				title={renderCollapsableBladeTitle(mappedRelatedIeObjects)}
-				renderContent={(hidden: boolean) =>
-					renderIeObjectCards('related', mappedRelatedIeObjects, hidden)
-				}
-				ariaLabel={renderCollapsableBladeTitle(mappedRelatedIeObjects)}
-			/>
-		);
-	};
-
-	const renderedOcrText = useMemo(() => {
-		let searchTermIndex = 0;
-		return (
-			<div className={styles['p-object-detail__ocr__words-container']}>
-				{simplifiedAltoInfo?.altoJsonContent?.text?.map((textLocation, textIndex) => {
-					const foundAltoText = altoTextsOnCurrentPageForSearchTerms.find((item) =>
-						isEqual(item.text, textLocation)
-					);
-					const isMarked: boolean = !!foundAltoText;
-					const isTabbable: boolean = !!foundAltoText?.tabbable;
-
-					// Search results are counted per page, so we need to subtract the amount of results in previous page
-					const searchResultsOnPreviousPages: number =
-						searchResults?.filter((result) => result.pageIndex < currentPageIndex).length || 0;
-					const searchResultIndexWithinCurrentPage: number =
-						(currentSearchResultIndex || 0) - searchResultsOnPreviousPages;
-					const isActive: boolean =
-						!!searchTermWords &&
-						isTabbable &&
-						searchTermIndex === searchResultIndexWithinCurrentPage;
-
-					const wordElement = (
-						// biome-ignore lint/a11y/noStaticElementInteractions: We need it this way
-						<span
-							key={`ocr-text--${ieObjectId}--${currentPageIndex}--${
-								// biome-ignore lint/suspicious/noArrayIndexKey: _
-								textIndex
-							}`}
-							onClick={() => handleClickOnOcrWord(textLocation)}
-							onKeyUp={(evt) => {
-								if (evt.key === 'Enter') {
-									handleClickOnOcrWord(textLocation);
-								}
-							}}
-							onDoubleClick={() => handleIsTextOverlayVisibleChange(!isTextOverlayVisible)}
-							className={clsx(styles['p-object-detail__ocr__word'], {
-								[styles['p-object-detail__ocr__word--marked']]: isMarked,
-								[styles['p-object-detail__ocr__word--marked--active']]: isActive,
-							})}
-						>
-							{textLocation.text}{' '}
-						</span>
-					);
-
-					if (isTabbable) {
-						searchTermIndex += 1;
-					}
-
-					return wordElement;
-				})}
-			</div>
-		);
-	}, [
-		searchTermWords,
-		simplifiedAltoInfo?.altoJsonContent?.text,
-		altoTextsOnCurrentPageForSearchTerms,
-		searchResults,
-		currentSearchResultIndex,
-		ieObjectId,
-		currentPageIndex,
-		handleIsTextOverlayVisibleChange,
-		handleClickOnOcrWord,
-		isTextOverlayVisible,
-	]);
-
-	const renderOcrContent = () => {
-		return (
-			<div className={clsx(styles['p-object-detail__ocr'])}>
-				<Alert
-					icon={<Icon name={IconNamesLight.Info} aria-hidden />}
-					title={tText('modules/ie-objects/object-detail-page___ocr-betrouwbaarheid')}
-					content={tHtml(
-						'modules/ie-objects/object-detail-page___deze-ocr-kan-fouten-bevatten-a-href-ocr-betrouwbaarheid-info-meer-info-vind-je-hier-a'
-					)}
-				/>
-
-				{arePagesOcrTextsAvailable && (
-					<OcrSearchInputWithResultsPagination
-						id="object-detail-page__ocr-search-input"
-						className={styles['p-object-detail__ocr__search']}
-						value={searchTermsTemp}
-						onChange={setSearchTermsTemp}
-						onSearch={(newSearchTerms) => handleSearch(newSearchTerms)}
-						onClearSearch={handleClearSearch}
-						searchResults={searchTerms ? searchResults : null}
-						currentSearchIndex={currentSearchResultIndex || 0}
-						onChangeSearchIndex={handleChangeSearchIndex}
-						searchInputAriaLabel={tText(
-							'modules/ie-objects/object-detail-page___zoek-tekst-in-deze-krant-input-aria-label'
-						)}
-					/>
-				)}
-
-				{renderedOcrText}
-
-				<div className={styles['p-object-detail__ocr__pagination']}>
-					<Button
-						className={clsx(styles['p-object-detail__ocr__pagination__button'], {
-							[styles['p-object-detail__ocr__pagination__button--active']]: currentPageIndex > 0,
-						})}
-						iconStart={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
-						ariaLabel={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding')}
-						label={tText('modules/ie-objects/object-detail-page___vorige')}
-						variants={['text']}
-						onClick={() => {
-							setCurrentPageIndex(currentPageIndex - 1, 'replaceIn');
-						}}
-						disabled={currentPageIndex === 0}
-					/>
-					<span className="pagination-info">
-						{tText('modules/ie-objects/object-detail-page___pagina-current-page-van-total-pages', {
-							currentPage: currentPageIndex + 1,
-							totalPages: iiifViewerImageInfos?.length || 1,
-						})}
-					</span>
-					<Button
-						className={clsx(styles['p-object-detail__ocr__pagination__button'], {
-							[styles['p-object-detail__ocr__pagination__button--active']]:
-								currentPageIndex < iiifViewerImageInfos.length - 1,
-						})}
-						iconEnd={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
-						ariaLabel={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding')}
-						label={tText('modules/ie-objects/object-detail-page___volgende')}
-						variants={['text']}
-						onClick={() => {
-							setCurrentPageIndex(currentPageIndex + 1, 'replaceIn');
-						}}
-						disabled={currentPageIndex === iiifViewerImageInfos.length - 1}
-					/>
-				</div>
-			</div>
-		);
-	};
-
 	const renderObjectMedia = () => {
 		if (mediaInfo?.hasAccessToEssence) {
 			return (
@@ -1808,8 +1609,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					[styles['p-object-detail__wrapper--expanded']]: expandSidebar,
 					[styles['p-object-detail__wrapper--no-media-available']]: !isMediaAvailable(),
 					[styles['p-object-detail__wrapper--media-available']]: isMediaAvailable(),
-					[styles['p-object-detail__wrapper--no-ocr-available']]: !arePagesOcrTextsAvailable,
-					[styles['p-object-detail__wrapper--ocr-available']]: arePagesOcrTextsAvailable,
 					[styles['p-object-detail__wrapper--metadata']]: activeTab === ObjectDetailTabs.Metadata,
 					[styles['p-object-detail__wrapper--video']]: activeTab === ObjectDetailTabs.Media,
 					[styles['p-object-detail__wrapper--ocr']]: activeTab === ObjectDetailTabs.Ocr,
@@ -1841,13 +1640,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					/>
 				)}
 
-				{/* Tabs */}
-				<Tabs
-					className={clsx(styles['p-object-detail__tabs'])}
-					variants={['dark']}
-					tabs={tabs}
-					onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
-				/>
+				{/* Tabs - mobile only: the mobile FA puts the tab strip above the header, so it stays
+				 * a grid sibling here. Desktop renders tabs below the header instead, inside the
+				 * shared sticky unit (see &__sidebar__sticky below). */}
+				{isMobile && (
+					<Tabs
+						className={clsx(styles['p-object-detail__tabs'])}
+						variants={['dark']}
+						tabs={tabs}
+						onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
+					/>
+				)}
 
 				{/* Sidebar */}
 				<div className={clsx(styles['p-object-detail__sidebar'])}>
@@ -1863,22 +1666,43 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					>
 						{/* Sentinel that drives the header's collapse - see the IntersectionObserver effect above */}
 						<div ref={headerCollapseSentinelRef} />
-						<ObjectDetailPageHeader
-							mediaInfo={mediaInfo}
-							onClickAction={onClickAction}
-							hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
-							currentPageIndex={currentPageIndex}
-							isCollapsed={isHeaderCollapsed}
-							onShowDetails={handleShowHeaderDetails}
-							onReadMoreClicked={setSelectedMetadataField}
-						/>
+						<div
+							className={clsx(styles['p-object-detail__sidebar__sticky'], {
+								[styles['p-object-detail__sidebar__sticky--scrolled']]: isHeaderCollapsed,
+							})}
+						>
+							<ObjectDetailPageHeader
+								mediaInfo={mediaInfo}
+								onClickAction={onClickAction}
+								hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
+								currentPageIndex={currentPageIndex}
+								isCollapsed={isHeaderCollapsed}
+								onShowDetails={handleShowHeaderDetails}
+								onReadMoreClicked={setSelectedMetadataField}
+							/>
+							{!isMobile && (
+								<Tabs
+									className={clsx(styles['p-object-detail__tabs'])}
+									variants={['dark']}
+									tabs={tabs}
+									onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
+								/>
+							)}
+						</div>
+						{activeTab === ObjectDetailTabs.Overview && (
+							<ObjectDetailPageOverviewTab
+								mediaInfo={mediaInfo}
+								visitRequest={visitRequest || null}
+								similar={similar}
+								onReadMoreClicked={setSelectedMetadataField}
+							/>
+						)}
 						{/*
 						 * HetArchiefIeObject metadata
 						 */}
 						{activeTab === ObjectDetailTabs.Metadata && (
-							<ObjectDetailPageMetadata
+							<ObjectDetailPageMetadataTab
 								mediaInfo={mediaInfo}
-								visitRequest={visitRequest || null}
 								goToPage={handleSetCurrentPage}
 								currentPage={currentPage}
 								activeFile={
@@ -1895,22 +1719,38 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 								onReadMoreClicked={setSelectedMetadataField}
 							/>
 						)}
-						{activeTab === ObjectDetailTabs.Metadata && !!similar.length && (
-							<MetadataList allowTwoColumns={false}>
-								<Metadata
-									title={tHtml('pages/slug/ie/index___ook-interessant')}
-									key="metadata-keywords"
-									className="u-pb-0"
-								>
-									{renderIeObjectCards('similar', similar)}
-								</Metadata>
-							</MetadataList>
+						{activeTab === ObjectDetailTabs.Related && (
+							<ObjectDetailPageRelatedTab
+								items={getMappedRelatedIeObjects()}
+								isParent={!!relatedIeObjects?.parent}
+							/>
 						)}
 
 						{activeTab === ObjectDetailTabs.Media && isMobile && renderObjectMedia()}
-						{activeTab === ObjectDetailTabs.Ocr && renderOcrContent()}
+						{activeTab === ObjectDetailTabs.Ocr && (
+							<ObjectDetailPageOcrTab
+								ieObjectId={ieObjectId}
+								altoText={simplifiedAltoInfo?.altoJsonContent?.text}
+								altoTextsOnCurrentPageForSearchTerms={altoTextsOnCurrentPageForSearchTerms}
+								searchResults={searchResults}
+								currentSearchResultIndex={currentSearchResultIndex}
+								currentPageIndex={currentPageIndex}
+								pageCount={iiifViewerImageInfos.length}
+								setCurrentPageIndex={setCurrentPageIndex}
+								searchTermsTemp={searchTermsTemp}
+								setSearchTermsTemp={setSearchTermsTemp}
+								searchTerms={searchTerms}
+								searchTermWords={searchTermWords}
+								arePagesOcrTextsAvailable={arePagesOcrTextsAvailable}
+								onSearch={handleSearch}
+								onClearSearch={handleClearSearch}
+								onChangeSearchIndex={handleChangeSearchIndex}
+								onClickOnOcrWord={handleClickOnOcrWord}
+								isTextOverlayVisible={isTextOverlayVisible}
+								onIsTextOverlayVisibleChange={handleIsTextOverlayVisibleChange}
+							/>
+						)}
 					</div>
-					{renderRelatedObjectsBlade()}
 				</div>
 			</article>
 

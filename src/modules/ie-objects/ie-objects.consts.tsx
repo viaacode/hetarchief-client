@@ -134,22 +134,19 @@ export const OBJECT_DETAIL_TABS = (
 	 * tab -- the tab itself is always rendered.
 	 */
 	isMediaPlayable = true,
-	ocrAvailable = true
+	ocrAvailable = true,
+	hasRelated = true
 ): TabProps[] => {
 	const typeWithDefault = mediaType || HetArchiefIeObjectType.VIDEO;
 	return [
 		{
-			id: ObjectDetailTabs.Metadata,
-			label: tText('modules/ie-objects/const/index___metadata'),
-			ariaLabel: tText('modules/ie-objects/const/index___metadata'),
-			icon: <Icon name={IconNamesLight.Info} aria-hidden />,
-			active: ObjectDetailTabs.Metadata === activeTab,
-		},
-		{
+			// Positioned first so this array already matches the mobile tab order (see the mobile FA);
+			// desktop hides it via the `.c-tab--media` rule below regardless of its position here.
 			id: ObjectDetailTabs.Media,
 			label: GET_TYPE_TO_LABEL_MAP(typeWithDefault),
 			ariaLabel: GET_TYPE_TO_LABEL_MAP(typeWithDefault),
-			// typeWithDefault falls back to VIDEO above, so an icon is always resolved
+			// typeWithDefault falls back to VIDEO above, so an icon is always resolved. Media is the
+			// only tab on the detail page that keeps its icon (per both the desktop and mobile FA).
 			icon: (
 				<Icon
 					name={getIconFromObjectType(typeWithDefault, isMediaPlayable) as IconName}
@@ -158,14 +155,35 @@ export const OBJECT_DETAIL_TABS = (
 			),
 			active: ObjectDetailTabs.Media === activeTab,
 		},
+		{
+			id: ObjectDetailTabs.Overview,
+			label: tText('modules/ie-objects/const/index___overzicht'),
+			ariaLabel: tText('modules/ie-objects/const/index___overzicht'),
+			active: ObjectDetailTabs.Overview === activeTab,
+		},
+		{
+			id: ObjectDetailTabs.Metadata,
+			label: tText('modules/ie-objects/const/index___metadata'),
+			ariaLabel: tText('modules/ie-objects/const/index___metadata'),
+			active: ObjectDetailTabs.Metadata === activeTab,
+		},
 		...(ocrAvailable
 			? [
 					{
 						id: ObjectDetailTabs.Ocr,
 						label: tText('modules/ie-objects/ie-objects___ocr'),
 						ariaLabel: tText('modules/ie-objects/ie-objects___ocr'),
-						icon: <Icon name={IconNamesLight.Ocr} aria-hidden />,
 						active: ObjectDetailTabs.Ocr === activeTab,
+					},
+				]
+			: []),
+		...(hasRelated
+			? [
+					{
+						id: ObjectDetailTabs.Related,
+						label: tText('modules/ie-objects/const/index___gerelateerd'),
+						ariaLabel: tText('modules/ie-objects/const/index___gerelateerd'),
+						active: ObjectDetailTabs.Related === activeTab,
 					},
 				]
 			: []),

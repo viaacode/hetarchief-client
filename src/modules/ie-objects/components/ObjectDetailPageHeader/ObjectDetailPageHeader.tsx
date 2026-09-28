@@ -8,7 +8,7 @@ import {
 	DynamicActionMenu,
 	type DynamicActionMenuProps,
 } from '@ie-objects/components/DynamicActionMenu';
-import { ObjectDetailPageMetadataAiDescription } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadataAiDescription';
+import { ObjectDetailPageMetadataAiDescription } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataAiDescription';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/use-get-is-public-newspaper';
 import {
 	ANONYMOUS_ACTION_SORT_MAP,

@@ -1,4 +1,5 @@
 @use "src/styles/abstracts" as abstracts;
+@use "sass:color";
 @use "sass:map";
 
 $expand-button-vertical-position: 35vh; // Visually a litter higher than halfway to compensate for the visual bottom bar
@@ -104,22 +105,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		@media (max-width: abstracts.$breakpoint-lg) {
 			grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);
 			grid-template-columns: max-content 1fr;
-		}
-
-		&--no-ocr-available {
-			:global(.c-tabs) {
-				@media (min-width: abstracts.$breakpoint-lg) {
-					// On desktop if no ocr is available, we don't need to show the tabs, since only one tab will be visible
-					display: none !important;
-				}
-			}
-
-			@include abstracts.module-class-selector-global("ObjectDetailPage", "p-object-detail__sidebar") {
-				// Sidebar can take the space of the tabs if there is no media, since only one tab would be visible or desktop
-				@media (min-width: abstracts.$breakpoint-lg) {
-					grid-row: 2 / 5 !important;
-				}
-			}
 		}
 	}
 
@@ -237,10 +222,23 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	}
 
 	&__tabs {
-		display: none;
+		// Shrink-to-fit tabs, left-aligned; any leftover width just shows the row's own black
+		// background (see :global(.c-tab) below) instead of stretching tabs to fill it.
+		display: flex;
+		justify-content: flex-start;
+
+		// The row's own background, behind any width the (shrink-to-fit) tabs don't fill.
+		background-color: abstracts.$black;
 
 		@media (min-width: abstracts.$breakpoint-lg) {
-			// Desktop
+			// Desktop - not a grid item here: it renders inside .p-object-detail__sidebar__sticky,
+			// directly below the header, as part of that shared sticky unit (see
+			// &__sidebar__sticky below). Mobile keeps its own separate grid-row placement, since
+			// mobile puts the tab strip above the header instead (see the mobile FA).
+			width: 100%;
+			height: $metadata-media-ocr-tabs-height-desktop;
+			flex-shrink: 0;
+
 			:global(.c-tab--media) {
 				display: none !important;
 			}
@@ -250,28 +248,48 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			// Mobile
 			grid-column: 1 / 4;
 			width: 100%;
-			display: flex;
 		}
 
 		:global(.c-tabs__item) {
 			display: flex;
-			justify-content: center;
-			flex-grow: 1;
+			flex-shrink: 0;
 			margin-right: 0;
-			width: 100%;
 		}
 
 		:global(.c-tab) {
 			display: flex;
+			align-items: center;
 			justify-content: center;
+			height: 4.8rem; // 48px
+			padding: 0 abstracts.$spacer-lg; // 32px
+			gap: abstracts.$spacer-xs; // 8px
 			background-color: abstracts.$black;
+
+			// Active/inactive background already gives clear visual feedback; the browser's
+			// default focus ring on this <button> isn't part of the design here.
+			outline: none;
 
 			:global(.c-tab__icon) {
 				font-size: abstracts.$font-size-lg;
 			}
 
+			:global(.c-tab__label) {
+				color: abstracts.$white;
+				font-size: abstracts.$font-size-base; // 16px
+				font-weight: abstracts.$font-weight-normal;
+				line-height: abstracts.$line-height-1xl; // 20px at 16px font size
+				white-space: nowrap;
+			}
+
 			&:global(.c-tab--active) {
 				background-color: abstracts.$white;
+
+				:global(.c-tab__label) {
+					color: abstracts.$black;
+
+					// No matching token for this weight (same precedent as the header title/detail pages elsewhere).
+					font-weight: 800;
+				}
 			}
 		}
 	}
@@ -393,6 +411,9 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	}
 
 	&__sidebar {
+		// Row 2/5 on desktop: the tabs no longer get their own grid row there - they render inside
+		// this sidebar, directly below the header (see &__sidebar__sticky). Mobile keeps its
+		// separate tabs row above (row 2), so its sidebar still starts at row 3.
 		grid-row: 2 / 5;
 		grid-column: 3;
 		display: flex;
@@ -408,29 +429,36 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	}
 
 	&:global(.p-object-detail--newspaper) {
-		:global([class*="p-object-detail__wrapper"] > #{abstracts.module-class-selector-webpack("ObjectDetailPage", "p-object-detail__sidebar")}),
-		:global([class*="p-object-detail__wrapper"] > #{abstracts.module-class-selector-turbopack("ObjectDetailPage", "p-object-detail__sidebar")}) {
-			grid-row: 3 / 5;
-			grid-column: 3;
-
-			@media (max-width: abstracts.$breakpoint-lg) {
-				grid-row: 3 / 5;
-				grid-column: 1 / 3;
-			}
-		}
-
 		:global([class*="p-object-detail__wrapper"] > [class*="p-object-detail__tabs"]) {
-			grid-row: 2;
-			grid-column: 3;
-			display: flex;
-			width: 100%;
-			height: $metadata-media-ocr-tabs-height-desktop;
-
 			@media (max-width: abstracts.$breakpoint-lg) {
-				width: 100%;
-				grid-row: 2;
+				// Newspaper mobile reserves a back-arrow column before the tabs; other types don't.
 				grid-column: 2 / 3;
 			}
+		}
+	}
+
+	&__sidebar__sticky {
+		// Sticky wrapper for the header + (desktop-only) tabs, so they move and collapse together
+		// as one unit: this element - not the header itself - owns the stickiness, so the tabs
+		// just sit in normal flow directly below the header, growing/shrinking with its own
+		// collapse animation instead of needing their own independently-computed sticky offset.
+		// No explicit z-index: sticky alone already paints above the tab content below it, and
+		// must stay below the expand/collapse sidebar button ($z-layers "foreground") regardless -
+		// an explicit z-index here would tie with that button's and win on DOM order (see
+		// ObjectDetailPageHeader.module.scss's own history for why this matters).
+		position: sticky;
+		top: 0;
+		display: flex;
+		flex-direction: column;
+
+		// Without this, scroll anchoring "corrects" scrollTop as the header inside here
+		// collapses/expands, re-triggering its IntersectionObserver and causing a flicker loop.
+		overflow-anchor: none;
+
+		&--scrolled {
+			// Cast once content has scrolled underneath this sticky unit (same signal as the header's
+			// own collapse - see the sentinel IntersectionObserver in ObjectDetailPage.tsx), per Figma.
+			box-shadow: 0 0.4rem 0.4rem 0 color.adjust(abstracts.$black, $alpha: -0.84); // 4px 4px, black/0.16
 		}
 	}
 
@@ -447,7 +475,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 		// Breathing room under whatever the last section happens to be (metadata, "ook
 		// interessant", ...), so the content never ends flush against the bottom edge
-		padding-bottom: abstracts.$spacer-2xl;
+		padding-bottom: abstracts.$spacer-md;
 
 		// "Ook interessant" is always the last section when it renders, and it paints its own
 		// background. Padding here would leave that grey stopping short with a white band
@@ -472,167 +500,11 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 	}
 
-	&__ocr {
-		background-color: abstracts.$white;
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-		overflow: hidden;
-		width: 100%;
-		gap: abstracts.$spacer-md;
-		padding: abstracts.$spacer-lg 0;
-
-		// Search, Alert, Pagination
-		> * {
-			margin-left: abstracts.$spacer-lg;
-			margin-right: abstracts.$spacer-lg;
-			width: calc(100% - #{abstracts.$spacer-lg} * 2);
-
-			@media (max-width: abstracts.$breakpoint-lg) {
-				margin: abstracts.$spacer-sm;
-				width: calc(100% - #{abstracts.$spacer-sm} * 2);
-			}
-		}
-
-		&__words-container {
-			height: 100%;
-			max-height: 100%;
-			overflow-y: auto;
-			padding: 0 abstracts.$spacer-lg abstracts.$spacer-lg * 3;
-			width: 100%;
-			margin: 0;
-
-			@media (max-width: abstracts.$breakpoint-lg) {
-				padding: 0 abstracts.$spacer-sm abstracts.$spacer-1xl;
-				width: 100vw;
-			}
-		}
-
-		&__word {
-			display: inline-block;
-			padding: 0.5rem 0.25rem;
-			cursor: pointer;
-			scroll-margin: 40vh;
-			word-break: break-word;
-
-			&:hover {
-				background-color: abstracts.$teal-30;
-				color: black;
-			}
-
-			&--marked {
-				background-color: abstracts.$teal-dark;
-				color: white;
-
-				&:hover {
-					background-color: abstracts.$teal-30;
-					color: black;
-				}
-
-				&--active {
-					background-color: abstracts.$black;
-
-					&:hover {
-						background-color: abstracts.$teal-30;
-						color: black;
-					}
-				}
-			}
-		}
-
-		&__pagination {
-			display: flex;
-			align-items: center;
-			background-color: abstracts.$silver;
-			border-radius: abstracts.$button-radius;
-			text-align: center;
-
-			:global(.pagination-info) {
-				flex-grow: 1;
-			}
-
-			> :global(.c-button) {
-				margin: 0;
-				color: abstracts.$zinc;
-			}
-
-			@media (max-width: abstracts.$breakpoint-lg) {
-				:global(.c-button__label) {
-					display: none;
-				}
-			}
-
-			&__button {
-				&--active {
-					color: abstracts.$black !important;
-				}
-			}
-		}
-
-		:global(.u-flex) {
-			margin-bottom: abstracts.$spacer-1xl;
-			height: abstracts.$font-size-3xl;
-		}
-
-		&__close {
-			display: flex;
-			flex-direction: row;
-			justify-content: flex-end;
-			margin-bottom: 3.2rem;
-		}
-	}
-
 	:global(.p-object-detail__metadata-component) {
 		padding: 0 2rem;
 
 		@media (min-width: abstracts.$breakpoint-lg) {
 			padding: 0 abstracts.$spacer-lg;
-		}
-	}
-
-	&__metadata-list {
-		display: flex;
-		flex-direction: column;
-		gap: abstracts.$spacer-sm;
-	}
-
-	:global(.p-object-detail__metadata-list--similar) {
-		// Firefox and Safari render weirdly with: margin: 0 - abstracts.$spacer-md;
-		margin-left: -#{abstracts.$spacer-md};
-		margin-right: -#{abstracts.$spacer-md};
-		margin-top: abstracts.$spacer-xs;
-		background-color: abstracts.$platinum;
-		padding: abstracts.$spacer-md abstracts.$spacer-md 10rem;
-
-		@media (min-width: abstracts.$breakpoint-lg) {
-			// Firefox and Safari render weirdly with: margin: 0 - abstracts.$spacer-md;
-			margin-left: -#{abstracts.$spacer-lg};
-			margin-right: -#{abstracts.$spacer-lg};
-
-			// The extra bottom padding keeps the grey running to the bottom of the scroll area,
-			// since this is always the last section of the sidebar when it renders
-			padding: abstracts.$spacer-md abstracts.$spacer-lg abstracts.$spacer-2xl;
-		}
-	}
-
-	@media (min-width: abstracts.$breakpoint-lg) {
-		&__related {
-			grid-column: 2;
-		}
-	}
-
-	:global(.p-object-detail__metadata-list--related) {
-		padding: 2rem;
-		height: max-content;
-
-		@media (min-width: abstracts.$breakpoint-lg) {
-			padding: abstracts.$spacer-lg;
-		}
-
-		ul {
-			display: block;
-			height: auto;
-			overflow: scroll;
 		}
 	}
 
@@ -642,14 +514,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			.p-object-detail__media {
 				display: none;
 			}
-		}
-	}
-
-	&__metadata-card-link {
-		display: block;
-
-		&:not(:active):not(:hover):focus {
-			outline: 0.2rem solid abstracts.$teal;
 		}
 	}
 
