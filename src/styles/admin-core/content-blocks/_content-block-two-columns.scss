@@ -11,17 +11,18 @@
 		display: grid;
 		grid-gap: abstracts.$spacer-1xl;
 
-		.o-grid-col-bp2-6 {
-			width: calc(100% - abstracts.$spacer-1xl / 2) !important;
+		// The css grid gap handles the spacing between the columns, so the flex grid column margins
+		// (and the first/last-child overrides from _rich-text.scss) must not apply. Otherwise the
+		// second column is indented when the columns wrap onto separate rows (eg: iPad portrait)
+		> [class*="o-grid-col"] {
+			width: 100% !important;
+			margin-left: 0 !important;
+			margin-right: 0 !important;
 		}
 
 		/* https://meemoo.atlassian.net/browse/ARC-1960 */
 		@media (max-width: abstracts.$breakpoint-md) {
 			grid-template-columns: repeat(auto-fill, 1fr);
-
-			.o-grid-col-bp2-6 {
-				width: calc(100% - abstracts.$spacer-2xl) !important;
-			}
 		}
 	}
 
