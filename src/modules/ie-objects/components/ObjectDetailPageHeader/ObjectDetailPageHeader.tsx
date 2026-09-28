@@ -8,7 +8,6 @@ import {
 	DynamicActionMenu,
 	type DynamicActionMenuProps,
 } from '@ie-objects/components/DynamicActionMenu';
-import type { MetadataItem } from '@ie-objects/components/Metadata/Metadata.types';
 import { ObjectDetailPageMetadataAiDescription } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadataAiDescription';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/use-get-is-public-newspaper';
 import {
@@ -46,9 +45,7 @@ import {
 	MenuContent,
 } from '@meemoo/react-components';
 import { useGetAccessibleVisitorSpaces } from '@navigation/components/Navigation/hooks/get-accessible-visitor-spaces';
-import { Blade } from '@shared/components/Blade/Blade';
 import Callout from '@shared/components/Callout/Callout';
-import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -87,6 +84,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 	currentPageIndex,
 	isCollapsed,
 	onShowDetails,
+	onReadMoreClicked,
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
@@ -97,7 +95,6 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 
 	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
 	const isPublicNewspaper: boolean = useIsPublicNewspaper(mediaInfo);
-	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const breadcrumbs = useSelector(selectBreadcrumbs);
 
 	/**
@@ -422,7 +419,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 	]);
 
 	const renderMetaDataActions = (): ReactNode => (
-		<div className="p-object-detail__actions">
+		<div className={styles['p-object-detail__actions']}>
 			<div className="p-object-detail__primary-actions">
 				<DynamicActionMenu
 					{...mediaActions}
@@ -564,8 +561,8 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 							styles['p-object-detail-header__description'],
 							'u-line-height-1-4 u-font-size-14'
 						)}
-						onReadMoreClicked={setSelectedMetadataField}
-						readMoreButtonClassName={styles['p-object-detail-header__read-more']}
+						onReadMoreClicked={onReadMoreClicked}
+						readMoreButtonVariant="onHeader"
 					/>
 				)}
 
@@ -590,42 +587,11 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 						<ObjectDetailPageMetadataAiDescription
 							name={mediaInfo.nameAi}
 							synopsis={mediaInfo.synopsisAi}
-							onReadMoreClicked={setSelectedMetadataField}
-							readMoreButtonClassName={styles['p-object-detail-header__read-more']}
+							onReadMoreClicked={onReadMoreClicked}
 						/>
 					</>
 				)}
 			</div>
-
-			{/* Read more metadata field blade (main description / AI synopsis) */}
-			<Blade
-				isOpen={!!selectedMetadataField}
-				onClose={() => setSelectedMetadataField(null)}
-				title={selectedMetadataField?.title ?? ''}
-				stickyFooter={false}
-				footerButtons={[
-					{
-						label: tText(
-							'modules/ie-objects/components/object-detail-page-header/object-detail-page-header___sluit'
-						),
-						mobileLabel: tText(
-							'modules/ie-objects/components/object-detail-page-header/object-detail-page-header___sluit-mobiel'
-						),
-						type: 'secondary',
-						onClick: () => setSelectedMetadataField(null),
-					},
-				]}
-				id="object-detail-page__header-field-detail-blade"
-				ariaLabel={tText(
-					'modules/ie-objects/components/object-detail-page-header/object-detail-page-header___lees-de-volledige-waarde-van-het-metadata-veld-selected-metadata-field-name-blade-aria-label',
-					{ selectedMetadataFieldName: selectedMetadataField?.title }
-				)}
-			>
-				<HighlightedMetadata
-					title={selectedMetadataField?.title}
-					data={selectedMetadataField?.data}
-				/>
-			</Blade>
 
 			<CopyrightConfirmationModal
 				isOpen={copyrightModalOpen}

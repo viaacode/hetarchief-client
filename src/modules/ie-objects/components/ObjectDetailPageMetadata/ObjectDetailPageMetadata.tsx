@@ -2,7 +2,6 @@ import { GroupName, Permission } from '@account/const';
 import { selectUser } from '@auth/store/user';
 import type { User } from '@auth/types';
 import Metadata from '@ie-objects/components/Metadata/Metadata';
-import type { MetadataItem } from '@ie-objects/components/Metadata/Metadata.types';
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
 import type { ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
 import { ObjectDetailPageMetadataDisclaimerTooltip } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadataDisclaimerTooltip';
@@ -29,9 +28,7 @@ import {
 import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 import { isAudioVideoType, isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import { Button } from '@meemoo/react-components';
-import { Blade } from '@shared/components/Blade/Blade';
 import { CopyButton } from '@shared/components/CopyButton';
-import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
@@ -55,12 +52,11 @@ import {
 	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
-import clsx from 'clsx';
 import { compact, isEmpty, isNil, isString } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import React, { type FC, type ReactNode, useCallback, useMemo, useState } from 'react';
+import React, { type FC, type ReactNode, useCallback, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import MetadataList from '../Metadata/MetadataList';
 import styles from './ObjectDetailPageMetadata.module.scss';
@@ -75,6 +71,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	iiifZoomTo,
 	setActiveMentionHighlights,
 	setIsTextOverlayVisible,
+	onReadMoreClicked,
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
@@ -84,7 +81,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	 */
 
 	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
-	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const { data: ieObjectPreviousNextIds } = useGetIeObjectPreviousNextIds(
 		mediaInfo?.collectionId,
 		mediaInfo?.iri,
@@ -234,7 +230,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					<MetaDataFieldWithHighlightingAndMaxLength
 						title={title}
 						data={data}
-						onReadMoreClicked={setSelectedMetadataField}
+						onReadMoreClicked={onReadMoreClicked}
 					/>
 				</Metadata>
 			);
@@ -817,37 +813,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						</Metadata>
 					)}
 				</MetadataList>
-
-				{/* Read more metadata field blade */}
-				<Blade
-					className={clsx(styles['p-object-detail__metadata-blade'])}
-					isOpen={!!selectedMetadataField}
-					onClose={() => setSelectedMetadataField(null)}
-					title={selectedMetadataField?.title ?? ''}
-					stickyFooter={false}
-					footerButtons={[
-						{
-							label: tText(
-								'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___sluit'
-							),
-							mobileLabel: tText(
-								'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___sluit-mobiel'
-							),
-							type: 'secondary',
-							onClick: () => setSelectedMetadataField(null),
-						},
-					]}
-					id="object-detail-page__metadata-field-detail-blade"
-					ariaLabel={tText(
-						'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___lees-de-volledige-waarde-van-het-metadata-veld-selected-metadata-field-name-blade-aria-label',
-						{ selectedMetadataFieldName: selectedMetadataField?.title }
-					)}
-				>
-					<HighlightedMetadata
-						title={selectedMetadataField?.title}
-						data={selectedMetadataField?.data}
-					/>
-				</Blade>
 			</div>
 		);
 	};

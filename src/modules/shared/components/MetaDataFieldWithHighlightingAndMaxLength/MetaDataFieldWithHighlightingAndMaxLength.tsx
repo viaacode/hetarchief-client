@@ -3,7 +3,6 @@ import type { DefaultComponentProps } from '@meemoo/admin-core-ui/admin';
 import { Button } from '@meemoo/react-components';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import { tText } from '@shared/helpers/translate';
-import clsx from 'clsx';
 import { isString } from 'es-toolkit/compat';
 import type { FC, ReactNode } from 'react';
 import { METADATA_FIELD_MAX_LENGTH } from './MetaDataFieldWithHighlightingAndMaxLength.const';
@@ -15,8 +14,9 @@ interface MetaDataFieldWithHighlightingAndMaxLengthProps extends DefaultComponen
 	onReadMoreClicked: (item: MetadataItem) => void;
 	enableHighlighting?: boolean;
 	maxLength?: number;
-	/** Extra class applied to the "Lees meer" button, layered on top of the default styling */
-	readMoreButtonClassName?: string;
+	/** Visual style of the "Lees meer" button. 'onHeader' renders the bold black style used on the
+	 * object detail page header's purple background, instead of the default neutral/underlined style. */
+	readMoreButtonVariant?: 'default' | 'onHeader';
 }
 
 const MetaDataFieldWithHighlightingAndMaxLength: FC<
@@ -28,7 +28,7 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 	onReadMoreClicked,
 	enableHighlighting = true,
 	maxLength = METADATA_FIELD_MAX_LENGTH,
-	readMoreButtonClassName,
+	readMoreButtonVariant = 'default',
 }) => {
 	const isLongFieldData: boolean = isString(data) && data.length > maxLength;
 
@@ -50,7 +50,11 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 					{' '}
 					<Button
 						variants={['text', 'sm']}
-						className={clsx(styles['c-metadata__field__blade__read-more'], readMoreButtonClassName)}
+						className={
+							readMoreButtonVariant === 'onHeader'
+								? styles['c-metadata__field__blade__read-more--on-header']
+								: styles['c-metadata__field__blade__read-more']
+						}
 						onClick={() => onReadMoreClicked({ title, data })}
 						onKeyUp={(evt) => {
 							if (evt.key === 'Enter') {

@@ -10,6 +10,7 @@ import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
 import { ContextDisclaimer } from '@ie-objects/components/ContextDisclaimer/ContextDisclaimer';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
 import Metadata from '@ie-objects/components/Metadata/Metadata';
+import type { MetadataItem } from '@ie-objects/components/Metadata/Metadata.types';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import { ObjectDetailPageHeader } from '@ie-objects/components/ObjectDetailPageHeader/ObjectDetailPageHeader';
 import { ObjectDetailPageMetadata } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata';
@@ -65,6 +66,7 @@ import { Blade } from '@shared/components/Blade/Blade';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
+import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -249,6 +251,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const [isHeaderCollapsed, setIsHeaderCollapsed] = useState(false);
 	const sidebarContentRef = useRef<HTMLDivElement>(null);
 	const headerCollapseSentinelRef = useRef<HTMLDivElement>(null);
+	// Owned here (rather than in the header/metadata components) so the header and the metadata
+	// tab share a single "read more" blade instead of each being able to open their own.
+	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const [iiifViewerFocusX] = useQueryParam(
 		QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X,
 		withDefault(NumberParam, undefined)
@@ -284,8 +289,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	} = useGetIeObjectBySchemaIdentifier(ieObjectId, true);
 
 	// Collapse the header once the sentinel at the top of the scrollable tab content scrolls out
-	// of view. Re-attach when the tab content (re)renders, since the sentinel node can be recreated.
-	// biome-ignore lint/correctness/useExhaustiveDependencies: activeTab/mediaInfo intentionally re-attach the observer, not read directly
+	// of view. The root and sentinel are both always mounted (only their CSS visibility changes
+	// across tabs/loading states), so this only needs to run once.
 	useEffect(() => {
 		const root = sidebarContentRef.current;
 		const sentinel = headerCollapseSentinelRef.current;
@@ -300,7 +305,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		);
 		observer.observe(sentinel);
 		return () => observer.disconnect();
-	}, [activeTab, mediaInfo]);
+	}, []);
 
 	const { data: thumbnailUrl, isLoading: thumbnailUrlIsLoading } =
 		useGetIeObjectThumbnail(ieObjectId);
@@ -1865,6 +1870,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							currentPageIndex={currentPageIndex}
 							isCollapsed={isHeaderCollapsed}
 							onShowDetails={handleShowHeaderDetails}
+							onReadMoreClicked={setSelectedMetadataField}
 						/>
 						{/*
 						 * HetArchiefIeObject metadata
@@ -1886,6 +1892,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 								}
 								setActiveMentionHighlights={handleSetActiveMentionHighlights}
 								setIsTextOverlayVisible={setIsTextOverlayVisible}
+								onReadMoreClicked={setSelectedMetadataField}
 							/>
 						)}
 						{activeTab === ObjectDetailTabs.Metadata && !!similar.length && (
@@ -1906,6 +1913,38 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					{renderRelatedObjectsBlade()}
 				</div>
 			</article>
+
+			{/* Read more metadata field blade, shared by the header and the metadata tab so only one
+			 * can ever be open at a time */}
+			<Blade
+				isOpen={!!selectedMetadataField}
+				onClose={() => setSelectedMetadataField(null)}
+				title={selectedMetadataField?.title ?? ''}
+				stickyFooter={false}
+				footerButtons={[
+					{
+						label: tText(
+							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___sluit'
+						),
+						mobileLabel: tText(
+							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___sluit-mobiel'
+						),
+						type: 'secondary',
+						onClick: () => setSelectedMetadataField(null),
+					},
+				]}
+				id="object-detail-page__metadata-field-detail-blade"
+				ariaLabel={tText(
+					'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___lees-de-volledige-waarde-van-het-metadata-veld-selected-metadata-field-name-blade-aria-label',
+					{ selectedMetadataFieldName: selectedMetadataField?.title }
+				)}
+			>
+				<HighlightedMetadata
+					title={selectedMetadataField?.title}
+					data={selectedMetadataField?.data}
+				/>
+			</Blade>
+
 			{canManageFolders && (
 				<AddToFolderBlade
 					isOpen={activeBlade === MediaActions.Bookmark}

@@ -166,21 +166,17 @@ $max-height-collapsed: 8rem;
 }
 
 .p-object-detail-header__read-more {
-	// Used two ways: (1) composed with MetaDataFieldWithHighlightingAndMaxLength's shared
-	// "Lees meer" class as an override (color/font-weight/margin-top need !important there,
-	// since it composes alongside that class on the same element where a plain class of equal
-	// specificity isn't reliable), and (2) standalone, as on the research warning's "Meer info"
-	// button - so it also carries the shared class's structural properties itself, to render
-	// identically without needing that other class.
+	// Standalone styling for the research warning's "Meer info" button (a plain Button, not
+	// composed with MetaDataFieldWithHighlightingAndMaxLength's own read-more styling, which
+	// gets the equivalent look via its own readMoreButtonVariant="onHeader" instead).
 	display: inline;
 	cursor: pointer;
 	padding: 0;
 	height: 2.4rem;
 	border-radius: 0;
-	color: $black !important;
+	color: $black;
 	font-size: $font-size-sm;
-	font-weight: $font-weight-bold !important;
-	margin-top: 0 !important;
+	font-weight: $font-weight-bold;
 
 	// The gap before this button comes from a literal space in the text flow (see
 	// MetaDataFieldWithHighlightingAndMaxLength.tsx / Callout.tsx), not a margin - a margin-left
@@ -188,7 +184,7 @@ $max-height-collapsed: 8rem;
 	transition: opacity $animate-default;
 
 	:global(.c-button__content) {
-		text-decoration: underline !important;
+		text-decoration: underline;
 	}
 
 	&:hover,
@@ -205,4 +201,8 @@ $max-height-collapsed: 8rem;
 	:global(.c-menu) {
 		margin: 0;
 	}
+}
+
+.p-object-detail__actions:last-child {
+	padding-bottom: $spacer-md;
 }
