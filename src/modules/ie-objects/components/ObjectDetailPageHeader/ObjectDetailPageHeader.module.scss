@@ -77,16 +77,17 @@ $max-height-collapsed: 8rem;
 		white-space: nowrap;
 		font-size: $font-size-md; // 18px
 		line-height: 2rem; // 20px at 18px font size (1.111 ratio) - no exact token match
+		padding-bottom: 0;
 	}
 }
 
-.p-object-detail-header__toon-details {
+.p-object-detail-header__details {
 	flex-shrink: 0;
 	white-space: nowrap;
 	height: auto;
 	padding: 0;
 	color: $black;
-	font-family: $font-family-primary;
+	margin: $spacer-xs 0;
 	font-size: $font-size-base; // 16px
 	font-weight: $font-weight-medium;
 	line-height: $line-height-4xl; // 1.5 ratio = 24px at 16px font size, matches Figma exactly
@@ -108,7 +109,7 @@ $max-height-collapsed: 8rem;
 .p-object-detail__title {
 	overflow-wrap: break-word;
 	color: $black;
-	font-family: $font-family-primary;
+	padding-bottom: $spacer-sm;
 	font-size: $font-size-2xl;
 	font-weight: 800;
 	line-height: $line-height-md; // 1.1 ratio = 44px at 40px font size, matches Figma exactly
@@ -118,7 +119,6 @@ $max-height-collapsed: 8rem;
 	align-self: stretch;
 	padding: $spacer-sm 0;
 	color: $black;
-	font-family: $font-family-primary;
 	font-weight: $font-weight-medium;
 
 	// The description is a single paragraph with literal newlines embedded in its text, not one
@@ -156,7 +156,6 @@ $max-height-collapsed: 8rem;
 		p {
 			margin: 0;
 			color: $black;
-			font-family: $font-family-primary;
 			font-size: $font-size-sm; // 14px
 			font-weight: $font-weight-medium;
 			line-height: 2rem; // 20px at 14px font size (1.4286 ratio) - no exact token match
@@ -164,7 +163,6 @@ $max-height-collapsed: 8rem;
 
 		a {
 			color: $black;
-			font-family: $font-family-primary;
 			font-size: $font-size-sm; // 14px
 			font-weight: $font-weight-bold;
 			line-height: 2rem; // 20px at 14px font size (1.4286 ratio) - no exact token match
@@ -176,6 +174,18 @@ $max-height-collapsed: 8rem;
 			text-underline-position: from-font;
 		}
 	}
+}
+
+.p-object-detail-header__divider {
+	// A real <hr> (flex item of .p-object-detail-header__expanded-content) rather than a border
+	// on the AI description block, so that container's own gap handles the spacing on both
+	// sides instead of separate margin/padding math.
+	align-self: stretch;
+	width: 100%;
+	height: 0.1rem;
+	margin: 0;
+	border: 0;
+	background-color: rgba($black, 0.12); // 12% opacity black, per Figma
 }
 
 .p-object-detail-header__read-more {

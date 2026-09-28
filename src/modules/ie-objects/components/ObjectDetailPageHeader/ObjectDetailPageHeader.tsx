@@ -432,16 +432,14 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 	);
 
 	const renderKeyUserPill = (): ReactNode => (
-		<div className="u-mt-24">
-			<Pill
-				isExpanded
-				icon={IconNamesLight.Key}
-				label={tText(
-					'pages/bezoekersruimte/visitor-space-slug/object-id/index___voor-sleutelgebruikers'
-				)}
-				className="u-bg-mustard"
-			/>
-		</div>
+		<Pill
+			isExpanded
+			icon={IconNamesLight.Key}
+			label={tText(
+				'pages/bezoekersruimte/visitor-space-slug/object-id/index___voor-sleutelgebruikers'
+			)}
+			className="u-bg-mustard"
+		/>
 	);
 
 	const renderBreadcrumbs = (): ReactNode => {
@@ -513,7 +511,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 					<HighlightSearchTerms toHighlight={mediaInfo?.name} />
 				</h3>
 				<Button
-					className={styles['p-object-detail-header__toon-details']}
+					className={styles['p-object-detail-header__details']}
 					label={tText(
 						'modules/ie-objects/components/object-detail-page-header/object-detail-page-header___toon-details'
 					)}
@@ -532,16 +530,18 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 
 				{renderMetaDataActions()}
 
-				<MetaDataFieldWithHighlightingAndMaxLength
-					title={tText('modules/visitor-space/utils/metadata/metadata___beschrijving')}
-					data={mediaInfo.description}
-					className={clsx(
-						styles['p-object-detail-header__description'],
-						'u-line-height-1-4 u-font-size-14'
-					)}
-					onReadMoreClicked={setSelectedMetadataField}
-					readMoreButtonClassName={styles['p-object-detail-header__read-more']}
-				/>
+				{mediaInfo.description && (
+					<MetaDataFieldWithHighlightingAndMaxLength
+						title={tText('modules/visitor-space/utils/metadata/metadata___beschrijving')}
+						data={mediaInfo.description}
+						className={clsx(
+							styles['p-object-detail-header__description'],
+							'u-line-height-1-4 u-font-size-14'
+						)}
+						onReadMoreClicked={setSelectedMetadataField}
+						readMoreButtonClassName={styles['p-object-detail-header__read-more']}
+					/>
+				)}
 
 				{!mediaInfo.description && !isNewspaper && (
 					<div className={styles['p-object-detail-header__description-fallback']}>
@@ -559,12 +559,15 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 				)}
 
 				{showAiDescription && (
-					<ObjectDetailPageMetadataAiDescription
-						name={mediaInfo.nameAi}
-						synopsis={mediaInfo.synopsisAi}
-						onReadMoreClicked={setSelectedMetadataField}
-						readMoreButtonClassName={styles['p-object-detail-header__read-more']}
-					/>
+					<>
+						<hr className={styles['p-object-detail-header__divider']} />
+						<ObjectDetailPageMetadataAiDescription
+							name={mediaInfo.nameAi}
+							synopsis={mediaInfo.synopsisAi}
+							onReadMoreClicked={setSelectedMetadataField}
+							readMoreButtonClassName={styles['p-object-detail-header__read-more']}
+						/>
+					</>
 				)}
 			</div>
 

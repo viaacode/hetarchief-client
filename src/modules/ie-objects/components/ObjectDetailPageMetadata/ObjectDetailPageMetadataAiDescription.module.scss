@@ -7,10 +7,12 @@
 	align-items: flex-start;
 	align-self: stretch;
 	gap: $spacer-xs;
-	padding: $spacer-sm 0 $spacer-lg;
 
-	// Divider between the main description and this block: 12% opacity black, per Figma.
-	border-top: 0.1rem solid rgba($black, 0.12);
+	// Top padding is $spacer-xs (not $spacer-sm) because the divider above this block is now a
+	// sibling <hr> in the header, separated from this block by that flex column's own gap
+	// ($spacer-xs) - the two together reproduce the original 16px (spacer-sm) gap after the
+	// divider, without this block needing to know the divider isn't directly attached to it.
+	padding: $spacer-xs 0 $spacer-lg;
 }
 
 .c-object-detail-page-metadata-ai-description__header {
