@@ -1,8 +1,5 @@
 @use "src/styles/abstracts" as *;
 
-// Purple ("Lila") header background per Figma - close to but distinct from the $lila token
-$header-background: #c7c2e3;
-
 // max-height transition technique between expanded/collapsed states (CSS can't transition to/from
 // height: auto). 200rem is generous headroom for expanded content (~527px for a plain object);
 // duration is time-based so a larger target doesn't slow the animation down.
@@ -16,7 +13,7 @@ $max-height-collapsed: 8rem;
 	// independently-computed sticky offset.
 	overflow: hidden;
 	max-height: $max-height-expanded;
-	background-color: $header-background;
+	background-color: $lila;
 	color: $black;
 	transition: max-height $animate-default;
 }
