@@ -14,11 +14,13 @@ const Metadata: FC<MetadataProps> = ({
 	const renderDtAndDd = () => {
 		return (
 			<>
-				<dt className={styles['c-metadata__item-title']}>
-					<span className="u-flex-grow">{title}</span>
-					<span>{renderedTitleRight}</span>
-				</dt>
-				<dd className={styles['c-metadata__item-text']}>{children}</dd>
+				{(title || renderedTitleRight) && (
+					<dt className={styles['c-metadata__item-title']}>
+						<span className="u-flex-grow">{title}</span>
+						<span>{renderedTitleRight}</span>
+					</dt>
+				)}
+				{children && <dd className={styles['c-metadata__item-text']}>{children}</dd>}
 			</>
 		);
 	};
@@ -36,7 +38,7 @@ const Metadata: FC<MetadataProps> = ({
 		return renderDtAndDd();
 	};
 
-	if (!children) {
+	if (!children && !title) {
 		return null;
 	}
 	const completeClassName: string = clsx(

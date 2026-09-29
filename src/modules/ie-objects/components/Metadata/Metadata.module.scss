@@ -49,6 +49,10 @@
 			display: block;
 			width: 100%;
 		}
+
+		dt {
+			display: flex;
+		}
 	}
 
 	&__item-title {
@@ -69,6 +73,10 @@
 			span {
 				white-space: pre-line;
 			}
+		}
+
+		a {
+			color: $jade;
 		}
 	}
 }

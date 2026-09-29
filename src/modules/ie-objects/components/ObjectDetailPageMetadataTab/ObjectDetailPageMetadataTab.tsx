@@ -182,6 +182,8 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 	const renderSourceAttributionDisclaimerTooltip = () => (
 		<ObjectDetailPageMetadataDisclaimerTooltip
 			iconName={IconNamesLight.Info}
+			iconSize="lg"
+			position="left"
 			className={styles['p-object-detail__source-attribution-info']}
 			ariaLabel={tText(
 				'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
@@ -201,15 +203,18 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 			<Metadata
 				title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
 				key="metadata-source-attribution"
-				renderedTitleRight={renderSourceAttributionDisclaimerTooltip()}
-				renderRight={
-					<CopyButton
-						text={rightsAttributionText}
-						title={tText(
-							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-bronvermelding-naar-je-klembord'
-						)}
-						variants={['white']}
-					/>
+				renderedTitleRight={
+					<div className="u-flex u-flex-row u-gap-xs ">
+						<CopyButton
+							text={rightsAttributionText}
+							title={tText(
+								'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-bronvermelding-naar-je-klembord'
+							)}
+							className={styles['p-object-detail__icon-button']}
+							variants={['white']}
+						/>
+						{renderSourceAttributionDisclaimerTooltip()}
+					</div>
 				}
 				className="u-bt-0"
 			>
