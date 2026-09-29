@@ -22,7 +22,9 @@
 
 		/* https://meemoo.atlassian.net/browse/ARC-1960 */
 		@media (max-width: abstracts.$breakpoint-md) {
-			grid-template-columns: repeat(auto-fill, 1fr);
+			// `repeat(auto-fill, 1fr)` is invalid css (auto-fill needs a definite track size), so the
+			// declaration was dropped and the 40rem minimum above overflowed screens narrower than ~480px
+			grid-template-columns: minmax(0, 1fr);
 		}
 	}
 
