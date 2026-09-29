@@ -316,6 +316,43 @@
 }
 
 /**
+ * Menu
+ */
+
+// Borderless, full-width dropdown menu items with a silver hover, used by both the
+// object detail page header's export dropdown and DynamicActionMenu's overflow dropdown.
+@mixin dropdown-menu-item-styling() {
+	padding: 0;
+
+	:global(.c-menu__item) {
+		width: 100%;
+		background: none;
+		border: 0;
+		padding: variables.$spacer-sm variables.$spacer-md;
+
+		&:hover {
+			background: variables.$silver;
+		}
+	}
+}
+
+/**
+ * Text
+ */
+
+// Renders literal newlines in multi-paragraph text as line breaks instead of collapsing them,
+// with the last paragraph flowing inline so a trailing "Lees meer"-style button can sit on its line.
+@mixin inline-read-more-paragraph-styling() {
+	p {
+		white-space: pre-line;
+	}
+
+	p:last-of-type {
+		display: inline;
+	}
+}
+
+/**
  * Blade
  */
 

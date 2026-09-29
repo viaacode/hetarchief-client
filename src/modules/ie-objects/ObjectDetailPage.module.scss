@@ -216,10 +216,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		// The back button floats over the media's top-left corner here, unlike the smaller
 		// arrow shown when the visitor space navigation bar is visible
 		.p-object-detail__context-disclaimer {
-			top: calc(#{$metadata-media-ocr-tabs-height-desktop} + abstracts.$spacer-sm);
+			top: calc(#{$metadata-media-ocr-tabs-height-desktop} + #{abstracts.$spacer-sm});
 
 			@media (max-width: abstracts.$breakpoint-lg) {
-				top: calc(#{$metadata-media-ocr-tabs-height-mobile} + abstracts.$spacer-sm);
+				top: calc(#{$metadata-media-ocr-tabs-height-mobile} + #{abstracts.$spacer-sm});
 			}
 		}
 
@@ -435,8 +435,14 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	}
 
 	&__sidebar__content {
-		height: 100%;
+		// min-height: 0 lets overflow-y: auto engage on a flex child (it would otherwise grow to fit its content)
+		flex: 1 1 auto;
+		min-height: 0;
 		overflow-y: auto;
+
+		// Without this, scroll anchoring "corrects" scrollTop as the sticky header collapses/expands,
+		// re-triggering its IntersectionObserver and causing a flicker loop.
+		overflow-anchor: none;
 		box-shadow: abstracts.$shadow-24-black-12;
 
 		// Breathing room under whatever the last section happens to be (metadata, "ook

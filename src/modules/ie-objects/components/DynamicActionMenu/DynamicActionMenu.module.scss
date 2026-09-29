@@ -28,6 +28,10 @@
 		box-shadow: abstracts.$shadow-24-black-12;
 	}
 
+	&__dropdown-menu {
+		@include abstracts.dropdown-menu-item-styling;
+	}
+
 	&__button {
 		width: 5rem !important;
 		height: 5rem !important;

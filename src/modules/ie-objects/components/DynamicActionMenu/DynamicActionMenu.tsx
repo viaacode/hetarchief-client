@@ -33,6 +33,8 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	limit = 0,
 	onClickAction,
 	id,
+	primaryButtonVariants = ['teal', 'md'],
+	secondaryButtonVariants = ['silver'],
 }) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -82,7 +84,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			action.customElement
 		) : (
 			<Button
-				variants={['teal', 'md']}
+				variants={primaryButtonVariants}
 				iconStart={action.icon}
 				onClick={() => onClickAction(action.id)}
 				ariaLabel={action.ariaLabel}
@@ -120,7 +122,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			<Button
 				onClick={() => onClickAction(action.id)}
 				icon={action.icon}
-				variants={['silver']}
+				variants={secondaryButtonVariants}
 				ariaLabel={action.ariaLabel}
 				title={action.tooltip}
 			/>
@@ -172,12 +174,13 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 						ariaLabel={tText(
 							'modules/ie-objects/components/dynamic-action-menu/dynamic-action-menu___meer-acties'
 						)}
-						variants={['silver']}
+						variants={secondaryButtonVariants}
 					/>
 				</DropdownButton>
 				<DropdownContent>
 					<MenuContent
 						rootClassName="c-dropdown-menu"
+						className={styles['c-dynamic-action-menu__dropdown-menu']}
 						menuItems={mappedActions}
 						onClick={(id) => onClickAction(id as MediaActions)}
 					/>

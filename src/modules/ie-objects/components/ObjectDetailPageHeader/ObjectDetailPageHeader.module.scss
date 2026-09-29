@@ -1,0 +1,208 @@
+@use "src/styles/abstracts" as *;
+
+// Purple ("Lila") header background per Figma - close to but distinct from the $lila token
+$header-background: #c7c2e3;
+
+// max-height transition technique (see CollapsableBlade) between expanded/collapsed states.
+// 200rem is generous headroom for expanded content (~527px for a plain object); duration is
+// time-based so a larger target doesn't slow the animation down.
+$max-height-expanded: 200rem;
+$max-height-collapsed: 8rem;
+
+.p-object-detail-header {
+	// Sticky within the scroll container (not a fixed sibling) so scrolling over the header also
+	// scrolls the content. No explicit z-index needed: sticky alone paints above the tab content,
+	// and must stay below the expand/collapse sidebar button ($z-layers "foreground") regardless.
+	position: sticky;
+	top: 0;
+
+	// Without this, scroll anchoring "corrects" scrollTop as this element's height changes on
+	// collapse/expand, re-triggering the IntersectionObserver and causing a flicker loop.
+	overflow-anchor: none;
+	overflow: hidden;
+	max-height: $max-height-expanded;
+	background-color: $header-background;
+	color: $black;
+	transition: max-height $animate-default;
+}
+
+.p-object-detail-header--collapsed {
+	max-height: $max-height-collapsed;
+}
+
+// Both states render at once (see ObjectDetailPageHeader.tsx) so the max-height transition
+// above has stable content to animate around.
+.p-object-detail-header__expanded-content {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: $spacer-xs;
+	padding: $spacer-lg $spacer-lg 0 $spacer-lg;
+
+	.p-object-detail-header--collapsed & {
+		display: none;
+	}
+}
+
+.p-object-detail-header__collapsed-content {
+	display: none;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	gap: $spacer-xs; // 8px
+	padding: 1.2rem $spacer-lg; // 12px 32px - 12px has no matching spacer token
+
+	.p-object-detail-header--collapsed & {
+		display: flex;
+	}
+
+	.p-object-detail__title {
+		min-width: 0;
+		flex: 1 1 auto;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		font-size: $font-size-md; // 18px
+		line-height: 2rem; // 20px at 18px font size (1.111 ratio) - no exact token match
+		padding-bottom: 0;
+	}
+}
+
+.p-object-detail-header__details {
+	flex-shrink: 0;
+	white-space: nowrap;
+	height: auto;
+	padding: 0;
+	color: $black;
+	margin: $spacer-xs 0;
+	font-size: $font-size-base; // 16px
+	font-weight: $font-weight-medium;
+	line-height: $line-height-4xl; // 1.5 ratio = 24px at 16px font size, matches Figma exactly
+	text-align: right;
+
+	:global(.c-button__icon--end) {
+		margin-left: $spacer-xs; // 8px between label and icon, per Figma
+		// Otherwise the icon's default styling (meemoocons-light, 24px) already matches Figma.
+		font-size: $font-size-lg;
+	}
+}
+
+.p-object-detail-header__research-warning {
+	color: $black;
+	padding-bottom: $spacer-sm;
+}
+
+.p-object-detail-header__breadcrumbs {
+	align-self: stretch;
+	padding-bottom: $spacer-sm;
+	color: $black;
+}
+
+.p-object-detail__title {
+	overflow-wrap: break-word;
+	color: $black;
+	padding-bottom: $spacer-sm;
+	font-size: $font-size-2xl;
+	font-weight: 800;
+	line-height: $line-height-md; // 1.1 ratio = 44px at 40px font size, matches Figma exactly
+}
+
+.p-object-detail-header__description {
+	align-self: stretch;
+	padding: $spacer-sm 0;
+	color: $black;
+	font-weight: $font-weight-medium;
+
+	@include inline-read-more-paragraph-styling;
+}
+
+.p-object-detail-header__description-fallback {
+	display: flex;
+	align-items: flex-start;
+	align-self: stretch;
+	gap: $spacer-xs; // 8px minimum gap between the text and the icon, per design
+	padding: $spacer-sm 0;
+
+	&__icon {
+		flex-shrink: 0;
+		margin-left: auto;
+
+		// Matches the AI description block's disclaimer icon (iconSize="lg" there).
+		font-size: $font-size-lg;
+	}
+
+	&__text {
+		p {
+			margin: 0;
+			color: $black;
+			font-size: $font-size-sm; // 14px
+			font-weight: $font-weight-medium;
+			line-height: 2rem; // 20px at 14px font size (1.4286 ratio) - no exact token match
+		}
+
+		a {
+			color: $black;
+			font-size: $font-size-sm; // 14px
+			font-weight: $font-weight-bold;
+			line-height: 2rem; // 20px at 14px font size (1.4286 ratio) - no exact token match
+			text-decoration-line: underline;
+			text-decoration-style: solid;
+			text-decoration-skip-ink: auto;
+			text-decoration-thickness: auto;
+			text-underline-offset: auto;
+			text-underline-position: from-font;
+		}
+	}
+}
+
+.p-object-detail-header__divider {
+	// A real <hr> rather than a border on the AI description block, so the parent's gap handles spacing
+	align-self: stretch;
+	width: 100%;
+	height: 0.1rem;
+	margin: 0;
+	border: 0;
+	background-color: rgba($black, 0.12); // 12% opacity black, per Figma
+}
+
+.p-object-detail-header__read-more {
+	// Standalone styling for the research warning's "Meer info" button (a plain Button, not
+	// composed with MetaDataFieldWithHighlightingAndMaxLength's own read-more styling, which
+	// gets the equivalent look via its own readMoreButtonVariant="onHeader" instead).
+	display: inline;
+	cursor: pointer;
+	padding: 0;
+	height: 2.4rem;
+	border-radius: 0;
+	color: $black;
+	font-size: $font-size-sm;
+	font-weight: $font-weight-bold;
+
+	// The gap before this button comes from a literal space in the text flow (see
+	// MetaDataFieldWithHighlightingAndMaxLength.tsx / Callout.tsx), not a margin - a margin-left
+	// would still render when this button wraps onto its own line, creating a false indent.
+	transition: opacity $animate-default;
+
+	:global(.c-button__content) {
+		text-decoration: underline;
+	}
+
+	&:hover,
+	&:focus {
+		opacity: 0.8;
+	}
+}
+
+.p-object-detail__export-dropdown__menu {
+	@include dropdown-menu-item-styling;
+}
+
+.p-object-detail__export {
+	:global(.c-menu) {
+		margin: 0;
+	}
+}
+
+.p-object-detail__actions:last-child {
+	padding-bottom: $spacer-md;
+}

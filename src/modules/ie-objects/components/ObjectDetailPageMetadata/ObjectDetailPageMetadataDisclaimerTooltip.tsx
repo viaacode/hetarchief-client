@@ -26,7 +26,11 @@ export function ObjectDetailPageMetadataDisclaimerTooltip({
 }: ObjectDetailPageMetadataDisclaimerTooltipProps) {
 	return (
 		<NoServerSideRendering>
-			<Tooltip position={position} offset={10}>
+			<Tooltip
+				position={position}
+				offset={10}
+				contentClassName={styles['c-object-detail-page-metadata-disclaimer-tooltip__content']}
+			>
 				<TooltipTrigger>
 					<button
 						type="button"

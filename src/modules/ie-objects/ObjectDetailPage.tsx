@@ -9,10 +9,11 @@ import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
 import { ContextDisclaimer } from '@ie-objects/components/ContextDisclaimer/ContextDisclaimer';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
+import Metadata from '@ie-objects/components/Metadata/Metadata';
+import type { MetadataItem } from '@ie-objects/components/Metadata/Metadata.types';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
-import Metadata, {
-	ObjectDetailPageMetadata,
-} from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata';
+import { ObjectDetailPageHeader } from '@ie-objects/components/ObjectDetailPageHeader/ObjectDetailPageHeader';
+import { ObjectDetailPageMetadata } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata';
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
 import { type MediaObject, RelatedObject } from '@ie-objects/components/RelatedObject';
 import { useGetAltoJsonFileContent } from '@ie-objects/hooks/use-get-alto-json-file-content';
@@ -65,6 +66,7 @@ import { Blade } from '@shared/components/Blade/Blade';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
+import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -136,6 +138,7 @@ import React, {
 	useCallback,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -243,6 +246,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
 		BooleanParamWithDefault(false)
 	);
+
+	// Compact ("beperkte") header state, toggled by the sentinel IntersectionObserver below
+	const [isHeaderCollapsed, setIsHeaderCollapsed] = useState(false);
+	const sidebarContentRef = useRef<HTMLDivElement>(null);
+	const headerCollapseSentinelRef = useRef<HTMLDivElement>(null);
+	// Owned here (rather than in the header/metadata components) so the header and the metadata
+	// tab share a single "read more" blade instead of each being able to open their own.
+	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const [iiifViewerFocusX] = useQueryParam(
 		QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X,
 		withDefault(NumberParam, undefined)
@@ -276,6 +287,25 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
 	} = useGetIeObjectBySchemaIdentifier(ieObjectId, true);
+
+	// Collapse the header once the sentinel at the top of the scrollable tab content scrolls out
+	// of view. The root and sentinel are both always mounted (only their CSS visibility changes
+	// across tabs/loading states), so this only needs to run once.
+	useEffect(() => {
+		const root = sidebarContentRef.current;
+		const sentinel = headerCollapseSentinelRef.current;
+		if (!root || !sentinel) {
+			return;
+		}
+		const observer = new IntersectionObserver(
+			([entry]) => {
+				setIsHeaderCollapsed(!entry.isIntersecting);
+			},
+			{ root, threshold: 0 }
+		);
+		observer.observe(sentinel);
+		return () => observer.disconnect();
+	}, []);
 
 	const { data: thumbnailUrl, isLoading: thumbnailUrlIsLoading } =
 		useGetIeObjectThumbnail(ieObjectId);
@@ -1072,6 +1102,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		setExpandSidebar(!expandSidebar, 'replaceIn');
 	};
 
+	const handleShowHeaderDetails = () => {
+		// Scrolling to the top brings the sentinel back into view, which re-expands the header via the observer
+		sidebarContentRef.current?.scrollTo({ top: 0, behavior: 'smooth' });
+	};
+
 	const onCloseBlade = () => {
 		setActiveBlade(null, 'replaceIn');
 	};
@@ -1817,6 +1852,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				{/* Sidebar */}
 				<div className={clsx(styles['p-object-detail__sidebar'])}>
 					<div
+						ref={sidebarContentRef}
 						className={clsx(
 							styles['p-object-detail__sidebar__content'],
 							styles[`p-object-detail__sidebar__content__tab-${activeTab}`],
@@ -1825,16 +1861,24 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							}
 						)}
 					>
+						{/* Sentinel that drives the header's collapse - see the IntersectionObserver effect above */}
+						<div ref={headerCollapseSentinelRef} />
+						<ObjectDetailPageHeader
+							mediaInfo={mediaInfo}
+							onClickAction={onClickAction}
+							hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
+							currentPageIndex={currentPageIndex}
+							isCollapsed={isHeaderCollapsed}
+							onShowDetails={handleShowHeaderDetails}
+							onReadMoreClicked={setSelectedMetadataField}
+						/>
 						{/*
 						 * HetArchiefIeObject metadata
 						 */}
 						{activeTab === ObjectDetailTabs.Metadata && (
 							<ObjectDetailPageMetadata
-								onClickAction={onClickAction}
 								mediaInfo={mediaInfo}
 								visitRequest={visitRequest || null}
-								hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
-								currentPageIndex={currentPageIndex}
 								goToPage={handleSetCurrentPage}
 								currentPage={currentPage}
 								activeFile={
@@ -1848,6 +1892,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 								}
 								setActiveMentionHighlights={handleSetActiveMentionHighlights}
 								setIsTextOverlayVisible={setIsTextOverlayVisible}
+								onReadMoreClicked={setSelectedMetadataField}
 							/>
 						)}
 						{activeTab === ObjectDetailTabs.Metadata && !!similar.length && (
@@ -1868,6 +1913,38 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					{renderRelatedObjectsBlade()}
 				</div>
 			</article>
+
+			{/* Read more metadata field blade, shared by the header and the metadata tab so only one
+			 * can ever be open at a time */}
+			<Blade
+				isOpen={!!selectedMetadataField}
+				onClose={() => setSelectedMetadataField(null)}
+				title={selectedMetadataField?.title ?? ''}
+				stickyFooter={false}
+				footerButtons={[
+					{
+						label: tText(
+							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___sluit'
+						),
+						mobileLabel: tText(
+							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___sluit-mobiel'
+						),
+						type: 'secondary',
+						onClick: () => setSelectedMetadataField(null),
+					},
+				]}
+				id="object-detail-page__metadata-field-detail-blade"
+				ariaLabel={tText(
+					'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___lees-de-volledige-waarde-van-het-metadata-veld-selected-metadata-field-name-blade-aria-label',
+					{ selectedMetadataFieldName: selectedMetadataField?.title }
+				)}
+			>
+				<HighlightedMetadata
+					title={selectedMetadataField?.title}
+					data={selectedMetadataField?.data}
+				/>
+			</Blade>
+
 			{canManageFolders && (
 				<AddToFolderBlade
 					isOpen={activeBlade === MediaActions.Bookmark}

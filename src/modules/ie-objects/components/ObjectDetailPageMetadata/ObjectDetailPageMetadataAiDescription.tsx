@@ -52,8 +52,12 @@ export function ObjectDetailPageMetadataAiDescription({
 					)}
 					data={synopsis}
 					maxLength={AI_METADATA_FIELD_MAX_LENGTH}
-					className="u-line-height-1-4 u-font-size-14"
+					className={clsx(
+						styles['c-object-detail-page-metadata-ai-description__synopsis'],
+						'u-line-height-1-4 u-font-size-14'
+					)}
 					onReadMoreClicked={onReadMoreClicked}
+					readMoreButtonVariant="onHeader"
 				/>
 			)}
 		</div>

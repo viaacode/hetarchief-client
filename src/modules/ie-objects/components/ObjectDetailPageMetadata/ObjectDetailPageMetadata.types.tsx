@@ -1,4 +1,4 @@
-import type { MediaActions } from '@ie-objects/ie-objects.types';
+import type { MetadataItem } from '@ie-objects/components/Metadata/Metadata.types';
 import type { SimplifiedAlto, TextLine } from '@iiif-viewer/IiifViewer.types';
 import type { VisitRequest } from '@shared/types/visit-request';
 import type {
@@ -9,18 +9,18 @@ import type {
 
 export interface ObjectDetailPageMetadataProps {
 	mediaInfo: HetArchiefIeObject | null | undefined;
-	currentPageIndex: number;
 	goToPage: (pageIndex: number) => void;
 	currentPage: HetArchiefIeObjectPage | null;
-	hasAccessToVisitorSpaceOfObject: boolean;
 	visitRequest: VisitRequest | null;
 	activeFile: HetArchiefIeObjectFile | null;
 	simplifiedAltoInfo: SimplifiedAlto | null;
-	onClickAction: (id: MediaActions) => Promise<void>;
 	iiifZoomTo: (x: number, y: number) => void;
 	setActiveMentionHighlights: (mentionHighlights: {
 		pageIndex: number;
 		highlights: TextLine[];
 	}) => void;
 	setIsTextOverlayVisible: (visible: boolean) => void;
+	/** Opens the shared "read more" metadata field blade; owned by the parent so the header and
+	 * the metadata tab share a single blade instead of each having their own. */
+	onReadMoreClicked: (item: MetadataItem) => void;
 }
