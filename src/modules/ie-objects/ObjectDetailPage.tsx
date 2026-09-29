@@ -12,7 +12,6 @@ import type { MetadataItem } from '@ie-objects/components/Metadata/Metadata.type
 import { ObjectDetailPageHeader } from '@ie-objects/components/ObjectDetailPageHeader/ObjectDetailPageHeader';
 import { ObjectDetailPageMetadataTab } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataTab';
 import { ObjectDetailPageOcrTab } from '@ie-objects/components/ObjectDetailPageOcrTab/ObjectDetailPageOcrTab';
-import { ObjectDetailPageOcrTabStickyBar } from '@ie-objects/components/ObjectDetailPageOcrTab/ObjectDetailPageOcrTabStickyBar';
 import { ObjectDetailPageOverviewTab } from '@ie-objects/components/ObjectDetailPageOverviewTab/ObjectDetailPageOverviewTab';
 import { ObjectDetailPageRelatedTab } from '@ie-objects/components/ObjectDetailPageRelatedTab/ObjectDetailPageRelatedTab';
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
@@ -1695,20 +1694,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 									onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
 								/>
 							)}
-							{activeTab === ObjectDetailTabs.Ocr && (
-								<ObjectDetailPageOcrTabStickyBar
-									arePagesOcrTextsAvailable={arePagesOcrTextsAvailable}
-									searchTermsTemp={searchTermsTemp}
-									setSearchTermsTemp={setSearchTermsTemp}
-									searchTerms={searchTerms}
-									searchResults={searchResults}
-									currentSearchResultIndex={currentSearchResultIndex}
-									onSearch={handleSearch}
-									onClearSearch={handleClearSearch}
-									onChangeSearchIndex={handleChangeSearchIndex}
-									isScrolled={isHeaderCollapsed}
-								/>
-							)}
 						</div>
 						{activeTab === ObjectDetailTabs.Overview && (
 							<ObjectDetailPageOverviewTab
@@ -1762,6 +1747,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 								onClickOnOcrWord={handleClickOnOcrWord}
 								isTextOverlayVisible={isTextOverlayVisible}
 								onIsTextOverlayVisibleChange={handleIsTextOverlayVisibleChange}
+								arePagesOcrTextsAvailable={arePagesOcrTextsAvailable}
+								searchTermsTemp={searchTermsTemp}
+								setSearchTermsTemp={setSearchTermsTemp}
+								searchTerms={searchTerms}
+								onSearch={handleSearch}
+								onClearSearch={handleClearSearch}
+								onChangeSearchIndex={handleChangeSearchIndex}
+								scrollContainerRef={sidebarContentRef}
 							/>
 						)}
 					</div>

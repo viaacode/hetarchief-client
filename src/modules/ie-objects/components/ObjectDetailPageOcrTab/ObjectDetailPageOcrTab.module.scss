@@ -2,7 +2,7 @@
 
 // Horizontal inset shared by the search input and the scrolling body's OCR text/pagination -
 // this content doesn't render through MetadataList, so it can't rely on that component's own
-// self-padding like the other tabs (and the disclaimer, now a MetadataList item, do).
+// self-padding like the other tabs do.
 @mixin ocr-tab-inset {
 	margin-left: abstracts.$spacer-lg;
 	margin-right: abstracts.$spacer-lg;
@@ -14,31 +14,62 @@
 	}
 }
 
-// Rendered by ObjectDetailPage.tsx inside the page's own sticky header+tabs wrapper - see
-// ObjectDetailPageOcrTabStickyBar's own comment for why.
-.p-object-detail-ocr-tab__sticky-bar {
-	display: flex;
-	flex-direction: column;
-	background-color: abstracts.$white;
-
-	@include ocr-tab-inset;
-}
+// The search item below uses these to sit its own `top` right beneath the collapsed header+tabs
+// unit. $tabs-height-desktop mirrors ObjectDetailPage.module.scss's own
+// $metadata-media-ocr-tabs-height-desktop (a component-local constant there too, not a shared
+// token - keep in sync by hand if it changes). $header-collapsed-height is NOT
+// ObjectDetailPageHeader.module.scss's $max-height-collapsed (8rem) - that's only a ceiling
+// (max-height), and the collapsed row's actual rendered height is smaller than it; this is the
+// real measured value (getBoundingClientRect, collapsed state), so keep it in sync the same way
+// if the collapsed header's own padding/font-size/line-height ever changes.
+$header-collapsed-height: 6.6rem;
+$tabs-height-desktop: 5.6rem;
 
 .p-object-detail-ocr-tab {
-	// Only the OCR text (below) actually scrolls, along with everything else in the tab, as part
-	// of the page's single shared scroll container (see ObjectDetailPage.tsx's sidebarContentRef) -
-	// the disclaimer/search above and the pagination bar below both stay visible regardless of
-	// scroll position (the former via the page's own sticky header unit, the latter via its own
-	// `position: sticky; bottom: 0` below).
+	// The disclaimer scrolls away with everything else here, as part of the page's single shared
+	// scroll container (see ObjectDetailPage.tsx's sidebarContentRef). The search item and the
+	// pagination bar below both stay visible regardless of scroll position - each via its own
+	// `position: sticky` (top/bottom respectively - see &__search and &__pagination-bar).
 	background-color: abstracts.$white;
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	padding-top: abstracts.$spacer-md;
+
+	@include ocr-tab-inset;
+
+	&__search-sentinel {
+		// Rendered $header-collapsed-height + $tabs-height-desktop above its own place in the flow
+		// (via relative positioning, which doesn't affect sibling layout) - the same distance as
+		// &__search's own sticky `top` below. That makes it scroll out of the observer's root
+		// exactly when &__search reaches its sticky offset and becomes stuck, not merely when
+		// scrolling starts (see ObjectDetailPageOcrTab.tsx's own IntersectionObserver comment).
+		position: relative;
+		top: -($header-collapsed-height + $tabs-height-desktop);
+		height: 1px;
+
+		@media (max-width: abstracts.$breakpoint-lg) {
+			top: -$header-collapsed-height;
+		}
+	}
+
+	&__search {
+		// Sticks right below the page's own collapsed header+tabs sticky unit, catching only once
+		// the disclaimer above has scrolled out from under it (see ObjectDetailPageOcrTab.tsx's own
+		// comment). Deliberately its own sticky element rather than riding inside that page-level
+		// unit, so the disclaimer can scroll away independently while this stays pinned.
+		position: sticky;
+		top: $header-collapsed-height + $tabs-height-desktop;
+		background-color: abstracts.$white;
+
+		@media (max-width: abstracts.$breakpoint-lg) {
+			// Tabs render in their own separate, always-visible grid row on mobile (not stacked
+			// inside the sidebar's sticky unit) - only the collapsed header sits above this here.
+			top: $header-collapsed-height;
+		}
+	}
 
 	&__words-container {
 		width: 100%;
-		padding: 0 abstracts.$spacer-lg 0;
 		margin: 0;
 
 		@media (max-width: abstracts.$breakpoint-lg) {
@@ -84,10 +115,9 @@
 		// same reasoning as the page's own sticky header unit (see ObjectDetailPage.module.scss).
 		position: sticky;
 		bottom: 0;
+		width: 100%;
 		background-color: abstracts.$white;
 		padding: abstracts.$spacer-lg 0;
-
-		@include ocr-tab-inset;
 	}
 
 	&__pagination {

@@ -1,16 +1,19 @@
+import Metadata from '@ie-objects/components/Metadata/Metadata';
+import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination';
 import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import { isEqual } from 'es-toolkit/compat';
-import { type FC, useMemo } from 'react';
+import { type FC, useEffect, useMemo, useRef, useState } from 'react';
 import styles from './ObjectDetailPageOcrTab.module.scss';
 import type { ObjectDetailPageOcrTabProps } from './ObjectDetailPageOcrTab.types';
 
-// The disclaimer + search bar are rendered separately by ObjectDetailPageOcrTabStickyBar (see its
-// own comment for why) - this component is only the part of the tab that actually scrolls: the
-// OCR text, plus a pagination bar that stays pinned to the bottom of the shared scroll container.
+// Disclaimer, search bar, OCR text and pagination all render here now, in that order, so the
+// disclaimer scrolls away with the rest of the tab's content while the search bar - sticky in its
+// own right (see its own comment below) - catches and stays pinned right where the disclaimer
+// used to be, once it's scrolled past.
 export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 	ieObjectId,
 	altoText,
@@ -24,7 +27,38 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 	onClickOnOcrWord,
 	isTextOverlayVisible,
 	onIsTextOverlayVisibleChange,
+	arePagesOcrTextsAvailable,
+	searchTermsTemp,
+	setSearchTermsTemp,
+	searchTerms,
+	onSearch,
+	onClearSearch,
+	onChangeSearchIndex,
+	scrollContainerRef,
 }) => {
+	// Whether the search item is actually stuck (pinned at its sticky offset), not merely whether
+	// scrolling has started - see &__search-sentinel's own comment for how the sentinel's position
+	// makes this line up with the item's real sticky `top`.
+	const [isSearchStuck, setIsSearchStuck] = useState(false);
+	const searchStickySentinelRef = useRef<HTMLDivElement>(null);
+
+	useEffect(() => {
+		const root = scrollContainerRef.current;
+		const sentinel = searchStickySentinelRef.current;
+		if (!root || !sentinel) {
+			return;
+		}
+		const observer = new IntersectionObserver(
+			([entry]) => setIsSearchStuck(!entry.isIntersecting),
+			{
+				root,
+				threshold: 0,
+			}
+		);
+		observer.observe(sentinel);
+		return () => observer.disconnect();
+	}, [scrollContainerRef]);
+
 	const renderedOcrText = useMemo(() => {
 		let searchTermIndex = 0;
 		return (
@@ -92,6 +126,48 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 
 	return (
 		<div className={clsx(styles['p-object-detail-ocr-tab'])}>
+			<Metadata
+				title={tText('modules/ie-objects/object-detail-page___ocr-betrouwbaarheid')}
+				key="ocr-disclaimer"
+				renderedTitleRight={
+					<Icon name={IconNamesLight.Ai} aria-hidden className="u-font-size-24" />
+				}
+				className="u-bt-0"
+			/>
+
+			{arePagesOcrTextsAvailable && (
+				<div
+					ref={searchStickySentinelRef}
+					className={styles['p-object-detail-ocr-tab__search-sentinel']}
+				/>
+			)}
+			{arePagesOcrTextsAvailable && (
+				// Top border only kept while in normal flow, above - reuses u-bt-0 (an
+				// !important utility) to override Metadata's own .c-metadata__item divider once
+				// stuck flush against the tabs, the same way it's used unconditionally on the
+				// disclaimer above.
+				<Metadata
+					key="ocr-search"
+					className={clsx(styles['p-object-detail-ocr-tab__search'], {
+						'u-bt-0': isSearchStuck,
+					})}
+				>
+					<OcrSearchInputWithResultsPagination
+						id="object-detail-page__ocr-search-input"
+						value={searchTermsTemp}
+						onChange={setSearchTermsTemp}
+						onSearch={(newSearchTerms) => onSearch(newSearchTerms)}
+						onClearSearch={onClearSearch}
+						searchResults={searchTerms ? searchResults : null}
+						currentSearchIndex={currentSearchResultIndex || 0}
+						onChangeSearchIndex={onChangeSearchIndex}
+						searchInputAriaLabel={tText(
+							'modules/ie-objects/object-detail-page___zoek-tekst-in-deze-krant-input-aria-label'
+						)}
+					/>
+				</Metadata>
+			)}
+
 			{renderedOcrText}
 
 			<div className={styles['p-object-detail-ocr-tab__pagination-bar']}>

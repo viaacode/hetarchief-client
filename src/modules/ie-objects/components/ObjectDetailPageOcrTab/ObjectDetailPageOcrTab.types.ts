@@ -1,5 +1,6 @@
 import type { OcrSearchResult } from '@ie-objects/ie-objects.types';
 import type { TextLine } from '@iiif-viewer/IiifViewer.types';
+import type { RefObject } from 'react';
 
 export interface ObjectDetailPageOcrTabProps {
 	ieObjectId: string;
@@ -14,4 +15,16 @@ export interface ObjectDetailPageOcrTabProps {
 	onClickOnOcrWord: (textLocation: TextLine) => void;
 	isTextOverlayVisible: boolean;
 	onIsTextOverlayVisibleChange: (isVisible: boolean) => void;
+	arePagesOcrTextsAvailable: boolean;
+	searchTermsTemp: string;
+	setSearchTermsTemp: (searchTerms: string) => void;
+	searchTerms: string;
+	onSearch: (newSearchTerms: string) => Promise<void>;
+	onClearSearch: () => void;
+	onChangeSearchIndex: (searchResultIndex: number) => Promise<void>;
+	// The page's own scroll container (ObjectDetailPage.tsx's sidebarContentRef) - used as the
+	// IntersectionObserver root that detects when the search item itself becomes stuck (see
+	// ObjectDetailPageOcrTab.tsx's own comment), which happens later than - and independently of -
+	// the page's header collapsing, so that signal can't be reused here.
+	scrollContainerRef: RefObject<HTMLDivElement | null>;
 }

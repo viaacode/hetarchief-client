@@ -421,6 +421,12 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		max-height: 100%;
 		overflow: hidden;
 
+		// Contains z-index comparisons made inside this sidebar (see &__sidebar__sticky's own
+		// z-index below) to this subtree, so they can't tie/collide with the page-level
+		// $z-layers used outside it (e.g. &__expand-button's "foreground") - this element's own
+		// position relative to those is unaffected, since it isn't given a z-index itself.
+		isolation: isolate;
+
 		@media (max-width: abstracts.$breakpoint-lg) {
 			grid-row: 3 / 5;
 			grid-column: 1 / 3;
@@ -442,12 +448,16 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		// as one unit: this element - not the header itself - owns the stickiness, so the tabs
 		// just sit in normal flow directly below the header, growing/shrinking with its own
 		// collapse animation instead of needing their own independently-computed sticky offset.
-		// No explicit z-index: sticky alone already paints above the tab content below it, and
-		// must stay below the expand/collapse sidebar button ($z-layers "foreground") regardless -
-		// an explicit z-index here would tie with that button's and win on DOM order (see
-		// ObjectDetailPageHeader.module.scss's own history for why this matters).
+		// z-index: sticky alone already paints above plain tab content below it, without needing
+		// one - but the OCR tab's own search item (ObjectDetailPageOcrTab.module.scss's &__search)
+		// is sticky too, and being later in the DOM would otherwise paint over (hide) this
+		// element's own box-shadow where the two meet. An explicit z-index fixes that; it's safe
+		// from tying with the expand/collapse sidebar button ($z-layers "foreground", used outside
+		// this component) specifically because &__sidebar isolates z-index comparisons to this
+		// subtree - see its own comment.
 		position: sticky;
 		top: 0;
+		z-index: 1;
 		display: flex;
 		flex-direction: column;
 
