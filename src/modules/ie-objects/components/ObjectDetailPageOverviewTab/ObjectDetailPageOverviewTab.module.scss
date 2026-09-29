@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 // No wrapper-level horizontal padding here: each MetadataList already pads itself via the global
 // .p-object-detail__metadata-component class (see ObjectDetailPage.module.scss), same as the
@@ -34,8 +34,8 @@
 }
 
 .p-object-detail-overview-tab__previous-next {
-	background-color: $silver;
-	border-radius: $border-radius;
+	background-color: abstracts.$silver;
+	border-radius: abstracts.$border-radius;
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
@@ -44,6 +44,6 @@
 
 .p-object-detail-overview-tab__rights-status {
 	:global([class*="c-icon"]) {
-		font-size: $font-size-lg;
+		font-size: abstracts.$font-size-lg;
 	}
 }

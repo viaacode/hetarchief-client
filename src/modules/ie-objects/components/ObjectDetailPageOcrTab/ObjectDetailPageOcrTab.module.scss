@@ -96,6 +96,9 @@
 		background-color: abstracts.$silver;
 		border-radius: abstracts.$button-radius;
 		text-align: center;
+		font-size: abstracts.$font-size-sm;
+		font-weight: abstracts.$font-weight-medium;
+		line-height: 2rem;
 
 		:global(.pagination-info) {
 			flex-grow: 1;
@@ -103,7 +106,11 @@
 
 		> :global(.c-button) {
 			margin: 0;
+			padding: abstracts.$spacer-xs (abstracts.$spacer-xs * 1.5);
 			color: abstracts.$zinc;
+			font-size: abstracts.$font-size-sm;
+			font-weight: abstracts.$font-weight-medium;
+			line-height: 2rem;
 		}
 
 		@media (max-width: abstracts.$breakpoint-lg) {

@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 // max-height transition technique between expanded/collapsed states (CSS can't transition to/from
 // height: auto). 200rem is generous headroom for expanded content (~527px for a plain object);
@@ -13,9 +13,9 @@ $max-height-collapsed: 8rem;
 	// independently-computed sticky offset.
 	overflow: hidden;
 	max-height: $max-height-expanded;
-	background-color: $lila;
-	color: $black;
-	transition: max-height $animate-default;
+	background-color: abstracts.$lila;
+	color: abstracts.$black;
+	transition: max-height abstracts.$animate-default;
 }
 
 .p-object-detail-header--collapsed {
@@ -30,8 +30,8 @@ $max-height-collapsed: 8rem;
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
-	gap: $spacer-xs;
-	padding: $spacer-lg $spacer-lg 0 $spacer-lg;
+	gap: abstracts.$spacer-xs;
+	padding: abstracts.$spacer-lg abstracts.$spacer-lg 0 abstracts.$spacer-lg;
 }
 
 .p-object-detail-header__collapsed-content {
@@ -39,8 +39,8 @@ $max-height-collapsed: 8rem;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
-	gap: $spacer-xs; // 8px
-	padding: 1.2rem $spacer-lg; // 12px 32px - 12px has no matching spacer token
+	gap: abstracts.$spacer-xs; // 8px
+	padding: (abstracts.$spacer-xs * 1.5) abstracts.$spacer-lg; // 12px 32px - 12px has no matching spacer token
 
 	.p-object-detail__title {
 		min-width: 0;
@@ -48,7 +48,7 @@ $max-height-collapsed: 8rem;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
-		font-size: $font-size-md; // 18px
+		font-size: abstracts.$font-size-md; // 18px
 		line-height: 2rem; // 20px at 18px font size (1.111 ratio) - no exact token match
 		padding-bottom: 0;
 	}
@@ -59,77 +59,77 @@ $max-height-collapsed: 8rem;
 	white-space: nowrap;
 	height: auto;
 	padding: 0;
-	color: $black;
-	margin: $spacer-xs 0;
-	font-size: $font-size-base; // 16px
-	font-weight: $font-weight-medium;
-	line-height: $line-height-4xl; // 1.5 ratio = 24px at 16px font size, matches Figma exactly
+	color: abstracts.$black;
+	margin: abstracts.$spacer-xs 0;
+	font-size: abstracts.$font-size-base; // 16px
+	font-weight: abstracts.$font-weight-medium;
+	line-height: abstracts.$line-height-4xl; // 1.5 ratio = 24px at 16px font size, matches Figma exactly
 	text-align: right;
 
 	:global(.c-button__icon--end) {
-		margin-left: $spacer-xs; // 8px between label and icon, per Figma
+		margin-left: abstracts.$spacer-xs; // 8px between label and icon, per Figma
 		// Otherwise the icon's default styling (meemoocons-light, 24px) already matches Figma.
-		font-size: $font-size-lg;
+		font-size: abstracts.$font-size-lg;
 	}
 }
 
 .p-object-detail-header__research-warning {
-	color: $black;
-	padding-bottom: $spacer-sm;
+	color: abstracts.$black;
+	padding-bottom: abstracts.$spacer-sm;
 }
 
 .p-object-detail-header__breadcrumbs {
 	align-self: stretch;
-	padding-bottom: $spacer-sm;
-	color: $black;
+	padding-bottom: abstracts.$spacer-sm;
+	color: abstracts.$black;
 }
 
 .p-object-detail__title {
 	overflow-wrap: break-word;
-	color: $black;
-	padding-bottom: $spacer-sm;
-	font-size: $font-size-2xl;
+	color: abstracts.$black;
+	padding-bottom: abstracts.$spacer-sm;
+	font-size: abstracts.$font-size-2xl;
 	font-weight: 800;
-	line-height: $line-height-md; // 1.1 ratio = 44px at 40px font size, matches Figma exactly
+	line-height: abstracts.$line-height-md; // 1.1 ratio = 44px at 40px font size, matches Figma exactly
 }
 
 .p-object-detail-header__description {
 	align-self: stretch;
-	padding: $spacer-sm 0;
-	color: $black;
-	font-weight: $font-weight-medium;
+	padding: abstracts.$spacer-sm 0;
+	color: abstracts.$black;
+	font-weight: abstracts.$font-weight-medium;
 
-	@include inline-read-more-paragraph-styling;
+	@include abstracts.inline-read-more-paragraph-styling;
 }
 
 .p-object-detail-header__description-fallback {
 	display: flex;
 	align-items: flex-start;
 	align-self: stretch;
-	gap: $spacer-xs; // 8px minimum gap between the text and the icon, per design
-	padding: $spacer-sm 0;
+	gap: abstracts.$spacer-xs; // 8px minimum gap between the text and the icon, per design
+	padding: abstracts.$spacer-sm 0;
 
 	&__icon {
 		flex-shrink: 0;
 		margin-left: auto;
 
 		// Matches the AI description block's disclaimer icon (iconSize="lg" there).
-		font-size: $font-size-lg;
+		font-size: abstracts.$font-size-lg;
 	}
 
 	&__text {
 		p {
 			margin: 0;
-			color: $black;
-			font-size: $font-size-sm; // 14px
-			font-weight: $font-weight-medium;
+			color: abstracts.$black;
+			font-size: abstracts.$font-size-sm; // 14px
+			font-weight: abstracts.$font-weight-medium;
 			line-height: 2rem; // 20px at 14px font size (1.4286 ratio) - no exact token match
 		}
 
 		a {
-			color: $black;
-			font-size: $font-size-sm; // 14px
-			font-weight: $font-weight-bold;
+			color: abstracts.$black;
+			font-size: abstracts.$font-size-sm; // 14px
+			font-weight: abstracts.$font-weight-bold;
 			line-height: 2rem; // 20px at 14px font size (1.4286 ratio) - no exact token match
 			text-decoration-line: underline;
 			text-decoration-style: solid;
@@ -145,10 +145,10 @@ $max-height-collapsed: 8rem;
 	// A real <hr> rather than a border on the AI description block, so the parent's gap handles spacing
 	align-self: stretch;
 	width: 100%;
-	height: 0.1rem;
+	height: 1px;
 	margin: 0;
 	border: 0;
-	background-color: rgba($black, 0.12); // 12% opacity black, per Figma
+	background-color: rgba(abstracts.$black, 0.12); // 12% opacity black, per Figma
 }
 
 .p-object-detail-header__read-more {
@@ -160,14 +160,14 @@ $max-height-collapsed: 8rem;
 	padding: 0;
 	height: 2.4rem;
 	border-radius: 0;
-	color: $black;
-	font-size: $font-size-sm;
-	font-weight: $font-weight-bold;
+	color: abstracts.$black;
+	font-size: abstracts.$font-size-sm;
+	font-weight: abstracts.$font-weight-bold;
 
 	// The gap before this button comes from a literal space in the text flow (see
 	// MetaDataFieldWithHighlightingAndMaxLength.tsx / Callout.tsx), not a margin - a margin-left
 	// would still render when this button wraps onto its own line, creating a false indent.
-	transition: opacity $animate-default;
+	transition: opacity abstracts.$animate-default;
 
 	:global(.c-button__content) {
 		text-decoration: underline;
@@ -180,7 +180,7 @@ $max-height-collapsed: 8rem;
 }
 
 .p-object-detail__export-dropdown__menu {
-	@include dropdown-menu-item-styling;
+	@include abstracts.dropdown-menu-item-styling;
 }
 
 .p-object-detail__export {
@@ -190,5 +190,5 @@ $max-height-collapsed: 8rem;
 }
 
 .p-object-detail__actions:last-child {
-	padding-bottom: $spacer-md;
+	padding-bottom: abstracts.$spacer-md;
 }

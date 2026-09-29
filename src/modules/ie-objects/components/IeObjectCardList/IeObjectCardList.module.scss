@@ -1,27 +1,27 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-ie-object-card-list {
 	display: flex;
 	flex-direction: column;
-	gap: $spacer-sm;
+	gap: abstracts.$spacer-sm;
 
 	&--similar {
 		// Bleeds edge-to-edge against the Overview tab's own content padding and paints its own
 		// grey background, since "ook interessant" is always the last section of that tab.
-		// Firefox and Safari render weirdly with: margin: 0 - $spacer-md;
-		margin-left: -#{$spacer-md};
-		margin-right: -#{$spacer-md};
-		margin-top: $spacer-xs;
-		background-color: $platinum;
-		padding: $spacer-md $spacer-md 10rem;
+		// Firefox and Safari render weirdly with: margin: 0 - abstracts.$spacer-md;
+		margin-left: -#{abstracts.$spacer-md};
+		margin-right: -#{abstracts.$spacer-md};
+		margin-top: abstracts.$spacer-xs;
+		background-color: abstracts.$platinum;
+		padding: abstracts.$spacer-md abstracts.$spacer-md 10rem;
 
-		@media (min-width: $breakpoint-lg) {
-			margin-left: -#{$spacer-lg};
-			margin-right: -#{$spacer-lg};
+		@media (min-width: abstracts.$breakpoint-lg) {
+			margin-left: -#{abstracts.$spacer-lg};
+			margin-right: -#{abstracts.$spacer-lg};
 
 			// The extra bottom padding keeps the grey running to the bottom of the scroll area,
 			// since this is always the last section of the tab when it renders.
-			padding: $spacer-md $spacer-lg $spacer-2xl;
+			padding: abstracts.$spacer-md abstracts.$spacer-lg abstracts.$spacer-2xl;
 		}
 	}
 
@@ -29,8 +29,8 @@
 		padding: 2rem;
 		height: max-content;
 
-		@media (min-width: $breakpoint-lg) {
-			padding: $spacer-lg;
+		@media (min-width: abstracts.$breakpoint-lg) {
+			padding: abstracts.$spacer-lg;
 		}
 	}
 }
@@ -39,6 +39,6 @@
 	display: block;
 
 	&:not(:active):not(:hover):focus {
-		outline: 0.2rem solid $teal;
+		outline: 0.2rem solid abstracts.$teal;
 	}
 }
