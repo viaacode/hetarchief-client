@@ -131,6 +131,12 @@ $l-container-padding-xs: 2rem;
 			text-decoration: none;
 		}
 
+		// Links inside the image caption should stay underlined
+		// https://meemoo.atlassian.net/browse/ARC-4024
+		.a-copyright-attribution__text a {
+			text-decoration: underline;
+		}
+
 		.c-block-grid__item,
 		.c-block-grid__item > a {
 			width: 100%;
