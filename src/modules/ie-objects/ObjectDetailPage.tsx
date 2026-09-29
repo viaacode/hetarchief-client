@@ -76,7 +76,6 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { BooleanParamWithDefault } from '@shared/helpers/boolean-param-with-default';
 import { getIeObjectNameSlug } from '@shared/helpers/ie-object-urls';
-import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
@@ -135,6 +134,28 @@ import { NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-
 import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
+
+const mapRelatedIeObject = (
+	ieObject: Partial<HetArchiefRelatedIeObject> | undefined | null
+): MediaObject | null => {
+	if (!ieObject) {
+		return null;
+	}
+	const date = ieObject.datePublished ?? ieObject.dateCreated ?? null;
+
+	return {
+		type: ieObject.dctermsFormat as HetArchiefIeObjectType,
+		title: ieObject.name as string,
+		subtitle: isNil(date)
+			? `${ieObject?.maintainerName ?? ''}`
+			: `${ieObject?.maintainerName ?? ''} (${date})`,
+		description: ieObject.description as string,
+		id: ieObject.schemaIdentifier as string,
+		maintainer_id: ieObject.maintainerId,
+		thumbnail: ieObject.thumbnailUrl,
+		hasAccessToEssence: !!ieObject.hasAccessToEssence,
+	};
+};
 
 export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	title,
@@ -446,14 +467,20 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	);
 
 	// related
-	const { data: relatedIeObjects } = useGetIeObjectsRelated(
-		mediaInfo?.iri,
-		mediaInfo?.premisIsPartOf || null,
-		!!mediaInfo
-	);
-	// Same condition as getMappedRelatedIeObjects() below, without needing its mapping — just
-	// whether the Gerelateerd tab has anything to show.
-	const hasRelated: boolean = !!relatedIeObjects?.parent || !!relatedIeObjects?.children?.length;
+	const {
+		data: relatedIeObjects,
+		isLoading: relatedIeObjectsIsLoading,
+		isPlaceholderData: relatedIeObjectsIsPlaceholder,
+	} = useGetIeObjectsRelated(mediaInfo?.iri, mediaInfo?.premisIsPartOf || null, !!mediaInfo);
+	// Mapped here (not just checked for presence) so the Gerelateerd tab is only offered when at
+	// least one related object survives mapping
+	const mappedRelatedIeObjects: MediaObject[] = useMemo(() => {
+		if (relatedIeObjects?.parent) {
+			return compact([mapRelatedIeObject(relatedIeObjects.parent)]);
+		}
+		return compact(relatedIeObjects?.children?.map(mapRelatedIeObject) || []);
+	}, [relatedIeObjects]);
+	const hasRelated: boolean = mappedRelatedIeObjects.length > 0;
 
 	// visit info
 	const { data: visitRequest, error: visitRequestError } = useGetActiveVisitRequestForUserAndSpace(
@@ -955,47 +982,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	]);
 
 	/**
-	 * Scroll to active search result in ocr tab when the current search result index changes
-	 */
-	const scrollActiveSearchWordIntoView = useCallback(() => {
-		const activeSearchResultElem = document.querySelector(
-			moduleClassSelector('ObjectDetailPage', 'p-object-detail__ocr__word--marked--active')
-		) as HTMLSpanElement | null;
-		const scrollable = document.querySelector(
-			moduleClassSelector('ObjectDetailPage', 'p-object-detail__ocr__words-container')
-		);
-
-		// If word was not found, try again in 100ms
-		if (!activeSearchResultElem && currentSearchResultIndex !== -1) {
-			setTimeout(() => {
-				scrollActiveSearchWordIntoView();
-			}, 100);
-			return;
-		}
-
-		// Location of the word inside the scrollable container minus a margin to make sure it's about in the center of the screen
-		const scrollTopWord = Math.max(
-			0,
-			(activeSearchResultElem?.offsetTop || 0) - (scrollable?.clientHeight || 300)
-		);
-		// We don't use scrollIntoView because it causes scrolling on the whole page
-		// https://meemoo.atlassian.net/browse/ARC-3020
-		scrollable?.scrollTo({
-			top: scrollTopWord,
-		});
-	}, [currentSearchResultIndex]);
-
-	/**
-	 * In the ocr tab, when a user searches for a word
-	 * We want to scroll into view the first word that is found in the ocr text
-	 */
-	useEffect(() => {
-		iiifViewerInitializedPromise?.then(() => {
-			scrollActiveSearchWordIntoView();
-		});
-	}, [iiifViewerInitializedPromise, scrollActiveSearchWordIntoView]);
-
-	/**
 	 * Hide the zendesk button for
 	 * - kiosk users
 	 * - users with access to the visitor space of the object
@@ -1072,35 +1058,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	/**
 	 * Mapping
 	 */
-	const mapRelatedIeObject = (
-		ieObject: Partial<HetArchiefRelatedIeObject> | undefined | null
-	): MediaObject | null => {
-		if (!ieObject) {
-			return null;
-		}
-		const date = ieObject.datePublished ?? ieObject.dateCreated ?? null;
-
-		return {
-			type: ieObject.dctermsFormat as HetArchiefIeObjectType,
-			title: ieObject.name as string,
-			subtitle: isNil(date)
-				? `${ieObject?.maintainerName ?? ''}`
-				: `${ieObject?.maintainerName ?? ''} (${date})`,
-			description: ieObject.description as string,
-			id: ieObject.schemaIdentifier as string,
-			maintainer_id: ieObject.maintainerId,
-			thumbnail: ieObject.thumbnailUrl,
-			hasAccessToEssence: !!ieObject.hasAccessToEssence,
-		};
-	};
-
-	const getMappedRelatedIeObjects = (): MediaObject[] => {
-		if (relatedIeObjects?.parent) {
-			return [mapRelatedIeObject(relatedIeObjects.parent) as MediaObject];
-		}
-		return compact(relatedIeObjects?.children?.map(mapRelatedIeObject) || []);
-	};
-
 	/**
 	 * Callbacks
 	 */
@@ -1355,6 +1312,25 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		isMediaAvailable,
 		arePagesOcrTextsAvailable,
 		hasRelated,
+	]);
+
+	// A tab from the URL (or an old bookmark) may not exist for this object, e.g. ocr without
+	// transcripts or related without related objects. Wait until the data those tabs depend on has
+	// loaded, otherwise a valid deep link would be reset before its tab appears.
+	useEffect(() => {
+		if (!mediaInfo || relatedIeObjectsIsLoading || relatedIeObjectsIsPlaceholder) {
+			return;
+		}
+		if (!tabs.some((tab) => tab.id === activeTab)) {
+			updateActiveTab(ObjectDetailTabs.Metadata);
+		}
+	}, [
+		mediaInfo,
+		relatedIeObjectsIsLoading,
+		relatedIeObjectsIsPlaceholder,
+		tabs,
+		activeTab,
+		updateActiveTab,
 	]);
 
 	const accessEndDate = useMemo(() => {
@@ -1727,7 +1703,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 						)}
 						{activeTab === ObjectDetailTabs.Related && (
 							<ObjectDetailPageRelatedTab
-								items={getMappedRelatedIeObjects()}
+								items={mappedRelatedIeObjects}
 								isParent={!!relatedIeObjects?.parent}
 							/>
 						)}

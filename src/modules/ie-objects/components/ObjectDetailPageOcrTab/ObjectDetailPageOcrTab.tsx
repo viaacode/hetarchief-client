@@ -41,7 +41,10 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 	// makes this line up with the item's real sticky `top`.
 	const [isSearchStuck, setIsSearchStuck] = useState(false);
 	const searchStickySentinelRef = useRef<HTMLDivElement>(null);
+	const activeWordRef = useRef<HTMLSpanElement>(null);
 
+	// The sentinel only renders once the OCR texts are available, which can be after mount
+	// biome-ignore lint/correctness/useExhaustiveDependencies: arePagesOcrTextsAvailable decides whether the sentinel exists
 	useEffect(() => {
 		const root = scrollContainerRef.current;
 		const sentinel = searchStickySentinelRef.current;
@@ -57,7 +60,7 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 		);
 		observer.observe(sentinel);
 		return () => observer.disconnect();
-	}, [scrollContainerRef]);
+	}, [scrollContainerRef, arePagesOcrTextsAvailable]);
 
 	const renderedOcrText = useMemo(() => {
 		let searchTermIndex = 0;
@@ -123,6 +126,23 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 		onIsTextOverlayVisibleChange,
 		isTextOverlayVisible,
 	]);
+
+	// Scroll the active search result to the middle of the page's scroll container
+	// We don't use scrollIntoView because it causes scrolling on the whole page
+	// https://meemoo.atlassian.net/browse/ARC-3020
+	// biome-ignore lint/correctness/useExhaustiveDependencies: re-run whenever the active result or its page changes
+	useEffect(() => {
+		const container = scrollContainerRef.current;
+		const word = activeWordRef.current;
+		if (!container || !word) {
+			return;
+		}
+		const wordTop =
+			word.getBoundingClientRect().top -
+			container.getBoundingClientRect().top +
+			container.scrollTop;
+		container.scrollTo({ top: Math.max(0, wordTop - container.clientHeight / 2) });
+	}, [scrollContainerRef, currentSearchResultIndex, currentPageIndex, renderedOcrText]);
 
 	return (
 		<div className={clsx(styles['p-object-detail-ocr-tab'])}>
