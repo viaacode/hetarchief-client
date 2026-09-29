@@ -23,15 +23,20 @@ $max-height-collapsed: 8rem;
 }
 
 // Both states render at once (see ObjectDetailPageHeader.tsx) so the max-height transition above
-// has stable content to animate around. Their display is toggled via inline style in JS (not a
-// --collapsed selector here), so hiding the expanded content can be delayed until the shrink
-// transition actually finishes - see the component's own comment for why.
+// has stable content to animate around. The display swap is delayed with `allow-discrete` until
+// the shrink ends: hiding the expanded content earlier would make the box reach its final size
+// before max-height has visibly animated. Unsupported browsers swap immediately.
 .p-object-detail-header__expanded-content {
 	display: flex;
 	flex-direction: column;
 	align-items: flex-start;
 	gap: abstracts.$spacer-xs;
 	padding: abstracts.$spacer-lg abstracts.$spacer-lg 0 abstracts.$spacer-lg;
+}
+
+.p-object-detail-header--collapsed .p-object-detail-header__expanded-content {
+	display: none;
+	transition: display abstracts.$timing-default allow-discrete;
 }
 
 .p-object-detail-header__collapsed-content {
@@ -52,6 +57,19 @@ $max-height-collapsed: 8rem;
 		line-height: 2rem; // 20px at 18px font size (1.111 ratio) - no exact token match
 		padding-bottom: 0;
 	}
+}
+
+// A none -> flex transition flips at its start, so the delay has to come from an animation whose
+// backwards fill keeps display: none until the shrink ends.
+@keyframes collapsed-content-delay {
+	from {
+		display: none;
+	}
+}
+
+.p-object-detail-header--collapsed .p-object-detail-header__collapsed-content {
+	display: flex;
+	animation: collapsed-content-delay 0s abstracts.$timing-default backwards;
 }
 
 .p-object-detail-header__details {

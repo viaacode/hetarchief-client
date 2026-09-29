@@ -172,10 +172,6 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 	const [onConfirmCopyright, setOnConfirmCopyright] = useState<() => void>(noop);
 	const [copyrightModalOpen, setCopyrightModalOpen] = useState(false);
 
-	// Whether the expanded content is still shown, kept separate from `isCollapsed` itself so
-	// collapsing can delay hiding it - see the effect below for why.
-	const [showExpandedContent, setShowExpandedContent] = useState(!isCollapsed);
-	const headerRef = useRef<HTMLDivElement>(null);
 	const expandedTitleRef = useRef<HTMLHeadingElement>(null);
 	// Set only by the explicit "Toon details" click, never by an incidental scroll-driven expand
 	// (moving focus in response to mere scrolling, with no control interacted with, would itself be
@@ -191,45 +187,14 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 		setMetadataExportDropdownOpen(false);
 	}, [windowSize]);
 
-	// Swapping the expanded/collapsed content via display:none the instant `isCollapsed` flips
-	// made the max-height shrink transition invisible: the collapsed row's natural height is
-	// already smaller than $max-height-collapsed, so once display:none dropped the box's content
-	// down to that size, max-height's own (still mid-animation) value was never the actual
-	// constraint - the box was already at its final size before the animation had a chance to
-	// show anything. Expanding doesn't have this problem (showing the expanded content
-	// immediately is what makes the box's growth visible as max-height climbs), so only
-	// collapsing needs to wait for the transition to actually finish before hiding it.
+	// After an explicit "Toon details" click, the focused button disappears (display:none) and focus
+	// would drop to <body>, so move it into the expanded header instead.
 	useEffect(() => {
-		if (!isCollapsed) {
-			setShowExpandedContent(true);
-			return;
-		}
-		const node = headerRef.current;
-		if (!node) {
-			setShowExpandedContent(false);
-			return;
-		}
-		const handleTransitionEnd = (event: TransitionEvent) => {
-			if (event.target === node && event.propertyName === 'max-height') {
-				setShowExpandedContent(false);
-			}
-		};
-		node.addEventListener('transitionend', handleTransitionEnd);
-		return () => node.removeEventListener('transitionend', handleTransitionEnd);
-	}, [isCollapsed]);
-
-	// Moves focus into the expanded header once it's actually visible, after an explicit "Toon
-	// details" click - otherwise the button that had focus disappears (display:none) the instant
-	// it's clicked, and the browser drops focus to <body> instead of somewhere meaningful. Keyed on
-	// showExpandedContent (not isCollapsed) so it only fires once the DOM has actually caught up:
-	// expanding sets showExpandedContent in its own separate render (see the effect above), so on
-	// the very first render where isCollapsed flips, the expanded content can still be display:none.
-	useEffect(() => {
-		if (showExpandedContent && shouldFocusExpandedTitleRef.current) {
+		if (!isCollapsed && shouldFocusExpandedTitleRef.current) {
 			shouldFocusExpandedTitleRef.current = false;
 			expandedTitleRef.current?.focus();
 		}
-	}, [showExpandedContent]);
+	}, [isCollapsed]);
 
 	const handleShowDetailsClick = () => {
 		shouldFocusExpandedTitleRef.current = true;
@@ -578,18 +543,12 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 
 	return (
 		<div
-			ref={headerRef}
 			className={clsx(styles['p-object-detail-header'], {
 				[styles['p-object-detail-header--collapsed']]: isCollapsed,
 			})}
 		>
-			{/* Both states render at once so the max-height transition has stable content to animate
-			 * around. display is driven by showExpandedContent (JS), not the --collapsed class's own
-			 * CSS rule, so hiding the expanded content can be delayed until the shrink actually ends. */}
-			<div
-				className={styles['p-object-detail-header__collapsed-content']}
-				style={{ display: showExpandedContent ? 'none' : 'flex' }}
-			>
+			{/* Both states render at once so the max-height transition has stable content to animate around */}
+			<div className={styles['p-object-detail-header__collapsed-content']}>
 				<h3 className={styles['p-object-detail__title']} title={mediaInfo?.name}>
 					<HighlightSearchTerms toHighlight={mediaInfo?.name} />
 				</h3>
@@ -606,11 +565,8 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 
 			<div
 				className={styles['p-object-detail-header__expanded-content']}
-				style={{ display: showExpandedContent ? undefined : 'none' }}
-				// While collapsing, this stays display:flex (clipped by the shrinking box, not yet
-				// display:none) for the duration of the animation - see the effect above. Without
-				// `inert` it would still be focusable/screen-reader-reachable during that window even
-				// though it's visually cut off, which fails WCAG 2.4.3/2.4.7 (focus must be visible).
+				// Still displayed while the collapse animation runs (see the scss), so keep it out of the
+				// tab order and accessibility tree meanwhile
 				inert={isCollapsed}
 			>
 				{showResearchWarning && renderResearchWarning()}

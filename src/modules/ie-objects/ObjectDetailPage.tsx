@@ -331,6 +331,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		return () => observer.disconnect();
 	}, []);
 
+	// Every tab starts at its top. 1px instead of 0 keeps the sentinel out of view, so the header
+	// stays collapsed and scrolling up can still expand it (a short tab would otherwise clamp to 0).
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only on tab change, not when the header collapses
+	useEffect(() => {
+		const container = sidebarContentRef.current;
+		if (isHeaderCollapsed && container) {
+			container.scrollTo({ top: 1, behavior: 'auto' });
+		}
+	}, [activeTab]);
+
 	const { data: thumbnailUrl, isLoading: thumbnailUrlIsLoading } =
 		useGetIeObjectThumbnail(ieObjectId);
 
