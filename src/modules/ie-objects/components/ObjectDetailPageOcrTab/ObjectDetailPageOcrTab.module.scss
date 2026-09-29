@@ -20,12 +20,8 @@
 	display: flex;
 	flex-direction: column;
 	background-color: abstracts.$white;
-	gap: abstracts.$spacer-md;
-	padding-top: abstracts.$spacer-lg;
 
-	&__search {
-		@include ocr-tab-inset;
-	}
+	@include ocr-tab-inset;
 }
 
 .p-object-detail-ocr-tab {
@@ -42,7 +38,7 @@
 
 	&__words-container {
 		width: 100%;
-		padding: 0 abstracts.$spacer-lg abstracts.$spacer-lg * 3;
+		padding: 0 abstracts.$spacer-lg 0;
 		margin: 0;
 
 		@media (max-width: abstracts.$breakpoint-lg) {
@@ -89,7 +85,7 @@
 		position: sticky;
 		bottom: 0;
 		background-color: abstracts.$white;
-		padding-bottom: abstracts.$spacer-lg;
+		padding: abstracts.$spacer-lg 0;
 
 		@include ocr-tab-inset;
 	}

@@ -1706,6 +1706,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 									onSearch={handleSearch}
 									onClearSearch={handleClearSearch}
 									onChangeSearchIndex={handleChangeSearchIndex}
+									isScrolled={isHeaderCollapsed}
 								/>
 							)}
 						</div>
