@@ -8,7 +8,7 @@ import {
 	DynamicActionMenu,
 	type DynamicActionMenuProps,
 } from '@ie-objects/components/DynamicActionMenu';
-import { ObjectDetailPageMetadataAiDescription } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadataAiDescription';
+import { ObjectDetailPageMetadataAiDescription } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataAiDescription';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/use-get-is-public-newspaper';
 import {
 	ANONYMOUS_ACTION_SORT_MAP,
@@ -70,7 +70,7 @@ import { compact, indexOf, isEmpty, isNil, noop, sortBy } from 'es-toolkit/compa
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import React, { type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styles from './ObjectDetailPageHeader.module.scss';
 import type { ObjectDetailPageHeaderProps } from './ObjectDetailPageHeader.types';
@@ -172,6 +172,12 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 	const [onConfirmCopyright, setOnConfirmCopyright] = useState<() => void>(noop);
 	const [copyrightModalOpen, setCopyrightModalOpen] = useState(false);
 
+	const expandedTitleRef = useRef<HTMLHeadingElement>(null);
+	// Set only by the explicit "Toon details" click, never by an incidental scroll-driven expand
+	// (moving focus in response to mere scrolling, with no control interacted with, would itself be
+	// a WCAG 3.2.1/3.2.2 "unexpected context change" problem).
+	const shouldFocusExpandedTitleRef = useRef(false);
+
 	/**
 	 * Close dropdown while resizing
 	 */
@@ -180,6 +186,20 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 	useEffect(() => {
 		setMetadataExportDropdownOpen(false);
 	}, [windowSize]);
+
+	// After an explicit "Toon details" click, the focused button disappears (display:none) and focus
+	// would drop to <body>, so move it into the expanded header instead.
+	useEffect(() => {
+		if (!isCollapsed && shouldFocusExpandedTitleRef.current) {
+			shouldFocusExpandedTitleRef.current = false;
+			expandedTitleRef.current?.focus();
+		}
+	}, [isCollapsed]);
+
+	const handleShowDetailsClick = () => {
+		shouldFocusExpandedTitleRef.current = true;
+		onShowDetails();
+	};
 
 	/**
 	 * Event handlers
@@ -528,10 +548,17 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 			})}
 		>
 			{/* Both states render at once so the max-height transition has stable content to animate around */}
-			<div className={styles['p-object-detail-header__collapsed-content']}>
-				<h3 className={styles['p-object-detail__title']} title={mediaInfo?.name}>
+			<div
+				className={styles['p-object-detail-header__collapsed-content']}
+				// Mirrors the expanded content's inert below; aria-hidden as well since inert only takes
+				// effect after the class change has rendered, and the name is repeated in the expanded h3
+				inert={!isCollapsed}
+				aria-hidden={!isCollapsed}
+			>
+				{/* Not a heading: the expanded content already holds the page's h3 with the same name */}
+				<span className={styles['p-object-detail__title']} title={mediaInfo?.name}>
 					<HighlightSearchTerms toHighlight={mediaInfo?.name} />
-				</h3>
+				</span>
 				<Button
 					className={styles['p-object-detail-header__details']}
 					label={tText(
@@ -539,15 +566,21 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 					)}
 					iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
 					variants={['text']}
-					onClick={onShowDetails}
+					onClick={handleShowDetailsClick}
 				/>
 			</div>
 
-			<div className={styles['p-object-detail-header__expanded-content']}>
+			<div
+				className={styles['p-object-detail-header__expanded-content']}
+				// Still displayed while the collapse animation runs (see the scss), so keep it out of the
+				// tab order and accessibility tree meanwhile
+				inert={isCollapsed}
+			>
 				{showResearchWarning && renderResearchWarning()}
 				{renderBreadcrumbs()}
 				{showKeyUserPill && renderKeyUserPill()}
-				<h3 className={styles['p-object-detail__title']}>
+				{/* tabIndex=-1: not a tab stop, but a valid target for the "Toon details" focus move above */}
+				<h3 ref={expandedTitleRef} tabIndex={-1} className={styles['p-object-detail__title']}>
 					<HighlightSearchTerms toHighlight={mediaInfo?.name} />
 				</h3>
 

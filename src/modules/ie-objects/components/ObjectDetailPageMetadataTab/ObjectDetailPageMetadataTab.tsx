@@ -1,49 +1,30 @@
-import { GroupName, Permission } from '@account/const';
-import { selectUser } from '@auth/store/user';
-import type { User } from '@auth/types';
+import { GroupName } from '@account/const';
 import Metadata from '@ie-objects/components/Metadata/Metadata';
+import { renderSimpleMetadataField as renderSimpleMetadataFieldBase } from '@ie-objects/components/Metadata/render-simple-metadata-field';
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
-import type { ObjectDetailPageMetadataProps } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata.types';
-import { ObjectDetailPageMetadataDisclaimerTooltip } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadataDisclaimerTooltip';
-import { ObjectDetailPageMetadataRights } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadataRights';
-import { ObjectDetailPageMetadataThemes } from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadataThemes';
+import { ObjectDetailPageMetadataDisclaimerTooltip } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataDisclaimerTooltip';
+import type { ObjectDetailPageMetadataTabProps } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataTab.types';
 import { SearchLinkTag } from '@ie-objects/components/SearchLinkTag/SearchLinkTag';
-import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/use-get-ie-object-previous-next-ids';
 import { renderAbrahamLink, renderDate, renderIsPartOfValue } from '@ie-objects/ie-objects.consts';
 import { getFirstMentionHighlight } from '@ie-objects/utils/get-first-mention-highlight';
-import {
-	getIeObjectAvRightsIcon,
-	getIeObjectAvRightsLabel,
-	getIeObjectAvRightsUrl,
-} from '@ie-objects/utils/get-ie-object-av-rights-icon';
 import { getIeObjectProviderIdentifierLinkProps } from '@ie-objects/utils/get-ie-object-provider-identifier-link-props';
-import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import { getIeObjectSourceAttribution } from '@ie-objects/utils/get-ie-object-source-attribution';
 import {
 	mapArrayToMetadataData,
 	mapObjectOrArrayToMetadata,
 	mapObjectsToMetadata,
-	renderKeywordsAsTags,
 } from '@ie-objects/utils/map-metadata';
 import type { TextLine } from '@iiif-viewer/IiifViewer.types';
-import { isAudioVideoType, isNewspaperType } from '@meemoo/admin-core-ui/admin';
-import { Button } from '@meemoo/react-components';
+import { isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import { CopyButton } from '@shared/components/CopyButton';
-import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
-import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { formatDateTime } from '@shared/utils/dates';
-import { Locale } from '@shared/utils/i18n';
 import {
 	type HetArchiefIeObject,
-	HetArchiefIeObjectLicense,
-	type HetArchiefIeObjectRightsInfo,
-	HetArchiefIeObjectType,
 	HetArchiefIsPartOfKey,
 	type HetArchiefMention,
 } from '@viaa/avo2-types';
@@ -51,21 +32,16 @@ import {
 	LANGUAGES,
 	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
-import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
-import { compact, isEmpty, isNil, isString } from 'es-toolkit/compat';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
+import { SearchFilterId } from '@visitor-space/types';
+import { compact, isEmpty, isNil } from 'es-toolkit/compat';
 import React, { type FC, type ReactNode, useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
 import MetadataList from '../Metadata/MetadataList';
-import styles from './ObjectDetailPageMetadata.module.scss';
+import styles from './ObjectDetailPageMetadataTab.module.scss';
 
-export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
+export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> = ({
 	mediaInfo,
 	currentPage,
 	goToPage,
-	visitRequest,
 	activeFile,
 	simplifiedAltoInfo,
 	iiifZoomTo,
@@ -73,7 +49,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	setIsTextOverlayVisible,
 	onReadMoreClicked,
 }) => {
-	const router = useRouter();
 	const locale = useLocale();
 
 	/**
@@ -81,27 +56,12 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 	 */
 
 	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
-	const { data: ieObjectPreviousNextIds } = useGetIeObjectPreviousNextIds(
-		mediaInfo?.collectionId,
-		mediaInfo?.iri,
-
-		isNewspaper && !!mediaInfo?.collectionId && !!mediaInfo?.schemaIdentifier
-	);
 
 	/**
 	 * User
 	 */
 
-	const user: User | null = useSelector(selectUser);
 	const isKiosk = useHasAnyGroup(GroupName.KIOSK_VISITOR);
-
-	// Themes are shown for publicly disclosed objects that belong to at least one theme, to every
-	// user including logged out ones, but never to kiosk visitors. See ARC-3826.
-	const themes = mediaInfo?.themes ?? [];
-	const showThemes: boolean =
-		!isKiosk &&
-		!!mediaInfo?.licenses?.includes(HetArchiefIeObjectLicense.PUBLIEK_CONTENT) &&
-		themes.length > 0;
 
 	const zoomToName = useCallback(
 		(mention: HetArchiefMention) => {
@@ -159,110 +119,10 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		[currentPage, zoomToName, goToPage]
 	);
 
-	const renderMaintainerMetaTitle = ({
-		maintainerName,
-		maintainerLogo,
-		maintainerId,
-	}: HetArchiefIeObject): ReactNode => {
-		const maintainerSearchLink = stringifyUrl({
-			url: ROUTES_BY_LOCALE[locale].search,
-			query: {
-				[SearchFilterId.Maintainers]: [
-					`${maintainerId}${FILTER_LABEL_VALUE_DELIMITER}${maintainerName}`,
-				],
-			},
-		});
-		return (
-			<div className={styles['p-object-detail__metadata-maintainer-title']}>
-				<div>
-					<p className={styles['p-object-detail__metadata-label']}>
-						{tText('modules/ie-objects/const/index___aanbieder')}
-					</p>
-					{!isKiosk && <SearchLinkTag label={maintainerName} link={maintainerSearchLink} />}
-				</div>
-
-				{!isKiosk && maintainerLogo && (
-					<div
-						className={styles['p-object-detail__sidebar__content-logo']}
-						style={{ backgroundImage: `url(${maintainerLogo})` }}
-						aria-hidden="true"
-					/>
-				)}
-			</div>
-		);
-	};
-
-	const renderMaintainerMetaData = ({
-		maintainerDescription,
-		maintainerSiteUrl,
-	}: HetArchiefIeObject): ReactNode => {
-		if (!isKiosk) {
-			return (
-				<div className={styles['p-object-detail__sidebar__content-maintainer-data']}>
-					{maintainerDescription && locale === Locale.nl && (
-						<p className={styles['p-object-detail__sidebar__content-description']}>
-							{maintainerDescription}
-						</p>
-					)}
-					{maintainerSiteUrl && (
-						<p className={styles['p-object-detail__sidebar__content-link']}>
-							<a href={maintainerSiteUrl} target="_blank" rel="noopener noreferrer">
-								{maintainerSiteUrl}
-							</a>
-							<Icon className="u-ml-8" name={IconNamesLight.Extern} aria-hidden />
-						</p>
-					)}
-				</div>
-			);
-		}
-	};
-
 	const renderSimpleMetadataField = (
 		title: string,
 		data: string | ReactNode | null | undefined
-	): ReactNode => {
-		if (!data) {
-			return null;
-		}
-		if (isString(data)) {
-			return (
-				<Metadata title={title} key={`metadata-${title}`}>
-					<MetaDataFieldWithHighlightingAndMaxLength
-						title={title}
-						data={data}
-						onReadMoreClicked={onReadMoreClicked}
-					/>
-				</Metadata>
-			);
-		}
-		return (
-			<Metadata title={title} key={`metadata-${title}`}>
-				{data}
-			</Metadata>
-		);
-	};
-
-	const renderSeriesTitle = (mediaInfo: HetArchiefIeObject) => {
-		if (!mediaInfo.collectionName) {
-			return null;
-		}
-		if (isNewspaperType(mediaInfo.dctermsFormat)) {
-			// Use the series filter
-			return (
-				<SearchLinkTag
-					label={mediaInfo.collectionName}
-					link={getSearchLink(locale, {
-						format: HetArchiefIeObjectType.NEWSPAPER,
-						[SearchFilterId.NewspaperSeriesName]: mediaInfo.collectionName,
-					})}
-				/>
-			);
-		}
-
-		// This series filter isn't available for audio / video material, since the filter doesn't work well for those media types
-		// https://meemoo.atlassian.net/browse/ARC-3046
-		return mediaInfo.collectionName;
-	};
+	): ReactNode => renderSimpleMetadataFieldBase(title, data, onReadMoreClicked);
 
 	const renderProviderIdentifier = (mediaInfo: HetArchiefIeObject): ReactNode => {
 		const linkProps = getIeObjectProviderIdentifierLinkProps(mediaInfo, isKiosk);
@@ -287,85 +147,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		);
 	};
 
-	const renderPreviousButton = (enabled: boolean) => {
-		const previousButtonIcon = <Icon name={IconNamesLight.ArrowLeft} aria-hidden />;
-		const previousButtonLabel = tText(
-			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___vorige'
-		);
-
-		return (
-			<Button
-				variants={['text']}
-				iconStart={previousButtonIcon}
-				label={previousButtonLabel}
-				disabled={!enabled}
-				tabIndex={enabled ? undefined : -1}
-			/>
-		);
-	};
-
-	const renderNextButton = (enabled: boolean) => {
-		const nextButtonIcon = <Icon name={IconNamesLight.ArrowRight} aria-hidden />;
-		const nextButtonLabel = tText(
-			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___volgende'
-		);
-
-		return (
-			<Button
-				variants={['text']}
-				iconEnd={nextButtonIcon}
-				label={nextButtonLabel}
-				disabled={!enabled}
-				tabIndex={enabled ? undefined : -1}
-			/>
-		);
-	};
-
-	const renderPreviousAndNextButtons = (): ReactNode | null => {
-		if (user && !user?.permissions?.includes(Permission.VIEW_PREVIOUS_AND_NEXT_NEWSPAPER_BUTTONS)) {
-			// Kiosk user cannot see previous and next buttons
-			// https://meemoo.atlassian.net/browse/ARC-2933
-			return null;
-		}
-		if (
-			!mediaInfo ||
-			(!ieObjectPreviousNextIds?.previousIeObjectId && !ieObjectPreviousNextIds?.nextIeObjectId)
-		) {
-			return null;
-		}
-		return (
-			<div className={styles['p-object-detail__metadata-content__previous-next']}>
-				{ieObjectPreviousNextIds?.previousIeObjectId ? (
-					<Link
-						href={`/pid/${ieObjectPreviousNextIds?.previousIeObjectId}`}
-						aria-label={tText(
-							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___ga-naar-de-vorige-krant-in-dezelfde-serie-link-aria-label'
-						)}
-					>
-						{renderPreviousButton(true)}
-					</Link>
-				) : (
-					renderPreviousButton(false)
-				)}
-
-				<span>{mediaInfo?.datePublished || mediaInfo?.dateCreated || '-'}</span>
-
-				{ieObjectPreviousNextIds?.nextIeObjectId ? (
-					<Link
-						href={`/pid/${ieObjectPreviousNextIds?.nextIeObjectId}`}
-						aria-label={tText(
-							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___ga-naar-de-volgende-krant-in-dezelfde-serie-link-aria-label'
-						)}
-					>
-						{renderNextButton(true)}
-					</Link>
-				) : (
-					renderNextButton(false)
-				)}
-			</div>
-		);
-	};
-
 	// biome-ignore lint/correctness/useExhaustiveDependencies: We want this translation to be recalculated when the language is changed
 	const explainNamesListLink = useMemo(
 		() => (
@@ -378,72 +159,11 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 		[locale]
 	);
 
-	const getRightsInfoForAudioVideo = (
-		mediaInfo: HetArchiefIeObject
-	): HetArchiefIeObjectRightsInfo | null => {
-		const isAudioOrVideo = isAudioVideoType(mediaInfo.dctermsFormat);
-		return isAudioOrVideo ? mediaInfo.rightsInfo || null : null;
-	};
-
-	/**
-	 * Render the rights-info for a newspaper or audio / video object, if available.
-	 * For newspapers, we use the getIeObjectRightsStatusInfo util to get a user-friendly label and icon based on the rights-status of the object.
-	 * 		this is stored as licenses on the object itself (legacy)
-	 * For audio / video objects, we use the rightsInfo property of the mediaInfo, which is only present for AV media types.
-	 * 		this is stored as rights in graph.rights table (currelty still a fixed list of rights per object, but in the future this will be filled dynamically from the £Knowledge graph of meemoo)
-	 *
-	 * @param mediaInfo
-	 */
-	const renderRightsInfo = (mediaInfo: HetArchiefIeObject) => {
-		const rightsInfoNewspapers = isNewspaper ? getIeObjectRightsStatusInfo(mediaInfo) : null;
-		const rightsInfoAudioVideo = getRightsInfoForAudioVideo(mediaInfo);
-		const avRightsIcon = getIeObjectAvRightsIcon(rightsInfoAudioVideo);
-		const avRightsLabel = getIeObjectAvRightsLabel(rightsInfoAudioVideo);
-		const avRightsUrl = getIeObjectAvRightsUrl(rightsInfoAudioVideo);
-		const rightsMoreInfoTitle = tText(
-			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
-		);
-
-		if (rightsInfoNewspapers) {
-			return (
-				<ObjectDetailPageMetadataRights
-					title={tHtml('modules/ie-objects/object-detail-page___rechten')}
-					className={styles['p-object-detail__metadata-content__rights-status']}
-					label={rightsInfoNewspapers.label}
-					labelIcon={rightsInfoNewspapers.icon}
-					labelUrl={rightsInfoNewspapers.internalLink}
-					moreInfoUrl={rightsInfoNewspapers.externalLink}
-					moreInfoTitle={rightsMoreInfoTitle}
-				/>
-			);
-		}
-		if (rightsInfoAudioVideo) {
-			return (
-				<ObjectDetailPageMetadataRights
-					title={tHtml('modules/ie-objects/object-detail-page___rechten')}
-					className={styles['p-object-detail__metadata-content__rights-status']}
-					label={avRightsLabel}
-					labelIcon={avRightsIcon}
-					labelUrl={avRightsUrl}
-					moreInfoUrl={tText(
-						'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-internal-link',
-						{
-							languageCode: locale,
-						}
-					)}
-					moreInfoTitle={rightsMoreInfoTitle}
-					copyrightHolder={mediaInfo.copyrightHolder}
-					copyrightHolderLabel={tText('modules/ie-objects/ie-objects___rechthebbende')}
-					licenseDistributor={rightsInfoAudioVideo.licenseDistributor || undefined}
-					licenseDistributorLabel={tText('modules/ie-objects/ie-objects___licentiegever')}
-				/>
-			);
-		}
-	};
-
 	const renderSourceAttributionDisclaimerTooltip = () => (
 		<ObjectDetailPageMetadataDisclaimerTooltip
 			iconName={IconNamesLight.Info}
+			iconSize="lg"
+			position="left"
 			className={styles['p-object-detail__source-attribution-info']}
 			ariaLabel={tText(
 				'modules/ie-objects/object-detail-page___deze-bronvermelding-is-automatisch-gegenereerd-en-kan-fouten-bevatten-a-href-bronvermelding-fouten-meer-info-a'
@@ -463,31 +183,24 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 			<Metadata
 				title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
 				key="metadata-source-attribution"
-				renderedTitleRight={renderSourceAttributionDisclaimerTooltip()}
-				renderRight={
-					<CopyButton
-						text={rightsAttributionText}
-						title={tText(
-							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-bronvermelding-naar-je-klembord'
-						)}
-						variants={['white']}
-					/>
+				renderedTitleRight={
+					<div className="u-flex u-flex-row u-gap-xs ">
+						<CopyButton
+							text={rightsAttributionText}
+							title={tText(
+								'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___kopieer-de-bronvermelding-naar-je-klembord'
+							)}
+							className={styles['p-object-detail__icon-button']}
+							variants={['white']}
+						/>
+						{renderSourceAttributionDisclaimerTooltip()}
+					</div>
 				}
 				className="u-bt-0"
 			>
 				<span>{rightsAttributionText}</span>
 			</Metadata>
 		);
-	};
-
-	const renderAuthorRightsHolder = (mediaInfo: HetArchiefIeObject) => {
-		const rightsInfoAudioVideo = getRightsInfoForAudioVideo(mediaInfo);
-		if (!rightsInfoAudioVideo) {
-			return renderSimpleMetadataField(
-				tText('modules/ie-objects/ie-objects___auteursrechthouder'),
-				mediaInfo?.copyrightHolder
-			);
-		}
 	};
 
 	const renderMetaData = () => {
@@ -503,24 +216,7 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					{renderRightsAttributionText(rightsAttributionText)}
 				</div>
 
-				<MetadataList allowTwoColumns={false}>
-					<Metadata
-						title={tText(
-							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___editie-newspaper-series-title',
-							{
-								newspaperSeriesTitle: mediaInfo.collectionName,
-							}
-						)}
-						key={'collectionNamePreviousNext'}
-					>
-						{renderPreviousAndNextButtons()}
-					</Metadata>
-				</MetadataList>
 				<MetadataList allowTwoColumns={true}>
-					<Metadata title={renderMaintainerMetaTitle(mediaInfo)} key={'metadata-maintainer'}>
-						{renderMaintainerMetaData(mediaInfo)}
-					</Metadata>
-					{renderRightsInfo(mediaInfo)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___media-type'),
 						mediaInfo.dctermsFormat
@@ -532,14 +228,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___pid'),
 						mediaInfo.schemaIdentifier
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___titel-van-de-reeks'),
-						renderSeriesTitle(mediaInfo)
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___publicatiedatum'),
-						renderDate(mediaInfo.datePublished)
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___rechtenstatus'),
@@ -727,7 +415,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 						tText('modules/ie-objects/ie-objects___paginanummer'),
 						mediaInfo?.pageNumber
 					)}
-					{renderAuthorRightsHolder(mediaInfo)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___oorsprong'),
 						mediaInfo.meemooOriginalCp
@@ -783,33 +470,6 @@ export const ObjectDetailPageMetadata: FC<ObjectDetailPageMetadataProps> = ({
 								mentions={mediaInfo?.mentions || []}
 								onZoomToMention={handleZoomToMention}
 							/>
-						</Metadata>
-					)}
-
-					{showThemes && (
-						<ObjectDetailPageMetadataThemes
-							title={tHtml(
-								'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata-themes___themas'
-							)}
-							themes={themes}
-							locale={locale}
-						/>
-					)}
-
-					{!!mediaInfo.keywords?.length && (
-						<Metadata
-							title={tHtml(
-								'pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden'
-							)}
-							key="metadata-keywords"
-							className="u-pb-0"
-						>
-							{renderKeywordsAsTags(
-								mediaInfo.keywords,
-								visitRequest ? (router.query.slug as string) : '',
-								locale,
-								router
-							)}
 						</Metadata>
 					)}
 				</MetadataList>

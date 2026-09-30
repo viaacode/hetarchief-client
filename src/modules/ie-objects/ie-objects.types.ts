@@ -33,8 +33,10 @@ export type IeObjectSearchAggregations = Record<aggregateKeys, IeObjectSearchAgg
 
 export enum ObjectDetailTabs {
 	Media = 'media',
+	Overview = 'overview',
 	Metadata = 'metadata',
 	Ocr = 'ocr',
+	Related = 'related',
 }
 
 export enum MediaActions {

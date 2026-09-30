@@ -1,5 +1,5 @@
 @use "sass:color";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-metadata {
 	overflow: hidden;
@@ -19,21 +19,21 @@
 	&::before {
 		content: "";
 		display: block;
-		height: 0.1rem;
-		background-color: $black-20;
+		height: 1px;
+		background-color: abstracts.$black-20;
 	}
 
 	&__list {
 		@extend %reset-list;
 
 		margin-top: -0.2rem; // move top borders of first items in a column outside parent container to prevent double border
-		column-gap: $spacer-lg;
+		column-gap: abstracts.$spacer-lg;
 	}
 
 	&__item {
 		flex-flow: column;
-		padding: $spacer-md 0;
-		border-top: $divider-black;
+		padding: abstracts.$spacer-md 0;
+		border-top: abstracts.$divider-black;
 		display: flex;
 		break-inside: avoid;
 
@@ -41,16 +41,24 @@
 			max-width: 100%;
 		}
 
+		dl {
+			margin-block: 0;
+		}
+
 		dt, dd {
 			display: block;
 			width: 100%;
 		}
+
+		dt {
+			display: flex;
+		}
 	}
 
 	&__item-title {
-		font-weight: $font-weight-bold;
-		padding-bottom: $spacer-xxs;
-		font-size: $font-size-md;
+		font-weight: abstracts.$font-weight-bold;
+		padding-bottom: abstracts.$spacer-xxs;
+		font-size: abstracts.$font-size-md;
 		display: flex;
 		align-items: center;
 	}
@@ -58,13 +66,17 @@
 	&__item-text {
 		padding: 0;
 		margin: 0;
-		color: $neutral;
+		color: abstracts.$neutral;
 		overflow-wrap: break-word;
 
 		p {
 			span {
 				white-space: pre-line;
 			}
+		}
+
+		a {
+			color: abstracts.$jade;
 		}
 	}
 }

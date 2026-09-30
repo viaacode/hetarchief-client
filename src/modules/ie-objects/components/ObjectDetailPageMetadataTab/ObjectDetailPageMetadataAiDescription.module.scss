@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-object-detail-page-metadata-ai-description {
 	display: flex;
@@ -6,26 +6,26 @@
 	justify-content: center;
 	align-items: flex-start;
 	align-self: stretch;
-	gap: $spacer-xs;
+	gap: abstracts.$spacer-xs;
 
-	// Top padding is $spacer-xs, not $spacer-sm: combined with the parent gap it reproduces the
+	// Top padding is abstracts.$spacer-xs, not abstracts.$spacer-sm: combined with the parent gap it reproduces the
 	// original 16px gap after the divider, which is now a sibling <hr> rather than a border.
-	padding: $spacer-xs 0 $spacer-lg;
+	padding: abstracts.$spacer-xs 0 abstracts.$spacer-lg;
 }
 
 .c-object-detail-page-metadata-ai-description__header {
 	display: flex;
 	align-items: flex-start;
 	align-self: stretch;
-	gap: $spacer-md;
+	gap: abstracts.$spacer-md;
 }
 
 .c-object-detail-page-metadata-ai-description__title {
 	flex: 1 0 0;
 	overflow-wrap: break-word;
-	color: $black;
-	font-family: $font-family-primary;
-	font-size: $font-size-lg;
+	color: abstracts.$black;
+	font-family: abstracts.$font-family-primary;
+	font-size: abstracts.$font-size-lg;
 	font-weight: 800;
 	line-height: 2.6rem; // 26px at 24px font size (1.0833 ratio) - no existing token matches
 }
@@ -36,5 +36,5 @@
 }
 
 .c-object-detail-page-metadata-ai-description__synopsis {
-	@include inline-read-more-paragraph-styling;
+	@include abstracts.inline-read-more-paragraph-styling;
 }

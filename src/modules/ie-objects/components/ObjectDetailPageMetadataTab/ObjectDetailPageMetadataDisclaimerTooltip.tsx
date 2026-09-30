@@ -11,7 +11,7 @@ export interface ObjectDetailPageMetadataDisclaimerTooltipProps {
 	iconName: IconNamesLight;
 	ariaLabel: string;
 	content: ReactNode;
-	position?: 'top' | 'top-end';
+	position?: 'top' | 'top-end' | 'left';
 	iconSize?: 'base' | 'lg';
 	className?: string;
 }
