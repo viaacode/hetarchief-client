@@ -946,12 +946,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 * Hide the zendesk button for
 	 * - kiosk users
 	 * - users with access to the visitor space of the object
-	 * - when the metadata tab is not active (otherwise it overlaps with the ocr next page button)
+	 * - when the ocr tab is active (otherwise it overlaps with the ocr next page button)
 	 */
 	useEffect(() => {
 		dispatch(
 			setShowZendesk(
-				!isKiosk && !hasAccessToVisitorSpaceOfObject && activeTab === ObjectDetailTabs.Metadata
+				!isKiosk && !hasAccessToVisitorSpaceOfObject && activeTab !== ObjectDetailTabs.Ocr
 			)
 		);
 	}, [dispatch, hasAccessToVisitorSpaceOfObject, isKiosk, activeTab]);
@@ -993,10 +993,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	]);
 
 	/**
-	 * Pause media if metadata tab is shown on mobile
+	 * Pause media if any tab other than the media tab is shown on mobile
 	 */
 	useEffect(() => {
-		if (isMobile && activeTab === ObjectDetailTabs.Metadata) {
+		if (isMobile && activeTab !== ObjectDetailTabs.Media) {
 			setIsMediaPaused(true);
 		}
 	}, [activeTab, isMobile]);
@@ -1593,7 +1593,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					onReadMoreClicked={setSelectedMetadataField}
 					activeTab={activeTab}
 					similar={similar}
-					tabs={!isMobile && renderTabs()}
+					tabs={isMobile ? null : renderTabs()}
 					containerRef={sidebarContentRef}
 					isProgrammaticScrollRef={isOcrResultAutoScrollingRef}
 					className={styles['p-object-detail__sidebar']}

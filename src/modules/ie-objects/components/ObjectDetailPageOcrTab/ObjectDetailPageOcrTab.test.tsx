@@ -116,6 +116,46 @@ describe('Component: <ObjectDetailPageOcrTab />', () => {
 			vi.restoreAllMocks();
 		});
 
+		it('does not scroll again when the text re-renders for the same result', () => {
+			const scrollContainerRef = createScrollContainer();
+			const { rerender, props } = renderTab({ ...searchHitOnSecondWord, scrollContainerRef });
+			expect(scrollContainerRef.current?.scrollTo).toHaveBeenCalledTimes(1);
+
+			// e.g. a new callback identity after a router.replace, or the overlay being toggled
+			rerender(
+				<ObjectDetailPageOcrTab {...props} onClickOnOcrWord={vi.fn()} isTextOverlayVisible={true} />
+			);
+
+			expect(scrollContainerRef.current?.scrollTo).toHaveBeenCalledTimes(1);
+		});
+
+		it('scrolls again when the active result changes', () => {
+			const scrollContainerRef = createScrollContainer();
+			const { rerender, props } = renderTab({ ...searchHitOnSecondWord, scrollContainerRef });
+
+			rerender(
+				<ObjectDetailPageOcrTab
+					{...props}
+					altoTextsOnCurrentPageForSearchTerms={[
+						{ text: ALTO_TEXT[1], tabbable: true },
+						{ text: ALTO_TEXT[2], tabbable: true },
+					]}
+					searchResults={[
+						...(props.searchResults ?? []),
+						{
+							pageIndex: 0,
+							searchTerm: 'derde',
+							searchTermCharacterOffset: 14,
+							searchTermIndexOnPage: 1,
+						},
+					]}
+					currentSearchResultIndex={1}
+				/>
+			);
+
+			expect(scrollContainerRef.current?.scrollTo).toHaveBeenCalledTimes(2);
+		});
+
 		it('does not scroll without an active search result', () => {
 			const scrollContainerRef = createScrollContainer();
 

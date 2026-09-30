@@ -85,10 +85,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 	// Elements
 
-	.p-object-detail__title {
-		word-break: break-word;
-	}
-
 	&__wrapper {
 		display: grid;
 		grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);

@@ -1,7 +1,5 @@
 @use "src/styles/abstracts" as abstracts;
 
-$maintainer-logo-height: 7rem;
-
 .p-object-detail__metadata-content {
 	padding: 0 2rem;
 
@@ -32,27 +30,6 @@ $maintainer-logo-height: 7rem;
 				word-break: initial;
 			}
 		}
-	}
-
-	&__rights-status {
-		:global([class*="c-icon"]) {
-			font-size: abstracts.$font-size-lg;
-		}
-	}
-
-	&__names-list {
-		&__more-info {
-			color: abstracts.$neutral !important;
-		}
-	}
-
-	&__previous-next {
-		background-color: abstracts.$silver;
-		border-radius: abstracts.$border-radius;
-		display: flex;
-		flex-direction: row;
-		justify-content: space-between;
-		align-items: center;
 	}
 }
 

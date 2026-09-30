@@ -23,6 +23,21 @@
 	align-items: flex-start;
 }
 
+.p-object-detail-overview-tab__maintainer-data {
+	display: flex;
+	flex-direction: column;
+}
+
+.p-object-detail-overview-tab__maintainer-description {
+	margin-top: abstracts.$spacer-xs;
+}
+
+.p-object-detail-overview-tab__maintainer-link {
+	display: inline-flex;
+	align-items: center;
+	margin-top: abstracts.$spacer-xs;
+}
+
 .p-object-detail-overview-tab__maintainer-logo {
 	width: 100%;
 	height: 5.3rem;

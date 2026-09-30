@@ -43,6 +43,9 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 	const [isSearchStuck, setIsSearchStuck] = useState(false);
 	const searchStickySentinelRef = useRef<HTMLDivElement>(null);
 	const activeWordRef = useRef<HTMLSpanElement>(null);
+	// Which result (page + index) we last scrolled to, so unrelated re-renders of the OCR text
+	// (overlay toggle, new callback identities after a router.replace) don't yank the user back
+	const lastScrolledResultRef = useRef<string | null>(null);
 
 	// The sentinel only renders once the OCR texts are available, which can be after mount
 	// biome-ignore lint/correctness/useExhaustiveDependencies: arePagesOcrTextsAvailable decides whether the sentinel exists
@@ -137,8 +140,17 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 		const container = scrollContainerRef.current;
 		const word = activeWordRef.current;
 		if (!container || !word) {
+			// Forget the last result, so searching for the same result again scrolls again
+			lastScrolledResultRef.current = null;
 			return;
 		}
+		// The effect also runs when the text re-renders (the word can arrive after the page change),
+		// but must only scroll once per result
+		const resultKey = `${currentPageIndex}:${currentSearchResultIndex}`;
+		if (lastScrolledResultRef.current === resultKey) {
+			return;
+		}
+		lastScrolledResultRef.current = resultKey;
 		const wordTop =
 			word.getBoundingClientRect().top -
 			container.getBoundingClientRect().top +
