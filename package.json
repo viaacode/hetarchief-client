@@ -175,7 +175,7 @@
   },
   "allowScripts": {
     "@parcel/watcher@2.5.1": true,
-    "core-js@3.49.0": true,
+    "core-js@3.50.0": false,
     "core-js-pure@3.49.0": true,
     "es5-ext@0.10.64": true,
     "esbuild@0.27.2": true,
