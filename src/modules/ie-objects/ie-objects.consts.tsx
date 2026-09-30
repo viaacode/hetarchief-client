@@ -26,6 +26,7 @@ import React, { type ReactNode } from 'react';
 
 export const FLOWPLAYER_VIDEO_FORMATS: string[] = [
 	'video/mp4',
+	'application/mp4',
 	'video/ogv',
 	'video/webm',
 	'video/m3u8',
