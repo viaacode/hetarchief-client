@@ -9,11 +9,11 @@ import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ContextDisclaimer } from '@ie-objects/components/ContextDisclaimer/ContextDisclaimer';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
 import type { MetadataItem } from '@ie-objects/components/Metadata/Metadata.types';
-import { ObjectDetailPageHeader } from '@ie-objects/components/ObjectDetailPageHeader/ObjectDetailPageHeader';
 import { ObjectDetailPageMetadataTab } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataTab';
 import { ObjectDetailPageOcrTab } from '@ie-objects/components/ObjectDetailPageOcrTab/ObjectDetailPageOcrTab';
 import { ObjectDetailPageOverviewTab } from '@ie-objects/components/ObjectDetailPageOverviewTab/ObjectDetailPageOverviewTab';
 import { ObjectDetailPageRelatedTab } from '@ie-objects/components/ObjectDetailPageRelatedTab/ObjectDetailPageRelatedTab';
+import { ObjectDetailPageSidebar } from '@ie-objects/components/ObjectDetailPageSidebar/ObjectDetailPageSidebar';
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
 import type { MediaObject } from '@ie-objects/components/RelatedObject';
 import { useGetAltoJsonFileContent } from '@ie-objects/hooks/use-get-alto-json-file-content';
@@ -120,15 +120,7 @@ import { capitalize, compact, intersection, isNil, lowerCase, noop } from 'es-to
 import type { HTTPError } from 'ky';
 import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
-import React, {
-	type FC,
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import { type FC, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
 import styles from './ObjectDetailPage.module.scss';
@@ -256,10 +248,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		BooleanParamWithDefault(false)
 	);
 
-	// Compact ("beperkte") header state, toggled by the sentinel IntersectionObserver below
-	const [isHeaderCollapsed, setIsHeaderCollapsed] = useState(false);
+	// Shared with ObjectDetailPageSidebar (its own collapsible header/scroll behavior) and with
+	// ObjectDetailPageOcrTab (scrollContainerRef), so both act on the same scrollable element.
 	const sidebarContentRef = useRef<HTMLDivElement>(null);
-	const headerCollapseSentinelRef = useRef<HTMLDivElement>(null);
 	// Owned here (rather than in the header/metadata components) so the header and the metadata
 	// tab share a single "read more" blade instead of each being able to open their own.
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
@@ -296,50 +287,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		isError: mediaInfoIsError,
 		error: mediaInfoError,
 	} = useGetIeObjectBySchemaIdentifier(ieObjectId, true);
-
-	// Collapse the header once the sentinel at the top of the scrollable tab content scrolls out
-	// of view. The root and sentinel are both always mounted (only their CSS visibility changes
-	// across tabs/loading states), so this only needs to run once.
-	useEffect(() => {
-		const root = sidebarContentRef.current;
-		const sentinel = headerCollapseSentinelRef.current;
-		if (!root || !sentinel) {
-			return;
-		}
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting) {
-					// The sentinel can come back into view for two different reasons: the user
-					// genuinely scrolled back to the top (real overflow, should re-expand), or
-					// collapsing the header just now made the remaining content short enough to
-					// fit without scrolling at all - the browser then clamps scrollTop back to 0
-					// on its own, which brings the sentinel back into view even though nothing
-					// was scrolled. Re-expanding in that second case would recreate the overflow
-					// that triggered the collapse, which the clamp immediately undoes again,
-					// forever looping and leaving any content below the header unreachable with
-					// tabs that have little content (e.g. a short Overzicht tab).
-					const hasOverflow = root.scrollHeight - root.clientHeight > 1;
-					if (!hasOverflow) {
-						return;
-					}
-				}
-				setIsHeaderCollapsed(!entry.isIntersecting);
-			},
-			{ root, threshold: 0 }
-		);
-		observer.observe(sentinel);
-		return () => observer.disconnect();
-	}, []);
-
-	// Every tab starts at its top. 1px instead of 0 keeps the sentinel out of view, so the header
-	// stays collapsed and scrolling up can still expand it (a short tab would otherwise clamp to 0).
-	// biome-ignore lint/correctness/useExhaustiveDependencies: only on tab change, not when the header collapses
-	useEffect(() => {
-		const container = sidebarContentRef.current;
-		if (isHeaderCollapsed && container) {
-			container.scrollTo({ top: 1, behavior: 'auto' });
-		}
-	}, [activeTab]);
 
 	const { data: thumbnailUrl, isLoading: thumbnailUrlIsLoading } =
 		useGetIeObjectThumbnail(ieObjectId);
@@ -1075,21 +1022,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		setExpandSidebar(!expandSidebar, 'replaceIn');
 	};
 
-	const handleShowHeaderDetails = () => {
-		// Expand directly rather than relying on the scroll-to-top to re-trigger the sentinel's
-		// IntersectionObserver: when the tab's content fits on screen without a scrollbar, that
-		// observer deliberately ignores the sentinel coming back into view (see its own comment) to
-		// avoid an expand/collapse loop - which would otherwise also block this explicit click.
-		setIsHeaderCollapsed(false);
-		// behavior: 'auto' (instant), not 'smooth': a smooth scroll racing the header's own
-		// concurrent max-height expand transition can settle a few px short of scrollTop 0 (the
-		// header growing shifts the content it's scrolling through underneath it), which leaves the
-		// sentinel just out of view. The observer then never sees it re-enter, so it never fires
-		// again and the header can no longer collapse on a later scroll. An instant jump lands on
-		// exactly 0 before the transition has a chance to interfere.
-		sidebarContentRef.current?.scrollTo({ top: 0, behavior: 'auto' });
-	};
-
 	const onCloseBlade = () => {
 		setActiveBlade(null, 'replaceIn');
 	};
@@ -1644,102 +1576,79 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				{isMobile && renderTabs()}
 
 				{/* Sidebar */}
-				<div className={clsx(styles['p-object-detail__sidebar'])}>
-					<div
-						ref={sidebarContentRef}
-						className={clsx(
-							styles['p-object-detail__sidebar__content'],
-							styles[`p-object-detail__sidebar__content__tab-${activeTab}`],
-							{
-								[styles['p-object-detail__sidebar__content--no-media']]: !mediaInfo?.dctermsFormat,
-								// The overview ends in the "ook interessant" list
-								[styles['p-object-detail__sidebar__content--ends-in-list']]:
-									activeTab === ObjectDetailTabs.Overview && similar.length > 0,
+				<ObjectDetailPageSidebar
+					mediaInfo={mediaInfo}
+					onClickAction={onClickAction}
+					hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
+					currentPageIndex={currentPageIndex}
+					onReadMoreClicked={setSelectedMetadataField}
+					activeTab={activeTab}
+					similar={similar}
+					tabs={!isMobile && renderTabs()}
+					containerRef={sidebarContentRef}
+				>
+					{activeTab === ObjectDetailTabs.Overview && (
+						<ObjectDetailPageOverviewTab
+							mediaInfo={mediaInfo}
+							visitRequest={visitRequest || null}
+							similar={similar}
+							onReadMoreClicked={setSelectedMetadataField}
+						/>
+					)}
+					{/*
+					 * HetArchiefIeObject metadata
+					 */}
+					{activeTab === ObjectDetailTabs.Metadata && (
+						<ObjectDetailPageMetadataTab
+							mediaInfo={mediaInfo}
+							goToPage={handleSetCurrentPage}
+							currentPage={currentPage}
+							activeFile={
+								getFilesByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS])?.[currentPageIndex] ||
+								null
 							}
-						)}
-					>
-						{/* Sentinel that drives the header's collapse - see the IntersectionObserver effect above */}
-						<div ref={headerCollapseSentinelRef} />
-						<div
-							className={clsx(styles['p-object-detail__sidebar__sticky'], {
-								[styles['p-object-detail__sidebar__sticky--scrolled']]: isHeaderCollapsed,
-							})}
-						>
-							<ObjectDetailPageHeader
-								mediaInfo={mediaInfo}
-								onClickAction={onClickAction}
-								hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
-								currentPageIndex={currentPageIndex}
-								isCollapsed={isHeaderCollapsed}
-								onShowDetails={handleShowHeaderDetails}
-								onReadMoreClicked={setSelectedMetadataField}
-							/>
-							{!isMobile && renderTabs()}
-						</div>
-						{activeTab === ObjectDetailTabs.Overview && (
-							<ObjectDetailPageOverviewTab
-								mediaInfo={mediaInfo}
-								visitRequest={visitRequest || null}
-								similar={similar}
-								onReadMoreClicked={setSelectedMetadataField}
-							/>
-						)}
-						{/*
-						 * HetArchiefIeObject metadata
-						 */}
-						{activeTab === ObjectDetailTabs.Metadata && (
-							<ObjectDetailPageMetadataTab
-								mediaInfo={mediaInfo}
-								goToPage={handleSetCurrentPage}
-								currentPage={currentPage}
-								activeFile={
-									getFilesByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS])?.[
-										currentPageIndex
-									] || null
-								}
-								simplifiedAltoInfo={simplifiedAltoInfo?.altoJsonContent || null}
-								iiifZoomTo={(x: number, y: number) =>
-									iiifZoomTo(iiifViewerInitializedPromise as Promise<void>, x, y)
-								}
-								setActiveMentionHighlights={handleSetActiveMentionHighlights}
-								setIsTextOverlayVisible={setIsTextOverlayVisible}
-								onReadMoreClicked={setSelectedMetadataField}
-							/>
-						)}
-						{activeTab === ObjectDetailTabs.Related && (
-							<ObjectDetailPageRelatedTab
-								items={mappedRelatedIeObjects}
-								isParent={!!relatedIeObjects?.parent}
-							/>
-						)}
+							simplifiedAltoInfo={simplifiedAltoInfo?.altoJsonContent || null}
+							iiifZoomTo={(x: number, y: number) =>
+								iiifZoomTo(iiifViewerInitializedPromise as Promise<void>, x, y)
+							}
+							setActiveMentionHighlights={handleSetActiveMentionHighlights}
+							setIsTextOverlayVisible={setIsTextOverlayVisible}
+							onReadMoreClicked={setSelectedMetadataField}
+						/>
+					)}
+					{activeTab === ObjectDetailTabs.Related && (
+						<ObjectDetailPageRelatedTab
+							items={mappedRelatedIeObjects}
+							isParent={!!relatedIeObjects?.parent}
+						/>
+					)}
 
-						{activeTab === ObjectDetailTabs.Media && isMobile && renderObjectMedia()}
-						{activeTab === ObjectDetailTabs.Ocr && (
-							<ObjectDetailPageOcrTab
-								ieObjectId={ieObjectId}
-								altoText={simplifiedAltoInfo?.altoJsonContent?.text}
-								altoTextsOnCurrentPageForSearchTerms={altoTextsOnCurrentPageForSearchTerms}
-								searchResults={searchResults}
-								currentSearchResultIndex={currentSearchResultIndex}
-								currentPageIndex={currentPageIndex}
-								pageCount={iiifViewerImageInfos.length}
-								setCurrentPageIndex={setCurrentPageIndex}
-								searchTermWords={searchTermWords}
-								onClickOnOcrWord={handleClickOnOcrWord}
-								isTextOverlayVisible={isTextOverlayVisible}
-								onIsTextOverlayVisibleChange={handleIsTextOverlayVisibleChange}
-								arePagesOcrTextsAvailable={arePagesOcrTextsAvailable}
-								searchTermsTemp={searchTermsTemp}
-								setSearchTermsTemp={setSearchTermsTemp}
-								searchTerms={searchTerms}
-								onSearch={handleSearch}
-								onClearSearch={handleClearSearch}
-								onChangeSearchIndex={handleChangeSearchIndex}
-								scrollContainerRef={sidebarContentRef}
-							/>
-						)}
-					</div>
-				</div>
+					{activeTab === ObjectDetailTabs.Media && isMobile && renderObjectMedia()}
+					{activeTab === ObjectDetailTabs.Ocr && (
+						<ObjectDetailPageOcrTab
+							ieObjectId={ieObjectId}
+							altoText={simplifiedAltoInfo?.altoJsonContent?.text}
+							altoTextsOnCurrentPageForSearchTerms={altoTextsOnCurrentPageForSearchTerms}
+							searchResults={searchResults}
+							currentSearchResultIndex={currentSearchResultIndex}
+							currentPageIndex={currentPageIndex}
+							pageCount={iiifViewerImageInfos.length}
+							setCurrentPageIndex={setCurrentPageIndex}
+							searchTermWords={searchTermWords}
+							onClickOnOcrWord={handleClickOnOcrWord}
+							isTextOverlayVisible={isTextOverlayVisible}
+							onIsTextOverlayVisibleChange={handleIsTextOverlayVisibleChange}
+							arePagesOcrTextsAvailable={arePagesOcrTextsAvailable}
+							searchTermsTemp={searchTermsTemp}
+							setSearchTermsTemp={setSearchTermsTemp}
+							searchTerms={searchTerms}
+							onSearch={handleSearch}
+							onClearSearch={handleClearSearch}
+							onChangeSearchIndex={handleChangeSearchIndex}
+							scrollContainerRef={sidebarContentRef}
+						/>
+					)}
+				</ObjectDetailPageSidebar>
 			</article>
 
 			{/* Read more metadata field blade, shared by the header and the metadata tab so only one
