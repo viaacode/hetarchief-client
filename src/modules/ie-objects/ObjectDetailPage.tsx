@@ -1576,6 +1576,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		);
 	};
 
+	const renderTabs = (): ReactNode => (
+		<Tabs
+			className={clsx(styles['p-object-detail__tabs'])}
+			variants={['dark']}
+			tabs={tabs}
+			onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
+		/>
+	);
+
 	const renderObjectDetail = () => (
 		<>
 			{isNoAccessError && (
@@ -1601,9 +1610,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					[styles['p-object-detail__wrapper--expanded']]: expandSidebar,
 					[styles['p-object-detail__wrapper--no-media-available']]: !isMediaAvailable(),
 					[styles['p-object-detail__wrapper--media-available']]: isMediaAvailable(),
-					[styles['p-object-detail__wrapper--metadata']]: activeTab === ObjectDetailTabs.Metadata,
-					[styles['p-object-detail__wrapper--video']]: activeTab === ObjectDetailTabs.Media,
-					[styles['p-object-detail__wrapper--ocr']]: activeTab === ObjectDetailTabs.Ocr,
 				})}
 			>
 				{/* Visitor space navigation bar */}
@@ -1635,14 +1641,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				{/* Tabs - mobile only: the mobile FA puts the tab strip above the header, so it stays
 				 * a grid sibling here. Desktop renders tabs below the header instead, inside the
 				 * shared sticky unit (see &__sidebar__sticky below). */}
-				{isMobile && (
-					<Tabs
-						className={clsx(styles['p-object-detail__tabs'])}
-						variants={['dark']}
-						tabs={tabs}
-						onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
-					/>
-				)}
+				{isMobile && renderTabs()}
 
 				{/* Sidebar */}
 				<div className={clsx(styles['p-object-detail__sidebar'])}>
@@ -1653,6 +1652,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							styles[`p-object-detail__sidebar__content__tab-${activeTab}`],
 							{
 								[styles['p-object-detail__sidebar__content--no-media']]: !mediaInfo?.dctermsFormat,
+								// The overview ends in the "ook interessant" list
+								[styles['p-object-detail__sidebar__content--ends-in-list']]:
+									activeTab === ObjectDetailTabs.Overview && similar.length > 0,
 							}
 						)}
 					>
@@ -1672,14 +1674,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 								onShowDetails={handleShowHeaderDetails}
 								onReadMoreClicked={setSelectedMetadataField}
 							/>
-							{!isMobile && (
-								<Tabs
-									className={clsx(styles['p-object-detail__tabs'])}
-									variants={['dark']}
-									tabs={tabs}
-									onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
-								/>
-							)}
+							{!isMobile && renderTabs()}
 						</div>
 						{activeTab === ObjectDetailTabs.Overview && (
 							<ObjectDetailPageOverviewTab

@@ -492,19 +492,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		// interessant", ...), so the content never ends flush against the bottom edge
 		padding-bottom: abstracts.$spacer-md;
 
-		// "Ook interessant" is always the last section when it renders, and it paints its own
-		// background. Padding here would leave that grey stopping short with a white band
-		// underneath it, so let the list carry its own bottom padding instead.
-		&:has(:global(.p-object-detail__metadata-list--similar)) {
+		// The list paints its own background. Padding here would leave a white band underneath it,
+		// so let the list carry its own bottom padding instead.
+		&--ends-in-list {
 			padding-bottom: 0;
-		}
-
-		&__tab-media {
-			overflow-y: auto;
-		}
-
-		&__tab-metadata {
-			overflow-y: auto;
 		}
 
 		&__tab-ocr {
@@ -519,15 +510,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 		@media (min-width: abstracts.$breakpoint-lg) {
 			padding: 0 abstracts.$spacer-lg;
-		}
-	}
-
-	@media (max-width: abstracts.$breakpoint-lg) {
-		&__wrapper--metadata,
-		&__wrapper--ocr {
-			.p-object-detail__media {
-				display: none;
-			}
 		}
 	}
 

@@ -23,12 +23,7 @@ export const IeObjectCardList: FC<IeObjectCardListProps> = ({ type, items, class
 				'u-list-reset',
 				styles['c-ie-object-card-list'],
 				styles[`c-ie-object-card-list--${type}`],
-				className,
-				// Plain (unscoped) class, not run through CSS modules: lets
-				// ObjectDetailPage.module.scss's `:has()` selector on the scroll container detect
-				// "similar" content from outside this component without depending on this file's
-				// hashed class names.
-				`p-object-detail__metadata-list--${type}`
+				className
 			)}
 		>
 			{items.map((item, index) => (
