@@ -20,5 +20,7 @@ export interface ObjectDetailPageSidebarProps {
 	/** Exposed so the caller can also hand this same scrollable element to something else that
 	 * needs it (e.g. ObjectDetailPageOcrTab's own scrollContainerRef). */
 	containerRef: RefObject<HTMLDivElement | null>;
+	/** Grid placement from the page that hosts the sidebar. */
+	className?: string;
 	children: ReactNode;
 }

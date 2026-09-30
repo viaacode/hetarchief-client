@@ -1,5 +1,6 @@
 import { GroupName } from '@account/const';
 import Metadata from '@ie-objects/components/Metadata/Metadata';
+import { renderSimpleMetadataField as renderSimpleMetadataFieldBase } from '@ie-objects/components/Metadata/render-simple-metadata-field';
 import { NamesList } from '@ie-objects/components/NamesList/NamesList';
 import { ObjectDetailPageMetadataDisclaimerTooltip } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataDisclaimerTooltip';
 import type { ObjectDetailPageMetadataTabProps } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataTab.types';
@@ -17,7 +18,6 @@ import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 import { isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import { CopyButton } from '@shared/components/CopyButton';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -33,7 +33,7 @@ import {
 	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
 import { SearchFilterId } from '@visitor-space/types';
-import { compact, isEmpty, isNil, isString } from 'es-toolkit/compat';
+import { compact, isEmpty, isNil } from 'es-toolkit/compat';
 import React, { type FC, type ReactNode, useCallback, useMemo } from 'react';
 import MetadataList from '../Metadata/MetadataList';
 import styles from './ObjectDetailPageMetadataTab.module.scss';
@@ -122,27 +122,7 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 	const renderSimpleMetadataField = (
 		title: string,
 		data: string | ReactNode | null | undefined
-	): ReactNode => {
-		if (!data) {
-			return null;
-		}
-		if (isString(data)) {
-			return (
-				<Metadata title={title} key={`metadata-${title}`}>
-					<MetaDataFieldWithHighlightingAndMaxLength
-						title={title}
-						data={data}
-						onReadMoreClicked={onReadMoreClicked}
-					/>
-				</Metadata>
-			);
-		}
-		return (
-			<Metadata title={title} key={`metadata-${title}`}>
-				{data}
-			</Metadata>
-		);
-	};
+	): ReactNode => renderSimpleMetadataFieldBase(title, data, onReadMoreClicked);
 
 	const renderProviderIdentifier = (mediaInfo: HetArchiefIeObject): ReactNode => {
 		const linkProps = getIeObjectProviderIdentifierLinkProps(mediaInfo, isKiosk);

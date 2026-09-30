@@ -32,7 +32,6 @@ export const IeObjectCardList: FC<IeObjectCardListProps> = ({ type, items, class
 						passHref
 						href={`${ROUTES_BY_LOCALE[locale].search}/${router.query.slug}/${item.id}`}
 						className={clsx(styles['c-ie-object-card-list__link'], 'u-text-no-decoration')}
-						aria-label={item.title}
 					>
 						<RelatedObject object={item} />
 					</Link>

@@ -7,7 +7,7 @@ $max-height-expanded: 200rem;
 $max-height-collapsed: 8rem;
 
 .p-object-detail-header {
-	// Not sticky itself: ObjectDetailPage.module.scss's &__sidebar__sticky wraps this together
+	// Not sticky itself: ObjectDetailPageSidebar.module.scss's &__sticky wraps this together
 	// with the (desktop) tabs below it and owns the sticky/scroll-anchor behavior for both, so
 	// the tabs move and collapse as one unit with the header instead of needing their own
 	// independently-computed sticky offset.
@@ -36,7 +36,10 @@ $max-height-collapsed: 8rem;
 
 .p-object-detail-header--collapsed .p-object-detail-header__expanded-content {
 	display: none;
-	transition: display abstracts.$timing-default allow-discrete;
+
+	@supports (transition-behavior: allow-discrete) {
+		transition: display abstracts.$timing-default allow-discrete;
+	}
 }
 
 .p-object-detail-header__collapsed-content {
@@ -69,7 +72,24 @@ $max-height-collapsed: 8rem;
 
 .p-object-detail-header--collapsed .p-object-detail-header__collapsed-content {
 	display: flex;
-	animation: collapsed-content-delay 0s abstracts.$timing-default backwards;
+
+	@supports (transition-behavior: allow-discrete) {
+		animation: collapsed-content-delay 0s abstracts.$timing-default backwards;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.p-object-detail-header {
+		transition: none;
+	}
+
+	.p-object-detail-header--collapsed .p-object-detail-header__expanded-content {
+		transition: none;
+	}
+
+	.p-object-detail-header--collapsed .p-object-detail-header__collapsed-content {
+		animation: none;
+	}
 }
 
 .p-object-detail-header__details {

@@ -86,6 +86,7 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 					const wordElement = (
 						// biome-ignore lint/a11y/noStaticElementInteractions: We need it this way
 						<span
+							ref={isActive ? activeWordRef : undefined}
 							key={`ocr-text--${ieObjectId}--${currentPageIndex}--${
 								// biome-ignore lint/suspicious/noArrayIndexKey: _
 								textIndex

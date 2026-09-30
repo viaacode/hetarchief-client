@@ -56,13 +56,6 @@ $maintainer-logo-height: 7rem;
 	}
 }
 
-.p-object-detail__metadata-maintainer-title {
-	display: flex;
-	flex-direction: row;
-	justify-content: space-between;
-	align-items: flex-start;
-}
-
 .p-object-detail__metadata-category-tags {
 	display: flex;
 	flex-flow: row wrap;
@@ -81,17 +74,6 @@ $maintainer-logo-height: 7rem;
 	&:focus {
 		text-decoration-thickness: 0.2rem;
 	}
-}
-
-// maintainer logo
-.p-object-detail__sidebar__content-logo {
-	width: 100%;
-	height: 5.3rem;
-	max-width: 16rem;
-	max-height: 5.3rem;
-	background-repeat: no-repeat;
-	background-position: right;
-	background-size: contain;
 }
 
 .p-object-detail__icon-button {

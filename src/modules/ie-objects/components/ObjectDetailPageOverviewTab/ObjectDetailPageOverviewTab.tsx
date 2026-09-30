@@ -4,6 +4,7 @@ import type { User } from '@auth/types';
 import { IeObjectCardList } from '@ie-objects/components/IeObjectCardList/IeObjectCardList';
 import Metadata from '@ie-objects/components/Metadata/Metadata';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
+import { renderSimpleMetadataField as renderSimpleMetadataFieldBase } from '@ie-objects/components/Metadata/render-simple-metadata-field';
 import { ObjectDetailPageMetadataRights } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataRights';
 import { ObjectDetailPageMetadataThemes } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataThemes';
 import type { ObjectDetailPageOverviewTabProps } from '@ie-objects/components/ObjectDetailPageOverviewTab/ObjectDetailPageOverviewTab.types';
@@ -21,7 +22,6 @@ import { isAudioVideoType, isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import MetaDataFieldWithHighlightingAndMaxLength from '@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tHtml, tText } from '@shared/helpers/translate';
@@ -35,7 +35,7 @@ import {
 	HetArchiefIeObjectType,
 } from '@viaa/avo2-types';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
-import { isNil, isString } from 'es-toolkit/compat';
+import { isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
@@ -72,27 +72,7 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 	const renderSimpleMetadataField = (
 		title: string,
 		data: string | ReactNode | null | undefined
-	): ReactNode => {
-		if (!data) {
-			return null;
-		}
-		if (isString(data)) {
-			return (
-				<Metadata title={title} key={`metadata-${title}`}>
-					<MetaDataFieldWithHighlightingAndMaxLength
-						title={title}
-						data={data}
-						onReadMoreClicked={onReadMoreClicked}
-					/>
-				</Metadata>
-			);
-		}
-		return (
-			<Metadata title={title} key={`metadata-${title}`}>
-				{data}
-			</Metadata>
-		);
-	};
+	): ReactNode => renderSimpleMetadataFieldBase(title, data, onReadMoreClicked);
 
 	const renderMaintainerMetaTitle = ({
 		maintainerName,
@@ -413,7 +393,7 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 				<MetadataList allowTwoColumns={false}>
 					<Metadata
 						title={tHtml('pages/slug/ie/index___ook-interessant')}
-						key="metadata-keywords"
+						key="metadata-similar"
 						className="u-pb-0"
 					>
 						<IeObjectCardList type="similar" items={similar} />

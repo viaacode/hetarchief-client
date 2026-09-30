@@ -2,9 +2,7 @@ import { ObjectDetailPageHeader } from '@ie-objects/components/ObjectDetailPageH
 import { ObjectDetailTabs } from '@ie-objects/ie-objects.types';
 import clsx from 'clsx';
 import React, { type FC, useEffect, useRef, useState } from 'react';
-// Reuses the page's own stylesheet rather than a new module: these are the same
-// .p-object-detail__sidebar* rules the page already defined, unchanged by this extraction.
-import styles from '../../ObjectDetailPage.module.scss';
+import styles from './ObjectDetailPageSidebar.module.scss';
 import type { ObjectDetailPageSidebarProps } from './ObjectDetailPageSidebar.types';
 
 // 1px tolerance for sub-pixel rounding, not an exact 0 comparison.
@@ -20,6 +18,7 @@ export const ObjectDetailPageSidebar: FC<ObjectDetailPageSidebarProps> = ({
 	similar,
 	tabs,
 	containerRef,
+	className,
 	children,
 }) => {
 	// Compact ("beperkte") header state, toggled by the sentinel IntersectionObserver below.
@@ -107,19 +106,18 @@ export const ObjectDetailPageSidebar: FC<ObjectDetailPageSidebarProps> = ({
 	}, [activeTab]);
 
 	return (
-		<div className={clsx(styles['p-object-detail__sidebar'])}>
+		<div className={clsx(styles['c-object-detail-sidebar'], className)}>
 			<div
 				ref={containerRef}
 				onWheel={handleSidebarWheel}
 				onTouchStart={handleSidebarTouchStart}
 				onTouchMove={handleSidebarTouchMove}
 				className={clsx(
-					styles['p-object-detail__sidebar__content'],
-					styles[`p-object-detail__sidebar__content__tab-${activeTab}`],
+					styles['c-object-detail-sidebar__content'],
+					styles[`c-object-detail-sidebar__content--tab-${activeTab}`],
 					{
-						[styles['p-object-detail__sidebar__content--no-media']]: !mediaInfo?.dctermsFormat,
 						// The overview ends in the "ook interessant" list
-						[styles['p-object-detail__sidebar__content--ends-in-list']]:
+						[styles['c-object-detail-sidebar__content--ends-in-list']]:
 							activeTab === ObjectDetailTabs.Overview && similar.length > 0,
 					}
 				)}
@@ -127,8 +125,8 @@ export const ObjectDetailPageSidebar: FC<ObjectDetailPageSidebarProps> = ({
 				{/* Sentinel that drives the header's collapse - see the IntersectionObserver effect above */}
 				<div ref={headerCollapseSentinelRef} />
 				<div
-					className={clsx(styles['p-object-detail__sidebar__sticky'], {
-						[styles['p-object-detail__sidebar__sticky--scrolled']]: isHeaderCollapsed,
+					className={clsx(styles['c-object-detail-sidebar__sticky'], {
+						[styles['c-object-detail-sidebar__sticky--scrolled']]: isHeaderCollapsed,
 					})}
 				>
 					<ObjectDetailPageHeader

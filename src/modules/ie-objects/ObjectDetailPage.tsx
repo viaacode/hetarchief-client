@@ -1263,8 +1263,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		if (!mediaInfo || relatedIeObjectsIsLoading || relatedIeObjectsIsPlaceholder) {
 			return;
 		}
-		if (!tabs.some((tab) => tab.id === activeTab)) {
-			updateActiveTab(ObjectDetailTabs.Metadata);
+		// The media tab exists in the list but is only rendered on mobile
+		const isTabUnavailable =
+			!tabs.some((tab) => tab.id === activeTab) ||
+			(activeTab === ObjectDetailTabs.Media && !isMobile);
+		if (isTabUnavailable) {
+			updateActiveTab(ObjectDetailTabs.Metadata).then(noop);
 		}
 	}, [
 		mediaInfo,
@@ -1272,6 +1276,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		relatedIeObjectsIsPlaceholder,
 		tabs,
 		activeTab,
+		isMobile,
 		updateActiveTab,
 	]);
 
@@ -1572,7 +1577,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 				{/* Tabs - mobile only: the mobile FA puts the tab strip above the header, so it stays
 				 * a grid sibling here. Desktop renders tabs below the header instead, inside the
-				 * shared sticky unit (see &__sidebar__sticky below). */}
+				 * shared sticky unit (see ObjectDetailPageSidebar). */}
 				{isMobile && renderTabs()}
 
 				{/* Sidebar */}
@@ -1586,6 +1591,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					similar={similar}
 					tabs={!isMobile && renderTabs()}
 					containerRef={sidebarContentRef}
+					className={styles['p-object-detail__sidebar']}
 				>
 					{activeTab === ObjectDetailTabs.Overview && (
 						<ObjectDetailPageOverviewTab

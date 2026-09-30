@@ -1,0 +1,80 @@
+@use "src/styles/abstracts" as abstracts;
+@use "sass:color";
+
+.c-object-detail-sidebar {
+	display: flex;
+	flex-direction: column;
+	max-height: 100%;
+	overflow: hidden;
+
+	// Contains z-index comparisons made inside this sidebar (see &__sticky's own z-index below) to
+	// this subtree, so they can't tie/collide with the page-level $z-layers used outside it (e.g.
+	// the page's expand button "foreground") - this element's own position relative to those is
+	// unaffected, since it isn't given a z-index itself.
+	isolation: isolate;
+}
+
+.c-object-detail-sidebar__sticky {
+	// Sticky wrapper for the header + (desktop-only) tabs, so they move and collapse together
+	// as one unit: this element - not the header itself - owns the stickiness, so the tabs
+	// just sit in normal flow directly below the header, growing/shrinking with its own
+	// collapse animation instead of needing their own independently-computed sticky offset.
+	// z-index: sticky alone already paints above plain tab content below it, without needing
+	// one - but the OCR tab's own search item (ObjectDetailPageOcrTab.module.scss's &__search)
+	// is sticky too, and being later in the DOM would otherwise paint over (hide) this
+	// element's own box-shadow where the two meet. An explicit z-index fixes that; it's safe
+	// from tying with the page's expand/collapse button specifically because the root isolates
+	// z-index comparisons to this subtree.
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+
+	// Without this, scroll anchoring "corrects" scrollTop as the header inside here
+	// collapses/expands, re-triggering its IntersectionObserver and causing a flicker loop.
+	overflow-anchor: none;
+
+	// Fades alongside the header's own max-height transition (same duration) instead of
+	// snapping in/out the instant the --scrolled modifier toggles.
+	box-shadow: none;
+	transition: box-shadow abstracts.$animate-default;
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+
+	&--scrolled {
+		// Cast once content has scrolled underneath this sticky unit (same signal as the header's
+		// own collapse - see the sentinel IntersectionObserver in ObjectDetailPageSidebar.tsx), per Figma.
+		box-shadow: 0 0.4rem 0.4rem 0 color.adjust(abstracts.$black, $alpha: -0.84); // 4px 4px, black/0.16
+	}
+}
+
+.c-object-detail-sidebar__content {
+	// min-height: 0 lets overflow-y: auto engage on a flex child (it would otherwise grow to fit its content)
+	flex: 1 1 auto;
+	min-height: 0;
+	overflow-y: auto;
+
+	// Without this, scroll anchoring "corrects" scrollTop as the sticky header collapses/expands,
+	// re-triggering its IntersectionObserver and causing a flicker loop.
+	overflow-anchor: none;
+	box-shadow: abstracts.$shadow-24-black-12;
+
+	// Breathing room under whatever the last section happens to be (metadata, "ook
+	// interessant", ...), so the content never ends flush against the bottom edge
+	padding-bottom: abstracts.$spacer-md;
+
+	// The list paints its own background. Padding here would leave a white band underneath it,
+	// so let the list carry its own bottom padding instead.
+	&--ends-in-list {
+		padding-bottom: 0;
+	}
+
+	&--tab-ocr {
+		// The OCR tab's own pagination bar (position: sticky; bottom: 0) already provides
+		// bottom spacing - avoid doubling it up with this container's own default.
+		padding-bottom: 0;
+	}
+}

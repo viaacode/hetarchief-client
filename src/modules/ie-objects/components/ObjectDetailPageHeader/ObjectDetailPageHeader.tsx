@@ -548,10 +548,17 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 			})}
 		>
 			{/* Both states render at once so the max-height transition has stable content to animate around */}
-			<div className={styles['p-object-detail-header__collapsed-content']}>
-				<h3 className={styles['p-object-detail__title']} title={mediaInfo?.name}>
+			<div
+				className={styles['p-object-detail-header__collapsed-content']}
+				// Mirrors the expanded content's inert below; aria-hidden as well since inert only takes
+				// effect after the class change has rendered, and the name is repeated in the expanded h3
+				inert={!isCollapsed}
+				aria-hidden={!isCollapsed}
+			>
+				{/* Not a heading: the expanded content already holds the page's h3 with the same name */}
+				<span className={styles['p-object-detail__title']} title={mediaInfo?.name}>
 					<HighlightSearchTerms toHighlight={mediaInfo?.name} />
-				</h3>
+				</span>
 				<Button
 					className={styles['p-object-detail-header__details']}
 					label={tText(

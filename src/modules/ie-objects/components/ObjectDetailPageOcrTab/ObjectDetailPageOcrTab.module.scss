@@ -74,7 +74,7 @@ $tabs-height-desktop: 5.6rem;
 
 		@media (max-width: abstracts.$breakpoint-lg) {
 			padding: 0 abstracts.$spacer-sm abstracts.$spacer-1xl;
-			width: 100vw;
+			width: 100%;
 		}
 	}
 

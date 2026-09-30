@@ -1,5 +1,4 @@
 @use "src/styles/abstracts" as abstracts;
-@use "sass:color";
 @use "sass:map";
 
 $expand-button-vertical-position: 35vh; // Visually a litter higher than halfway to compensate for the visual bottom bar
@@ -231,10 +230,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		background-color: abstracts.$black;
 
 		@media (min-width: abstracts.$breakpoint-lg) {
-			// Desktop - not a grid item here: it renders inside .p-object-detail__sidebar__sticky,
-			// directly below the header, as part of that shared sticky unit (see
-			// &__sidebar__sticky below). Mobile keeps its own separate grid-row placement, since
-			// mobile puts the tab strip above the header instead (see the mobile FA).
+			// Desktop - not a grid item here: it renders inside the sidebar's sticky unit
+			// (ObjectDetailPageSidebar.module.scss), directly below the header. Mobile keeps its own
+			// separate grid-row placement, since mobile puts the tab strip above the header instead
+			// (see the mobile FA).
 			width: 100%;
 			height: $metadata-media-ocr-tabs-height-desktop;
 			flex-shrink: 0;
@@ -334,10 +333,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 	}
 
-	&__image {
-		position: relative;
-	}
-
 	&__media {
 		grid-row: 2 / 4;
 		grid-column: 1 / 3;
@@ -412,20 +407,11 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 	&__sidebar {
 		// Row 2/5 on desktop: the tabs no longer get their own grid row there - they render inside
-		// this sidebar, directly below the header (see &__sidebar__sticky). Mobile keeps its
-		// separate tabs row above (row 2), so its sidebar still starts at row 3.
+		// the sidebar, directly below the header. Mobile keeps its separate tabs row above (row 2),
+		// so its sidebar still starts at row 3. Only the grid placement lives here; the sidebar's
+		// own layout is in ObjectDetailPageSidebar.module.scss.
 		grid-row: 2 / 5;
 		grid-column: 3;
-		display: flex;
-		flex-direction: column;
-		max-height: 100%;
-		overflow: hidden;
-
-		// Contains z-index comparisons made inside this sidebar (see &__sidebar__sticky's own
-		// z-index below) to this subtree, so they can't tie/collide with the page-level
-		// $z-layers used outside it (e.g. &__expand-button's "foreground") - this element's own
-		// position relative to those is unaffected, since it isn't given a z-index itself.
-		isolation: isolate;
 
 		@media (max-width: abstracts.$breakpoint-lg) {
 			grid-row: 3 / 5;
@@ -443,125 +429,11 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 	}
 
-	&__sidebar__sticky {
-		// Sticky wrapper for the header + (desktop-only) tabs, so they move and collapse together
-		// as one unit: this element - not the header itself - owns the stickiness, so the tabs
-		// just sit in normal flow directly below the header, growing/shrinking with its own
-		// collapse animation instead of needing their own independently-computed sticky offset.
-		// z-index: sticky alone already paints above plain tab content below it, without needing
-		// one - but the OCR tab's own search item (ObjectDetailPageOcrTab.module.scss's &__search)
-		// is sticky too, and being later in the DOM would otherwise paint over (hide) this
-		// element's own box-shadow where the two meet. An explicit z-index fixes that; it's safe
-		// from tying with the expand/collapse sidebar button ($z-layers "foreground", used outside
-		// this component) specifically because &__sidebar isolates z-index comparisons to this
-		// subtree - see its own comment.
-		position: sticky;
-		top: 0;
-		z-index: 1;
-		display: flex;
-		flex-direction: column;
-
-		// Without this, scroll anchoring "corrects" scrollTop as the header inside here
-		// collapses/expands, re-triggering its IntersectionObserver and causing a flicker loop.
-		overflow-anchor: none;
-
-		// Fades alongside the header's own max-height transition (same duration) instead of
-		// snapping in/out the instant the --scrolled modifier toggles.
-		box-shadow: none;
-		transition: box-shadow abstracts.$animate-default;
-
-		&--scrolled {
-			// Cast once content has scrolled underneath this sticky unit (same signal as the header's
-			// own collapse - see the sentinel IntersectionObserver in ObjectDetailPage.tsx), per Figma.
-			box-shadow: 0 0.4rem 0.4rem 0 color.adjust(abstracts.$black, $alpha: -0.84); // 4px 4px, black/0.16
-		}
-	}
-
-	&__sidebar__content {
-		// min-height: 0 lets overflow-y: auto engage on a flex child (it would otherwise grow to fit its content)
-		flex: 1 1 auto;
-		min-height: 0;
-		overflow-y: auto;
-
-		// Without this, scroll anchoring "corrects" scrollTop as the sticky header collapses/expands,
-		// re-triggering its IntersectionObserver and causing a flicker loop.
-		overflow-anchor: none;
-		box-shadow: abstracts.$shadow-24-black-12;
-
-		// Breathing room under whatever the last section happens to be (metadata, "ook
-		// interessant", ...), so the content never ends flush against the bottom edge
-		padding-bottom: abstracts.$spacer-md;
-
-		// The list paints its own background. Padding here would leave a white band underneath it,
-		// so let the list carry its own bottom padding instead.
-		&--ends-in-list {
-			padding-bottom: 0;
-		}
-
-		&__tab-ocr {
-			// The OCR tab's own pagination bar (position: sticky; bottom: 0) already provides
-			// bottom spacing - avoid doubling it up with this container's own default.
-			padding-bottom: 0;
-		}
-	}
-
 	:global(.p-object-detail__metadata-component) {
 		padding: 0 2rem;
 
 		@media (min-width: abstracts.$breakpoint-lg) {
 			padding: 0 abstracts.$spacer-lg;
-		}
-	}
-
-	&__metadata-maintainer {
-		&-title {
-			display: grid;
-			grid-template-columns: 7fr 3fr;
-			grid-template-rows: repeat(2, min-content);
-
-			.p-object-detail__sidebar__content {
-				&-label {
-					grid-row: 1;
-				}
-
-				&-pill {
-					grid-row: 2;
-					grid-column: 1;
-				}
-
-				&-logo {
-					grid-row: 1/3;
-					grid-column: 2;
-					width: 100%;
-					height: 5.9rem;
-					overflow: hidden;
-					position: relative;
-
-					img {
-						width: 100%;
-						height: 100%;
-						object-fit: contain;
-						object-position: right top;
-					}
-				}
-			}
-		}
-
-		&-data {
-			display: flex;
-			flex-direction: column;
-
-			.p-object-detail__sidebar__content {
-				&-description {
-					margin-top: abstracts.$spacer-xs;
-				}
-
-				&-link {
-					display: inline-flex;
-					align-items: center;
-					margin-top: abstracts.$spacer-xs;
-				}
-			}
 		}
 	}
 
@@ -597,24 +469,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 	}
 
-	&__export {
-		.c-dropdown__content-open .c-menu--default {
-			box-shadow: abstracts.$shadow-12-black-16;
-			border: 0.1rem solid abstracts.$silver !important;
-		}
-
-		&-dropdown {
-			&.c-menu-content-item {
-				border: 0.1rem solid abstracts.$silver;
-				border-top: none;
-
-				&:first-of-type {
-					border-top: abstracts.$silver;
-				}
-			}
-		}
-	}
-
 	:global(.c-menu--default) {
 		padding: 0;
 		margin-top: abstracts.$spacer-xxs;
@@ -626,19 +480,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		:global(.c-button__content) {
 			width: 100%;
 		}
-	}
-
-	&__callout {
-		border-bottom: abstracts.$divider-black;
-	}
-
-	&__metadata-blade {
-		:global(span) {
-			word-break: break-word !important;
-		}
-
-		line-height: abstracts.$line-height-3xl;
-		font-size: abstracts.$font-size-sm;
 	}
 
 	.c-loading__iiif-viewer {
