@@ -358,11 +358,7 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 				)}
 				{renderRightsInfo(mediaInfo)}
 				{renderAuthorRightsHolder(mediaInfo)}
-			</MetadataList>
-
-			{renderAiEntities()}
-
-			<MetadataList allowTwoColumns={false}>
+				{renderAiEntities()}
 				{showThemes && (
 					<ObjectDetailPageMetadataThemes
 						title={tHtml(
@@ -372,7 +368,9 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 						locale={locale}
 					/>
 				)}
+			</MetadataList>
 
+			<MetadataList allowTwoColumns={false}>
 				{!!mediaInfo.keywords?.length && (
 					<Metadata
 						title={tHtml('pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden')}
