@@ -20,6 +20,10 @@ export interface ObjectDetailPageSidebarProps {
 	/** Exposed so the caller can also hand this same scrollable element to something else that
 	 * needs it (e.g. ObjectDetailPageOcrTab's own scrollContainerRef). */
 	containerRef: RefObject<HTMLDivElement | null>;
+	/** Set by a child (e.g. ObjectDetailPageOcrTab, scrolling to a search result) while it's
+	 * driving the scroll itself, so the collapse-sentinel observer below doesn't mistake landing
+	 * near the top for the user scrolling back up. */
+	isProgrammaticScrollRef: RefObject<boolean>;
 	/** Grid placement from the page that hosts the sidebar. */
 	className?: string;
 	children: ReactNode;

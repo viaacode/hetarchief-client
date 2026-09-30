@@ -44,6 +44,7 @@ const renderSidebar = (overrides: Partial<ObjectDetailPageSidebarProps> = {}) =>
 			similar={[]}
 			tabs={<div data-testid="tabs" />}
 			containerRef={containerRef}
+			isProgrammaticScrollRef={{ current: false }}
 			{...overrides}
 		>
 			<div data-testid="content" />
@@ -121,6 +122,7 @@ describe('Component: <ObjectDetailPageSidebar />', () => {
 				similar={similar}
 				tabs={null}
 				containerRef={{ current: container }}
+				isProgrammaticScrollRef={{ current: false }}
 			>
 				{null}
 			</ObjectDetailPageSidebar>
@@ -270,6 +272,7 @@ describe('Component: <ObjectDetailPageSidebar />', () => {
 					similar={[]}
 					tabs={null}
 					containerRef={{ current: container }}
+					isProgrammaticScrollRef={{ current: false }}
 				>
 					{null}
 				</ObjectDetailPageSidebar>

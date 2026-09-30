@@ -18,6 +18,7 @@ export const ObjectDetailPageSidebar: FC<ObjectDetailPageSidebarProps> = ({
 	similar,
 	tabs,
 	containerRef,
+	isProgrammaticScrollRef,
 	className,
 	children,
 }) => {
@@ -58,6 +59,12 @@ export const ObjectDetailPageSidebar: FC<ObjectDetailPageSidebarProps> = ({
 					if (!hasScrollOverflow(root)) {
 						return;
 					}
+					// Ignore a re-intersection caused by a child auto-scrolling the container itself
+					// (e.g. ObjectDetailPageOcrTab jumping to a search result that happens to sit near
+					// the top of its page) - that's not the user scrolling back up.
+					if (isProgrammaticScrollRef.current) {
+						return;
+					}
 				}
 				setIsHeaderCollapsed(!entry.isIntersecting);
 			},
@@ -65,7 +72,7 @@ export const ObjectDetailPageSidebar: FC<ObjectDetailPageSidebarProps> = ({
 		);
 		observer.observe(sentinel);
 		return () => observer.disconnect();
-	}, [containerRef]);
+	}, [containerRef, isProgrammaticScrollRef]);
 
 	// A short tab with no overflow never fires a scroll event, so the sentinel above never
 	// re-triggers; these catch the user's scroll-up attempt in that case instead. Passive by React's
