@@ -1,8 +1,8 @@
 @use "src/styles/abstracts" as *;
 
-/* Limit launcher button height, to avoid too much overlay on the page */
+/* Make the launcher iframe as wide as the button inside it (measured in ZendeskWrapper), to avoid too much overlay on the page */
 #launcher {
-	width: 190px !important;
+	width: var(--zendesk-launcher-width, 190px) !important;
 }
 
 body.hide-zendesk-widget #launcher {
