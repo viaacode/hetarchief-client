@@ -38,8 +38,16 @@
 
 .c-tag--closable {
 	height: auto;
-	border-radius: 1.8em;
-	padding-right: 0;
+	padding: abstracts.$spacer-xs 0 abstracts.$spacer-xs 1.2rem;
+	border-radius: 1.8rem;
+	background-color: abstracts.$teal-40;
+	font-size: abstracts.$font-size-sm;
+	line-height: 2rem;
+
+	.c-tag__close {
+		padding: 0;
+		font-size: abstracts.$font-size-base;
+	}
 }
 
 // Colors

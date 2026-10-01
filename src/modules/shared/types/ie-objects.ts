@@ -25,6 +25,11 @@ export enum IeObjectsSearchFilterField {
 	NEWSPAPER_SERIES_NAME = 'newspaperSeriesName',
 	LOCATION_CREATED = 'locationCreated',
 	MENTIONS = 'mentions',
+	// AI detected mentions, split per entity type. Only available to key users: the proxy rejects
+	// them for anybody else.
+	MENTION_PERSON = 'mentionPerson',
+	MENTION_PLACE = 'mentionPlace',
+	MENTION_ORGANISATION = 'mentionOrganisation',
 	QUERY = 'query',
 	// TODO future: rename maintainer to maintainerId and maintainers to maintainerName and also change this in the client
 	MAINTAINER_ID = 'maintainer', // Contains the OR-id of the maintainer
@@ -46,6 +51,12 @@ export enum IeObjectsSearchOperator {
 	IS = 'is',
 	IS_NOT = 'isNot',
 	LTE = 'lte',
+	/**
+	 * A date or duration range, and an exact duration. The advanced filter config expands both
+	 * into a GTE and an LTE clause, so neither reaches the proxy.
+	 */
+	BETWEEN = 'between',
+	EXACT = 'exact',
 }
 
 export interface IeObjectsSearchFilter {

@@ -2,9 +2,9 @@ import type { DefaultComponentProps } from '@shared/types';
 import type { ReactNode } from 'react';
 
 export interface MetadataProps extends DefaultComponentProps {
-	title: ReactNode;
+	title?: ReactNode;
 	key: string;
-	children: ReactNode;
+	children?: ReactNode;
 	renderRight?: ReactNode;
 	renderedTitleRight?: ReactNode;
 	rootElementType?: 'dl' | 'div';

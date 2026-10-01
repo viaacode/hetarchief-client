@@ -1,0 +1,60 @@
+@use "src/styles/abstracts" as abstracts;
+
+.p-object-detail__metadata-content {
+	padding: 0 2rem;
+
+	:global(p) {
+		:global(span) {
+			white-space: pre-line;
+		}
+	}
+
+	@media (min-width: abstracts.$breakpoint-md) {
+		padding: 0 abstracts.$spacer-lg;
+	}
+
+	& > {
+		:global(h1),
+		:global(h2),
+		:global(h3),
+		:global(h4),
+		:global(h5),
+		:global(h6),
+		:global(p),
+		:global(span) {
+			@media (min-width: abstracts.$breakpoint-md) {
+				word-break: break-all;
+			}
+
+			@media (min-width: abstracts.$breakpoint-lg) {
+				word-break: initial;
+			}
+		}
+	}
+}
+
+.p-object-detail__metadata-category-tags {
+	display: flex;
+	flex-flow: row wrap;
+	gap: abstracts.$spacer-xs;
+}
+
+.p-object-detail__source-attribution-info {
+	margin-left: abstracts.$spacer-xxs;
+}
+
+.p-object-detail__provider-identifier-link {
+	text-decoration: underline;
+	text-underline-offset: 0.2rem;
+
+	&:hover,
+	&:focus {
+		text-decoration-thickness: 0.2rem;
+	}
+}
+
+.p-object-detail__icon-button {
+	width: fit-content;
+	height: fit-content;
+}
+

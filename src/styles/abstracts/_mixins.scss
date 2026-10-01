@@ -79,6 +79,28 @@
 	}
 }
 
+/** The scrollbar the design gives the filter fly-out and the filter modals. */
+@mixin styled-scrollbar($width: 1.2rem, $thumb-width: 0.8rem) {
+	scrollbar-color: variables.$zinc variables.$silver;
+	scrollbar-width: thin;
+
+	&::-webkit-scrollbar {
+		width: $width;
+	}
+
+	&::-webkit-scrollbar-track {
+		background-color: variables.$silver;
+		border-radius: 0.8rem;
+	}
+
+	&::-webkit-scrollbar-thumb {
+		background-clip: content-box;
+		background-color: variables.$zinc;
+		border: calc(($width - $thumb-width) / 2) solid transparent;
+		border-radius: 2.4rem;
+	}
+}
+
 /**
  * Inputs
  */
@@ -290,6 +312,43 @@
 
 	@media (min-width: variables.$breakpoint-md) {
 		border-radius: math.div(math.max(variables.$tab-line-size-md + (variables.$tab-vertical-padding-md * 2), variables.$tab-min-height-md), 2);
+	}
+}
+
+/**
+ * Menu
+ */
+
+// Borderless, full-width dropdown menu items with a silver hover, used by both the
+// object detail page header's export dropdown and DynamicActionMenu's overflow dropdown.
+@mixin dropdown-menu-item-styling() {
+	padding: 0;
+
+	:global(.c-menu__item) {
+		width: 100%;
+		background: none;
+		border: 0;
+		padding: variables.$spacer-sm variables.$spacer-md;
+
+		&:hover {
+			background: variables.$silver;
+		}
+	}
+}
+
+/**
+ * Text
+ */
+
+// Renders literal newlines in multi-paragraph text as line breaks instead of collapsing them,
+// with the last paragraph flowing inline so a trailing "Lees meer"-style button can sit on its line.
+@mixin inline-read-more-paragraph-styling() {
+	p {
+		white-space: pre-line;
+	}
+
+	p:last-of-type {
+		display: inline;
 	}
 }
 

@@ -24,7 +24,8 @@ type aggregateKeys =
 	| ElasticsearchFieldNames.Language
 	| ElasticsearchFieldNames.Maintainer
 	| ElasticsearchFieldNames.RightsForNewspaper
-	| ElasticsearchFieldNames.RightsForAudioVideo;
+	| ElasticsearchFieldNames.RightsForAudioVideo
+	| ElasticsearchFieldNames.LocationCreated;
 
 export type IeObjectSearchAggregations = Record<aggregateKeys, IeObjectSearchAggregation<string>>;
 
@@ -32,8 +33,10 @@ export type IeObjectSearchAggregations = Record<aggregateKeys, IeObjectSearchAgg
 
 export enum ObjectDetailTabs {
 	Media = 'media',
+	Overview = 'overview',
 	Metadata = 'metadata',
 	Ocr = 'ocr',
+	Related = 'related',
 }
 
 export enum MediaActions {

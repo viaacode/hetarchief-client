@@ -23,7 +23,8 @@ export const GET_PATH_FROM_NOTIFICATION_TYPE = (): Record<NotificationType, stri
 		[NotificationType.VISIT_REQUEST_DENIED]: null,
 		[NotificationType.VISIT_REQUEST_CANCELLED]: null,
 
-		// Absolute url, so we force reload the page, so the active visitor spaces are reloaded
+		// Absolute url, so we force reload the page, so the active visitor spaces are reloaded.
+		// getSearchLink cannot build this one: it escapes the {slug} placeholder.
 		[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_STARTED]: `${window.location.origin}/${ROUTE_PARTS_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}={slug}`,
 		[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_END_WARNING]: null,
 		[NotificationType.ACCESS_PERIOD_VISITOR_SPACE_ENDED]:

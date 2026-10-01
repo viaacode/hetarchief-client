@@ -1,0 +1,50 @@
+@use "sass:math";
+@use "src/styles/abstracts" as abstracts;
+
+/**
+ * The checkbox area sits on a grey band, between a white title and a white footer. The space the
+ * filter form puts above and below that area is split in half: half stays white, half turns grey.
+ */
+// The class is doubled so it wins from the padding .c-filter-form__body sets, whatever order the
+// two css modules end up in
+.c-checkbox-filter-form__body.c-checkbox-filter-form__body {
+	background-color: abstracts.$platinum;
+
+	// .c-filter-form__body puts abstracts.$spacer-md above and abstracts.$spacer-xs below. Part of each moves out of
+	// the element as margin, so the band starts and ends inside that space.
+	padding-top: 2rem;
+	margin-top: math.div(abstracts.$spacer-md, 2);
+	padding-bottom: 2rem;
+	margin-bottom: math.div(abstracts.$spacer-xs, 2);
+}
+
+/**
+ * The magnifier the search field ends with. The clear cross sits next to it in the same slot and
+ * keeps its own colour, so only the last button is targeted.
+ */
+.c-checkbox-filter-form__search :global(.c-input__icon--end) > :last-child {
+	color: abstracts.$grey;
+}
+
+/**
+ * The checkbox list scrolls inside the band rather than running past the footer. The band itself
+ * is a flex column of at most 50vh, so the list gives up the height the search field takes.
+ */
+.c-checkbox-filter-form__list {
+	@include abstracts.styled-scrollbar;
+
+	overflow-y: auto;
+
+	// Without this a flex item refuses to shrink below the height of its content
+	min-height: 0;
+
+	&--searchable {
+		// The space the design puts between the search field and the first checkbox
+		margin-top: abstracts.$spacer-md;
+	}
+
+	// While loading or with nothing to show there is no list to scroll, so no scrollbar either
+	&--empty {
+		overflow-y: hidden;
+	}
+}

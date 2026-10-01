@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { IeObjectsSearchFilterField } from '@shared/types/ie-objects';
-import CheckboxFilterForm from '@visitor-space/components/CheckboxFilterForm/CheckboxFilterForm';
+import CheckboxFilterToggle from '@visitor-space/components/CheckboxFilterToggle/CheckboxFilterToggle';
 import type {
 	ConsultableOnlyOnLocationFilterFormProps,
 	ConsultableOnlyOnLocationFilterFormState,
@@ -60,7 +60,7 @@ export const ConsultableOnlyOnLocationFilterForm: FC<ConsultableOnlyOnLocationFi
 	}, [setValue, isChecked]);
 
 	return (
-		<CheckboxFilterForm
+		<CheckboxFilterToggle
 			value={isChecked}
 			onChange={setIsChecked}
 			label={label}

@@ -1,22 +1,14 @@
-@use "sass:color";
 @use "src/styles/abstracts" as abstracts;
 
+// One operator with the input that belongs to it, both the full width of the filter modal. The
+// modal carries the padding, so the operator lines up with the one of the release date filter.
 .c-advanced-filter-fields {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	gap: abstracts.$spacer-sm;
-	padding: 2rem;
-	border-bottom: 1px solid color.adjust(abstracts.$black, $alpha: -0.8);
-	background-color: abstracts.$platinum;
-
-	@media (min-width: abstracts.$breakpoint-md) {
-		padding: abstracts.$spacer-lg;
-	}
+	grid-template-columns: 1fr;
+	gap: abstracts.$spacer-md;
 }
 
 .c-advanced-filter-fields__field-container {
-	grid-column: span 2;
-
 	:global(.c-form-control__input) {
 		display: flex;
 

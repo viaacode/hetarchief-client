@@ -16,6 +16,7 @@ import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { sortingIcons } from '@shared/components/Table';
 import { VisitDetailBlade } from '@shared/components/VisitDetailBlade';
 import { ROUTES_BY_LOCALE } from '@shared/const';
+import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyPermission } from '@shared/hooks/has-permission';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
@@ -108,9 +109,7 @@ export const AccountMyHistory: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			const response = await getAccessStatus(visit.spaceSlug);
 			switch (response?.status) {
 				case AccessStatus.ACCESS:
-					router.push(
-						`${ROUTES_BY_LOCALE[locale].search}?${SearchFilterId.Maintainer}=${visit.spaceSlug}`
-					);
+					router.push(getSearchLink(locale, { [SearchFilterId.Maintainer]: visit.spaceSlug }));
 					break;
 				case AccessStatus.PENDING:
 					router.push(ROUTES_BY_LOCALE[locale].visitRequested.replace(':slug', visit.spaceSlug));

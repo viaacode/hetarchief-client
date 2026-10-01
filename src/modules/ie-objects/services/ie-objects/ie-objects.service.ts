@@ -1,3 +1,7 @@
+import type {
+	IeObjectAccessDebugRequest,
+	IeObjectAccessDebugResponse,
+} from '@admin/views/ie-object-access/IeObjectAccessPage.types';
 import type { IeObjectSimilar } from '@ie-objects/ie-objects.types';
 import type {
 	IeObjectPreviousNextIds,
@@ -24,6 +28,7 @@ import {
 	IE_OBJECT_SERVICE_TICKET_URL,
 	IE_OBJECT_TICKET_SERVICE_URL,
 	IE_OBJECTS_SERVICE_BASE_URL,
+	IE_OBJECTS_SERVICE_DEBUG,
 	IE_OBJECTS_SERVICE_SIMILAR,
 	IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON,
 	IO_OBJECTS_SERVICE_RELATED,
@@ -135,6 +140,18 @@ export class IeObjectsService {
 			thumbnailUrl: string | null;
 		}[] = await ApiService.getApi().get(url).json();
 		return thumbnailInfos?.[0]?.thumbnailUrl || null;
+	}
+
+	/**
+	 * Explains why an ie-object is (not) visible for a user and which fields they can see.
+	 * Only for meemoo admins, used by the undocumented /admin/objecten debug page.
+	 */
+	public static async getAccessDebugReport(
+		request: IeObjectAccessDebugRequest
+	): Promise<IeObjectAccessDebugResponse> {
+		return await ApiService.getApi()
+			.post(`${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECTS_SERVICE_DEBUG}`, { json: request })
+			.json();
 	}
 
 	public static async getSeoBySchemaIdentifier(schemaIdentifier: string): Promise<IeObjectSeo> {

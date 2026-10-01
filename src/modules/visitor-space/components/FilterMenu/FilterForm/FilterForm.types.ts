@@ -1,22 +1,18 @@
 import type { DefaultComponentProps } from '@shared/types';
-import type { FC, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
-import type { DefaultFilterFormProps, InlineFilterFormProps, SearchFilterId } from '../../../types';
 import type {
-	FilterMenuType,
+	FilterMenuFilterOption,
 	OnFilterMenuFormReset,
 	OnFilterMenuFormSubmit,
 } from '../FilterMenu.types';
 
 export interface FilterFormProps extends DefaultComponentProps {
 	children?: ReactNode;
-	// biome-ignore lint/suspicious/noExplicitAny: No typing yet
-	form: FC<DefaultFilterFormProps<any>> | FC<InlineFilterFormProps> | null;
-	id: SearchFilterId;
+	filter: FilterMenuFilterOption;
 	onFormReset: OnFilterMenuFormReset;
 	onFormSubmit: OnFilterMenuFormSubmit;
 	title: string;
-	type: FilterMenuType;
 	values?: unknown;
 	disabled?: boolean;
 }

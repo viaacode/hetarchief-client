@@ -1,0 +1,211 @@
+@use "src/styles/abstracts" as abstracts;
+
+.p-admin-ie-object-access {
+	padding-bottom: abstracts.$spacer-2xl;
+
+	h2 {
+		font-size: abstracts.$font-size-lg;
+		font-weight: abstracts.$font-weight-bold;
+		margin: abstracts.$spacer-lg 0 abstracts.$spacer-sm;
+	}
+
+	p {
+		margin: abstracts.$spacer-xxs 0;
+	}
+
+	code {
+		font-size: abstracts.$font-size-sm;
+		word-break: break-word;
+	}
+
+	&__form {
+		padding: abstracts.$spacer-md;
+
+		form {
+			display: flex;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: abstracts.$spacer-sm;
+			max-width: 48rem;
+			margin-top: abstracts.$spacer-sm;
+
+			> * {
+				width: 100%;
+			}
+
+			button {
+				width: auto;
+			}
+		}
+	}
+
+	&__radio-buttons {
+		display: flex;
+		flex-direction: column;
+		gap: abstracts.$spacer-xs;
+	}
+
+	&__muted {
+		color: abstracts.$neutral;
+	}
+
+	&__error {
+		margin-top: abstracts.$spacer-md;
+		padding: abstracts.$spacer-sm;
+		border-radius: abstracts.$input-border-radius;
+		background-color: rgba(abstracts.$cherry, 0.1);
+		color: abstracts.$cherry;
+	}
+
+	&__object-title {
+		font-size: abstracts.$font-size-1xl !important;
+		margin-top: abstracts.$spacer-1xl !important;
+	}
+
+	&__card {
+		background-color: abstracts.$white;
+		border: 1px solid abstracts.$silver;
+		border-radius: abstracts.$input-border-radius;
+		padding: abstracts.$spacer-sm abstracts.$spacer-md;
+		margin: abstracts.$spacer-sm 0;
+
+		&--step {
+			border-left: 4px solid abstracts.$teal-dark;
+		}
+	}
+
+	&__card-title,
+	&__subtitle {
+		font-size: abstracts.$font-size-md;
+		font-weight: abstracts.$font-weight-bold;
+		margin-bottom: abstracts.$spacer-xs;
+	}
+
+	&__subtitle {
+		margin-top: abstracts.$spacer-md;
+	}
+
+	&__step-number {
+		display: inline-block;
+		min-width: 2.6rem;
+		height: 2.6rem;
+		margin-right: abstracts.$spacer-xs;
+		border-radius: 50%;
+		background-color: abstracts.$teal-dark;
+		color: abstracts.$white;
+		font-size: abstracts.$font-size-sm;
+		line-height: 2.6rem;
+		text-align: center;
+	}
+
+	&__verdict {
+		margin: abstracts.$spacer-sm 0;
+		padding: abstracts.$spacer-sm abstracts.$spacer-md;
+		border-radius: abstracts.$input-border-radius;
+
+		&--ok {
+			background-color: abstracts.$teal-medium;
+			color: abstracts.$teal-extra-dark;
+		}
+
+		&--no {
+			background-color: rgba(abstracts.$cherry, 0.1);
+			color: abstracts.$cherry;
+		}
+	}
+
+	&__verdict-title {
+		display: block;
+		margin-bottom: abstracts.$spacer-xxs;
+		font-size: abstracts.$font-size-lg;
+		font-weight: abstracts.$font-weight-bold;
+	}
+
+	&__tag {
+		display: inline-block;
+		margin: 0.1rem 0.2rem 0.1rem 0;
+		padding: 0.1rem 0.8rem;
+		border-radius: 99rem;
+		background-color: abstracts.$platinum;
+		border: 1px solid abstracts.$silver;
+		font-size: abstracts.$font-size-sm;
+		white-space: nowrap;
+
+		&--ok {
+			background-color: abstracts.$teal-medium;
+			border-color: abstracts.$teal-medium;
+			color: abstracts.$teal-extra-dark;
+		}
+
+		&--no {
+			background-color: rgba(abstracts.$cherry, 0.1);
+			border-color: transparent;
+			color: abstracts.$cherry;
+		}
+
+		&--warn {
+			background-color: rgba(abstracts.$mustard, 0.3);
+			border-color: transparent;
+			white-space: normal;
+		}
+	}
+
+	&__definitions {
+		display: grid;
+		grid-template-columns: max-content 1fr;
+		gap: abstracts.$spacer-xxs abstracts.$spacer-md;
+		margin: abstracts.$spacer-xs 0;
+
+		dt {
+			color: abstracts.$neutral;
+		}
+	}
+
+	&__table-wrapper {
+		overflow-x: auto;
+		margin: abstracts.$spacer-xs 0;
+	}
+
+	&__table {
+		width: 100%;
+		border-collapse: collapse;
+		font-size: abstracts.$font-size-sm;
+
+		th,
+		td {
+			padding: abstracts.$spacer-xxs abstracts.$spacer-xs;
+			border-bottom: 1px solid abstracts.$silver;
+			text-align: left;
+			vertical-align: top;
+		}
+
+		th {
+			color: abstracts.$neutral;
+			font-weight: abstracts.$font-weight-bold;
+		}
+	}
+
+	&__details {
+		margin: abstracts.$spacer-xs 0;
+
+		summary {
+			cursor: pointer;
+			font-weight: abstracts.$font-weight-bold;
+		}
+
+		pre {
+			max-height: 50rem;
+			overflow: auto;
+			padding: abstracts.$spacer-sm;
+			border-radius: abstracts.$input-border-radius;
+			background-color: abstracts.$platinum;
+			font-size: abstracts.$font-size-sm;
+		}
+	}
+
+	&__list {
+		margin: abstracts.$spacer-xs 0;
+		padding-left: abstracts.$spacer-md;
+		list-style: disc;
+	}
+}

@@ -85,10 +85,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 	// Elements
 
-	.p-object-detail__title {
-		word-break: break-word;
-	}
-
 	&__wrapper {
 		display: grid;
 		grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);
@@ -104,22 +100,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		@media (max-width: abstracts.$breakpoint-lg) {
 			grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);
 			grid-template-columns: max-content 1fr;
-		}
-
-		&--no-ocr-available {
-			:global(.c-tabs) {
-				@media (min-width: abstracts.$breakpoint-lg) {
-					// On desktop if no ocr is available, we don't need to show the tabs, since only one tab will be visible
-					display: none !important;
-				}
-			}
-
-			@include abstracts.module-class-selector-global("ObjectDetailPage", "p-object-detail__sidebar") {
-				// Sidebar can take the space of the tabs if there is no media, since only one tab would be visible or desktop
-				@media (min-width: abstracts.$breakpoint-lg) {
-					grid-row: 2 / 5 !important;
-				}
-			}
 		}
 	}
 
@@ -216,10 +196,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		// The back button floats over the media's top-left corner here, unlike the smaller
 		// arrow shown when the visitor space navigation bar is visible
 		.p-object-detail__context-disclaimer {
-			top: calc(#{$metadata-media-ocr-tabs-height-desktop} + abstracts.$spacer-sm);
+			top: calc(#{$metadata-media-ocr-tabs-height-desktop} + #{abstracts.$spacer-sm});
 
 			@media (max-width: abstracts.$breakpoint-lg) {
-				top: calc(#{$metadata-media-ocr-tabs-height-mobile} + abstracts.$spacer-sm);
+				top: calc(#{$metadata-media-ocr-tabs-height-mobile} + #{abstracts.$spacer-sm});
 			}
 		}
 
@@ -237,10 +217,23 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	}
 
 	&__tabs {
-		display: none;
+		// Shrink-to-fit tabs, left-aligned; any leftover width just shows the row's own black
+		// background (see :global(.c-tab) below) instead of stretching tabs to fill it.
+		display: flex;
+		justify-content: flex-start;
+
+		// The row's own background, behind any width the (shrink-to-fit) tabs don't fill.
+		background-color: abstracts.$black;
 
 		@media (min-width: abstracts.$breakpoint-lg) {
-			// Desktop
+			// Desktop - not a grid item here: it renders inside the sidebar's sticky unit
+			// (ObjectDetailPageSidebar.module.scss), directly below the header. Mobile keeps its own
+			// separate grid-row placement, since mobile puts the tab strip above the header instead
+			// (see the mobile FA).
+			width: 100%;
+			height: $metadata-media-ocr-tabs-height-desktop;
+			flex-shrink: 0;
+
 			:global(.c-tab--media) {
 				display: none !important;
 			}
@@ -250,28 +243,48 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			// Mobile
 			grid-column: 1 / 4;
 			width: 100%;
-			display: flex;
 		}
 
 		:global(.c-tabs__item) {
 			display: flex;
-			justify-content: center;
-			flex-grow: 1;
+			flex-shrink: 0;
 			margin-right: 0;
-			width: 100%;
 		}
 
 		:global(.c-tab) {
 			display: flex;
+			align-items: center;
 			justify-content: center;
+			height: 4.8rem; // 48px
+			padding: 0 abstracts.$spacer-lg; // 32px
+			gap: abstracts.$spacer-xs; // 8px
 			background-color: abstracts.$black;
+
+			// Active/inactive background already gives clear visual feedback; the browser's
+			// default focus ring on this <button> isn't part of the design here.
+			outline: none;
 
 			:global(.c-tab__icon) {
 				font-size: abstracts.$font-size-lg;
 			}
 
+			:global(.c-tab__label) {
+				color: abstracts.$white;
+				font-size: abstracts.$font-size-base; // 16px
+				font-weight: abstracts.$font-weight-normal;
+				line-height: abstracts.$line-height-1xl; // 20px at 16px font size
+				white-space: nowrap;
+			}
+
 			&:global(.c-tab--active) {
 				background-color: abstracts.$white;
+
+				:global(.c-tab__label) {
+					color: abstracts.$black;
+
+					// No matching token for this weight (same precedent as the header title/detail pages elsewhere).
+					font-weight: 800;
+				}
 			}
 		}
 	}
@@ -314,10 +327,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		& :global(.is-paused) :global(.p-object-detail__flowplayer-fullscreen-button--exit) {
 			bottom: calc(#{abstracts.$spacer-lg} + 5.8rem); // Add height of controls bar
 		}
-	}
-
-	&__image {
-		position: relative;
 	}
 
 	&__media {
@@ -393,12 +402,12 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	}
 
 	&__sidebar {
+		// Row 2/5 on desktop: the tabs no longer get their own grid row there - they render inside
+		// the sidebar, directly below the header. Mobile keeps its separate tabs row above (row 2),
+		// so its sidebar still starts at row 3. Only the grid placement lives here; the sidebar's
+		// own layout is in ObjectDetailPageSidebar.module.scss.
 		grid-row: 2 / 5;
 		grid-column: 3;
-		display: flex;
-		flex-direction: column;
-		max-height: 100%;
-		overflow: hidden;
 
 		@media (max-width: abstracts.$breakpoint-lg) {
 			grid-row: 3 / 5;
@@ -408,171 +417,11 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	}
 
 	&:global(.p-object-detail--newspaper) {
-		:global([class*="p-object-detail__wrapper"] > #{abstracts.module-class-selector-webpack("ObjectDetailPage", "p-object-detail__sidebar")}),
-		:global([class*="p-object-detail__wrapper"] > #{abstracts.module-class-selector-turbopack("ObjectDetailPage", "p-object-detail__sidebar")}) {
-			grid-row: 3 / 5;
-			grid-column: 3;
-
-			@media (max-width: abstracts.$breakpoint-lg) {
-				grid-row: 3 / 5;
-				grid-column: 1 / 3;
-			}
-		}
-
 		:global([class*="p-object-detail__wrapper"] > [class*="p-object-detail__tabs"]) {
-			grid-row: 2;
-			grid-column: 3;
-			display: flex;
-			width: 100%;
-			height: $metadata-media-ocr-tabs-height-desktop;
-
 			@media (max-width: abstracts.$breakpoint-lg) {
-				width: 100%;
-				grid-row: 2;
+				// Newspaper mobile reserves a back-arrow column before the tabs; other types don't.
 				grid-column: 2 / 3;
 			}
-		}
-	}
-
-	&__sidebar__content {
-		height: 100%;
-		overflow-y: auto;
-		box-shadow: abstracts.$shadow-24-black-12;
-
-		// Breathing room under whatever the last section happens to be (metadata, "ook
-		// interessant", ...), so the content never ends flush against the bottom edge
-		padding-bottom: abstracts.$spacer-2xl;
-
-		// "Ook interessant" is always the last section when it renders, and it paints its own
-		// background. Padding here would leave that grey stopping short with a white band
-		// underneath it, so let the list carry its own bottom padding instead.
-		&:has(:global(.p-object-detail__metadata-list--similar)) {
-			padding-bottom: 0;
-		}
-
-		&__tab-media {
-			overflow-y: auto;
-		}
-
-		&__tab-metadata {
-			overflow-y: auto;
-		}
-
-		&__tab-ocr {
-			overflow-y: hidden;
-			padding-left: 0;
-			padding-right: 0;
-			padding-bottom: 0;
-		}
-	}
-
-	&__ocr {
-		background-color: abstracts.$white;
-		display: flex;
-		flex-direction: column;
-		height: 100%;
-		overflow: hidden;
-		width: 100%;
-		gap: abstracts.$spacer-md;
-		padding: abstracts.$spacer-lg 0;
-
-		// Search, Alert, Pagination
-		> * {
-			margin-left: abstracts.$spacer-lg;
-			margin-right: abstracts.$spacer-lg;
-			width: calc(100% - #{abstracts.$spacer-lg} * 2);
-
-			@media (max-width: abstracts.$breakpoint-lg) {
-				margin: abstracts.$spacer-sm;
-				width: calc(100% - #{abstracts.$spacer-sm} * 2);
-			}
-		}
-
-		&__words-container {
-			height: 100%;
-			max-height: 100%;
-			overflow-y: auto;
-			padding: 0 abstracts.$spacer-lg abstracts.$spacer-lg * 3;
-			width: 100%;
-			margin: 0;
-
-			@media (max-width: abstracts.$breakpoint-lg) {
-				padding: 0 abstracts.$spacer-sm abstracts.$spacer-1xl;
-				width: 100vw;
-			}
-		}
-
-		&__word {
-			display: inline-block;
-			padding: 0.5rem 0.25rem;
-			cursor: pointer;
-			scroll-margin: 40vh;
-			word-break: break-word;
-
-			&:hover {
-				background-color: abstracts.$teal-30;
-				color: black;
-			}
-
-			&--marked {
-				background-color: abstracts.$teal-dark;
-				color: white;
-
-				&:hover {
-					background-color: abstracts.$teal-30;
-					color: black;
-				}
-
-				&--active {
-					background-color: abstracts.$black;
-
-					&:hover {
-						background-color: abstracts.$teal-30;
-						color: black;
-					}
-				}
-			}
-		}
-
-		&__pagination {
-			display: flex;
-			align-items: center;
-			background-color: abstracts.$silver;
-			border-radius: abstracts.$button-radius;
-			text-align: center;
-
-			:global(.pagination-info) {
-				flex-grow: 1;
-			}
-
-			> :global(.c-button) {
-				margin: 0;
-				color: abstracts.$zinc;
-			}
-
-			@media (max-width: abstracts.$breakpoint-lg) {
-				:global(.c-button__label) {
-					display: none;
-				}
-			}
-
-			&__button {
-				&--active {
-					color: abstracts.$black !important;
-				}
-			}
-		}
-
-		:global(.u-flex) {
-			margin-bottom: abstracts.$spacer-1xl;
-			height: abstracts.$font-size-3xl;
-		}
-
-		&__close {
-			display: flex;
-			flex-direction: row;
-			justify-content: flex-end;
-			margin-bottom: 3.2rem;
 		}
 	}
 
@@ -581,121 +430,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 		@media (min-width: abstracts.$breakpoint-lg) {
 			padding: 0 abstracts.$spacer-lg;
-		}
-	}
-
-	&__metadata-list {
-		display: flex;
-		flex-direction: column;
-		gap: abstracts.$spacer-sm;
-	}
-
-	:global(.p-object-detail__metadata-list--similar) {
-		// Firefox and Safari render weirdly with: margin: 0 - abstracts.$spacer-md;
-		margin-left: -#{abstracts.$spacer-md};
-		margin-right: -#{abstracts.$spacer-md};
-		margin-top: abstracts.$spacer-xs;
-		background-color: abstracts.$platinum;
-		padding: abstracts.$spacer-md abstracts.$spacer-md 10rem;
-
-		@media (min-width: abstracts.$breakpoint-lg) {
-			// Firefox and Safari render weirdly with: margin: 0 - abstracts.$spacer-md;
-			margin-left: -#{abstracts.$spacer-lg};
-			margin-right: -#{abstracts.$spacer-lg};
-
-			// The extra bottom padding keeps the grey running to the bottom of the scroll area,
-			// since this is always the last section of the sidebar when it renders
-			padding: abstracts.$spacer-md abstracts.$spacer-lg abstracts.$spacer-2xl;
-		}
-	}
-
-	@media (min-width: abstracts.$breakpoint-lg) {
-		&__related {
-			grid-column: 2;
-		}
-	}
-
-	:global(.p-object-detail__metadata-list--related) {
-		padding: 2rem;
-		height: max-content;
-
-		@media (min-width: abstracts.$breakpoint-lg) {
-			padding: abstracts.$spacer-lg;
-		}
-
-		ul {
-			display: block;
-			height: auto;
-			overflow: scroll;
-		}
-	}
-
-	@media (max-width: abstracts.$breakpoint-lg) {
-		&__wrapper--metadata,
-		&__wrapper--ocr {
-			.p-object-detail__media {
-				display: none;
-			}
-		}
-	}
-
-	&__metadata-card-link {
-		display: block;
-
-		&:not(:active):not(:hover):focus {
-			outline: 0.2rem solid abstracts.$teal;
-		}
-	}
-
-	&__metadata-maintainer {
-		&-title {
-			display: grid;
-			grid-template-columns: 7fr 3fr;
-			grid-template-rows: repeat(2, min-content);
-
-			.p-object-detail__sidebar__content {
-				&-label {
-					grid-row: 1;
-				}
-
-				&-pill {
-					grid-row: 2;
-					grid-column: 1;
-				}
-
-				&-logo {
-					grid-row: 1/3;
-					grid-column: 2;
-					width: 100%;
-					height: 5.9rem;
-					overflow: hidden;
-					position: relative;
-
-					img {
-						width: 100%;
-						height: 100%;
-						object-fit: contain;
-						object-position: right top;
-					}
-				}
-			}
-		}
-
-		&-data {
-			display: flex;
-			flex-direction: column;
-
-			.p-object-detail__sidebar__content {
-				&-description {
-					margin-top: abstracts.$spacer-xs;
-				}
-
-				&-link {
-					display: inline-flex;
-					align-items: center;
-					margin-top: abstracts.$spacer-xs;
-				}
-			}
 		}
 	}
 
@@ -731,24 +465,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 	}
 
-	&__export {
-		.c-dropdown__content-open .c-menu--default {
-			box-shadow: abstracts.$shadow-12-black-16;
-			border: 0.1rem solid abstracts.$silver !important;
-		}
-
-		&-dropdown {
-			&.c-menu-content-item {
-				border: 0.1rem solid abstracts.$silver;
-				border-top: none;
-
-				&:first-of-type {
-					border-top: abstracts.$silver;
-				}
-			}
-		}
-	}
-
 	:global(.c-menu--default) {
 		padding: 0;
 		margin-top: abstracts.$spacer-xxs;
@@ -760,19 +476,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		:global(.c-button__content) {
 			width: 100%;
 		}
-	}
-
-	&__callout {
-		border-bottom: abstracts.$divider-black;
-	}
-
-	&__metadata-blade {
-		:global(span) {
-			word-break: break-word !important;
-		}
-
-		line-height: abstracts.$line-height-3xl;
-		font-size: abstracts.$font-size-sm;
 	}
 
 	.c-loading__iiif-viewer {

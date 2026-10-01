@@ -6,15 +6,16 @@ import {
 	type RequestAccessFormState,
 } from '@home/components/RequestAccessBlade';
 import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
-import { CollapsableBlade } from '@ie-objects/components/CollapsableBlade';
 import { ContextDisclaimer } from '@ie-objects/components/ContextDisclaimer/ContextDisclaimer';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
-import MetadataList from '@ie-objects/components/Metadata/MetadataList';
-import Metadata, {
-	ObjectDetailPageMetadata,
-} from '@ie-objects/components/ObjectDetailPageMetadata/ObjectDetailPageMetadata';
+import type { MetadataItem } from '@ie-objects/components/Metadata/Metadata.types';
+import { ObjectDetailPageMetadataTab } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataTab';
+import { ObjectDetailPageOcrTab } from '@ie-objects/components/ObjectDetailPageOcrTab/ObjectDetailPageOcrTab';
+import { ObjectDetailPageOverviewTab } from '@ie-objects/components/ObjectDetailPageOverviewTab/ObjectDetailPageOverviewTab';
+import { ObjectDetailPageRelatedTab } from '@ie-objects/components/ObjectDetailPageRelatedTab/ObjectDetailPageRelatedTab';
+import { ObjectDetailPageSidebar } from '@ie-objects/components/ObjectDetailPageSidebar/ObjectDetailPageSidebar';
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
-import { type MediaObject, RelatedObject } from '@ie-objects/components/RelatedObject';
+import type { MediaObject } from '@ie-objects/components/RelatedObject';
 import { useGetAltoJsonFileContent } from '@ie-objects/hooks/use-get-alto-json-file-content';
 import { useGetIeObjectBySchemaIdentifier } from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
 import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/use-get-ie-object-ticket-service-tokens';
@@ -41,7 +42,6 @@ import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-te
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
-import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination';
 import {
 	iiifGoToHome,
 	iiifGoToPage,
@@ -58,13 +58,14 @@ import {
 	isNewspaperType,
 	mapDcTermsFormatToSimpleType,
 } from '@meemoo/admin-core-ui/admin';
-import { Alert, Button, type TabProps, Tabs } from '@meemoo/react-components';
+import { Button, type TabProps, Tabs } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import type { CuePoints } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer.types';
 import { Blade } from '@shared/components/Blade/Blade';
 import { ErrorNoAccessToObject } from '@shared/components/ErrorNoAccessToObject';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { ErrorSpaceNoLongerActive } from '@shared/components/ErrorSpaceNoLongerActive';
+import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
@@ -75,7 +76,6 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { BooleanParamWithDefault } from '@shared/helpers/boolean-param-with-default';
 import { getIeObjectNameSlug } from '@shared/helpers/ie-object-urls';
-import { moduleClassSelector } from '@shared/helpers/module-class-locator';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
@@ -111,38 +111,43 @@ import { VisitorLayout } from '@visitor-layout/index';
 import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
 import { MaterialRequestBlade } from '@visitor-space/components/MaterialRequestBlade/MaterialRequestBlade';
 import { MaterialRequestForReuseBlade } from '@visitor-space/components/MaterialRequestForReuseBlade/MaterialRequestForReuseBlade';
-import { ReportBlade } from '@visitor-space/components/reportBlade';
+import { ReportBlade } from '@visitor-space/components/ReportBlade';
 import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { VisitorSpaceStatus } from '@visitor-space/types';
 import clsx from 'clsx';
-import {
-	capitalize,
-	compact,
-	intersection,
-	isEqual,
-	isNil,
-	lowerCase,
-	noop,
-} from 'es-toolkit/compat';
+import { capitalize, compact, intersection, isNil, lowerCase, noop } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
-import React, {
-	type FC,
-	Fragment,
-	type ReactNode,
-	useCallback,
-	useEffect,
-	useMemo,
-	useState,
-} from 'react';
+import { type FC, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
 import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
+
+const mapRelatedIeObject = (
+	ieObject: Partial<HetArchiefRelatedIeObject> | undefined | null
+): MediaObject | null => {
+	if (!ieObject) {
+		return null;
+	}
+	const date = ieObject.datePublished ?? ieObject.dateCreated ?? null;
+
+	return {
+		type: ieObject.dctermsFormat as HetArchiefIeObjectType,
+		title: ieObject.name as string,
+		subtitle: isNil(date)
+			? `${ieObject?.maintainerName ?? ''}`
+			: `${ieObject?.maintainerName ?? ''} (${date})`,
+		description: ieObject.description as string,
+		id: ieObject.schemaIdentifier as string,
+		maintainer_id: ieObject.maintainerId,
+		thumbnail: ieObject.thumbnailUrl,
+		hasAccessToEssence: !!ieObject.hasAccessToEssence,
+	};
+};
 
 export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	title,
@@ -192,7 +197,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, []);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
-	const [isRelatedObjectsBladeOpen, setIsRelatedObjectsBladeOpen] = useState(false);
 	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
 	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
 	/**
@@ -243,6 +247,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
 		BooleanParamWithDefault(false)
 	);
+
+	// Shared with ObjectDetailPageSidebar (its own collapsible header/scroll behavior) and with
+	// ObjectDetailPageOcrTab (scrollContainerRef), so both act on the same scrollable element.
+	const sidebarContentRef = useRef<HTMLDivElement>(null);
+	// Shared with ObjectDetailPageSidebar and ObjectDetailPageOcrTab: lets the OCR tab's own
+	// scroll-to-search-result flag itself as programmatic, so the sidebar's collapse-sentinel
+	// observer doesn't mistake landing near the top for the user scrolling back up.
+	const isOcrResultAutoScrollingRef = useRef(false);
+	// Owned here (rather than in the header/metadata components) so the header and the metadata
+	// tab share a single "read more" blade instead of each being able to open their own.
+	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
 	const [iiifViewerFocusX] = useQueryParam(
 		QUERY_PARAM_KEY.IIIF_VIEWER_FOCUS_X,
 		withDefault(NumberParam, undefined)
@@ -413,11 +428,20 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	);
 
 	// related
-	const { data: relatedIeObjects } = useGetIeObjectsRelated(
-		mediaInfo?.iri,
-		mediaInfo?.premisIsPartOf || null,
-		!!mediaInfo
-	);
+	const {
+		data: relatedIeObjects,
+		isLoading: relatedIeObjectsIsLoading,
+		isPlaceholderData: relatedIeObjectsIsPlaceholder,
+	} = useGetIeObjectsRelated(mediaInfo?.iri, mediaInfo?.premisIsPartOf || null, !!mediaInfo);
+	// Mapped here (not just checked for presence) so the Gerelateerd tab is only offered when at
+	// least one related object survives mapping
+	const mappedRelatedIeObjects: MediaObject[] = useMemo(() => {
+		if (relatedIeObjects?.parent) {
+			return compact([mapRelatedIeObject(relatedIeObjects.parent)]);
+		}
+		return compact(relatedIeObjects?.children?.map(mapRelatedIeObject) || []);
+	}, [relatedIeObjects]);
+	const hasRelated: boolean = mappedRelatedIeObjects.length > 0;
 
 	// visit info
 	const { data: visitRequest, error: visitRequestError } = useGetActiveVisitRequestForUserAndSpace(
@@ -919,56 +943,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	]);
 
 	/**
-	 * Scroll to active search result in ocr tab when the current search result index changes
-	 */
-	const scrollActiveSearchWordIntoView = useCallback(() => {
-		const activeSearchResultElem = document.querySelector(
-			moduleClassSelector('ObjectDetailPage', 'p-object-detail__ocr__word--marked--active')
-		) as HTMLSpanElement | null;
-		const scrollable = document.querySelector(
-			moduleClassSelector('ObjectDetailPage', 'p-object-detail__ocr__words-container')
-		);
-
-		// If word was not found, try again in 100ms
-		if (!activeSearchResultElem && currentSearchResultIndex !== -1) {
-			setTimeout(() => {
-				scrollActiveSearchWordIntoView();
-			}, 100);
-			return;
-		}
-
-		// Location of the word inside the scrollable container minus a margin to make sure it's about in the center of the screen
-		const scrollTopWord = Math.max(
-			0,
-			(activeSearchResultElem?.offsetTop || 0) - (scrollable?.clientHeight || 300)
-		);
-		// We don't use scrollIntoView because it causes scrolling on the whole page
-		// https://meemoo.atlassian.net/browse/ARC-3020
-		scrollable?.scrollTo({
-			top: scrollTopWord,
-		});
-	}, [currentSearchResultIndex]);
-
-	/**
-	 * In the ocr tab, when a user searches for a word
-	 * We want to scroll into view the first word that is found in the ocr text
-	 */
-	useEffect(() => {
-		iiifViewerInitializedPromise?.then(() => {
-			scrollActiveSearchWordIntoView();
-		});
-	}, [iiifViewerInitializedPromise, scrollActiveSearchWordIntoView]);
-
-	/**
 	 * Hide the zendesk button for
 	 * - kiosk users
 	 * - users with access to the visitor space of the object
-	 * - when the metadata tab is not active (otherwise it overlaps with the ocr next page button)
+	 * - when the ocr tab is active (otherwise it overlaps with the ocr next page button)
 	 */
 	useEffect(() => {
 		dispatch(
 			setShowZendesk(
-				!isKiosk && !hasAccessToVisitorSpaceOfObject && activeTab === ObjectDetailTabs.Metadata
+				!isKiosk && !hasAccessToVisitorSpaceOfObject && activeTab !== ObjectDetailTabs.Ocr
 			)
 		);
 	}, [dispatch, hasAccessToVisitorSpaceOfObject, isKiosk, activeTab]);
@@ -1010,10 +993,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	]);
 
 	/**
-	 * Pause media if metadata tab is shown on mobile
+	 * Pause media if any tab other than the media tab is shown on mobile
 	 */
 	useEffect(() => {
-		if (isMobile && activeTab === ObjectDetailTabs.Metadata) {
+		if (isMobile && activeTab !== ObjectDetailTabs.Media) {
 			setIsMediaPaused(true);
 		}
 	}, [activeTab, isMobile]);
@@ -1036,35 +1019,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	/**
 	 * Mapping
 	 */
-	const mapRelatedIeObject = (
-		ieObject: Partial<HetArchiefRelatedIeObject> | undefined | null
-	): MediaObject | null => {
-		if (!ieObject) {
-			return null;
-		}
-		const date = ieObject.datePublished ?? ieObject.dateCreated ?? null;
-
-		return {
-			type: ieObject.dctermsFormat as HetArchiefIeObjectType,
-			title: ieObject.name as string,
-			subtitle: isNil(date)
-				? `${ieObject?.maintainerName ?? ''}`
-				: `${ieObject?.maintainerName ?? ''} (${date})`,
-			description: ieObject.description as string,
-			id: ieObject.schemaIdentifier as string,
-			maintainer_id: ieObject.maintainerId,
-			thumbnail: ieObject.thumbnailUrl,
-			hasAccessToEssence: !!ieObject.hasAccessToEssence,
-		};
-	};
-
-	const getMappedRelatedIeObjects = (): MediaObject[] => {
-		if (relatedIeObjects?.parent) {
-			return [mapRelatedIeObject(relatedIeObjects.parent) as MediaObject];
-		}
-		return compact(relatedIeObjects?.children?.map(mapRelatedIeObject) || []);
-	};
-
 	/**
 	 * Callbacks
 	 */
@@ -1295,9 +1249,40 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			mediaInfo?.dctermsFormat || null,
 			activeTab as ObjectDetailTabs,
 			isMediaAvailable(),
-			arePagesOcrTextsAvailable
+			arePagesOcrTextsAvailable,
+			hasRelated
 		);
-	}, [mediaInfo?.dctermsFormat, activeTab, isMediaAvailable, arePagesOcrTextsAvailable]);
+	}, [
+		mediaInfo?.dctermsFormat,
+		activeTab,
+		isMediaAvailable,
+		arePagesOcrTextsAvailable,
+		hasRelated,
+	]);
+
+	// A tab from the URL (or an old bookmark) may not exist for this object, e.g. ocr without
+	// transcripts or related without related objects. Wait until the data those tabs depend on has
+	// loaded, otherwise a valid deep link would be reset before its tab appears.
+	useEffect(() => {
+		if (!mediaInfo || relatedIeObjectsIsLoading || relatedIeObjectsIsPlaceholder) {
+			return;
+		}
+		// The media tab exists in the list but is only rendered on mobile
+		const isTabUnavailable =
+			!tabs.some((tab) => tab.id === activeTab) ||
+			(activeTab === ObjectDetailTabs.Media && !isMobile);
+		if (isTabUnavailable) {
+			updateActiveTab(ObjectDetailTabs.Metadata).then(noop);
+		}
+	}, [
+		mediaInfo,
+		relatedIeObjectsIsLoading,
+		relatedIeObjectsIsPlaceholder,
+		tabs,
+		activeTab,
+		isMobile,
+		updateActiveTab,
+	]);
 
 	const accessEndDate = useMemo(() => {
 		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
@@ -1470,222 +1455,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		);
 	};
 
-	// Metadata
-	const renderCard = (item: MediaObject, isHidden: boolean) => (
-		<li>
-			<Link
-				passHref
-				href={`${ROUTES_BY_LOCALE[locale].search}/${router.query.slug}/${item.id}`}
-				tabIndex={isHidden ? -1 : 0}
-				className={clsx(styles['p-object-detail__metadata-card-link'], 'u-text-no-decoration')}
-				aria-label={item.title}
-			>
-				<RelatedObject object={item} />
-			</Link>
-		</li>
-	);
-
-	const renderIeObjectCards = (
-		type: 'similar' | 'related',
-		items: MediaObject[],
-		isHidden = false
-	): ReactNode => (
-		<div className="u-m-0">
-			{
-				<ul
-					className={clsx(
-						'u-bg-platinum',
-						'u-list-reset',
-						styles['p-object-detail__metadata-list'],
-						`p-object-detail__metadata-list--${type}`
-					)}
-				>
-					{items.map((item, index) => {
-						return (
-							<Fragment key={`${type}-object-${item.id}-${index}`}>
-								{renderCard(item, isHidden)}
-							</Fragment>
-						);
-					})}
-				</ul>
-			}
-		</div>
-	);
-
-	const renderCollapsableBladeTitle = (mappedRelatedIeObjects: MediaObject[]): string => {
-		if (relatedIeObjects?.parent) {
-			return tText(
-				'modules/ie-objects/object-detail-page___dit-object-is-onderdeel-van-dit-hoofdobject'
-			);
-		}
-		if (mappedRelatedIeObjects.length === 1) {
-			return tText('modules/ie-objects/object-detail-page___dit-object-heeft-1-fragment');
-		}
-		return tText('modules/ie-objects/object-detail-page___dit-object-heeft-amount-fragmenten', {
-			amount: mappedRelatedIeObjects.length,
-		});
-	};
-
-	const renderRelatedObjectsBlade = () => {
-		const mappedRelatedIeObjects = getMappedRelatedIeObjects();
-		if (!mappedRelatedIeObjects.length || (!expandSidebar && isMobile)) {
-			return null;
-		}
-		return (
-			<CollapsableBlade
-				className={clsx('p-object-detail__related')}
-				isOpen={isRelatedObjectsBladeOpen}
-				setIsOpen={setIsRelatedObjectsBladeOpen}
-				icon={
-					<Icon
-						className="u-font-size-24 u-mr-8 u-text-left"
-						name={IconNamesLight.RelatedObjects}
-						aria-hidden
-					/>
-				}
-				title={renderCollapsableBladeTitle(mappedRelatedIeObjects)}
-				renderContent={(hidden: boolean) =>
-					renderIeObjectCards('related', mappedRelatedIeObjects, hidden)
-				}
-				ariaLabel={renderCollapsableBladeTitle(mappedRelatedIeObjects)}
-			/>
-		);
-	};
-
-	const renderedOcrText = useMemo(() => {
-		let searchTermIndex = 0;
-		return (
-			<div className={styles['p-object-detail__ocr__words-container']}>
-				{simplifiedAltoInfo?.altoJsonContent?.text?.map((textLocation, textIndex) => {
-					const foundAltoText = altoTextsOnCurrentPageForSearchTerms.find((item) =>
-						isEqual(item.text, textLocation)
-					);
-					const isMarked: boolean = !!foundAltoText;
-					const isTabbable: boolean = !!foundAltoText?.tabbable;
-
-					// Search results are counted per page, so we need to subtract the amount of results in previous page
-					const searchResultsOnPreviousPages: number =
-						searchResults?.filter((result) => result.pageIndex < currentPageIndex).length || 0;
-					const searchResultIndexWithinCurrentPage: number =
-						(currentSearchResultIndex || 0) - searchResultsOnPreviousPages;
-					const isActive: boolean =
-						!!searchTermWords &&
-						isTabbable &&
-						searchTermIndex === searchResultIndexWithinCurrentPage;
-
-					const wordElement = (
-						// biome-ignore lint/a11y/noStaticElementInteractions: We need it this way
-						<span
-							key={`ocr-text--${ieObjectId}--${currentPageIndex}--${
-								// biome-ignore lint/suspicious/noArrayIndexKey: _
-								textIndex
-							}`}
-							onClick={() => handleClickOnOcrWord(textLocation)}
-							onKeyUp={(evt) => {
-								if (evt.key === 'Enter') {
-									handleClickOnOcrWord(textLocation);
-								}
-							}}
-							onDoubleClick={() => handleIsTextOverlayVisibleChange(!isTextOverlayVisible)}
-							className={clsx(styles['p-object-detail__ocr__word'], {
-								[styles['p-object-detail__ocr__word--marked']]: isMarked,
-								[styles['p-object-detail__ocr__word--marked--active']]: isActive,
-							})}
-						>
-							{textLocation.text}{' '}
-						</span>
-					);
-
-					if (isTabbable) {
-						searchTermIndex += 1;
-					}
-
-					return wordElement;
-				})}
-			</div>
-		);
-	}, [
-		searchTermWords,
-		simplifiedAltoInfo?.altoJsonContent?.text,
-		altoTextsOnCurrentPageForSearchTerms,
-		searchResults,
-		currentSearchResultIndex,
-		ieObjectId,
-		currentPageIndex,
-		handleIsTextOverlayVisibleChange,
-		handleClickOnOcrWord,
-		isTextOverlayVisible,
-	]);
-
-	const renderOcrContent = () => {
-		return (
-			<div className={clsx(styles['p-object-detail__ocr'])}>
-				<Alert
-					icon={<Icon name={IconNamesLight.Info} aria-hidden />}
-					title={tText('modules/ie-objects/object-detail-page___ocr-betrouwbaarheid')}
-					content={tHtml(
-						'modules/ie-objects/object-detail-page___deze-ocr-kan-fouten-bevatten-a-href-ocr-betrouwbaarheid-info-meer-info-vind-je-hier-a'
-					)}
-				/>
-
-				{arePagesOcrTextsAvailable && (
-					<OcrSearchInputWithResultsPagination
-						id="object-detail-page__ocr-search-input"
-						className={styles['p-object-detail__ocr__search']}
-						value={searchTermsTemp}
-						onChange={setSearchTermsTemp}
-						onSearch={(newSearchTerms) => handleSearch(newSearchTerms)}
-						onClearSearch={handleClearSearch}
-						searchResults={searchTerms ? searchResults : null}
-						currentSearchIndex={currentSearchResultIndex || 0}
-						onChangeSearchIndex={handleChangeSearchIndex}
-						searchInputAriaLabel={tText(
-							'modules/ie-objects/object-detail-page___zoek-tekst-in-deze-krant-input-aria-label'
-						)}
-					/>
-				)}
-
-				{renderedOcrText}
-
-				<div className={styles['p-object-detail__ocr__pagination']}>
-					<Button
-						className={clsx(styles['p-object-detail__ocr__pagination__button'], {
-							[styles['p-object-detail__ocr__pagination__button--active']]: currentPageIndex > 0,
-						})}
-						iconStart={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
-						ariaLabel={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-vorige-afbeelding')}
-						label={tText('modules/ie-objects/object-detail-page___vorige')}
-						variants={['text']}
-						onClick={() => {
-							setCurrentPageIndex(currentPageIndex - 1, 'replaceIn');
-						}}
-						disabled={currentPageIndex === 0}
-					/>
-					<span className="pagination-info">
-						{tText('modules/ie-objects/object-detail-page___pagina-current-page-van-total-pages', {
-							currentPage: currentPageIndex + 1,
-							totalPages: iiifViewerImageInfos?.length || 1,
-						})}
-					</span>
-					<Button
-						className={clsx(styles['p-object-detail__ocr__pagination__button'], {
-							[styles['p-object-detail__ocr__pagination__button--active']]:
-								currentPageIndex < iiifViewerImageInfos.length - 1,
-						})}
-						iconEnd={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
-						ariaLabel={tText('modules/iiif-viewer/iiif-viewer___ga-naar-de-volgende-afbeelding')}
-						label={tText('modules/ie-objects/object-detail-page___volgende')}
-						variants={['text']}
-						onClick={() => {
-							setCurrentPageIndex(currentPageIndex + 1, 'replaceIn');
-						}}
-						disabled={currentPageIndex === iiifViewerImageInfos.length - 1}
-					/>
-				</div>
-			</div>
-		);
-	};
-
 	const renderObjectMedia = () => {
 		if (mediaInfo?.hasAccessToEssence) {
 			return (
@@ -1748,6 +1517,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		);
 	};
 
+	const renderTabs = (): ReactNode => (
+		<Tabs
+			className={clsx(styles['p-object-detail__tabs'])}
+			variants={['dark']}
+			tabs={tabs}
+			onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
+		/>
+	);
+
 	const renderObjectDetail = () => (
 		<>
 			{isNoAccessError && (
@@ -1773,11 +1551,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					[styles['p-object-detail__wrapper--expanded']]: expandSidebar,
 					[styles['p-object-detail__wrapper--no-media-available']]: !isMediaAvailable(),
 					[styles['p-object-detail__wrapper--media-available']]: isMediaAvailable(),
-					[styles['p-object-detail__wrapper--no-ocr-available']]: !arePagesOcrTextsAvailable,
-					[styles['p-object-detail__wrapper--ocr-available']]: arePagesOcrTextsAvailable,
-					[styles['p-object-detail__wrapper--metadata']]: activeTab === ObjectDetailTabs.Metadata,
-					[styles['p-object-detail__wrapper--video']]: activeTab === ObjectDetailTabs.Media,
-					[styles['p-object-detail__wrapper--ocr']]: activeTab === ObjectDetailTabs.Ocr,
 				})}
 			>
 				{/* Visitor space navigation bar */}
@@ -1806,68 +1579,121 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					/>
 				)}
 
-				{/* Tabs */}
-				<Tabs
-					className={clsx(styles['p-object-detail__tabs'])}
-					variants={['dark']}
-					tabs={tabs}
-					onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
-				/>
+				{/* Tabs - mobile only: the mobile FA puts the tab strip above the header, so it stays
+				 * a grid sibling here. Desktop renders tabs below the header instead, inside the
+				 * shared sticky unit (see ObjectDetailPageSidebar). */}
+				{isMobile && renderTabs()}
 
 				{/* Sidebar */}
-				<div className={clsx(styles['p-object-detail__sidebar'])}>
-					<div
-						className={clsx(
-							styles['p-object-detail__sidebar__content'],
-							styles[`p-object-detail__sidebar__content__tab-${activeTab}`],
-							{
-								[styles['p-object-detail__sidebar__content--no-media']]: !mediaInfo?.dctermsFormat,
+				<ObjectDetailPageSidebar
+					mediaInfo={mediaInfo}
+					onClickAction={onClickAction}
+					hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
+					currentPageIndex={currentPageIndex}
+					onReadMoreClicked={setSelectedMetadataField}
+					activeTab={activeTab}
+					similar={similar}
+					tabs={isMobile ? null : renderTabs()}
+					containerRef={sidebarContentRef}
+					isProgrammaticScrollRef={isOcrResultAutoScrollingRef}
+					className={styles['p-object-detail__sidebar']}
+				>
+					{activeTab === ObjectDetailTabs.Overview && (
+						<ObjectDetailPageOverviewTab
+							mediaInfo={mediaInfo}
+							visitRequest={visitRequest || null}
+							similar={similar}
+							onReadMoreClicked={setSelectedMetadataField}
+						/>
+					)}
+					{/*
+					 * HetArchiefIeObject metadata
+					 */}
+					{activeTab === ObjectDetailTabs.Metadata && (
+						<ObjectDetailPageMetadataTab
+							mediaInfo={mediaInfo}
+							goToPage={handleSetCurrentPage}
+							currentPage={currentPage}
+							activeFile={
+								getFilesByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS])?.[currentPageIndex] ||
+								null
 							}
-						)}
-					>
-						{/*
-						 * HetArchiefIeObject metadata
-						 */}
-						{activeTab === ObjectDetailTabs.Metadata && (
-							<ObjectDetailPageMetadata
-								onClickAction={onClickAction}
-								mediaInfo={mediaInfo}
-								visitRequest={visitRequest || null}
-								hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
-								currentPageIndex={currentPageIndex}
-								goToPage={handleSetCurrentPage}
-								currentPage={currentPage}
-								activeFile={
-									getFilesByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS])?.[
-										currentPageIndex
-									] || null
-								}
-								simplifiedAltoInfo={simplifiedAltoInfo?.altoJsonContent || null}
-								iiifZoomTo={(x: number, y: number) =>
-									iiifZoomTo(iiifViewerInitializedPromise as Promise<void>, x, y)
-								}
-								setActiveMentionHighlights={handleSetActiveMentionHighlights}
-								setIsTextOverlayVisible={setIsTextOverlayVisible}
-							/>
-						)}
-						{activeTab === ObjectDetailTabs.Metadata && !!similar.length && (
-							<MetadataList allowTwoColumns={false}>
-								<Metadata
-									title={tHtml('pages/slug/ie/index___ook-interessant')}
-									key="metadata-keywords"
-									className="u-pb-0"
-								>
-									{renderIeObjectCards('similar', similar)}
-								</Metadata>
-							</MetadataList>
-						)}
+							simplifiedAltoInfo={simplifiedAltoInfo?.altoJsonContent || null}
+							iiifZoomTo={(x: number, y: number) =>
+								iiifZoomTo(iiifViewerInitializedPromise as Promise<void>, x, y)
+							}
+							setActiveMentionHighlights={handleSetActiveMentionHighlights}
+							setIsTextOverlayVisible={setIsTextOverlayVisible}
+							onReadMoreClicked={setSelectedMetadataField}
+						/>
+					)}
+					{activeTab === ObjectDetailTabs.Related && (
+						<ObjectDetailPageRelatedTab
+							items={mappedRelatedIeObjects}
+							isParent={!!relatedIeObjects?.parent}
+						/>
+					)}
 
-						{activeTab === ObjectDetailTabs.Media && isMobile && renderObjectMedia()}
-						{activeTab === ObjectDetailTabs.Ocr && renderOcrContent()}
-					</div>
-					{renderRelatedObjectsBlade()}
-				</div>
+					{activeTab === ObjectDetailTabs.Media && isMobile && renderObjectMedia()}
+					{activeTab === ObjectDetailTabs.Ocr && (
+						<ObjectDetailPageOcrTab
+							ieObjectId={ieObjectId}
+							altoText={simplifiedAltoInfo?.altoJsonContent?.text}
+							altoTextsOnCurrentPageForSearchTerms={altoTextsOnCurrentPageForSearchTerms}
+							searchResults={searchResults}
+							currentSearchResultIndex={currentSearchResultIndex}
+							currentPageIndex={currentPageIndex}
+							pageCount={iiifViewerImageInfos.length}
+							setCurrentPageIndex={setCurrentPageIndex}
+							searchTermWords={searchTermWords}
+							onClickOnOcrWord={handleClickOnOcrWord}
+							isTextOverlayVisible={isTextOverlayVisible}
+							onIsTextOverlayVisibleChange={handleIsTextOverlayVisibleChange}
+							arePagesOcrTextsAvailable={arePagesOcrTextsAvailable}
+							searchTermsTemp={searchTermsTemp}
+							setSearchTermsTemp={setSearchTermsTemp}
+							searchTerms={searchTerms}
+							onSearch={handleSearch}
+							onClearSearch={handleClearSearch}
+							onChangeSearchIndex={handleChangeSearchIndex}
+							scrollContainerRef={sidebarContentRef}
+							isProgrammaticScrollRef={isOcrResultAutoScrollingRef}
+						/>
+					)}
+				</ObjectDetailPageSidebar>
 			</article>
+
+			{/* Read more metadata field blade, shared by the header and the metadata tab so only one
+			 * can ever be open at a time */}
+			<Blade
+				isOpen={!!selectedMetadataField}
+				onClose={() => setSelectedMetadataField(null)}
+				title={selectedMetadataField?.title ?? ''}
+				stickyFooter={false}
+				footerButtons={[
+					{
+						label: tText(
+							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___sluit'
+						),
+						mobileLabel: tText(
+							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___sluit-mobiel'
+						),
+						type: 'secondary',
+						onClick: () => setSelectedMetadataField(null),
+					},
+				]}
+				id="object-detail-page__metadata-field-detail-blade"
+				ariaLabel={tText(
+					'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___lees-de-volledige-waarde-van-het-metadata-veld-selected-metadata-field-name-blade-aria-label',
+					{ selectedMetadataFieldName: selectedMetadataField?.title }
+				)}
+			>
+				<HighlightedMetadata
+					title={selectedMetadataField?.title}
+					data={selectedMetadataField?.data}
+				/>
+			</Blade>
+
 			{canManageFolders && (
 				<AddToFolderBlade
 					isOpen={activeBlade === MediaActions.Bookmark}
@@ -1908,6 +1734,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			)}
 			<ReportBlade
 				user={user}
+				mediaInfo={mediaInfo}
 				isOpen={activeBlade === MediaActions.Report}
 				onClose={onCloseBlade}
 				id="object-detail-page__report-blade"
@@ -2039,7 +1866,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		return <ErrorNotFound />;
 	};
 
-	const seoDescription = description || capitalize(lowerCase((router.query.slug as string) || ''));
+	// Objects without a maintainer description fall back to the AI generated synopsis, and only
+	// then to the maintainer slug, so the page still gets a meaningful meta description.
+	const seoDescription =
+		description ||
+		mediaInfo?.synopsisAi ||
+		capitalize(lowerCase((router.query.slug as string) || ''));
 	return (
 		<VisitorLayout>
 			<SeoTags

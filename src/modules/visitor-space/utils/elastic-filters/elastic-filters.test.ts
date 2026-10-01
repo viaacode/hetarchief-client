@@ -3,8 +3,6 @@ import type { SearchPageQueryParams } from '@visitor-space/const';
 import { RightsLabel } from '@visitor-space/const/rights-filter.const';
 import {
 	FILTER_LABEL_VALUE_DELIMITER,
-	FilterProperty,
-	Operator,
 	ReusabilityFilterOption,
 	SearchFilterId,
 } from '@visitor-space/types';
@@ -37,8 +35,8 @@ describe('mapFiltersToElastic()', () => {
 		const filters = mapFiltersToElastic({
 			[SearchFilterId.Advanced]: [
 				{
-					prop: FilterProperty.THEME,
-					op: Operator.EQUALS,
+					prop: SearchFilterId.Theme,
+					op: IeObjectsSearchOperator.IS,
 					val: 'education-learning',
 					renderKey: 'theme-filter',
 				},
@@ -56,8 +54,8 @@ describe('mapFiltersToElastic()', () => {
 		const filters = mapFiltersToElastic({
 			[SearchFilterId.Advanced]: [
 				{
-					prop: FilterProperty.RIGHTS,
-					op: Operator.EQUALS,
+					prop: SearchFilterId.Rights,
+					op: IeObjectsSearchOperator.IS,
 					val: RightsLabel.IN_COPYRIGHT,
 					renderKey: 'rights-filter',
 				},
@@ -69,5 +67,134 @@ describe('mapFiltersToElastic()', () => {
 			operator: IeObjectsSearchOperator.IS,
 			value: RightsLabel.IN_COPYRIGHT,
 		});
+	});
+
+	// The multiselect and text filters of ARC-3806
+	it('sends every value of one multiselect filter as one multiValue clause', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Creator]: ['VRT', 'Amsab-ISG'],
+		} as SearchPageQueryParams);
+
+		expect(filters.find(({ field }) => field === IeObjectsSearchFilterField.CREATOR)).toEqual({
+			field: IeObjectsSearchFilterField.CREATOR,
+			operator: IeObjectsSearchOperator.IS,
+			multiValue: ['VRT', 'Amsab-ISG'],
+		});
+	});
+
+	it('strips the label half of a value that carries its own label', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Maintainers]: [
+				`OR-1${FILTER_LABEL_VALUE_DELIMITER}VRT`,
+				`OR-2${FILTER_LABEL_VALUE_DELIMITER}Amsab-ISG`,
+			],
+		} as SearchPageQueryParams);
+
+		expect(
+			filters.find(({ field }) => field === IeObjectsSearchFilterField.MAINTAINER_ID)?.multiValue
+		).toEqual(['OR-1', 'OR-2']);
+	});
+
+	it('sends one clause per text filter condition, with its own operator', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Title]: [
+				{ op: IeObjectsSearchOperator.CONTAINS, val: 'concert' },
+				{ op: IeObjectsSearchOperator.CONTAINS_NOT, val: 'herhaling' },
+			],
+		} as SearchPageQueryParams);
+
+		expect(filters.filter(({ field }) => field === IeObjectsSearchFilterField.NAME)).toEqual([
+			{
+				field: IeObjectsSearchFilterField.NAME,
+				operator: IeObjectsSearchOperator.CONTAINS,
+				value: 'concert',
+			},
+			{
+				field: IeObjectsSearchFilterField.NAME,
+				operator: IeObjectsSearchOperator.CONTAINS_NOT,
+				value: 'herhaling',
+			},
+		]);
+	});
+
+	// The identifier is a keyword field in elasticsearch, so the match is on the whole value
+	it('sends the is operators for a text filter on a keyword field', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Identifier]: [
+				{ op: IeObjectsSearchOperator.IS, val: 'abc123' },
+				{ op: IeObjectsSearchOperator.IS_NOT, val: 'def456' },
+			],
+		} as SearchPageQueryParams);
+
+		expect(filters.filter(({ field }) => field === IeObjectsSearchFilterField.IDENTIFIER)).toEqual([
+			{
+				field: IeObjectsSearchFilterField.IDENTIFIER,
+				operator: IeObjectsSearchOperator.IS,
+				value: 'abc123',
+			},
+			{
+				field: IeObjectsSearchFilterField.IDENTIFIER,
+				operator: IeObjectsSearchOperator.IS_NOT,
+				value: 'def456',
+			},
+		]);
+	});
+
+	it('sends the is operators for an identifier url from before the field switched operators', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Identifier]: [
+				{ op: IeObjectsSearchOperator.CONTAINS, val: 'abc123' },
+				{ op: IeObjectsSearchOperator.CONTAINS_NOT, val: 'def456' },
+			],
+		} as SearchPageQueryParams);
+
+		expect(
+			filters
+				.filter(({ field }) => field === IeObjectsSearchFilterField.IDENTIFIER)
+				.map(({ operator }) => operator)
+		).toEqual([IeObjectsSearchOperator.IS, IeObjectsSearchOperator.IS_NOT]);
+	});
+
+	// Before ARC-3806 the text form only ever sent the contains pair, so an "is" on a field that
+	// offers it used to be rewritten. It has to reach the proxy as it stands.
+	it('sends is and is-not untouched on a text field that offers all four operators', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.Title]: [
+				{ op: IeObjectsSearchOperator.IS, val: 'concert' },
+				{ op: IeObjectsSearchOperator.IS_NOT, val: 'herhaling' },
+			],
+		} as SearchPageQueryParams);
+
+		expect(filters.filter(({ field }) => field === IeObjectsSearchFilterField.NAME)).toEqual([
+			{
+				field: IeObjectsSearchFilterField.NAME,
+				operator: IeObjectsSearchOperator.IS,
+				value: 'concert',
+			},
+			{
+				field: IeObjectsSearchFilterField.NAME,
+				operator: IeObjectsSearchOperator.IS_NOT,
+				value: 'herhaling',
+			},
+		]);
+	});
+
+	it('keeps the two filters of the FA example apart, so the proxy can and them', () => {
+		const filters = mapFiltersToElastic({
+			[SearchFilterId.NewspaperSeriesName]: ['Reeks A', 'Reeks B'],
+			[SearchFilterId.Maintainers]: ['OR-1', 'OR-2'],
+		} as SearchPageQueryParams);
+
+		expect(
+			filters.find(({ field }) => field === IeObjectsSearchFilterField.NEWSPAPER_SERIES_NAME)
+				?.multiValue
+		).toEqual(['Reeks A', 'Reeks B']);
+		expect(
+			filters.find(({ field }) => field === IeObjectsSearchFilterField.MAINTAINER_ID)?.multiValue
+		).toEqual(['OR-1', 'OR-2']);
+	});
+
+	it('sends no clause for a filter without a value', () => {
+		expect(mapFiltersToElastic({} as SearchPageQueryParams)).toEqual([]);
 	});
 });

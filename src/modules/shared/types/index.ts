@@ -11,6 +11,9 @@ export interface DefaultComponentProps {
 	style?: CSSProperties;
 }
 
+/** Mirrors @meemoo/react-components' own VariantsProp, which its public entry point doesn't re-export */
+export type VariantsProp = string | string[];
+
 export interface ComponentLink {
 	label: string;
 	to: string;

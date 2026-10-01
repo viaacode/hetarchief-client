@@ -1,0 +1,46 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-object-detail-page-metadata-disclaimer-tooltip {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: abstracts.$black;
+	cursor: pointer;
+
+	&:focus-visible {
+		outline: 0.2rem solid abstracts.$teal;
+		outline-offset: 0.2rem;
+	}
+}
+
+.c-object-detail-page-metadata-disclaimer-tooltip--icon-base {
+	:global([class*="c-icon"]) {
+		font-size: abstracts.$font-size-base;
+	}
+}
+
+.c-object-detail-page-metadata-disclaimer-tooltip--icon-lg {
+	:global([class*="c-icon"]) {
+		font-size: abstracts.$font-size-lg;
+	}
+}
+
+.c-object-detail-page-metadata-disclaimer-tooltip__content {
+	// Overrides the site-wide tooltip's default link styling for this tooltip only, per design.
+	a {
+		color: abstracts.$teal;
+		font-family: abstracts.$font-family-primary;
+		font-size: abstracts.$font-size-xs; // 12px
+		font-weight: abstracts.$font-weight-medium;
+		line-height: 1.6rem; // 16px at 12px font size (1.333 ratio) - no exact token match
+		text-decoration-line: underline;
+		text-decoration-style: solid;
+		text-decoration-skip-ink: auto;
+		text-decoration-thickness: auto;
+		text-underline-offset: auto;
+		text-underline-position: from-font;
+	}
+}

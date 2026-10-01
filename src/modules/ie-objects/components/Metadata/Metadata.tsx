@@ -11,14 +11,19 @@ const Metadata: FC<MetadataProps> = ({
 	renderRight,
 	renderedTitleRight,
 }) => {
+	// Boolean, not `children &&`: a falsy child like 0 must not be rendered as text
+	const hasChildren = !!children;
+
 	const renderDtAndDd = () => {
 		return (
 			<>
-				<dt className={styles['c-metadata__item-title']}>
-					<span className="u-flex-grow">{title}</span>
-					<span>{renderedTitleRight}</span>
-				</dt>
-				<dd className={styles['c-metadata__item-text']}>{children}</dd>
+				{(title || renderedTitleRight) && (
+					<dt className={styles['c-metadata__item-title']}>
+						<span className="u-flex-grow">{title}</span>
+						<span>{renderedTitleRight}</span>
+					</dt>
+				)}
+				{hasChildren && <dd className={styles['c-metadata__item-text']}>{children}</dd>}
 			</>
 		);
 	};
@@ -36,7 +41,7 @@ const Metadata: FC<MetadataProps> = ({
 		return renderDtAndDd();
 	};
 
-	if (!children) {
+	if (!hasChildren && !title) {
 		return null;
 	}
 	const completeClassName: string = clsx(

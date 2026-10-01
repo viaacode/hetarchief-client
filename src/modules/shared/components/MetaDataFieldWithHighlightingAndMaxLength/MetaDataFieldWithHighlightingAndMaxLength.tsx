@@ -13,15 +13,27 @@ interface MetaDataFieldWithHighlightingAndMaxLengthProps extends DefaultComponen
 	data: string;
 	onReadMoreClicked: (item: MetadataItem) => void;
 	enableHighlighting?: boolean;
+	maxLength?: number;
+	/** Visual style of the "Lees meer" button. 'onHeader' renders the bold black style used on the
+	 * object detail page header's purple background, instead of the default neutral/underlined style. */
+	readMoreButtonVariant?: 'default' | 'onHeader';
 }
 
 const MetaDataFieldWithHighlightingAndMaxLength: FC<
 	MetaDataFieldWithHighlightingAndMaxLengthProps
-> = ({ title, data, className, onReadMoreClicked, enableHighlighting = true }) => {
-	const isLongFieldData: boolean = isString(data) && data.length > METADATA_FIELD_MAX_LENGTH;
+> = ({
+	title,
+	data,
+	className,
+	onReadMoreClicked,
+	enableHighlighting = true,
+	maxLength = METADATA_FIELD_MAX_LENGTH,
+	readMoreButtonVariant = 'default',
+}) => {
+	const isLongFieldData: boolean = isString(data) && data.length > maxLength;
 
 	const parsedFieldData: string | ReactNode = isLongFieldData
-		? `${(data as string).substring(0, METADATA_FIELD_MAX_LENGTH)}...`
+		? `${(data as string).substring(0, maxLength)}...`
 		: data;
 
 	return (
@@ -31,18 +43,28 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 			<HighlightedMetadata title={title} data={parsedFieldData} enabled={enableHighlighting} />
 
 			{isLongFieldData && (
-				<Button
-					variants={['text', 'sm']}
-					className={styles['c-metadata__field__blade__read-more']}
-					onClick={() => onReadMoreClicked({ title, data })}
-					onKeyUp={(evt) => {
-						if (evt.key === 'Enter') {
-							onReadMoreClicked({ title, data });
+				// A literal space (not CSS margin) before the button: when this wraps onto its own
+				// line, the browser collapses trailing whitespace at the line break, so it doesn't
+				// carry the false indent that a margin-left would render at the start of that line.
+				<>
+					{' '}
+					<Button
+						variants={['text', 'sm']}
+						className={
+							readMoreButtonVariant === 'onHeader'
+								? styles['c-metadata__field__blade__read-more--on-header']
+								: styles['c-metadata__field__blade__read-more']
 						}
-					}}
-				>
-					{tText('modules/visitor-space/utils/metadata/metadata___lees-meer')}
-				</Button>
+						onClick={() => onReadMoreClicked({ title, data })}
+						onKeyUp={(evt) => {
+							if (evt.key === 'Enter') {
+								onReadMoreClicked({ title, data });
+							}
+						}}
+					>
+						{tText('modules/visitor-space/utils/metadata/metadata___lees-meer')}
+					</Button>
+				</>
 			)}
 		</div>
 	);

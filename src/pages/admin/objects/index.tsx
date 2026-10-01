@@ -1,0 +1,21 @@
+import { IeObjectAccessPage } from '@admin/views/ie-object-access/IeObjectAccessPage';
+import { withAdminCoreConfig } from '@admin/wrappers/with-admin-core-config';
+import { withAuth } from '@auth/wrappers/with-auth';
+import { ROUTES_BY_LOCALE } from '@shared/const';
+import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
+import type { DefaultSeoInfo } from '@shared/types/seo';
+import type { GetServerSidePropsResult } from 'next';
+import type { GetServerSidePropsContext, NextPage } from 'next/types';
+import React, { type ComponentType } from 'react';
+
+const IeObjectAccessPageEnglish: NextPage<DefaultSeoInfo> = ({ url, locale }) => {
+	return <IeObjectAccessPage url={url} locale={locale} />;
+};
+
+export async function getStaticProps(
+	context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
+	return getDefaultStaticProps(context, ROUTES_BY_LOCALE.en.adminIeObjectAccess);
+}
+
+export default withAuth(withAdminCoreConfig(IeObjectAccessPageEnglish as ComponentType), true);

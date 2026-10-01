@@ -22,4 +22,27 @@ $component: "c-metadata__field__blade";
 			opacity: 0.8;
 		}
 	}
+
+	// Used on the object detail page header's purple background (readMoreButtonVariant="onHeader").
+	// A separate class rather than composed with &__read-more above, so there's never two classes
+	// of equal specificity on the same element fighting over color/font-weight/margin-top.
+	&__read-more--on-header {
+		cursor: pointer;
+		font-size: $font-size-sm;
+		color: $black;
+		font-weight: $font-weight-bold;
+		transition: opacity $animate-default;
+		padding: 0;
+		height: 2.4rem;
+		border-radius: 0;
+
+		:global(.c-button__content) {
+			text-decoration: underline;
+		}
+
+		&:hover,
+		&:focus {
+			opacity: 0.8;
+		}
+	}
 }
