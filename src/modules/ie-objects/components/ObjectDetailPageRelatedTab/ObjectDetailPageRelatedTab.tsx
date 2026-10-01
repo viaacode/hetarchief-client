@@ -2,7 +2,9 @@ import { IeObjectCardList } from '@ie-objects/components/IeObjectCardList/IeObje
 import Metadata from '@ie-objects/components/Metadata/Metadata';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import { tText } from '@shared/helpers/translate';
+import clsx from 'clsx';
 import type { FC } from 'react';
+import styles from './ObjectDetailPageRelatedTab.module.scss';
 import type { ObjectDetailPageRelatedTabProps } from './ObjectDetailPageRelatedTab.types';
 
 export const ObjectDetailPageRelatedTab: FC<ObjectDetailPageRelatedTabProps> = ({
@@ -19,8 +21,11 @@ export const ObjectDetailPageRelatedTab: FC<ObjectDetailPageRelatedTabProps> = (
 				);
 
 	return (
-		<MetadataList allowTwoColumns={false}>
-			<Metadata title={title} key="metadata-related" className="u-pb-0">
+		<MetadataList
+			allowTwoColumns={false}
+			className={styles['p-object-detail-related-tab__no-divider']}
+		>
+			<Metadata title={title} key="metadata-related" className={clsx('u-bt-0', 'u-pb-0')}>
 				<IeObjectCardList type="related" items={items} />
 			</Metadata>
 		</MetadataList>
