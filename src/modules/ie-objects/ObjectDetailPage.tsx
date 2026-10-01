@@ -24,6 +24,10 @@ import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/use-get-ie-obj
 import { useGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/use-get-is-public-newspaper';
 import {
+	useObjectDetailActiveTab,
+	useResetUnavailableTab,
+} from '@ie-objects/hooks/use-object-detail-active-tab';
+import {
 	FLOWPLAYER_FORMATS,
 	getNoLicensePlaceholderLabels,
 	getObjectPlaceholderLabels,
@@ -115,7 +119,7 @@ import { MaterialRequestForReuseBlade } from '@visitor-space/components/Material
 import { ReportBlade } from '@visitor-space/components/ReportBlade';
 import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { SearchFilterId, VisitorSpaceStatus } from '@visitor-space/types';
+import { VisitorSpaceStatus } from '@visitor-space/types';
 import clsx from 'clsx';
 import { capitalize, compact, intersection, isNil, lowerCase, noop } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
@@ -123,7 +127,7 @@ import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
 import { type FC, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { ArrayParam, NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
+import { NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
 import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -221,8 +225,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS,
 		withDefault(StringParam, '')
 	);
-	// Namenlijst filter coming from the global search page
-	const [namenlijstFilter] = useQueryParam(SearchFilterId.Mentions, ArrayParam);
 	// Temp search terms are used to store the search terms while the user is typing
 	const [searchTermsTemp, setSearchTermsTemp] = useState<string>('');
 	// Search terms are used to store the search terms after the user has confirmed the search
@@ -279,7 +281,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		withDefault(NumberParam, undefined)
 	);
 	const [isTextOverlayVisible, setIsTextOverlayVisible] = useState(false);
-	const [activeTab, setActiveTab] = useState<ObjectDetailTabs>(ObjectDetailTabs.Overview);
 	const [cuePoints, setCuePoints] = useState<CuePoints | undefined>(undefined);
 
 	const [activeMentionHighlights, setActiveMentionHighlights] = useState<{
@@ -452,6 +453,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, [relatedIeObjects]);
 	// Gerelateerd only applies to AV objects with a parent/child relation (per the FA), not newspapers
 	const relatedCount = isNewspaper ? 0 : mappedRelatedIeObjects.length;
+
+	const { activeTab, updateActiveTab } = useObjectDetailActiveTab({
+		objectId: mediaInfo?.schemaIdentifier,
+		isNewspaper,
+	});
 
 	// visit info
 	const { data: visitRequest, error: visitRequestError } = useGetActiveVisitRequestForUserAndSpace(
@@ -629,7 +635,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		[router]
 	);
 
-	// Link activeTab and isOverLayVisible from the query params to the internal state
+	// Link isOverLayVisible and cue points from the query params to the internal state
 	// We cannot use the useQueryParam hook here because
 	// There seems to be a disconnect between React/NextJS router and the useQueryParam hook
 	// Probably because of the hacky way we had to get the use query param hook to work with NextJS
@@ -638,12 +644,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
 	useEffect(() => {
 		const parsedUrl = parseUrl(window.location.href);
-		const activeTabFromUrl = parsedUrl.query[QUERY_PARAM_KEY.ACTIVE_TAB];
 		const isTextOverlayVisibleFromUrl =
 			parsedUrl.query[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED];
-		if (activeTabFromUrl) {
-			setActiveTab(activeTabFromUrl as ObjectDetailTabs);
-		}
 		if (isTextOverlayVisibleFromUrl) {
 			setIsTextOverlayVisible(isTextOverlayVisibleFromUrl === 'true');
 		}
@@ -659,30 +661,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			}
 		}
 	}, []);
-
-	const updateActiveTab = useCallback(
-		async (newActiveTab: ObjectDetailTabs | null) => {
-			setActiveTab(newActiveTab || ObjectDetailTabs.Overview);
-
-			// Also update the query param
-			// We cannot use the useQueryParam hook here because
-			// There seems to be a disconnect between React/NextJS router and the useQueryParam hook
-			// Probably because of the hacky way we had to get the use query param hook to work with NextJS
-			// See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
-			// This could probably be solved by using the latest version of use-query-params and the next-query-params package
-			// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
-			const parsedUrl = parseUrl(window.location.href);
-			const newUrl = stringifyUrl({
-				url: parsedUrl.url,
-				query: {
-					...parsedUrl.query,
-					[QUERY_PARAM_KEY.ACTIVE_TAB]: newActiveTab,
-				},
-			});
-			await router.replace(newUrl, undefined, { shallow: true });
-		},
-		[router.replace]
-	);
 
 	/**
 	 * Effects
@@ -1010,27 +988,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 	}, [activeTab, isMobile]);
 
-	/**
-	 * Default tab per object (FA scenarios): Overzicht, except Metadata for newspapers opened with a
-	 * namenlijst filter. For newspapers with a search term, the alto-content effect below switches
-	 * to Ocr once OCR text is available.
-	 */
-	// biome-ignore lint/correctness/useExhaustiveDependencies: only reset the tab when the object changes, not on every mediaInfo refetch
-	useEffect(() => {
-		if (!mediaInfo?.schemaIdentifier) {
-			return;
-		}
-		// Keep an explicit tab from the URL (deep link / bookmark)
-		if (parseUrl(window.location.href).query[QUERY_PARAM_KEY.ACTIVE_TAB]) {
-			return;
-		}
-		const defaultTab =
-			isNewspaper && namenlijstFilter?.length
-				? ObjectDetailTabs.Metadata
-				: ObjectDetailTabs.Overview;
-		updateActiveTab(defaultTab).then(noop);
-	}, [mediaInfo?.schemaIdentifier]);
-
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
 		if (!isMobile) {
@@ -1283,29 +1240,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		relatedCount,
 	]);
 
-	// A tab from the URL (or an old bookmark) may not exist for this object, e.g. ocr without
-	// transcripts or related without related objects. Wait until the data those tabs depend on has
-	// loaded, otherwise a valid deep link would be reset before its tab appears.
-	useEffect(() => {
-		if (!mediaInfo || relatedIeObjectsIsLoading || relatedIeObjectsIsPlaceholder) {
-			return;
-		}
-		// The media tab exists in the list but is only rendered on mobile
-		const isTabUnavailable =
-			!tabs.some((tab) => tab.id === activeTab) ||
-			(activeTab === ObjectDetailTabs.Media && !isMobile);
-		if (isTabUnavailable) {
-			updateActiveTab(ObjectDetailTabs.Overview).then(noop);
-		}
-	}, [
-		mediaInfo,
-		relatedIeObjectsIsLoading,
-		relatedIeObjectsIsPlaceholder,
-		tabs,
+	const availableTabIds = useMemo(() => tabs.map((tab) => tab.id as ObjectDetailTabs), [tabs]);
+
+	useResetUnavailableTab({
 		activeTab,
+		availableTabIds,
 		isMobile,
+		// Wait for the data the tabs depend on, or a valid deep link is reset before its tab appears
+		isReady: !!mediaInfo && !relatedIeObjectsIsLoading && !relatedIeObjectsIsPlaceholder,
 		updateActiveTab,
-	]);
+	});
 
 	const accessEndDate = useMemo(() => {
 		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
