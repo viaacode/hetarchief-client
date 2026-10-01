@@ -596,6 +596,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 						)}
 						onReadMoreClicked={onReadMoreClicked}
 						readMoreButtonVariant="onHeader"
+						maxLength={250}
 					/>
 				)}
 
