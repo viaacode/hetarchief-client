@@ -319,7 +319,7 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 	const previousAndNextButtons = renderPreviousAndNextButtons();
 
 	return (
-		<div>
+		<div className={styles['p-object-detail-overview-tab']}>
 			{previousAndNextButtons && (
 				// First section in this tab: no leading divider, there's nothing above it to divide
 				// from inside this tab (the header sits above, outside it).

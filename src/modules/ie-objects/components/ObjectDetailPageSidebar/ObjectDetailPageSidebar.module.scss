@@ -28,6 +28,7 @@
 	position: sticky;
 	top: 0;
 	z-index: 1;
+	flex-shrink: 0; // never give up space to the (now flex) content below it - see &__content
 	display: flex;
 	flex-direction: column;
 
@@ -56,6 +57,24 @@
 	flex: 1 1 auto;
 	min-height: 0;
 	overflow-y: auto;
+
+	// A flex column (not just block) so the active tab's own root, as this element's second flex
+	// item after the sticky header, can opt into growing to fill whatever space the header
+	// doesn't use - see ObjectDetailPageOverviewTab.module.scss, which is the only tab that
+	// currently does.
+	display: flex;
+	flex-direction: column;
+
+	// Every direct child keeps its natural (block-like) height by default. flex-shrink: 1 (the
+	// default) lets the flex algorithm compute a box smaller than a child's actual content needs
+	// whenever the children's combined natural height exceeds this container's - the child's
+	// rendered content still spills out at its real size (per its own, unshrunk descendants), but
+	// this element's scrollHeight is computed from the *shrunk* box, so overflow stops being
+	// detected and overflow-y: auto no longer engages. Any tab wanting to grow (not shrink)
+	// opts back in itself - see ObjectDetailPageOverviewTab's `flex: 1 0 auto`.
+	> * {
+		flex-shrink: 0;
+	}
 
 	// Without this, scroll anchoring "corrects" scrollTop as the sticky header collapses/expands,
 	// re-triggering its IntersectionObserver and causing a flicker loop.

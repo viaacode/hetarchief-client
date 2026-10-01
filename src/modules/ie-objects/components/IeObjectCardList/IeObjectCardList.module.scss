@@ -11,17 +11,20 @@
 		// Firefox and Safari render weirdly with: margin: 0 - abstracts.$spacer-md;
 		margin-left: -#{abstracts.$spacer-md};
 		margin-right: -#{abstracts.$spacer-md};
-		margin-top: abstracts.$spacer-xs;
+		margin-top: abstracts.$spacer-md;
 		background-color: abstracts.$platinum;
-		padding: abstracts.$spacer-md abstracts.$spacer-md 10rem;
+		padding: abstracts.$spacer-md;
+
+		// Grows to the bottom of the sidebar's scroll area when the cards don't already reach it
+		// (the ancestor chain enabling this lives in ObjectDetailPageOverviewTab.module.scss),
+		// instead of guessing at a bottom padding large enough to cover every screen height.
+		// Grow-only (shrink: 0) - see that chain's own comments for why shrinking breaks overflow.
+		flex: 1 0 auto;
 
 		@media (min-width: abstracts.$breakpoint-lg) {
 			margin-left: -#{abstracts.$spacer-lg};
 			margin-right: -#{abstracts.$spacer-lg};
-
-			// The extra bottom padding keeps the grey running to the bottom of the scroll area,
-			// since this is always the last section of the tab when it renders.
-			padding: abstracts.$spacer-md abstracts.$spacer-lg abstracts.$spacer-2xl;
+			padding: abstracts.$spacer-lg;
 		}
 	}
 
@@ -29,15 +32,13 @@
 		height: max-content;
 		margin-left: -#{abstracts.$spacer-md};
 		margin-right: -#{abstracts.$spacer-md};
+		margin-top: abstracts.$spacer-md;
 		padding: abstracts.$spacer-md;
 
 		@media (min-width: abstracts.$breakpoint-lg) {
 			margin-left: -#{abstracts.$spacer-lg};
 			margin-right: -#{abstracts.$spacer-lg};
-
-			// The extra bottom padding keeps the grey running to the bottom of the scroll area,
-			// since this is always the last section of the tab when it renders.
-			padding: abstracts.$spacer-md abstracts.$spacer-lg abstracts.$spacer-2xl;
+			padding: abstracts.$spacer-lg;
 		}
 	}
 }
