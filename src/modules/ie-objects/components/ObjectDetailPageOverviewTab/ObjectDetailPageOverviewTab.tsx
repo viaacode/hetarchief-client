@@ -342,14 +342,19 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 				<Metadata title={renderMaintainerMetaTitle(mediaInfo)} key={'metadata-maintainer'}>
 					{renderMaintainerMetaData(mediaInfo)}
 				</Metadata>
-				{renderSimpleMetadataField(
-					tText('modules/ie-objects/ie-objects___titel-van-de-reeks'),
-					renderSeriesTitle(mediaInfo)
-				)}
-				{renderSimpleMetadataField(
-					tText('modules/ie-objects/const/index___publicatiedatum'),
-					renderDate(mediaInfo.datePublished)
-				)}
+				{/* Newspapers get the combined "Editie: ..." field above (naam van de reeks + editie
+				 * publicatiedatum + vorige/volgende) instead of these - showing both would repeat the
+				 * same series name under two different labels. */}
+				{!isNewspaper &&
+					renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___titel-van-de-reeks'),
+						renderSeriesTitle(mediaInfo)
+					)}
+				{!isNewspaper &&
+					renderSimpleMetadataField(
+						tText('modules/ie-objects/const/index___publicatiedatum'),
+						renderDate(mediaInfo.datePublished)
+					)}
 				{renderRightsInfo(mediaInfo)}
 				{renderAuthorRightsHolder(mediaInfo)}
 				{renderAiEntities()}
