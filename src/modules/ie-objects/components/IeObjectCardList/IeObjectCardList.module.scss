@@ -15,10 +15,7 @@
 		background-color: abstracts.$platinum;
 		padding: abstracts.$spacer-md;
 
-		// Grows to the bottom of the sidebar's scroll area when the cards don't already reach it
-		// (the ancestor chain enabling this lives in ObjectDetailPageOverviewTab.module.scss),
-		// instead of guessing at a bottom padding large enough to cover every screen height.
-		// Grow-only (shrink: 0) - see that chain's own comments for why shrinking breaks overflow.
+		// Fills the rest of the sidebar's scroll area (flex chain in ObjectDetailPageOverviewTab.module.scss)
 		flex: 1 0 auto;
 
 		@media (min-width: abstracts.$breakpoint-lg) {

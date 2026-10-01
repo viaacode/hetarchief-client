@@ -7,12 +7,14 @@ export interface MetadataProps extends DefaultComponentProps {
 	children?: ReactNode;
 	renderRight?: ReactNode;
 	renderedTitleRight?: ReactNode;
+	contentClassName?: string;
 	rootElementType?: 'dl' | 'div';
 }
 
 export interface MetadataListProps extends DefaultComponentProps {
 	children: ReactNode;
 	allowTwoColumns: boolean;
+	listClassName?: string;
 }
 
 export interface MetadataItem {

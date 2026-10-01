@@ -10,6 +10,7 @@ const Metadata: FC<MetadataProps> = ({
 	children,
 	renderRight,
 	renderedTitleRight,
+	contentClassName,
 }) => {
 	// Boolean, not `children &&`: a falsy child like 0 must not be rendered as text
 	const hasChildren = !!children;
@@ -23,7 +24,9 @@ const Metadata: FC<MetadataProps> = ({
 						<span>{renderedTitleRight}</span>
 					</dt>
 				)}
-				{hasChildren && <dd className={styles['c-metadata__item-text']}>{children}</dd>}
+				{hasChildren && (
+					<dd className={clsx(styles['c-metadata__item-text'], contentClassName)}>{children}</dd>
+				)}
 			</>
 		);
 	};

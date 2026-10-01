@@ -123,10 +123,7 @@ export const ObjectDetailPageSidebar: FC<ObjectDetailPageSidebarProps> = ({
 					styles['c-object-detail-sidebar__content'],
 					styles[`c-object-detail-sidebar__content--tab-${activeTab}`],
 					{
-						// The overview ends in the "ook interessant" list; related is nothing but
-						// its own card list (both paint their own background/padding - see
-						// IeObjectCardList.module.scss - so this container's default bottom padding
-						// would otherwise double up with it)
+						// Both end in a card list that paints its own padding/background
 						[styles['c-object-detail-sidebar__content--ends-in-list']]:
 							(activeTab === ObjectDetailTabs.Overview && similar.length > 0) ||
 							activeTab === ObjectDetailTabs.Related,

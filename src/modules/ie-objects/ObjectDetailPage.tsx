@@ -1011,28 +1011,28 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, [activeTab, isMobile]);
 
 	/**
-	 * Set the media type and default tab when the media info is loaded
-	 *
-	 * Default-tab scenarios per the FA (desktop and mobile describe the same 4 scenarios, so this
-	 * isn't gated behind isMobile):
-	 * 1. no filter, no search term -> Overzicht (AV and newspaper alike)
-	 * 2. AI-entity filter active (AV only) -> Overzicht, same as scenario 1 - the filter itself is
-	 *    read directly in ObjectDetailPageOverviewTab (not here, nothing else needs it), but opening
-	 *    the first filtered entity's visitekaartje is still a TODO until that card UI exists (see
-	 *    its renderAiEntities stub)
-	 * 3. namenlijst filter active (newspaper only) -> Metadata, where the namenlijst list lives
-	 * 4. search by term -> Overzicht; for newspapers the alto-content effect below overrides this to
-	 *    Ocr once/if OCR text turns out to be available, which doubles as this scenario's "fall back
-	 *    to Overzicht when OCR isn't available" branch
+	 * Default tab per object (FA scenarios): Overzicht, except Metadata for newspapers opened with a
+	 * namenlijst filter. For newspapers with a search term, the alto-content effect below switches
+	 * to Ocr once OCR text is available.
 	 */
-	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only reset the tab when the object changes, not on every mediaInfo refetch
 	useEffect(() => {
+		if (!mediaInfo?.schemaIdentifier) {
+			return;
+		}
+		// Keep an explicit tab from the URL (deep link / bookmark)
+		if (parseUrl(window.location.href).query[QUERY_PARAM_KEY.ACTIVE_TAB]) {
+			return;
+		}
 		const defaultTab =
 			isNewspaper && namenlijstFilter?.length
 				? ObjectDetailTabs.Metadata
 				: ObjectDetailTabs.Overview;
 		updateActiveTab(defaultTab).then(noop);
+	}, [mediaInfo?.schemaIdentifier]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
+	useEffect(() => {
 		if (!isMobile) {
 			// Check media content and license for default tab on desktop
 			setExpandSidebar(!mediaInfo?.dctermsFormat || !hasMedia, 'replaceIn');

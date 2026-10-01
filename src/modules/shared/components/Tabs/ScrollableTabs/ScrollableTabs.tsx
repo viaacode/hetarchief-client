@@ -8,8 +8,7 @@ import React, { type FC, useCallback, useEffect, useRef, useState } from 'react'
 
 import styles from './ScrollableTabs.module.scss';
 
-// Subpixel layout means the true scroll end doesn't always land exactly on scrollWidth -
-// clientWidth; treat anything within this many px of it as "nothing left to scroll to".
+// Subpixel layout: the scroll end can miss scrollWidth - clientWidth by a fraction
 const SCROLL_END_TOLERANCE_PX = 1;
 
 export interface ScrollableTabsProps extends TabsProps {
@@ -72,11 +71,7 @@ const ScrollableTabs: FC<ScrollableTabsProps> = (props) => {
 				return;
 			}
 
-			// scrollLeft/scrollWidth/clientWidth can each carry their own subpixel fraction that
-			// rounding independently (as this used to, via Math.round on each) can push to either
-			// side depending on the exact remainder - at some container widths the true scroll end
-			// rounded to 1px *past* clientWidth, leaving the arrow stuck visible even though there
-			// was nothing left to scroll to. A tolerance band instead of rounding absorbs that.
+			// Tolerance instead of rounding: independent rounding left the right arrow stuck visible
 			const rightOffset = element.scrollWidth - element.scrollLeft;
 			const showLeft = element.scrollLeft > SCROLL_END_TOLERANCE_PX;
 			const showRight = rightOffset > element.clientWidth + SCROLL_END_TOLERANCE_PX;
@@ -100,8 +95,7 @@ const ScrollableTabs: FC<ScrollableTabsProps> = (props) => {
 		[setGradients]
 	);
 
-	// Scroll by roughly one screen's worth of tabs, like a carousel's next/prev controls. Covers
-	// desktop too (not just mobile) since the tab strip can overflow there as well.
+	// Scroll by roughly one screen's worth of tabs
 	const scrollByAmount = useCallback((direction: 'left' | 'right') => {
 		const tabsEl = tabsRef.current as HTMLElement | null;
 		if (!tabsEl) {
@@ -150,12 +144,7 @@ const ScrollableTabs: FC<ScrollableTabsProps> = (props) => {
 					observer = new ResizeObserver((entries) => {
 						for (const entry of entries) {
 							const target = entry.target as HTMLElement;
-							// Recompute on every resize, not just when the window happens to be
-							// narrower than the row's content: a row inside a narrow sidebar (like the
-							// object detail page's) can overflow its own container while the window
-							// itself stays far wider, so gating on window width left gradients stuck
-							// at whatever they were before the resize (e.g. the sidebar being
-							// expanded/collapsed, which resizes this row without the window moving).
+							// Not gated on window width: a row in a narrow sidebar can overflow while the window is wide
 							setGradients(target);
 							if (target.clientHeight !== tabsHeight) {
 								setHeight(target);

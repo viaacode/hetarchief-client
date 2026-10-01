@@ -228,12 +228,7 @@ $max-height-collapsed: 8rem;
 }
 
 .p-object-detail__actions {
-	// The parent (&__expanded-content) uses align-items: flex-start, so every child shrinks to
-	// fit its own content by default - other children (breadcrumbs, description, ...) opt into
-	// the header's real width via their own align-self: stretch, but this one never did. Without
-	// it, this renders at its own unconstrained natural width instead of the sidebar's actual
-	// available width, which also means DynamicActionMenu's internal width: 100% never gets a
-	// real width to resolve against, silently defeating its own shrink/truncate-to-fit CSS.
+	// Parent is align-items: flex-start; without stretch, DynamicActionMenu never gets a real width
 	align-self: stretch;
 
 	&:last-child {

@@ -35,6 +35,7 @@ import {
 	HetArchiefIeObjectType,
 } from '@viaa/avo2-types';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
+import clsx from 'clsx';
 import { isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -395,11 +396,16 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 			</MetadataList>
 
 			{!!similar.length && (
-				<MetadataList allowTwoColumns={false}>
+				<MetadataList
+					allowTwoColumns={false}
+					className={styles['p-object-detail-overview-tab__grow']}
+					listClassName={styles['p-object-detail-overview-tab__grow']}
+				>
 					<Metadata
 						title={tHtml('pages/slug/ie/index___ook-interessant')}
 						key="metadata-similar"
-						className="u-pb-0"
+						className={clsx('u-pb-0', styles['p-object-detail-overview-tab__grow'])}
+						contentClassName={styles['p-object-detail-overview-tab__grow']}
 					>
 						<IeObjectCardList type="similar" items={similar} />
 					</Metadata>

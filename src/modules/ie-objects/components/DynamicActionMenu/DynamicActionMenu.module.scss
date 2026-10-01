@@ -9,21 +9,13 @@
 
 	&__primary {
 		&-item {
-			// Without this, the default flex min-width: auto pins this item to its label's full
-			// natural width, so the label's own u-text-ellipsis (see DynamicActionMenu.tsx) never
-			// actually gets small enough to trigger - the whole row just overflows its container
-			// instead of the label truncating and freeing room for the secondary items' own
-			// overflow-to-dropdown logic to measure correctly.
+			// Lets the label's u-text-ellipsis actually truncate instead of overflowing the row
 			min-width: 0;
 			flex-shrink: 1;
 			overflow: hidden;
 			padding-right: abstracts.$spacer-xs;
 
-			// .c-button is display: inline-block (shrink-to-fit) and .c-button__content is its own
-			// nested inline-flex - both need to be constrained to this item's (now shrinkable)
-			// width too, each with the same min-width: auto problem as the item itself above,
-			// otherwise the button's content just renders at its natural width regardless of how
-			// little room this li actually has, overlapping the secondary buttons next to it.
+			// Constrain the nested button/content too, or they overlap the secondary buttons
 			:global(.c-button) {
 				display: flex;
 				max-width: 100%;
@@ -42,14 +34,9 @@
 	&__secondary {
 		list-style: none;
 
-		// Not width: 100% - for a flex item, that's read as this item's flex-basis, which means
-		// "as wide as the whole row" rather than "whatever's left of it". That manufactures shrink
-		// pressure even when there's plenty of actual room (both items shrink to fit a basis far
-		// bigger than the row itself), which is exactly backwards from the comment's intent below.
+		// No width: 100%: as a flex-basis it creates shrink pressure even with room to spare
 		min-width: 0; // prevent overflow in flex container
-		// Never shrinks: these are fixed-size icon buttons, not text that can gracefully get
-		// smaller. All the squeeze goes to the primary item's label instead (see &__primary-item),
-		// which truncates with an ellipsis rather than wrapping or clipping.
+		// Fixed-size icon buttons; the primary label absorbs the squeeze
 		flex-shrink: 0;
 		display: flex;
 

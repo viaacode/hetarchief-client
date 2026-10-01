@@ -223,16 +223,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			width: 100%;
 		}
 
-		// The actual tab row (ScrollableTabs' `.c-tabs`) sits one level deeper than this wrapper,
-		// which ScrollableTabs itself sizes via an inline style mirroring the row's measured
-		// height. Setting an explicit height here instead of on this wrapper would just get
-		// overridden by that inline style (which starts at 0) - worse, if this wrapper were a flex
-		// container, the row would default to stretching to match that 0, and the measurement
-		// would never recover since it reads the (stretched-to-0) row's own height. Styling the row
-		// directly sidesteps all of that.
+		// Style the row (`.c-tabs`), not this wrapper: ScrollableTabs sets the wrapper's height inline
+		// from the row's measured height, so a flex/height here can lock it at 0.
 		:global(.c-tabs) {
-			// Shrink-to-fit tabs, left-aligned; any leftover width just shows the row's own black
-			// background (see :global(.c-tab) below) instead of stretching tabs to fill it.
+			// Shrink-to-fit tabs, left-aligned; leftover width shows the row's black background
 			display: flex;
 			justify-content: flex-start;
 
@@ -240,10 +234,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			background-color: abstracts.$black;
 
 			@media (min-width: abstracts.$breakpoint-lg) {
-				// Desktop - not a grid item here: it renders inside the sidebar's sticky unit
-				// (ObjectDetailPageSidebar.module.scss), directly below the header. Mobile keeps its
-				// own separate grid-row placement, since mobile puts the tab strip above the header
-				// instead (see the mobile FA).
+				// Desktop: not a grid item, renders in the sidebar's sticky unit below the header
 				width: 100%;
 				height: $metadata-media-ocr-tabs-height-desktop;
 				flex-shrink: 0;

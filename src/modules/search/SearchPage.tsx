@@ -132,6 +132,14 @@ const getDefaultOption = (): VisitorSpaceDropdownOption => {
 	};
 };
 
+// Carried over to the object detail page, which uses them to pick the default tab
+const CARRIED_FILTER_IDS = [
+	SearchFilterId.Mentions,
+	SearchFilterId.MentionPerson,
+	SearchFilterId.MentionPlace,
+	SearchFilterId.MentionOrganisation,
+] as const;
+
 const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const windowSize = useWindowSizeContext();
 	const dispatch = useDispatch();
@@ -582,6 +590,13 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	 * Computed
 	 */
 
+	const carriedFilters = useMemo(
+		() =>
+			Object.fromEntries(
+				CARRIED_FILTER_IDS.filter((id) => query[id]?.length).map((id) => [id, query[id]])
+			),
+		[query]
+	);
 	const isLoadedWithoutResults = !!searchResults && searchResults?.items?.length === 0;
 	const isLoadedWithResults = !!searchResults && searchResults?.items?.length > 0;
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
@@ -610,28 +625,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				? JSON.stringify(searchResults?.searchTerms)
 				: '';
 
-			// Carried into the object detail page so it can determine the default tab
-			const activeMentionsFilter = query[SearchFilterId.Mentions];
-			const activeMentionPersonFilter = query[SearchFilterId.MentionPerson];
-			const activeMentionPlaceFilter = query[SearchFilterId.MentionPlace];
-			const activeMentionOrganisationFilter = query[SearchFilterId.MentionOrganisation];
-
 			const link: string | undefined = stringifyUrl({
 				url: getIeObjectDetailPath(locale, item.maintainerSlug, item.schemaIdentifier, item.name),
 				query: {
 					[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: plainTextSearchTerms,
-					...(activeMentionsFilter?.length
-						? { [SearchFilterId.Mentions]: activeMentionsFilter }
-						: {}),
-					...(activeMentionPersonFilter?.length
-						? { [SearchFilterId.MentionPerson]: activeMentionPersonFilter }
-						: {}),
-					...(activeMentionPlaceFilter?.length
-						? { [SearchFilterId.MentionPlace]: activeMentionPlaceFilter }
-						: {}),
-					...(activeMentionOrganisationFilter?.length
-						? { [SearchFilterId.MentionOrganisation]: activeMentionOrganisationFilter }
-						: {}),
+					...carriedFilters,
 				},
 			});
 
@@ -662,16 +660,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				isPartOfOtherItem: !!item.premisIsPartOf,
 			};
 		});
-	}, [
-		isKioskUser,
-		locale,
-		isGlobalArchive,
-		searchResults,
-		query[SearchFilterId.Mentions],
-		query[SearchFilterId.MentionPerson],
-		query[SearchFilterId.MentionPlace],
-		query[SearchFilterId.MentionOrganisation],
-	]);
+	}, [isKioskUser, locale, isGlobalArchive, searchResults, carriedFilters]);
 
 	const openAndScrollToAdvancedFilters = () => {
 		setFilterMenuOpen(true);

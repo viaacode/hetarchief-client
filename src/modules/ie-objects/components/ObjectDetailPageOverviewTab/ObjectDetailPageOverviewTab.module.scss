@@ -5,46 +5,17 @@
 // Metadata tab. Padding here too would double it up and make this tab's items narrower.
 
 .p-object-detail-overview-tab {
-	// Flex item of the (now flex-column) sidebar content, so it can claim whatever vertical space
-	// the sticky header above it doesn't use - see ObjectDetailPageSidebar.module.scss. Grow-only
-	// (shrink: 0): shrinking would let the flex algorithm compute a box smaller than this tab's
-	// actual content, which breaks the parent's overflow/scrollHeight accounting on a short
-	// viewport - see that file's own `> * { flex-shrink: 0 }` for the full explanation.
+	// Grow-only flex item so the tab fills the sidebar (see the sidebar's `> * { flex-shrink: 0 }`)
 	display: flex;
 	flex-direction: column;
 	flex: 1 0 auto;
+}
 
-	// When present, the "ook interessant" list is always this tab's last section. It should
-	// stretch its own grey background (see IeObjectCardList.module.scss's &--similar) to the
-	// bottom of the sidebar's scroll area rather than stopping short on tall screens, which needs
-	// every element between here and that background to be a flex column passing the stretch
-	// down (grow-only, same reasoning as above). The intermediate elements (dl/div/dd) are
-	// Metadata's own private, CSS-module-scoped markup with no exported class to hook into, so
-	// this targets them by tag instead - safe here because this is the *last*
-	// .p-object-detail__metadata-component specifically, a structure only this one section has.
-	> :global(.p-object-detail__metadata-component):last-child {
-		display: flex;
-		flex-direction: column;
-		flex: 1 0 auto;
-
-		dl {
-			display: flex;
-			flex-direction: column;
-			flex: 1 0 auto;
-
-			> div {
-				display: flex;
-				flex-direction: column;
-				flex: 1 0 auto;
-			}
-		}
-
-		dd {
-			display: flex;
-			flex-direction: column;
-			flex: 1 0 auto;
-		}
-	}
+// Passes the tab's stretch down to the "ook interessant" list's grey background
+.p-object-detail-overview-tab__grow {
+	display: flex;
+	flex-direction: column;
+	flex: 1 0 auto;
 }
 
 .p-object-detail-overview-tab__no-divider {

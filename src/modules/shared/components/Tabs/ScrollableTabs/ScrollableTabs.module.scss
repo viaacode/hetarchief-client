@@ -108,8 +108,7 @@ $scrollable-tabs-gradient-width-lg: $spacer-md + $scrollable-tabs-gradient-width
 	}
 }
 
-// Nav-button layout shared by every variant that opts in (via the `showNavButtons` prop). Not
-// rounded, unlike the default round icon button this overrides.
+// Nav buttons (`showNavButtons` prop), shared by all variants
 $nav-button-solid-width: 4rem;
 $nav-button-width: 6.4rem;
 
@@ -118,11 +117,8 @@ $nav-button-width: 6.4rem;
 	background: linear-gradient(#{$angle}, #{$color} 0, #{$color} $nav-button-solid-width, transparent $nav-button-width);
 }
 
-// Background/icon color per color variant, reusing the same tokens scrollable-tabs-gradient()
-// above already uses for that variant's edge-fade (eg. $black for --dark) so the button blends
-// into the tab row instead of carrying its own unrelated color. $zinc for --dark is the icon color
-// from the Figma spec; --light has no spec yet, so it defaults to $black for contrast against the
-// white gradient, matching this project's existing .c-button--white (black icon) convention.
+// Same background tokens as the variant's edge-fade. --dark icon is from Figma; --light has no
+// spec yet, so black for contrast.
 $nav-button-variant-colors: (
 	dark: (
 		background: $black,
@@ -135,9 +131,7 @@ $nav-button-variant-colors: (
 );
 
 .#{$component}__nav-button {
-	// Everything lives under this compound selector (two classes) so it reliably outweighs the
-	// single-class base `.c-button`/`.c-button--icon`/`.c-button--black` rules it overrides,
-	// regardless of CSS source order.
+	// Compound selector to outweigh the base `.c-button` rules regardless of source order
 	&:global(.c-button) {
 		position: absolute;
 		top: 0;
@@ -148,9 +142,7 @@ $nav-button-variant-colors: (
 		border: 0;
 		border-radius: 0;
 
-		// The underlying Button carries no color variant of its own (all color comes from the
-		// per-variant rules below) - without zeroing this out, it'd otherwise fall back to the
-		// base `.c-button`'s own solid background-color, at rest and on hover/active alike.
+		// Color comes from the per-variant gradient below, not the base .c-button background
 		background-color: transparent;
 
 		&:hover,
