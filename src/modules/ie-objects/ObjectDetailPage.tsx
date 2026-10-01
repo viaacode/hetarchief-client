@@ -58,7 +58,7 @@ import {
 	isNewspaperType,
 	mapDcTermsFormatToSimpleType,
 } from '@meemoo/admin-core-ui/admin';
-import { Button, type TabProps, Tabs } from '@meemoo/react-components';
+import { Button, type TabProps } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import type { CuePoints } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer.types';
 import { Blade } from '@shared/components/Blade/Blade';
@@ -71,6 +71,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { ScrollableTabs } from '@shared/components/Tabs';
 import getConfig from '@shared/config/public-runtime-config';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
@@ -1540,10 +1541,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	};
 
 	const renderTabs = (): ReactNode => (
-		<Tabs
+		<ScrollableTabs
 			className={clsx(styles['p-object-detail__tabs'])}
 			variants={['dark']}
 			tabs={tabs}
+			showNavButtons
 			onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
 		/>
 	);

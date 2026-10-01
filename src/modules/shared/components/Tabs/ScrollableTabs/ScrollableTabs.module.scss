@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "sass:map";
 @use "sass:math";
 @use "src/styles/abstracts" as *;
 
@@ -103,6 +104,82 @@ $scrollable-tabs-gradient-width-lg: $spacer-md + $scrollable-tabs-gradient-width
 					border-radius: math.div($tab-min-height-medium, 2);
 				}
 			}
+		}
+	}
+}
+
+// Nav-button layout shared by every variant that opts in (via the `showNavButtons` prop). Not
+// rounded, unlike the default round icon button this overrides.
+$nav-button-solid-width: 4rem;
+$nav-button-width: 6.4rem;
+
+// Gradient fades from this color to transparent.
+@mixin nav-button-gradient($angle, $color) {
+	background: linear-gradient(#{$angle}, #{$color} 0, #{$color} $nav-button-solid-width, transparent $nav-button-width);
+}
+
+// Background/icon color per color variant, reusing the same tokens scrollable-tabs-gradient()
+// above already uses for that variant's edge-fade (eg. $black for --dark) so the button blends
+// into the tab row instead of carrying its own unrelated color. $zinc for --dark is the icon color
+// from the Figma spec; --light has no spec yet, so it defaults to $black for contrast against the
+// white gradient, matching this project's existing .c-button--white (black icon) convention.
+$nav-button-variant-colors: (
+	dark: (
+		background: $black,
+		icon: $zinc,
+	),
+	light: (
+		background: $white,
+		icon: $black,
+	),
+);
+
+.#{$component}__nav-button {
+	// Everything lives under this compound selector (two classes) so it reliably outweighs the
+	// single-class base `.c-button`/`.c-button--icon`/`.c-button--black` rules it overrides,
+	// regardless of CSS source order.
+	&:global(.c-button) {
+		position: absolute;
+		top: 0;
+		z-index: get-z-layer("foreground") + 1;
+		width: $nav-button-width;
+		height: 100%;
+		padding: 0;
+		border: 0;
+		border-radius: 0;
+
+		// The underlying Button carries no color variant of its own (all color comes from the
+		// per-variant rules below) - without zeroing this out, it'd otherwise fall back to the
+		// base `.c-button`'s own solid background-color, at rest and on hover/active alike.
+		background-color: transparent;
+
+		&:hover,
+		&:active {
+			background-color: transparent;
+		}
+	}
+
+	&--left:global(.c-button) {
+		left: 0;
+	}
+
+	&--right:global(.c-button) {
+		right: 0;
+	}
+}
+
+@each $variant, $colors in $nav-button-variant-colors {
+	.#{$component}--#{$variant} .#{$component}__nav-button {
+		&:global(.c-button) {
+			color: map.get($colors, icon);
+		}
+
+		&--left:global(.c-button) {
+			@include nav-button-gradient(90deg, map.get($colors, background));
+		}
+
+		&--right:global(.c-button) {
+			@include nav-button-gradient(270deg, map.get($colors, background));
 		}
 	}
 }

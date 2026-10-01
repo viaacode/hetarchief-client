@@ -1,12 +1,23 @@
-import { getVariantsArray, Tabs, type TabsProps } from '@meemoo/react-components';
+import { Button, getVariantsArray, Tabs, type TabsProps } from '@meemoo/react-components';
+import { Icon } from '@shared/components/Icon';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { tText } from '@shared/helpers/translate';
 import { isBrowser } from '@shared/utils/is-browser';
 import clsx from 'clsx';
 import React, { type FC, useCallback, useEffect, useRef, useState } from 'react';
 
 import styles from './ScrollableTabs.module.scss';
 
-const ScrollableTabs: FC<TabsProps> = (props) => {
-	const { tabs: items, className } = props;
+// Subpixel layout means the true scroll end doesn't always land exactly on scrollWidth -
+// clientWidth; treat anything within this many px of it as "nothing left to scroll to".
+const SCROLL_END_TOLERANCE_PX = 1;
+
+export interface ScrollableTabsProps extends TabsProps {
+	showNavButtons?: boolean;
+}
+
+const ScrollableTabs: FC<ScrollableTabsProps> = (props) => {
+	const { tabs: items, className, showNavButtons = false, ...tabsProps } = props;
 
 	/**
 	 * Hooks
@@ -61,11 +72,14 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 				return;
 			}
 
-			const containerEnd = Math.round(element.clientWidth);
-			const leftOffset = Math.round(element.scrollLeft);
-			const rightOffset = Math.round(element.scrollWidth - leftOffset);
-			const showLeft = leftOffset > 0;
-			const showRight = rightOffset > containerEnd;
+			// scrollLeft/scrollWidth/clientWidth can each carry their own subpixel fraction that
+			// rounding independently (as this used to, via Math.round on each) can push to either
+			// side depending on the exact remainder - at some container widths the true scroll end
+			// rounded to 1px *past* clientWidth, leaving the arrow stuck visible even though there
+			// was nothing left to scroll to. A tolerance band instead of rounding absorbs that.
+			const rightOffset = element.scrollWidth - element.scrollLeft;
+			const showLeft = element.scrollLeft > SCROLL_END_TOLERANCE_PX;
+			const showRight = rightOffset > element.clientWidth + SCROLL_END_TOLERANCE_PX;
 
 			if (showLeft !== showLeftGradient) {
 				setShowLeftGradient(showLeft);
@@ -85,6 +99,24 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 		},
 		[setGradients]
 	);
+
+	// Scroll by roughly one screen's worth of tabs, like a carousel's next/prev controls. Covers
+	// desktop too (not just mobile) since the tab strip can overflow there as well.
+	const scrollByAmount = useCallback((direction: 'left' | 'right') => {
+		const tabsEl = tabsRef.current as HTMLElement | null;
+		if (!tabsEl) {
+			return;
+		}
+		const amount = tabsEl.clientWidth * 0.8 * (direction === 'left' ? -1 : 1);
+		const newX = tabsEl.scrollLeft + amount;
+
+		// scrollTo is not supported on IE and Safari (iOS)
+		if (tabsEl.scrollTo) {
+			tabsEl.scrollTo({ top: 0, left: newX, behavior: 'smooth' });
+		} else {
+			tabsEl.scrollLeft = newX;
+		}
+	}, []);
 
 	// Set scroll listener
 	useEffect(() => {
@@ -118,9 +150,13 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 					observer = new ResizeObserver((entries) => {
 						for (const entry of entries) {
 							const target = entry.target as HTMLElement;
-							if (window.innerWidth < target.scrollWidth + 40) {
-								setGradients(target);
-							}
+							// Recompute on every resize, not just when the window happens to be
+							// narrower than the row's content: a row inside a narrow sidebar (like the
+							// object detail page's) can overflow its own container while the window
+							// itself stays far wider, so gating on window width left gradients stuck
+							// at whatever they were before the resize (e.g. the sidebar being
+							// expanded/collapsed, which resizes this row without the window moving).
+							setGradients(target);
 							if (target.clientHeight !== tabsHeight) {
 								setHeight(target);
 							}
@@ -174,7 +210,33 @@ const ScrollableTabs: FC<TabsProps> = (props) => {
 			)}
 			style={{ height: `${tabsHeight}px` }}
 		>
-			<Tabs {...props} className={`${className}-tab`} />
+			{showNavButtons && showLeftGradient && (
+				<Button
+					className={clsx(
+						styles['c-scrollable-tabs__nav-button'],
+						styles['c-scrollable-tabs__nav-button--left']
+					)}
+					icon={<Icon name={IconNamesLight.AngleLeft} aria-hidden />}
+					ariaLabel={tText(
+						'modules/shared/components/tabs/scrollable-tabs/scrollable-tabs___scroll-tabs-naar-links'
+					)}
+					onClick={() => scrollByAmount('left')}
+				/>
+			)}
+			<Tabs {...tabsProps} tabs={items} className={`${className}-tab`} />
+			{showNavButtons && showRightGradient && (
+				<Button
+					className={clsx(
+						styles['c-scrollable-tabs__nav-button'],
+						styles['c-scrollable-tabs__nav-button--right']
+					)}
+					icon={<Icon name={IconNamesLight.AngleRight} aria-hidden />}
+					ariaLabel={tText(
+						'modules/shared/components/tabs/scrollable-tabs/scrollable-tabs___scroll-tabs-naar-rechts'
+					)}
+					onClick={() => scrollByAmount('right')}
+				/>
+			)}
 		</div>
 	);
 };

@@ -217,32 +217,45 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	}
 
 	&__tabs {
-		// Shrink-to-fit tabs, left-aligned; any leftover width just shows the row's own black
-		// background (see :global(.c-tab) below) instead of stretching tabs to fill it.
-		display: flex;
-		justify-content: flex-start;
-
-		// The row's own background, behind any width the (shrink-to-fit) tabs don't fill.
-		background-color: abstracts.$black;
-
-		@media (min-width: abstracts.$breakpoint-lg) {
-			// Desktop - not a grid item here: it renders inside the sidebar's sticky unit
-			// (ObjectDetailPageSidebar.module.scss), directly below the header. Mobile keeps its own
-			// separate grid-row placement, since mobile puts the tab strip above the header instead
-			// (see the mobile FA).
-			width: 100%;
-			height: $metadata-media-ocr-tabs-height-desktop;
-			flex-shrink: 0;
-
-			:global(.c-tab--media) {
-				display: none !important;
-			}
-		}
-
 		@media (max-width: abstracts.$breakpoint-lg) {
 			// Mobile
 			grid-column: 1 / 4;
 			width: 100%;
+		}
+
+		// The actual tab row (ScrollableTabs' `.c-tabs`) sits one level deeper than this wrapper,
+		// which ScrollableTabs itself sizes via an inline style mirroring the row's measured
+		// height. Setting an explicit height here instead of on this wrapper would just get
+		// overridden by that inline style (which starts at 0) - worse, if this wrapper were a flex
+		// container, the row would default to stretching to match that 0, and the measurement
+		// would never recover since it reads the (stretched-to-0) row's own height. Styling the row
+		// directly sidesteps all of that.
+		:global(.c-tabs) {
+			// Shrink-to-fit tabs, left-aligned; any leftover width just shows the row's own black
+			// background (see :global(.c-tab) below) instead of stretching tabs to fill it.
+			display: flex;
+			justify-content: flex-start;
+
+			// The row's own background, behind any width the (shrink-to-fit) tabs don't fill.
+			background-color: abstracts.$black;
+
+			@media (min-width: abstracts.$breakpoint-lg) {
+				// Desktop - not a grid item here: it renders inside the sidebar's sticky unit
+				// (ObjectDetailPageSidebar.module.scss), directly below the header. Mobile keeps its
+				// own separate grid-row placement, since mobile puts the tab strip above the header
+				// instead (see the mobile FA).
+				width: 100%;
+				height: $metadata-media-ocr-tabs-height-desktop;
+				flex-shrink: 0;
+
+				:global(.c-tab--media) {
+					display: none !important;
+				}
+			}
+
+			@media (max-width: abstracts.$breakpoint-lg) {
+				width: 100%;
+			}
 		}
 
 		:global(.c-tabs__item) {
