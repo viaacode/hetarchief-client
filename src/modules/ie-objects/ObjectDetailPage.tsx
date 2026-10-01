@@ -1403,23 +1403,29 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			);
 		}
 
+		// TODO: mobile AI-entity navigation overlay
 		return (
-			<AudioOrVideoPlayer
-				className={clsx('p-object-detail__flowplayer')}
-				locationId="object detail page"
-				representation={getRepresentationByCurrentFileIndex()}
-				dctermsFormat={mediaInfo.dctermsFormat}
-				schemaIdentifier={mediaInfo.schemaIdentifier}
-				maintainerLogo={mediaInfo?.maintainerOverlay ? mediaInfo.maintainerLogo : undefined}
-				cuePoints={cuePoints}
-				poster={undefined}
-				paused={isMediaPaused}
-				onPlay={handleOnPlay}
-				onPause={handleOnPause}
-				onMediaReady={setIsFlowPlayerMediaAvailable}
-			/>
+			<>
+				<AudioOrVideoPlayer
+					className={clsx('p-object-detail__flowplayer')}
+					locationId="object detail page"
+					representation={getRepresentationByCurrentFileIndex()}
+					dctermsFormat={mediaInfo.dctermsFormat}
+					schemaIdentifier={mediaInfo.schemaIdentifier}
+					maintainerLogo={mediaInfo?.maintainerOverlay ? mediaInfo.maintainerLogo : undefined}
+					cuePoints={cuePoints}
+					poster={undefined}
+					paused={isMediaPaused}
+					onPlay={handleOnPlay}
+					onPause={handleOnPause}
+					onMediaReady={setIsFlowPlayerMediaAvailable}
+				/>
+				{isMobile && renderAiEntityNavigationOverlay()}
+			</>
 		);
 	};
+
+	const renderAiEntityNavigationOverlay = (): ReactNode => null;
 
 	const renderObjectMedia = () => {
 		if (mediaInfo?.hasAccessToEssence) {

@@ -137,15 +137,17 @@ export const ObjectDetailPageSidebar: FC<ObjectDetailPageSidebarProps> = ({
 						[styles['c-object-detail-sidebar__sticky--scrolled']]: isHeaderCollapsed,
 					})}
 				>
-					<ObjectDetailPageHeader
-						mediaInfo={mediaInfo}
-						onClickAction={onClickAction}
-						hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
-						currentPageIndex={currentPageIndex}
-						isCollapsed={isHeaderCollapsed}
-						onShowDetails={expandHeader}
-						onReadMoreClicked={onReadMoreClicked}
-					/>
+					{activeTab !== ObjectDetailTabs.Media && (
+						<ObjectDetailPageHeader
+							mediaInfo={mediaInfo}
+							onClickAction={onClickAction}
+							hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
+							currentPageIndex={currentPageIndex}
+							isCollapsed={isHeaderCollapsed}
+							onShowDetails={expandHeader}
+							onReadMoreClicked={onReadMoreClicked}
+						/>
+					)}
 					{tabs}
 				</div>
 				{children}

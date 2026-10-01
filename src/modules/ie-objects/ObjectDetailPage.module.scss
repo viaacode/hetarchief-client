@@ -258,6 +258,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			gap: abstracts.$spacer-xs; // 8px
 			background-color: abstracts.$black;
 
+			@media (max-width: abstracts.$breakpoint-lg) {
+				padding: 0 abstracts.$spacer-md;
+			}
+
 			// Active/inactive background already gives clear visual feedback; the browser's
 			// default focus ring on this <button> isn't part of the design here.
 			outline: none;
@@ -282,6 +286,20 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 					// No matching token for this weight (same precedent as the header title/detail pages elsewhere).
 					font-weight: 800;
+				}
+
+				// Mobile: content tabs (Overzicht/Metadata/OCR/Gerelateerd) get a purple active state
+				// instead of white. Video/Audio/Krant (Media) keeps the white active state from above.
+				@media (max-width: abstracts.$breakpoint-lg) {
+					&:not(:global(.c-tab--media)) {
+						background-color: abstracts.$lila;
+
+						:global(.c-tab__label) {
+							font-family: abstracts.$font-family-primary;
+							font-size: abstracts.$font-size-sm; // 14px
+							line-height: 2rem; // 20px - no matching token for 142.857% of 14px
+						}
+					}
 				}
 			}
 		}
