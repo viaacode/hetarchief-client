@@ -114,7 +114,7 @@ import { MaterialRequestForReuseBlade } from '@visitor-space/components/Material
 import { ReportBlade } from '@visitor-space/components/ReportBlade';
 import { VisitorSpaceNavigation } from '@visitor-space/components/VisitorSpaceNavigation/VisitorSpaceNavigation';
 import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
-import { VisitorSpaceStatus } from '@visitor-space/types';
+import { SearchFilterId, VisitorSpaceStatus } from '@visitor-space/types';
 import clsx from 'clsx';
 import { capitalize, compact, intersection, isNil, lowerCase, noop } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
@@ -122,7 +122,7 @@ import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
 import { type FC, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
+import { ArrayParam, NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
 import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -220,6 +220,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS,
 		withDefault(StringParam, '')
 	);
+	// Namenlijst filter coming from the global search page
+	const [namenlijstFilter] = useQueryParam(SearchFilterId.Mentions, ArrayParam);
 	// Temp search terms are used to store the search terms while the user is typing
 	const [searchTermsTemp, setSearchTermsTemp] = useState<string>('');
 	// Search terms are used to store the search terms after the user has confirmed the search
@@ -276,7 +278,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		withDefault(NumberParam, undefined)
 	);
 	const [isTextOverlayVisible, setIsTextOverlayVisible] = useState(false);
-	const [activeTab, setActiveTab] = useState<ObjectDetailTabs>(ObjectDetailTabs.Metadata);
+	const [activeTab, setActiveTab] = useState<ObjectDetailTabs>(ObjectDetailTabs.Overview);
 	const [cuePoints, setCuePoints] = useState<CuePoints | undefined>(undefined);
 
 	const [activeMentionHighlights, setActiveMentionHighlights] = useState<{
@@ -433,6 +435,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	);
 
 	// related
+	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
 	const {
 		data: relatedIeObjects,
 		isLoading: relatedIeObjectsIsLoading,
@@ -446,7 +449,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 		return compact(relatedIeObjects?.children?.map(mapRelatedIeObject) || []);
 	}, [relatedIeObjects]);
-	const hasRelated: boolean = mappedRelatedIeObjects.length > 0;
+	// Gerelateerd only applies to AV objects with a parent/child relation (per the FA), not newspapers
+	const relatedCount = isNewspaper ? 0 : mappedRelatedIeObjects.length;
 
 	// visit info
 	const { data: visitRequest, error: visitRequestError } = useGetActiveVisitRequestForUserAndSpace(
@@ -494,7 +498,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		(visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
-	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
 	const showFragmentSlider = allFilesToDisplayInCurrentPage.length > 1 && !isNewspaper;
 	const isMobile = isTabletPortraitSize(windowSize); // mobile and tablet portrait
 	const hasAccessToVisitorSpaceOfObject =
@@ -658,7 +661,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 	const updateActiveTab = useCallback(
 		async (newActiveTab: ObjectDetailTabs | null) => {
-			setActiveTab(newActiveTab || ObjectDetailTabs.Metadata);
+			setActiveTab(newActiveTab || ObjectDetailTabs.Overview);
 
 			// Also update the query param
 			// We cannot use the useQueryParam hook here because
@@ -1008,14 +1011,28 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 	/**
 	 * Set the media type and default tab when the media info is loaded
+	 *
+	 * Default-tab scenarios per the FA (desktop and mobile describe the same 4 scenarios, so this
+	 * isn't gated behind isMobile):
+	 * 1. no filter, no search term -> Overzicht (AV and newspaper alike)
+	 * 2. AI-entity filter active (AV only) -> Overzicht, same as scenario 1 - the filter itself is
+	 *    read directly in ObjectDetailPageOverviewTab (not here, nothing else needs it), but opening
+	 *    the first filtered entity's visitekaartje is still a TODO until that card UI exists (see
+	 *    its renderAiEntities stub)
+	 * 3. namenlijst filter active (newspaper only) -> Metadata, where the namenlijst list lives
+	 * 4. search by term -> Overzicht; for newspapers the alto-content effect below overrides this to
+	 *    Ocr once/if OCR text turns out to be available, which doubles as this scenario's "fall back
+	 *    to Overzicht when OCR isn't available" branch
 	 */
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
-		// Set default view
-		if (isMobile) {
-			// Default to metadata tab on mobile
-			updateActiveTab(ObjectDetailTabs.Metadata);
-		} else {
+		const defaultTab =
+			isNewspaper && namenlijstFilter?.length
+				? ObjectDetailTabs.Metadata
+				: ObjectDetailTabs.Overview;
+		updateActiveTab(defaultTab).then(noop);
+
+		if (!isMobile) {
 			// Check media content and license for default tab on desktop
 			setExpandSidebar(!mediaInfo?.dctermsFormat || !hasMedia, 'replaceIn');
 		}
@@ -1255,14 +1272,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			activeTab as ObjectDetailTabs,
 			isMediaAvailable(),
 			arePagesOcrTextsAvailable,
-			hasRelated
+			relatedCount
 		);
 	}, [
 		mediaInfo?.dctermsFormat,
 		activeTab,
 		isMediaAvailable,
 		arePagesOcrTextsAvailable,
-		hasRelated,
+		relatedCount,
 	]);
 
 	// A tab from the URL (or an old bookmark) may not exist for this object, e.g. ocr without
@@ -1277,7 +1294,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			!tabs.some((tab) => tab.id === activeTab) ||
 			(activeTab === ObjectDetailTabs.Media && !isMobile);
 		if (isTabUnavailable) {
-			updateActiveTab(ObjectDetailTabs.Metadata).then(noop);
+			updateActiveTab(ObjectDetailTabs.Overview).then(noop);
 		}
 	}, [
 		mediaInfo,

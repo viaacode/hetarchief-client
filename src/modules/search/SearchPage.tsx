@@ -610,10 +610,28 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				? JSON.stringify(searchResults?.searchTerms)
 				: '';
 
+			// Carried into the object detail page so it can determine the default tab
+			const activeMentionsFilter = query[SearchFilterId.Mentions];
+			const activeMentionPersonFilter = query[SearchFilterId.MentionPerson];
+			const activeMentionPlaceFilter = query[SearchFilterId.MentionPlace];
+			const activeMentionOrganisationFilter = query[SearchFilterId.MentionOrganisation];
+
 			const link: string | undefined = stringifyUrl({
 				url: getIeObjectDetailPath(locale, item.maintainerSlug, item.schemaIdentifier, item.name),
 				query: {
 					[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: plainTextSearchTerms,
+					...(activeMentionsFilter?.length
+						? { [SearchFilterId.Mentions]: activeMentionsFilter }
+						: {}),
+					...(activeMentionPersonFilter?.length
+						? { [SearchFilterId.MentionPerson]: activeMentionPersonFilter }
+						: {}),
+					...(activeMentionPlaceFilter?.length
+						? { [SearchFilterId.MentionPlace]: activeMentionPlaceFilter }
+						: {}),
+					...(activeMentionOrganisationFilter?.length
+						? { [SearchFilterId.MentionOrganisation]: activeMentionOrganisationFilter }
+						: {}),
 				},
 			});
 
@@ -644,7 +662,16 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				isPartOfOtherItem: !!item.premisIsPartOf,
 			};
 		});
-	}, [isKioskUser, locale, isGlobalArchive, searchResults]);
+	}, [
+		isKioskUser,
+		locale,
+		isGlobalArchive,
+		searchResults,
+		query[SearchFilterId.Mentions],
+		query[SearchFilterId.MentionPerson],
+		query[SearchFilterId.MentionPlace],
+		query[SearchFilterId.MentionOrganisation],
+	]);
 
 	const openAndScrollToAdvancedFilters = () => {
 		setFilterMenuOpen(true);

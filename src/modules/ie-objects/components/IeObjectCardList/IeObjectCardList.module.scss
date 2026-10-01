@@ -26,11 +26,18 @@
 	}
 
 	&--related {
-		padding: 2rem;
 		height: max-content;
+		margin-left: -#{abstracts.$spacer-md};
+		margin-right: -#{abstracts.$spacer-md};
+		padding: abstracts.$spacer-md;
 
 		@media (min-width: abstracts.$breakpoint-lg) {
-			padding: abstracts.$spacer-lg;
+			margin-left: -#{abstracts.$spacer-lg};
+			margin-right: -#{abstracts.$spacer-lg};
+
+			// The extra bottom padding keeps the grey running to the bottom of the scroll area,
+			// since this is always the last section of the tab when it renders.
+			padding: abstracts.$spacer-md abstracts.$spacer-lg abstracts.$spacer-2xl;
 		}
 	}
 }

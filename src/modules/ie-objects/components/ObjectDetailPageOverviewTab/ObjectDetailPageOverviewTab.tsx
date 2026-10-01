@@ -41,6 +41,7 @@ import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
 import type { FC, ReactNode } from 'react';
 import { useSelector } from 'react-redux';
+import { ArrayParam, useQueryParam } from 'use-query-params';
 import styles from './ObjectDetailPageOverviewTab.module.scss';
 
 export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> = ({
@@ -53,6 +54,13 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 	const locale = useLocale();
 	const user: User | null = useSelector(selectUser);
 	const isKiosk = useHasAnyGroup(GroupName.KIOSK_VISITOR);
+	// AI-entity filters (Personen/Plaatsen/Organisaties) carried over from the search results page
+	// biome-ignore lint/correctness/noUnusedVariables: consumed once the visitekaartje card UI exists, see renderAiEntities below
+	const [mentionPersonFilter] = useQueryParam(SearchFilterId.MentionPerson, ArrayParam);
+	// biome-ignore lint/correctness/noUnusedVariables: consumed once the visitekaartje card UI exists, see renderAiEntities below
+	const [mentionPlaceFilter] = useQueryParam(SearchFilterId.MentionPlace, ArrayParam);
+	// biome-ignore lint/correctness/noUnusedVariables: consumed once the visitekaartje card UI exists, see renderAiEntities below
+	const [mentionOrganisationFilter] = useQueryParam(SearchFilterId.MentionOrganisation, ArrayParam);
 
 	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
 	const { data: ieObjectPreviousNextIds } = useGetIeObjectPreviousNextIds(
@@ -297,10 +305,9 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 		}
 	};
 
-	// AI-detected entities (Personen/Plaatsen/Organisaties) "visitekaartje" cards, per "FA:
-	// Ontsluiting van AI metadata" / "FA: Filters voor AI metadata". Only the search-filter
-	// plumbing (mentionPerson/mentionPlace/mentionOrganisation) exists today; there is no card UI
-	// yet anywhere in the app. Stubbed until that data + UI exists.
+	// TODO: once the visitekaartje card UI exists, render it here, and when one of the filters
+	// above has a value, open the first matching entity's card automatically (scenario 2's "open
+	// the first filtered entity's visitekaartje").
 	const renderAiEntities = (): ReactNode => null;
 
 	if (isNil(mediaInfo)) {
