@@ -1,5 +1,6 @@
 import getConfig from '@shared/config/public-runtime-config';
 import { moduleClassSelector } from '@shared/helpers/module-class-locator';
+import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { selectShowZendesk } from '@shared/store/ui';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import { useRouter } from 'next/router';
@@ -17,6 +18,8 @@ const { publicRuntimeConfig } = getConfig();
 const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 	const router = useRouter();
 	const showZendesk = useSelector(selectShowZendesk);
+	const locale = useLocale();
+	const [isLoaded, setIsLoaded] = useState<boolean>(false);
 
 	const feedbackButtonHeight = 46;
 	const zendeskMarginBottom = 22;
@@ -49,7 +52,6 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 			const scrollTop = window.scrollY;
 
 			widget.style.zIndex = '3'; // Ensure the zendesk widget doesn't show on top of blades
-			widget.style.width = 'auto';
 			widget.style.marginRight = `${zendeskMarginRight}px`;
 
 			if (
@@ -77,6 +79,50 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 			setWidget(zendeskWidget);
 		}
 	}, []);
+
+	/**
+	 * Zendesk uses the browser language by default, make it follow the website language instead
+	 */
+	useEffect(() => {
+		if (isLoaded) {
+			window.zE?.('webWidget', 'setLocale', locale);
+		}
+	}, [isLoaded, locale]);
+
+	/**
+	 * Make the launcher iframe exactly as wide as the button inside it.
+	 * The button is a pill with text on desktop and a circle on mobile.
+	 * The iframe is same-origin (created by the zendesk script), so we can measure its contents.
+	 */
+	useEffect(() => {
+		if (!widget) {
+			return;
+		}
+		let buttonObserver: ResizeObserver | null = null;
+		let timeout: ReturnType<typeof setTimeout>;
+		const observeButton = () => {
+			const button = widget.contentDocument?.querySelector('button');
+			if (!button) {
+				timeout = setTimeout(observeButton, 100);
+				return;
+			}
+			const fitWidth = () => {
+				// Set on body, since zendesk overwrites the inline styles of the iframe
+				document.body.style.setProperty(
+					'--zendesk-launcher-width',
+					`${Math.ceil(button.getBoundingClientRect().width)}px`
+				);
+			};
+			buttonObserver = new ResizeObserver(fitWidth);
+			buttonObserver.observe(button);
+			fitWidth();
+		};
+		observeButton();
+		return () => {
+			clearTimeout(timeout);
+			buttonObserver?.disconnect();
+		};
+	}, [widget]);
 
 	const onResize = useCallback(() => {
 		updateFooterHeight();
@@ -120,6 +166,7 @@ const ZendeskWrapper: FC<Partial<IZendeskProps>> = (settings) => {
 				defer={true}
 				color={{ theme: '#00857d' }} // Ensure a contrast of 4.51:1 with white text
 				onLoaded={() => {
+					setIsLoaded(true);
 					initListeners();
 					settings?.onLoaded?.();
 				}}
