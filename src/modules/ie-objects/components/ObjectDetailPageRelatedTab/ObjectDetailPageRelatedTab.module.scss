@@ -1,7 +1,0 @@
-.p-object-detail-related-tab__no-divider {
-	// Cancels MetadataList's top divider: nothing above it to divide from.
-	// !important: equal specificity to Metadata's ::before and CSS module order isn't guaranteed.
-	&::before {
-		display: none !important;
-	}
-}

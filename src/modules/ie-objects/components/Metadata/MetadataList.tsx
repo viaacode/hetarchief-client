@@ -4,21 +4,24 @@ import type { FC } from 'react';
 import styles from './Metadata.module.scss';
 import type { MetadataListProps } from './Metadata.types';
 
-const Metadata: FC<MetadataListProps> = ({
+const MetadataList: FC<MetadataListProps> = ({
 	className,
-	listClassName,
 	children,
 	allowTwoColumns = true,
+	noDivider = false,
+	grow = false,
 }) => {
 	return (
 		<div
 			className={clsx(className, 'p-object-detail__metadata-component', styles['c-metadata'], {
 				[styles['c-metadata--container-query']]: allowTwoColumns,
+				[styles['c-metadata--no-divider']]: noDivider,
+				[styles['c-metadata--grow']]: grow,
 			})}
 		>
-			<dl className={clsx(styles['c-metadata__list'], listClassName)}>{children}</dl>
+			<dl className={styles['c-metadata__list']}>{children}</dl>
 		</div>
 	);
 };
 
-export default Metadata;
+export default MetadataList;

@@ -23,6 +23,32 @@
 		background-color: abstracts.$black-20;
 	}
 
+	// After ::before and __item with equal specificity, so no !important is needed
+	&--no-divider {
+		&::before {
+			display: none;
+		}
+
+		.c-metadata__list > .c-metadata__item:first-child {
+			border-top: 0;
+		}
+	}
+
+	// Passes the parent's stretch down the list > item > text chain to the card list's background
+	&--grow {
+		display: flex;
+		flex-direction: column;
+		flex: 1 0 auto;
+
+		.c-metadata__list,
+		.c-metadata__item,
+		.c-metadata__item-text {
+			display: flex;
+			flex-direction: column;
+			flex: 1 0 auto;
+		}
+	}
+
 	&__list {
 		@extend %reset-list;
 

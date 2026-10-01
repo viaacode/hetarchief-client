@@ -7,14 +7,16 @@ export interface MetadataProps extends DefaultComponentProps {
 	children?: ReactNode;
 	renderRight?: ReactNode;
 	renderedTitleRight?: ReactNode;
-	contentClassName?: string;
 	rootElementType?: 'dl' | 'div';
 }
 
 export interface MetadataListProps extends DefaultComponentProps {
 	children: ReactNode;
 	allowTwoColumns: boolean;
-	listClassName?: string;
+	/** Stretches the list to fill the remaining height of a flex-column parent */
+	grow?: boolean;
+	/** Hides the top divider, for a first section with nothing above it to divide from */
+	noDivider?: boolean;
 }
 
 export interface MetadataItem {

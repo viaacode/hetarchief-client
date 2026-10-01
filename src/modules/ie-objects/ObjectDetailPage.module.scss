@@ -243,10 +243,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 					display: none !important;
 				}
 			}
-
-			@media (max-width: abstracts.$breakpoint-lg) {
-				width: 100%;
-			}
 		}
 
 		:global(.c-tabs__item) {

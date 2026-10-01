@@ -35,7 +35,6 @@ import {
 	HetArchiefIeObjectType,
 } from '@viaa/avo2-types';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
-import clsx from 'clsx';
 import { isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -99,9 +98,9 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 		return (
 			<div className={styles['p-object-detail-overview-tab__maintainer-title']}>
 				<div>
-					<p className={styles['p-object-detail-overview-tab__label']}>
+					<span className={styles['p-object-detail-overview-tab__label']}>
 						{tText('modules/ie-objects/const/index___aanbieder')}
-					</p>
+					</span>
 					{!isKiosk && <SearchLinkTag label={maintainerName} link={maintainerSearchLink} />}
 				</div>
 
@@ -324,10 +323,7 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 			{previousAndNextButtons && (
 				// First section in this tab: no leading divider, there's nothing above it to divide
 				// from inside this tab (the header sits above, outside it).
-				<MetadataList
-					allowTwoColumns={false}
-					className={styles['p-object-detail-overview-tab__no-divider']}
-				>
+				<MetadataList allowTwoColumns={false} noDivider>
 					<Metadata
 						title={tText(
 							'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___editie-newspaper-series-title',
@@ -336,24 +332,14 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 							}
 						)}
 						key={'collectionNamePreviousNext'}
-						className="u-bt-0"
 					>
 						{previousAndNextButtons}
 					</Metadata>
 				</MetadataList>
 			)}
 
-			<MetadataList
-				allowTwoColumns={true}
-				className={
-					previousAndNextButtons ? undefined : styles['p-object-detail-overview-tab__no-divider']
-				}
-			>
-				<Metadata
-					title={renderMaintainerMetaTitle(mediaInfo)}
-					key={'metadata-maintainer'}
-					className={previousAndNextButtons ? undefined : 'u-bt-0'}
-				>
+			<MetadataList allowTwoColumns={true} noDivider={!previousAndNextButtons}>
+				<Metadata title={renderMaintainerMetaTitle(mediaInfo)} key={'metadata-maintainer'}>
 					{renderMaintainerMetaData(mediaInfo)}
 				</Metadata>
 				{renderSimpleMetadataField(
@@ -396,16 +382,11 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 			</MetadataList>
 
 			{!!similar.length && (
-				<MetadataList
-					allowTwoColumns={false}
-					className={styles['p-object-detail-overview-tab__grow']}
-					listClassName={styles['p-object-detail-overview-tab__grow']}
-				>
+				<MetadataList allowTwoColumns={false} grow>
 					<Metadata
 						title={tHtml('pages/slug/ie/index___ook-interessant')}
 						key="metadata-similar"
-						className={clsx('u-pb-0', styles['p-object-detail-overview-tab__grow'])}
-						contentClassName={styles['p-object-detail-overview-tab__grow']}
+						className="u-pb-0"
 					>
 						<IeObjectCardList type="similar" items={similar} />
 					</Metadata>

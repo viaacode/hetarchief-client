@@ -58,15 +58,6 @@
 	min-height: 0;
 	overflow-y: auto;
 
-	// Flex column so a tab can grow to fill the space below the header (see OverviewTab)
-	display: flex;
-	flex-direction: column;
-
-	// Shrinking children makes scrollHeight undercount, so overflow-y: auto stops engaging
-	> * {
-		flex-shrink: 0;
-	}
-
 	// Without this, scroll anchoring "corrects" scrollTop as the sticky header collapses/expands,
 	// re-triggering its IntersectionObserver and causing a flicker loop.
 	overflow-anchor: none;
@@ -80,6 +71,17 @@
 	// so let the list carry its own bottom padding instead.
 	&--ends-in-list {
 		padding-bottom: 0;
+	}
+
+	&--tab-overview {
+		// Flex column so the tab can grow to fill the space below the header (see OverviewTab)
+		display: flex;
+		flex-direction: column;
+
+		// Shrinking children makes scrollHeight undercount, so overflow-y: auto stops engaging
+		> * {
+			flex-shrink: 0;
+		}
 	}
 
 	&--tab-ocr {
