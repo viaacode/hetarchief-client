@@ -117,6 +117,7 @@ import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useSta
 import { useDispatch, useSelector } from 'react-redux';
 import type { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
+import { omitEmptyFilters } from './omit-empty-filters';
 import styles from './SearchPage.module.scss';
 
 const labelKeys = {
@@ -131,14 +132,6 @@ const getDefaultOption = (): VisitorSpaceDropdownOption => {
 		),
 	};
 };
-
-// Carried over to the object detail page, which uses them to pick the default tab
-const CARRIED_FILTER_IDS = [
-	SearchFilterId.Mentions,
-	SearchFilterId.MentionPerson,
-	SearchFilterId.MentionPlace,
-	SearchFilterId.MentionOrganisation,
-] as const;
 
 const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const windowSize = useWindowSizeContext();
@@ -590,13 +583,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	 * Computed
 	 */
 
-	const carriedFilters = useMemo(
-		() =>
-			Object.fromEntries(
-				CARRIED_FILTER_IDS.filter((id) => query[id]?.length).map((id) => [id, query[id]])
-			),
-		[query]
-	);
+	// Read individually so the result items below only rebuild when these change, not on any query change
+	const mentionsFilter = query[SearchFilterId.Mentions];
+	const mentionPersonFilter = query[SearchFilterId.MentionPerson];
+	const mentionPlaceFilter = query[SearchFilterId.MentionPlace];
+	const mentionOrganisationFilter = query[SearchFilterId.MentionOrganisation];
 	const isLoadedWithoutResults = !!searchResults && searchResults?.items?.length === 0;
 	const isLoadedWithResults = !!searchResults && searchResults?.items?.length > 0;
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
@@ -629,7 +620,13 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				url: getIeObjectDetailPath(locale, item.maintainerSlug, item.schemaIdentifier, item.name),
 				query: {
 					[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: plainTextSearchTerms,
-					...carriedFilters,
+					// Carried over to the object detail page, which uses them to pick the default tab
+					...omitEmptyFilters({
+						[SearchFilterId.Mentions]: mentionsFilter,
+						[SearchFilterId.MentionPerson]: mentionPersonFilter,
+						[SearchFilterId.MentionPlace]: mentionPlaceFilter,
+						[SearchFilterId.MentionOrganisation]: mentionOrganisationFilter,
+					}),
 				},
 			});
 
@@ -660,7 +657,16 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				isPartOfOtherItem: !!item.premisIsPartOf,
 			};
 		});
-	}, [isKioskUser, locale, isGlobalArchive, searchResults, carriedFilters]);
+	}, [
+		isKioskUser,
+		locale,
+		isGlobalArchive,
+		searchResults,
+		mentionsFilter,
+		mentionPersonFilter,
+		mentionPlaceFilter,
+		mentionOrganisationFilter,
+	]);
 
 	const openAndScrollToAdvancedFilters = () => {
 		setFilterMenuOpen(true);

@@ -16,6 +16,9 @@ window.ResizeObserver =
 		unobserve = vi.fn();
 	};
 
+// jsdom doesn't implement Element.scrollTo
+Element.prototype.scrollTo = Element.prototype.scrollTo || vi.fn();
+
 // Make sure the container is small enough to create overflow
 const containerWidth = 320;
 const baseContainer = document.createElement('div');
@@ -119,6 +122,23 @@ describe('<ScrollableTabs />', () => {
 			expect(queryByLabelText(rightLabel)).toBeNull();
 		});
 
+		it('moves focus to the other button when the focused one disappears at the scroll end', () => {
+			mockOverflow();
+			const { container, getByLabelText } = render(
+				<ScrollableTabs tabs={mockTabs} showNavButtons />
+			);
+			const tabs = container.querySelector('.c-tabs') as HTMLElement;
+			tabs.scrollTo = vi.fn();
+
+			fireEvent.scroll(tabs, { target: { scrollLeft: 300 } });
+			const right = getByLabelText(rightLabel);
+			right.focus();
+			fireEvent.click(right);
+			fireEvent.scroll(tabs, { target: { scrollLeft: 700 } });
+
+			expect(getByLabelText(leftLabel)).toHaveFocus();
+		});
+
 		it('scrolls by 80% of the row width when clicked', () => {
 			mockOverflow();
 			const { container, getByLabelText } = render(
@@ -134,6 +154,56 @@ describe('<ScrollableTabs />', () => {
 
 			fireEvent.click(getByLabelText(leftLabel));
 			expect(scrollTo).toHaveBeenLastCalledWith({ top: 0, left: 60, behavior: 'smooth' });
+		});
+
+		it('shows the right button when tabs are added after mount', () => {
+			// 200px per tab in a 300px row
+			Object.defineProperty(HTMLElement.prototype, 'scrollWidth', {
+				configurable: true,
+				get(this: HTMLElement) {
+					return this.querySelectorAll('.c-tab').length * 200;
+				},
+			});
+			Object.defineProperty(HTMLElement.prototype, 'clientWidth', {
+				configurable: true,
+				get: () => 300,
+			});
+			const { rerender, queryByLabelText } = render(
+				<ScrollableTabs tabs={mockTabs.slice(0, 1)} showNavButtons />
+			);
+			expect(queryByLabelText(rightLabel)).toBeNull();
+
+			rerender(<ScrollableTabs tabs={mockTabs} showNavButtons />);
+
+			expect(queryByLabelText(rightLabel)).not.toBeNull();
+		});
+	});
+
+	describe('tab resize observation', () => {
+		it('observes tabs that are added after mount', () => {
+			const observed = new Set<Element>();
+			const original = window.ResizeObserver;
+			window.ResizeObserver = class {
+				disconnect = vi.fn();
+				observe = (el: Element) => {
+					observed.add(el);
+				};
+				unobserve = vi.fn();
+			} as unknown as typeof ResizeObserver;
+
+			try {
+				const { rerender, container } = render(
+					<ScrollableTabs tabs={mockTabs.slice(0, 1)} showNavButtons />
+				);
+				rerender(<ScrollableTabs tabs={mockTabs} showNavButtons />);
+
+				for (const tab of container.querySelectorAll('.c-tab')) {
+					expect(observed.has(tab)).toBe(true);
+				}
+				expect(container.querySelectorAll('.c-tab').length).toBe(mockTabs.length);
+			} finally {
+				window.ResizeObserver = original;
+			}
 		});
 	});
 });

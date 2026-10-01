@@ -3,7 +3,13 @@ import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const replace = vi.fn().mockResolvedValue(true);
-vi.mock('next/router', () => ({ useRouter: () => ({ replace }) }));
+// query mirrors the URL, like next's router.query does on the first render
+vi.mock('next/router', () => ({
+	useRouter: () => ({
+		replace,
+		query: Object.fromEntries(new URLSearchParams(window.location.search)),
+	}),
+}));
 
 import {
 	getDefaultObjectDetailTab,
@@ -93,6 +99,13 @@ describe('useObjectDetailActiveTab', () => {
 
 		expect(result.current.activeTab).toBe(ObjectDetailTabs.Ocr);
 		expect(replace).not.toHaveBeenCalled();
+	});
+
+	it('starts on the url tab before the object has loaded', () => {
+		setUrl(`?tab=${ObjectDetailTabs.Ocr}`);
+		const { result } = render({ objectId: undefined, isNewspaper: false });
+
+		expect(result.current.activeTab).toBe(ObjectDetailTabs.Ocr);
 	});
 
 	it('falls back to the default when the url tab is not a known tab', () => {

@@ -31,7 +31,11 @@ export const useObjectDetailActiveTab = ({
 	isNewspaper,
 }: UseObjectDetailActiveTabProps) => {
 	const router = useRouter();
-	const [activeTab, setActiveTab] = useState<ObjectDetailTabs>(ObjectDetailTabs.Overview);
+	// Seeded from router.query (also available during SSR) so a deep link doesn't paint Overview first
+	const [activeTab, setActiveTab] = useState<ObjectDetailTabs>(
+		() =>
+			parseObjectDetailTab(router.query[QUERY_PARAM_KEY.ACTIVE_TAB]) ?? ObjectDetailTabs.Overview
+	);
 
 	const updateActiveTab = useCallback(
 		async (newActiveTab: ObjectDetailTabs | null) => {
@@ -53,7 +57,11 @@ export const useObjectDetailActiveTab = ({
 					[QUERY_PARAM_KEY.ACTIVE_TAB]: tab,
 				},
 			});
-			await router.replace(newUrl, undefined, { shallow: true });
+			try {
+				await router.replace(newUrl, undefined, { shallow: true });
+			} catch {
+				// A newer navigation cancelled this route change; the tab state is already updated
+			}
 		},
 		[router.replace]
 	);
@@ -80,7 +88,7 @@ export const useObjectDetailActiveTab = ({
 		setActiveTab(getDefaultObjectDetailTab(isNewspaper, hasNamenlijstFilter));
 	}, [objectId]);
 
-	return { activeTab, updateActiveTab, setActiveTab };
+	return { activeTab, updateActiveTab };
 };
 
 interface UseResetUnavailableTabProps {
@@ -90,7 +98,7 @@ interface UseResetUnavailableTabProps {
 	/** False while the data the tabs depend on is still loading */
 	isReady: boolean;
 	/** Also writes to the URL, so a reset tab never leaves a stale tab id behind in the address bar */
-	updateActiveTab: (tab: ObjectDetailTabs) => void | Promise<void>;
+	updateActiveTab: (tab: ObjectDetailTabs) => Promise<void>;
 }
 
 /**

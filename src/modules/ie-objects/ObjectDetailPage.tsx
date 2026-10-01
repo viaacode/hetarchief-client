@@ -451,8 +451,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 		return compact(relatedIeObjects?.children?.map(mapRelatedIeObject) || []);
 	}, [relatedIeObjects]);
-	// Gerelateerd only applies to AV objects with a parent/child relation (per the FA), not newspapers
-	const relatedCount = isNewspaper ? 0 : mappedRelatedIeObjects.length;
+	const relatedCount = mappedRelatedIeObjects.length;
 
 	const { activeTab, updateActiveTab } = useObjectDetailActiveTab({
 		objectId: mediaInfo?.schemaIdentifier,
@@ -1227,7 +1226,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const tabs: TabProps[] = useMemo(() => {
 		return OBJECT_DETAIL_TABS(
 			mediaInfo?.dctermsFormat || null,
-			activeTab as ObjectDetailTabs,
+			activeTab,
 			isMediaAvailable(),
 			arePagesOcrTextsAvailable,
 			relatedCount
@@ -1490,7 +1489,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			variants={['dark']}
 			tabs={tabs}
 			showNavButtons
-			onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
+			onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs)}
 		/>
 	);
 
