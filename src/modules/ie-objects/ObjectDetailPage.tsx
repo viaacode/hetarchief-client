@@ -1585,7 +1585,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					{activeTab === ObjectDetailTabs.Metadata && (
 						<ObjectDetailPageMetadataTab
 							mediaInfo={mediaInfo}
-							goToPage={handleSetCurrentPage}
+							goToPage={(page) => {
+								if (isMobile) {
+									updateActiveTab(ObjectDetailTabs.Media).then(noop);
+								}
+								handleSetCurrentPage(page);
+							}}
 							currentPage={currentPage}
 							activeFile={
 								getFilesByType([...FLOWPLAYER_FORMATS, ...IMAGE_API_FORMATS])?.[currentPageIndex] ||
