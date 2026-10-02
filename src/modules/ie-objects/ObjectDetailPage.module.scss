@@ -294,6 +294,14 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 					&:not(:global(.c-tab--media)) {
 						background-color: abstracts.$lila;
 
+						// This tab's own purple can rasterize a 1px blend with whatever sits right
+						// below it (sub-pixel rounding) - invisible on the other (black-on-black)
+						// tabs, but visible here since it's the one spot where the surrounding color
+						// isn't black. A box-shadow (not margin - margin doesn't enlarge this item's
+						// own fixed-height box, so it has no visual effect here) paints solid purple
+						// over that blend pixel without affecting layout.
+						box-shadow: 0 0.2rem 0 0 abstracts.$lila;
+
 						:global(.c-tab__label) {
 							font-family: abstracts.$font-family-primary;
 							font-size: abstracts.$font-size-sm; // 14px

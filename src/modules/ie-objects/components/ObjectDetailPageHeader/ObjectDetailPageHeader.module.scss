@@ -16,6 +16,15 @@ $max-height-collapsed: 8rem;
 	background-color: abstracts.$lila;
 	color: abstracts.$black;
 	transition: max-height abstracts.$animate-default;
+
+	// The tabs row above sits in a separate grid item/component; at some device-pixel ratios the
+	// shared edge rasterizes as a 1px blend between the two colors instead of a crisp line (most
+	// visible where a black inactive tab meets this purple header). Pulling this element's own
+	// opaque background up by a hair paints over that blend pixel instead of blending with it -
+	// this paints after the tabs in DOM order, so no z-index is needed. 2px (not 1px): the
+	// collapsed state (max-height transition to $max-height-collapsed) rasterizes this edge at a
+	// different sub-pixel offset than the expanded state, and 1px wasn't enough to cover it there.
+	margin-top: -0.2rem;
 }
 
 .p-object-detail-header--collapsed {

@@ -50,7 +50,7 @@ const ScrollableTabs: FC<ScrollableTabsProps> = (props) => {
 
 			if (tabsEl) {
 				tabsRef.current = tabsEl;
-				setTabsHeight(tabsEl.clientHeight);
+				setTabsHeight(tabsEl.getBoundingClientRect().height);
 			}
 		}
 	}, []);
@@ -184,8 +184,9 @@ const ScrollableTabs: FC<ScrollableTabsProps> = (props) => {
 			const tabsEl = scrollContainerRef.current.querySelector('.c-tabs');
 
 			const setHeight = (el: Element) => {
-				lastTabsHeightRef.current = el.clientHeight;
-				setTabsHeight(el.clientHeight);
+				const height = el.getBoundingClientRect().height;
+				lastTabsHeightRef.current = height;
+				setTabsHeight(height);
 				tabsRef.current = el;
 			};
 
@@ -196,7 +197,7 @@ const ScrollableTabs: FC<ScrollableTabsProps> = (props) => {
 							const target = entry.target as HTMLElement;
 							// Not gated on window width: a row in a narrow sidebar can overflow while the window is wide
 							setGradients(target);
-							if (target.clientHeight !== lastTabsHeightRef.current) {
+							if (target.getBoundingClientRect().height !== lastTabsHeightRef.current) {
 								setHeight(target);
 							}
 						}
