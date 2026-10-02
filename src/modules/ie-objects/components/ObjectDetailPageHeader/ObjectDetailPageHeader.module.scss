@@ -120,6 +120,12 @@ $max-height-collapsed: 8rem;
 	align-self: stretch;
 	padding-bottom: abstracts.$spacer-sm;
 	color: abstracts.$black;
+
+	:global(.c-breadcrumbs__link) {
+		font-size: abstracts.$font-size-xs;
+		font-weight: 500;
+		line-height: abstracts.$font-size-base;
+	}
 }
 
 .p-object-detail__title {

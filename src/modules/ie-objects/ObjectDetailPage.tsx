@@ -563,8 +563,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
 		async (newSearchTerms: string): Promise<void> => {
-			updateActiveTab(ObjectDetailTabs.Ocr);
-			setHighlightMode(HighlightMode.OCR_SEARCH);
 			if (newSearchTerms === '') {
 				// Reset search
 				// Zoom to whole page
@@ -592,6 +590,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				return;
 			}
 
+			updateActiveTab(ObjectDetailTabs.Ocr);
+			setHighlightMode(HighlightMode.OCR_SEARCH);
 			setSearchTerms(newSearchTerms.toLowerCase());
 			setCurrentSearchResultIndex(-1);
 			handleIsTextOverlayVisibleChange(true);
