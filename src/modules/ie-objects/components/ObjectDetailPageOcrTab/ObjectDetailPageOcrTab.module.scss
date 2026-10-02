@@ -64,15 +64,13 @@ $tabs-height-desktop: 5.6rem;
 		@media (max-width: abstracts.$breakpoint-lg) {
 			// Tabs render in their own separate, always-visible grid row on mobile (not stacked
 			// inside the sidebar's sticky unit) - only the collapsed header sits above this here.
-			top: $header-collapsed-height;
-
 			// ObjectDetailPageHeader.module.scss pulls the collapsed header up by 0.2rem (its own
-			// fix for a seam against the tabs above it), so this element's own measured
-			// $header-collapsed-height sticky offset now overshoots the header's real bottom edge
-			// by that same 0.2rem - a gap the scrolling OCR text behind shows through. A box-shadow
-			// (not a bigger margin/top, which would shift the sticky trigger point itself) extends
-			// this element's own opaque background up to cover exactly that gap.
-			box-shadow: 0 -0.2rem 0 0 abstracts.$white;
+			// fix for a seam against the tabs above it) - matching that same -0.2rem here keeps
+			// this element's sticky point flush with the header's real (already-shifted) bottom
+			// edge. Without it, this sticks 0.2rem too late, showing a seam of scrolling OCR text
+			// through the gap (a box-shadow patch here instead left a 1px sub-pixel blend - the
+			// same rasterization mismatch seen elsewhere on this page, see Navigation.module.scss).
+			top: $header-collapsed-height - 0.2rem;
 		}
 	}
 
