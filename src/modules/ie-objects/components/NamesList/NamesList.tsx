@@ -15,6 +15,7 @@ import React, {
 	useRef,
 	useState,
 } from 'react';
+import CellMeasurer, { CellMeasurerCache } from 'react-virtualized/dist/commonjs/CellMeasurer';
 import List, { type ListRowProps } from 'react-virtualized/dist/commonjs/List';
 
 import styles from './NamesList.module.scss';
@@ -28,6 +29,18 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 	const [searchTerms, setSearchTerms] = useState('');
 	const [filteredNames, setFilteredNames] = useState<HetArchiefMention[]>(mentions);
 	const ref = useRef<HTMLDivElement | null>(null);
+	const listRef = useRef<List | null>(null);
+	// Rows wrap onto a variable number of lines (long names, narrow viewports), so a fixed
+	// rowHeight squashes/overlaps content - this measures each row's real rendered height instead.
+	const cacheRef = useRef<CellMeasurerCache | null>(null);
+	if (!cacheRef.current) {
+		cacheRef.current = new CellMeasurerCache({
+			fixedWidth: true,
+			defaultHeight: ROW_HEIGHT,
+			minHeight: ROW_HEIGHT,
+		});
+	}
+	const cache = cacheRef.current;
 
 	const handleOnChange = (evt: ChangeEvent<HTMLInputElement>): void => {
 		setSearchTermsTemp(evt.target.value);
@@ -66,11 +79,23 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 		searchNames();
 	}, [searchNames]);
 
+	// filteredNames changing (search, re-sort) reassigns which mention renders at a given row
+	// index, which makes that index's previously-measured height stale.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: filteredNames isn't read in the body, only used to re-trigger this on every reorder/refilter
+	useEffect(() => {
+		cache.clearAll();
+		listRef.current?.recomputeRowHeights();
+	}, [filteredNames, cache]);
+
 	const renderMention = useCallback(
-		(mention: HetArchiefMention, key: string, style: CSSProperties) => {
+		(
+			mention: HetArchiefMention,
+			style: CSSProperties,
+			registerChild: (element?: Element | null) => void
+		) => {
 			const firstHighlight = mention.highlights?.[0];
 			return (
-				<div key={key} className={styles['c-names-list__person']} style={style}>
+				<div ref={registerChild} className={styles['c-names-list__person']} style={style}>
 					<div className={styles['c-names-list__person__occurrence-confidence']}>
 						<ConfidenceIndicator
 							className={styles['c-names-list__person__confidence-indicator']}
@@ -136,8 +161,12 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 		[onZoomToMention]
 	);
 
-	const rowRenderer = ({ key, index, style }: ListRowProps) => {
-		return renderMention(filteredNames[index], key, style);
+	const rowRenderer = ({ key, index, style, parent }: ListRowProps) => {
+		return (
+			<CellMeasurer cache={cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>
+				{({ registerChild }) => renderMention(filteredNames[index], style, registerChild)}
+			</CellMeasurer>
+		);
 	};
 
 	const noRowsRenderer = () => {
@@ -174,8 +203,10 @@ export const NamesList: FC<NamesListProps> = ({ className, mentions, onZoomToMen
 				)}
 			/>
 			<List
+				ref={listRef}
+				deferredMeasurementCache={cache}
 				rowCount={filteredNames.length}
-				rowHeight={81}
+				rowHeight={cache.rowHeight}
 				rowRenderer={rowRenderer}
 				noRowsRenderer={noRowsRenderer}
 				autoContainerWidth={true}
