@@ -1259,7 +1259,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 
 		if (isMobile) {
-			return;
+			return tHtml('pages/slug/index___tot-access-end-date-mobile', {
+				accessEndDateMobile: dateMobile,
+			});
 		}
 
 		return tHtml(

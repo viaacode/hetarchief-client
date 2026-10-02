@@ -210,9 +210,26 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 		.p-object-detail__tabs {
 			@media (max-width: abstracts.$breakpoint-lg) {
-				display: flex;
+				display: block;
 				grid-row: 2 !important;
 				grid-column: 1 / 3 !important;
+			}
+		}
+
+		// The visitor space navigation bar now sits where the plain back button used to (the
+		// topmost row), so it needs the same top divider that row gets in the other state. A
+		// separate pseudo-element rather than moving &__wrapper's own ::before: that one stays at
+		// grid-row 2 for the (still present) divider between this bar and the tabs below it.
+		.p-object-detail__wrapper::after {
+			@media (max-width: abstracts.$breakpoint-lg) {
+				content: "";
+				z-index: abstracts.get-z-layer("foreground") + 1;
+				grid-row: 1;
+				grid-column: 1 / -1;
+				align-self: start;
+				height: 1px;
+				margin: 0 2rem;
+				background-color: abstracts.$shade;
 			}
 		}
 	}
