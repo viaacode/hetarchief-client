@@ -10,8 +10,8 @@ export interface ObjectDetailPageSidebarProps {
 	hasAccessToVisitorSpaceOfObject: boolean;
 	currentPageIndex: number;
 	onReadMoreClicked: (item: MetadataItem) => void;
-	/** Drives the sticky content's own class names, and (once mobile rendering needs it - see the
-	 * FA rework plan's Phase 6) which tab hides the header. */
+	/** Drives the sticky content's own class names, and which tab hides the header (mobile's
+	 * Media tab - see ObjectDetailPageSidebar.tsx). */
 	activeTab: ObjectDetailTabs;
 	similar: MediaObject[];
 	/** Desktop tabs, rendered inside the sticky header+tabs unit. Mobile renders its own tabs

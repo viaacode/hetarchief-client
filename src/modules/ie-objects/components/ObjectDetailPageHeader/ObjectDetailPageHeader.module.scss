@@ -16,6 +16,15 @@ $max-height-collapsed: 8rem;
 	background-color: abstracts.$lila;
 	color: abstracts.$black;
 	transition: max-height abstracts.$animate-default;
+
+	// The tabs row above sits in a separate grid item/component; at some device-pixel ratios the
+	// shared edge rasterizes as a 1px blend between the two colors instead of a crisp line (most
+	// visible where a black inactive tab meets this purple header). Pulling this element's own
+	// opaque background up by a hair paints over that blend pixel instead of blending with it -
+	// this paints after the tabs in DOM order, so no z-index is needed. 2px (not 1px): the
+	// collapsed state (max-height transition to $max-height-collapsed) rasterizes this edge at a
+	// different sub-pixel offset than the expanded state, and 1px wasn't enough to cover it there.
+	margin-top: -0.2rem;
 }
 
 .p-object-detail-header--collapsed {
@@ -32,6 +41,10 @@ $max-height-collapsed: 8rem;
 	align-items: flex-start;
 	gap: abstracts.$spacer-xs;
 	padding: abstracts.$spacer-lg abstracts.$spacer-lg 0 abstracts.$spacer-lg;
+
+	@media (max-width: abstracts.$breakpoint-lg) {
+		padding: 2rem 2rem 0;
+	}
 }
 
 .p-object-detail-header--collapsed .p-object-detail-header__expanded-content {
@@ -49,6 +62,10 @@ $max-height-collapsed: 8rem;
 	justify-content: space-between;
 	gap: abstracts.$spacer-xs; // 8px
 	padding: (abstracts.$spacer-xs * 1.5) abstracts.$spacer-lg; // 12px 32px - 12px has no matching spacer token
+
+	@media (max-width: abstracts.$breakpoint-lg) {
+		padding: (abstracts.$spacer-xs * 1.5) 2rem;
+	}
 
 	.p-object-detail__title {
 		min-width: 0;
@@ -120,6 +137,16 @@ $max-height-collapsed: 8rem;
 	align-self: stretch;
 	padding-bottom: abstracts.$spacer-sm;
 	color: abstracts.$black;
+
+	:global(.c-breadcrumbs__link) {
+		font-size: abstracts.$font-size-xs;
+		font-weight: 500;
+		line-height: abstracts.$font-size-base;
+	}
+
+	@media (max-width: abstracts.$breakpoint-lg) {
+		padding-bottom: 0;
+	}
 }
 
 .p-object-detail__title {
@@ -227,6 +254,11 @@ $max-height-collapsed: 8rem;
 	}
 }
 
-.p-object-detail__actions:last-child {
-	padding-bottom: abstracts.$spacer-md;
+.p-object-detail__actions {
+	// Parent is align-items: flex-start; without stretch, DynamicActionMenu never gets a real width
+	align-self: stretch;
+
+	&:last-child {
+		padding-bottom: abstracts.$spacer-md;
+	}
 }

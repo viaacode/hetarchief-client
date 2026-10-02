@@ -24,6 +24,10 @@ import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/use-get-ie-obj
 import { useGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/use-get-is-public-newspaper';
 import {
+	useObjectDetailActiveTab,
+	useResetUnavailableTab,
+} from '@ie-objects/hooks/use-object-detail-active-tab';
+import {
 	FLOWPLAYER_FORMATS,
 	getNoLicensePlaceholderLabels,
 	getObjectPlaceholderLabels,
@@ -58,7 +62,7 @@ import {
 	isNewspaperType,
 	mapDcTermsFormatToSimpleType,
 } from '@meemoo/admin-core-ui/admin';
-import { Button, type TabProps, Tabs } from '@meemoo/react-components';
+import { Button, type TabProps } from '@meemoo/react-components';
 import { AudioOrVideoPlayer } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer';
 import type { CuePoints } from '@shared/components/AudioOrVideoPlayer/AudioOrVideoPlayer.types';
 import { Blade } from '@shared/components/Blade/Blade';
@@ -71,6 +75,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
+import { ScrollableTabs } from '@shared/components/Tabs';
 import getConfig from '@shared/config/public-runtime-config';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
@@ -255,6 +260,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	// scroll-to-search-result flag itself as programmatic, so the sidebar's collapse-sentinel
 	// observer doesn't mistake landing near the top for the user scrolling back up.
 	const isOcrResultAutoScrollingRef = useRef(false);
+	// Writers (the OCR tab) get this setter, the reader (the sidebar) gets the ref itself. Must stay
+	// referentially stable: the OCR tab's scroll effect depends on it.
+	const setIsOcrResultAutoScrolling = useCallback((isAutoScrolling: boolean) => {
+		isOcrResultAutoScrollingRef.current = isAutoScrolling;
+	}, []);
 	// Owned here (rather than in the header/metadata components) so the header and the metadata
 	// tab share a single "read more" blade instead of each being able to open their own.
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
@@ -271,7 +281,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		withDefault(NumberParam, undefined)
 	);
 	const [isTextOverlayVisible, setIsTextOverlayVisible] = useState(false);
-	const [activeTab, setActiveTab] = useState<ObjectDetailTabs>(ObjectDetailTabs.Metadata);
 	const [cuePoints, setCuePoints] = useState<CuePoints | undefined>(undefined);
 
 	const [activeMentionHighlights, setActiveMentionHighlights] = useState<{
@@ -428,6 +437,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	);
 
 	// related
+	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
 	const {
 		data: relatedIeObjects,
 		isLoading: relatedIeObjectsIsLoading,
@@ -441,7 +451,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 		return compact(relatedIeObjects?.children?.map(mapRelatedIeObject) || []);
 	}, [relatedIeObjects]);
-	const hasRelated: boolean = mappedRelatedIeObjects.length > 0;
+	const relatedCount = mappedRelatedIeObjects.length;
+
+	const { activeTab, updateActiveTab } = useObjectDetailActiveTab({
+		objectId: mediaInfo?.schemaIdentifier,
+		isNewspaper,
+	});
 
 	// visit info
 	const { data: visitRequest, error: visitRequestError } = useGetActiveVisitRequestForUserAndSpace(
@@ -489,7 +504,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		(visitRequestError as HTTPError)?.response?.status === 403;
 	const isErrorSpaceNotFound = (visitorSpaceError as HTTPError)?.response?.status === 404;
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
-	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
 	const showFragmentSlider = allFilesToDisplayInCurrentPage.length > 1 && !isNewspaper;
 	const isMobile = isTabletPortraitSize(windowSize); // mobile and tablet portrait
 	const hasAccessToVisitorSpaceOfObject =
@@ -549,8 +563,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
 		async (newSearchTerms: string): Promise<void> => {
-			updateActiveTab(ObjectDetailTabs.Ocr);
-			setHighlightMode(HighlightMode.OCR_SEARCH);
 			if (newSearchTerms === '') {
 				// Reset search
 				// Zoom to whole page
@@ -578,6 +590,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				return;
 			}
 
+			updateActiveTab(ObjectDetailTabs.Ocr);
+			setHighlightMode(HighlightMode.OCR_SEARCH);
 			setSearchTerms(newSearchTerms.toLowerCase());
 			setCurrentSearchResultIndex(-1);
 			handleIsTextOverlayVisibleChange(true);
@@ -620,7 +634,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		[router]
 	);
 
-	// Link activeTab and isOverLayVisible from the query params to the internal state
+	// Link isOverLayVisible and cue points from the query params to the internal state
 	// We cannot use the useQueryParam hook here because
 	// There seems to be a disconnect between React/NextJS router and the useQueryParam hook
 	// Probably because of the hacky way we had to get the use query param hook to work with NextJS
@@ -629,12 +643,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
 	useEffect(() => {
 		const parsedUrl = parseUrl(window.location.href);
-		const activeTabFromUrl = parsedUrl.query[QUERY_PARAM_KEY.ACTIVE_TAB];
 		const isTextOverlayVisibleFromUrl =
 			parsedUrl.query[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED];
-		if (activeTabFromUrl) {
-			setActiveTab(activeTabFromUrl as ObjectDetailTabs);
-		}
 		if (isTextOverlayVisibleFromUrl) {
 			setIsTextOverlayVisible(isTextOverlayVisibleFromUrl === 'true');
 		}
@@ -650,30 +660,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			}
 		}
 	}, []);
-
-	const updateActiveTab = useCallback(
-		async (newActiveTab: ObjectDetailTabs | null) => {
-			setActiveTab(newActiveTab || ObjectDetailTabs.Metadata);
-
-			// Also update the query param
-			// We cannot use the useQueryParam hook here because
-			// There seems to be a disconnect between React/NextJS router and the useQueryParam hook
-			// Probably because of the hacky way we had to get the use query param hook to work with NextJS
-			// See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
-			// This could probably be solved by using the latest version of use-query-params and the next-query-params package
-			// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
-			const parsedUrl = parseUrl(window.location.href);
-			const newUrl = stringifyUrl({
-				url: parsedUrl.url,
-				query: {
-					...parsedUrl.query,
-					[QUERY_PARAM_KEY.ACTIVE_TAB]: newActiveTab,
-				},
-			});
-			await router.replace(newUrl, undefined, { shallow: true });
-		},
-		[router.replace]
-	);
 
 	/**
 	 * Effects
@@ -1001,16 +987,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 	}, [activeTab, isMobile]);
 
-	/**
-	 * Set the media type and default tab when the media info is loaded
-	 */
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	useEffect(() => {
-		// Set default view
-		if (isMobile) {
-			// Default to metadata tab on mobile
-			updateActiveTab(ObjectDetailTabs.Metadata);
-		} else {
+		if (!isMobile) {
 			// Check media content and license for default tab on desktop
 			setExpandSidebar(!mediaInfo?.dctermsFormat || !hasMedia, 'replaceIn');
 		}
@@ -1247,42 +1226,29 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const tabs: TabProps[] = useMemo(() => {
 		return OBJECT_DETAIL_TABS(
 			mediaInfo?.dctermsFormat || null,
-			activeTab as ObjectDetailTabs,
+			activeTab,
 			isMediaAvailable(),
 			arePagesOcrTextsAvailable,
-			hasRelated
+			relatedCount
 		);
 	}, [
 		mediaInfo?.dctermsFormat,
 		activeTab,
 		isMediaAvailable,
 		arePagesOcrTextsAvailable,
-		hasRelated,
+		relatedCount,
 	]);
 
-	// A tab from the URL (or an old bookmark) may not exist for this object, e.g. ocr without
-	// transcripts or related without related objects. Wait until the data those tabs depend on has
-	// loaded, otherwise a valid deep link would be reset before its tab appears.
-	useEffect(() => {
-		if (!mediaInfo || relatedIeObjectsIsLoading || relatedIeObjectsIsPlaceholder) {
-			return;
-		}
-		// The media tab exists in the list but is only rendered on mobile
-		const isTabUnavailable =
-			!tabs.some((tab) => tab.id === activeTab) ||
-			(activeTab === ObjectDetailTabs.Media && !isMobile);
-		if (isTabUnavailable) {
-			updateActiveTab(ObjectDetailTabs.Metadata).then(noop);
-		}
-	}, [
-		mediaInfo,
-		relatedIeObjectsIsLoading,
-		relatedIeObjectsIsPlaceholder,
-		tabs,
+	const availableTabIds = useMemo(() => tabs.map((tab) => tab.id as ObjectDetailTabs), [tabs]);
+
+	useResetUnavailableTab({
 		activeTab,
+		availableTabIds,
 		isMobile,
+		// Wait for the data the tabs depend on, or a valid deep link is reset before its tab appears
+		isReady: !!mediaInfo && !relatedIeObjectsIsLoading && !relatedIeObjectsIsPlaceholder,
 		updateActiveTab,
-	]);
+	});
 
 	const accessEndDate = useMemo(() => {
 		const dateDesktop = formatMediumDateWithTime(asDate(visitRequest?.endAt));
@@ -1437,23 +1403,29 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			);
 		}
 
+		// TODO: mobile AI-entity navigation overlay
 		return (
-			<AudioOrVideoPlayer
-				className={clsx('p-object-detail__flowplayer')}
-				locationId="object detail page"
-				representation={getRepresentationByCurrentFileIndex()}
-				dctermsFormat={mediaInfo.dctermsFormat}
-				schemaIdentifier={mediaInfo.schemaIdentifier}
-				maintainerLogo={mediaInfo?.maintainerOverlay ? mediaInfo.maintainerLogo : undefined}
-				cuePoints={cuePoints}
-				poster={undefined}
-				paused={isMediaPaused}
-				onPlay={handleOnPlay}
-				onPause={handleOnPause}
-				onMediaReady={setIsFlowPlayerMediaAvailable}
-			/>
+			<>
+				<AudioOrVideoPlayer
+					className={clsx('p-object-detail__flowplayer')}
+					locationId="object detail page"
+					representation={getRepresentationByCurrentFileIndex()}
+					dctermsFormat={mediaInfo.dctermsFormat}
+					schemaIdentifier={mediaInfo.schemaIdentifier}
+					maintainerLogo={mediaInfo?.maintainerOverlay ? mediaInfo.maintainerLogo : undefined}
+					cuePoints={cuePoints}
+					poster={undefined}
+					paused={isMediaPaused}
+					onPlay={handleOnPlay}
+					onPause={handleOnPause}
+					onMediaReady={setIsFlowPlayerMediaAvailable}
+				/>
+				{isMobile && renderAiEntityNavigationOverlay()}
+			</>
 		);
 	};
+
+	const renderAiEntityNavigationOverlay = (): ReactNode => null;
 
 	const renderObjectMedia = () => {
 		if (mediaInfo?.hasAccessToEssence) {
@@ -1518,11 +1490,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	};
 
 	const renderTabs = (): ReactNode => (
-		<Tabs
+		<ScrollableTabs
 			className={clsx(styles['p-object-detail__tabs'])}
 			variants={['dark']}
 			tabs={tabs}
-			onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs | null)}
+			showNavButtons
+			onClick={(tabId) => updateActiveTab(tabId as ObjectDetailTabs)}
 		/>
 	);
 
@@ -1657,7 +1630,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							onClearSearch={handleClearSearch}
 							onChangeSearchIndex={handleChangeSearchIndex}
 							scrollContainerRef={sidebarContentRef}
-							isProgrammaticScrollRef={isOcrResultAutoScrollingRef}
+							onProgrammaticScrollChange={setIsOcrResultAutoScrolling}
 						/>
 					)}
 				</ObjectDetailPageSidebar>

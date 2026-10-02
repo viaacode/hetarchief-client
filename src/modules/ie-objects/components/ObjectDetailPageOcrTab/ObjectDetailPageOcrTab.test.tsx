@@ -6,6 +6,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@shared/helpers/translate', () => ({
 	tText: (key: string) => key,
+	tHtml: (key: string) => key,
 }));
 vi.mock(
 	'@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination',
@@ -53,7 +54,7 @@ const renderTab = (overrides: Partial<ComponentProps<typeof ObjectDetailPageOcrT
 		onClearSearch: vi.fn(),
 		onChangeSearchIndex: vi.fn(),
 		scrollContainerRef: createScrollContainer(),
-		isProgrammaticScrollRef: { current: false },
+		onProgrammaticScrollChange: vi.fn(),
 		...overrides,
 	};
 	return { props, ...render(<ObjectDetailPageOcrTab {...props} />) };

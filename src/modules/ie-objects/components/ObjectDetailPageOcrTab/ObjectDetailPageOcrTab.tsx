@@ -3,7 +3,7 @@ import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/Sea
 import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { tText } from '@shared/helpers/translate';
+import { tHtml, tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import { isEqual } from 'es-toolkit/compat';
 import { type FC, useEffect, useMemo, useRef, useState } from 'react';
@@ -35,7 +35,7 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 	onClearSearch,
 	onChangeSearchIndex,
 	scrollContainerRef,
-	isProgrammaticScrollRef,
+	onProgrammaticScrollChange,
 }) => {
 	// Whether the search item is actually stuck (pinned at its sticky offset), not merely whether
 	// scrolling has started - see &__search-sentinel's own comment for how the sentinel's position
@@ -160,12 +160,10 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 		// A result near the top of its page (e.g. the first match after a page change) would
 		// otherwise land scrollTop at/near 0 and make the sidebar's collapse-sentinel observer think
 		// the user scrolled back up, re-expanding the header. Flag this as programmatic instead.
-		isProgrammaticScrollRef.current = true;
+		onProgrammaticScrollChange(true);
 		container.scrollTo({ top: target });
 
-		const clearFlag = () => {
-			isProgrammaticScrollRef.current = false;
-		};
+		const clearFlag = () => onProgrammaticScrollChange(false);
 		// Two rAFs, not scrollend: an instant (non-smooth) scrollTo can fire scrollend before the
 		// browser's own IntersectionObserver notification queue - which runs once per rendering
 		// frame - has processed the resulting sentinel intersection, clearing the flag too early.
@@ -189,7 +187,7 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 		currentSearchResultIndex,
 		currentPageIndex,
 		renderedOcrText,
-		isProgrammaticScrollRef,
+		onProgrammaticScrollChange,
 	]);
 
 	return (
@@ -201,7 +199,11 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 					<Icon name={IconNamesLight.Ai} aria-hidden className="u-font-size-24" />
 				}
 				className="u-bt-0"
-			/>
+			>
+				{tHtml(
+					'modules/ie-objects/object-detail-page___deze-ocr-kan-fouten-bevatten-a-href-ocr-betrouwbaarheid-info-meer-info-vind-je-hier-a'
+				)}
+			</Metadata>
 
 			{arePagesOcrTextsAvailable && (
 				<div

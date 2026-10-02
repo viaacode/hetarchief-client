@@ -39,6 +39,14 @@ vi.mock(
 	'@shared/components/MetaDataFieldWithHighlightingAndMaxLength/MetaDataFieldWithHighlightingAndMaxLength',
 	() => ({ default: ({ data }: { data: string }) => <span>{data}</span> })
 );
+// renderAiEntities reads the AI-entity filters off the URL directly
+vi.mock('use-query-params', async (importOriginal) => {
+	const actual = await importOriginal<typeof import('use-query-params')>();
+	return {
+		...actual,
+		useQueryParam: () => [null, vi.fn()],
+	};
+});
 
 import { Permission } from '@account/const';
 import type { MediaObject } from '@ie-objects/components/RelatedObject';

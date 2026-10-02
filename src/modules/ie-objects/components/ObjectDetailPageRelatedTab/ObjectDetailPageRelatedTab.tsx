@@ -19,7 +19,7 @@ export const ObjectDetailPageRelatedTab: FC<ObjectDetailPageRelatedTabProps> = (
 				);
 
 	return (
-		<MetadataList allowTwoColumns={false}>
+		<MetadataList allowTwoColumns={false} noDivider>
 			<Metadata title={title} key="metadata-related" className="u-pb-0">
 				<IeObjectCardList type="related" items={items} />
 			</Metadata>

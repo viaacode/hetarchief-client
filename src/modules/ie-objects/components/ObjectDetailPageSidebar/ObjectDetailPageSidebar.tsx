@@ -123,9 +123,10 @@ export const ObjectDetailPageSidebar: FC<ObjectDetailPageSidebarProps> = ({
 					styles['c-object-detail-sidebar__content'],
 					styles[`c-object-detail-sidebar__content--tab-${activeTab}`],
 					{
-						// The overview ends in the "ook interessant" list
+						// Both end in a card list that paints its own padding/background
 						[styles['c-object-detail-sidebar__content--ends-in-list']]:
-							activeTab === ObjectDetailTabs.Overview && similar.length > 0,
+							(activeTab === ObjectDetailTabs.Overview && similar.length > 0) ||
+							activeTab === ObjectDetailTabs.Related,
 					}
 				)}
 			>
@@ -136,15 +137,17 @@ export const ObjectDetailPageSidebar: FC<ObjectDetailPageSidebarProps> = ({
 						[styles['c-object-detail-sidebar__sticky--scrolled']]: isHeaderCollapsed,
 					})}
 				>
-					<ObjectDetailPageHeader
-						mediaInfo={mediaInfo}
-						onClickAction={onClickAction}
-						hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
-						currentPageIndex={currentPageIndex}
-						isCollapsed={isHeaderCollapsed}
-						onShowDetails={expandHeader}
-						onReadMoreClicked={onReadMoreClicked}
-					/>
+					{activeTab !== ObjectDetailTabs.Media && (
+						<ObjectDetailPageHeader
+							mediaInfo={mediaInfo}
+							onClickAction={onClickAction}
+							hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
+							currentPageIndex={currentPageIndex}
+							isCollapsed={isHeaderCollapsed}
+							onShowDetails={expandHeader}
+							onReadMoreClicked={onReadMoreClicked}
+						/>
+					)}
 					{tabs}
 				</div>
 				{children}
