@@ -41,6 +41,10 @@ $max-height-collapsed: 8rem;
 	align-items: flex-start;
 	gap: abstracts.$spacer-xs;
 	padding: abstracts.$spacer-lg abstracts.$spacer-lg 0 abstracts.$spacer-lg;
+
+	@media (max-width: abstracts.$breakpoint-lg) {
+		padding: 2rem 2rem 0;
+	}
 }
 
 .p-object-detail-header--collapsed .p-object-detail-header__expanded-content {
@@ -58,6 +62,10 @@ $max-height-collapsed: 8rem;
 	justify-content: space-between;
 	gap: abstracts.$spacer-xs; // 8px
 	padding: (abstracts.$spacer-xs * 1.5) abstracts.$spacer-lg; // 12px 32px - 12px has no matching spacer token
+
+	@media (max-width: abstracts.$breakpoint-lg) {
+		padding: (abstracts.$spacer-xs * 1.5) 2rem;
+	}
 
 	.p-object-detail__title {
 		min-width: 0;
@@ -134,6 +142,10 @@ $max-height-collapsed: 8rem;
 		font-size: abstracts.$font-size-xs;
 		font-weight: 500;
 		line-height: abstracts.$font-size-base;
+	}
+
+	@media (max-width: abstracts.$breakpoint-lg) {
+		padding-bottom: 0;
 	}
 }
 
