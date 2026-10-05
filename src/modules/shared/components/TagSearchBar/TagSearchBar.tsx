@@ -10,7 +10,13 @@ import type {
 import { TagSearchBarButton } from '@shared/components/TagSearchBar/TagSearchBarButton';
 import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
-import { type KeyboardEvent, type MouseEvent, type ReactElement, useMemo } from 'react';
+import {
+	type KeyboardEvent,
+	type MouseEvent,
+	type ReactElement,
+	type TouchEvent,
+	useMemo,
+} from 'react';
 import type { InputActionMeta } from 'react-select';
 import CreatableSelect from 'react-select/creatable';
 import { Spinner } from '../Spinner/Spinner';
@@ -33,7 +39,12 @@ const makeClickableMultiValue =
 	(onTagClick: (tag: ClickableTag) => void) =>
 	// biome-ignore lint/suspicious/noExplicitAny: react-select does not export its component props
 	({ children, className, cx, data, innerProps, isDisabled, removeProps }: any) => (
-		<span {...innerProps} className={cx({ 'multi-value': true }, className)}>
+		<span
+			{...innerProps}
+			className={cx({ 'multi-value': true }, className)}
+			// react-select's Control calls preventDefault() on touchend, which cancels the click on touch devices
+			onTouchEnd={(event: TouchEvent<HTMLSpanElement>) => event.stopPropagation()}
+		>
 			<Tag
 				id={data.value}
 				label={children}
