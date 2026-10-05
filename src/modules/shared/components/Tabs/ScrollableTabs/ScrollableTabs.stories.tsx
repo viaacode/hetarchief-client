@@ -61,3 +61,13 @@ Rounded.args = {
 Rounded.parameters = {
 	backgrounds: { default: 'light' },
 };
+
+export const ActiveTabLast = GradientTemplate.bind({});
+ActiveTabLast.args = {
+	variants: ['dark'],
+	showNavButtons: true,
+	tabs: mockTabs.map((tab, index) => ({ ...tab, active: index === mockTabs.length - 1 })),
+};
+ActiveTabLast.parameters = {
+	backgrounds: { default: 'light' },
+};

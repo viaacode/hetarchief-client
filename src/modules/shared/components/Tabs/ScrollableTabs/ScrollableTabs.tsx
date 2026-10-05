@@ -38,7 +38,6 @@ const ScrollableTabs: FC<ScrollableTabsProps> = (props) => {
 	const clickedNavButtonRef = useRef<'left' | 'right' | null>(null);
 	const leftButtonRef = useRef<HTMLButtonElement | null>(null);
 	const rightButtonRef = useRef<HTMLButtonElement | null>(null);
-	const [activeEl, setActiveEl] = useState<Element | null>(null);
 	const [tabsHeight, setTabsHeight] = useState(0);
 	const [canScrollLeft, setCanScrollLeft] = useState(false);
 	const [canScrollRight, setCanScrollRight] = useState(false);
@@ -55,17 +54,12 @@ const ScrollableTabs: FC<ScrollableTabsProps> = (props) => {
 		}
 	}, []);
 
-	// Set active element
-	useEffect(() => {
-		if (tabsRef.current && items.length) {
-			setActiveEl(tabsRef.current.querySelector('.c-tab--active'));
-		}
-	}, [items]);
-
 	// Scroll active tab into view
 	const scrollToActive = useCallback(() => {
-		if (activeEl && tabsRef.current) {
-			const tabsEl = tabsRef.current;
+		// Look the active tab up at scroll time: a cached node goes stale when the tabs re-render
+		const tabsEl = tabsRef.current;
+		const activeEl = tabsEl?.querySelector('.c-tab--active');
+		if (tabsEl && activeEl) {
 			// Leave room for whatever overlays the left edge, so the active tab is fully visible
 			const leftInset = showNavButtons ? NAV_BUTTON_WIDTH_PX : EDGE_FADE_WIDTH_PX;
 			const newX = (activeEl as HTMLDivElement).offsetLeft - leftInset;
@@ -73,7 +67,7 @@ const ScrollableTabs: FC<ScrollableTabsProps> = (props) => {
 			shouldRealignRef.current = true;
 			tabsEl.scrollTo({ top: 0, left: newX, behavior: getScrollBehavior() });
 		}
-	}, [activeEl, showNavButtons]);
+	}, [showNavButtons]);
 
 	// Set gradients to indicate it's scrollable
 	const setGradients = useCallback((element: Element) => {
@@ -141,8 +135,8 @@ const ScrollableTabs: FC<ScrollableTabsProps> = (props) => {
 		};
 	}, [onTabsScroll]);
 
-	// The tabs' widths can still grow after the first paint (webfont, counts), which raises the max
-	// scroll position: the one-off scroll to the active tab then stops short, under the nav button.
+	// The tabs' widths can still grow, or the row shrink, after the first paint (webfont, counts,
+	// scrollbar), which raises the max scroll position: the one-off scroll to the active tab then stops short, under the nav button.
 	// Re-align on tab resizes until the user takes over.
 	// biome-ignore lint/correctness/useExhaustiveDependencies: items re-subscribes the observer to newly added tabs
 	useEffect(() => {
@@ -160,6 +154,8 @@ const ScrollableTabs: FC<ScrollableTabsProps> = (props) => {
 				scrollToActive();
 			}
 		});
+		// The row itself can also narrow after load (e.g. a scrollbar appearing in the sidebar)
+		observer.observe(tabsEl);
 		for (const tab of tabsEl.querySelectorAll('.c-tab')) {
 			observer.observe(tab);
 		}
@@ -226,11 +222,12 @@ const ScrollableTabs: FC<ScrollableTabsProps> = (props) => {
 		}
 	}, [setGradients, items]);
 
+	// Scroll the active tab into view on page load and whenever the tabs or the active tab change
 	useEffect(() => {
-		if (items.length && activeEl) {
+		if (items.length) {
 			scrollToActive();
 		}
-	}, [activeEl, items.length, scrollToActive]);
+	}, [items, scrollToActive]);
 
 	/**
 	 * Render
