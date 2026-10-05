@@ -25,6 +25,13 @@
 $header-collapsed-height: 6.6rem;
 $tabs-height-desktop: 5.6rem;
 
+// Sticky elements here can end up a sub-pixel short of the scroll container's edge (fractional
+// rendered heights), leaving a sliver of scrolling OCR text visible. Overlap by this much to hide it.
+$sticky-overlap: 1px;
+
+// The search bar needs a larger overlap at the top: 1px still left a visible sliver there.
+$sticky-overlap-search: 3px;
+
 .p-object-detail-ocr-tab {
 	// The disclaimer scrolls away with everything else here, as part of the page's single shared
 	// scroll container (see ObjectDetailPage.tsx's sidebarContentRef). The search item and the
@@ -44,11 +51,11 @@ $tabs-height-desktop: 5.6rem;
 		// exactly when &__search reaches its sticky offset and becomes stuck, not merely when
 		// scrolling starts (see ObjectDetailPageOcrTab.tsx's own IntersectionObserver comment).
 		position: relative;
-		top: -($header-collapsed-height + $tabs-height-desktop);
+		top: calc(#{$sticky-overlap-search} - #{$header-collapsed-height + $tabs-height-desktop});
 		height: 1px;
 
 		@media (max-width: abstracts.$breakpoint-lg) {
-			top: -$header-collapsed-height;
+			top: calc(#{$sticky-overlap-search} - #{$header-collapsed-height});
 		}
 	}
 
@@ -58,19 +65,14 @@ $tabs-height-desktop: 5.6rem;
 		// comment). Deliberately its own sticky element rather than riding inside that page-level
 		// unit, so the disclaimer can scroll away independently while this stays pinned.
 		position: sticky;
-		top: $header-collapsed-height + $tabs-height-desktop;
+		top: calc(#{$header-collapsed-height + $tabs-height-desktop} - #{$sticky-overlap-search});
 		background-color: abstracts.$white;
 
 		@media (max-width: abstracts.$breakpoint-lg) {
 			// Tabs render in their own separate, always-visible grid row on mobile (not stacked
 			// inside the sidebar's sticky unit) - only the collapsed header sits above this here.
-			// ObjectDetailPageHeader.module.scss pulls the collapsed header up by 0.2rem (its own
-			// fix for a seam against the tabs above it) - matching that same -0.2rem here keeps
-			// this element's sticky point flush with the header's real (already-shifted) bottom
-			// edge. Without it, this sticks 0.2rem too late, showing a seam of scrolling OCR text
-			// through the gap (a box-shadow patch here instead left a 1px sub-pixel blend - the
-			// same rasterization mismatch seen elsewhere on this page, see Navigation.module.scss).
-			top: $header-collapsed-height - 0.2rem;
+			// The $sticky-overlap-search tucks it under the header, hiding any seam of scrolling OCR text.
+			top: calc(#{$header-collapsed-height} - #{$sticky-overlap-search});
 
 			// Bleed out of the tab's own ocr-tab-inset margins to span the full width, so the
 			// sidebar's drop shadow only shows below this element, not along its sides.
@@ -122,14 +124,16 @@ $tabs-height-desktop: 5.6rem;
 	&__pagination-bar {
 		// No explicit z-index: sticky alone already paints above the OCR text scrolling behind it,
 		// same reasoning as the page's own sticky header unit (see ObjectDetailPage.module.scss).
+		// Sticks $sticky-overlap past the container's bottom edge (the overflow is clipped) and pads
+		// that back in, so no OCR text shows through below the bar while the spacing stays the same.
 		position: sticky;
-		bottom: 0;
+		bottom: -$sticky-overlap;
 		width: 100%;
 		background-color: abstracts.$white;
-		padding: abstracts.$spacer-lg 0;
+		padding: abstracts.$spacer-lg 0 calc(#{abstracts.$spacer-lg} + #{$sticky-overlap});
 
 		@media (max-width: abstracts.$breakpoint-lg) {
-			padding: abstracts.$spacer-md 0;
+			padding: abstracts.$spacer-md 0 calc(#{abstracts.$spacer-md} + #{$sticky-overlap});
 		}
 	}
 
