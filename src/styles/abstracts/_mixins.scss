@@ -68,6 +68,16 @@
 	}
 }
 
+// Only apply hover styles on devices that can really hover.
+// Touch devices keep :hover on the last tapped element, which makes buttons look stuck.
+@mixin hover {
+	@media (hover: hover) {
+		&:hover {
+			@content;
+		}
+	}
+}
+
 @mixin focus-outline() {
 	&:focus {
 		outline: 0;
