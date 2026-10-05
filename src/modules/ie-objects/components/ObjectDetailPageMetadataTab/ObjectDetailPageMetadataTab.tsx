@@ -448,14 +448,16 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 						renderDate(activeFile?.createdAt)
 					)}
 					<Metadata
-						title={tText('Disclaimer')}
+						title={tText(
+							'modules/ie-objects/components/object-detail-page-metadata-tab/object-detail-page-metadata-tab___disclaimer'
+						)}
 						key="metadata-disclaimer"
 						renderedTitleRight={
 							<Icon name={IconNamesLight.Metadata} aria-hidden className="u-font-size-24" />
 						}
 					>
 						{tHtml(
-							'Metadata worden aangeleverd door partners van meemoo. Meemoo is niet verantwoordelijk voor onjuistheden of onvolledigheden in deze gegevens. Meer info'
+							'modules/ie-objects/components/object-detail-page-metadata-tab/object-detail-page-metadata-tab___metadata-worden-aangeleverd-door-partners-van-meemoo-meemoo-is-niet-verantwoordelijk-voor-onjuistheden-of-onvolledigheden-in-deze-gegevens-meer-info'
 						)}
 					</Metadata>
 
