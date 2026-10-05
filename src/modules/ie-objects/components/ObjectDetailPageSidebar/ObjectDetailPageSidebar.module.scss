@@ -7,6 +7,9 @@
 	max-height: 100%;
 	overflow: hidden;
 
+	// Tabs with little content (e.g. OCR) would otherwise let whatever is behind the sidebar show through below them
+	background-color: abstracts.$white;
+
 	// Contains z-index comparisons made inside this sidebar (see &__sticky's own z-index below) to
 	// this subtree, so they can't tie/collide with the page-level $z-layers used outside it (e.g.
 	// the page's expand button "foreground") - this element's own position relative to those is
