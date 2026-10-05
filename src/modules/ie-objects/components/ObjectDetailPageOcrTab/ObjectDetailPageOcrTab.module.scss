@@ -71,6 +71,14 @@ $tabs-height-desktop: 5.6rem;
 			// through the gap (a box-shadow patch here instead left a 1px sub-pixel blend - the
 			// same rasterization mismatch seen elsewhere on this page, see Navigation.module.scss).
 			top: $header-collapsed-height - 0.2rem;
+
+			// Bleed out of the tab's own ocr-tab-inset margins to span the full width, so the
+			// sidebar's drop shadow only shows below this element, not along its sides.
+			margin-left: -(abstracts.$spacer-sm);
+			margin-right: -(abstracts.$spacer-sm);
+			padding-left: abstracts.$spacer-sm;
+			padding-right: abstracts.$spacer-sm;
+			width: calc(100% + #{abstracts.$spacer-sm} * 2);
 		}
 	}
 
