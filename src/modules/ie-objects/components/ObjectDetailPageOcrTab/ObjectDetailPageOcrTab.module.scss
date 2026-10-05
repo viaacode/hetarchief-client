@@ -64,18 +64,19 @@ $tabs-height-desktop: 5.6rem;
 		@media (max-width: abstracts.$breakpoint-lg) {
 			// Tabs render in their own separate, always-visible grid row on mobile (not stacked
 			// inside the sidebar's sticky unit) - only the collapsed header sits above this here.
-			top: $header-collapsed-height;
+			// ObjectDetailPageHeader.module.scss pulls the collapsed header up by 0.2rem (its own
+			// fix for a seam against the tabs above it) - matching that same -0.2rem here keeps
+			// this element's sticky point flush with the header's real (already-shifted) bottom
+			// edge. Without it, this sticks 0.2rem too late, showing a seam of scrolling OCR text
+			// through the gap (a box-shadow patch here instead left a 1px sub-pixel blend - the
+			// same rasterization mismatch seen elsewhere on this page, see Navigation.module.scss).
+			top: $header-collapsed-height - 0.2rem;
 		}
 	}
 
 	&__words-container {
 		width: 100%;
 		margin: 0;
-
-		@media (max-width: abstracts.$breakpoint-lg) {
-			padding: 0 abstracts.$spacer-sm abstracts.$spacer-1xl;
-			width: 100%;
-		}
 	}
 
 	&__word {
@@ -118,6 +119,10 @@ $tabs-height-desktop: 5.6rem;
 		width: 100%;
 		background-color: abstracts.$white;
 		padding: abstracts.$spacer-lg 0;
+
+		@media (max-width: abstracts.$breakpoint-lg) {
+			padding: abstracts.$spacer-md 0;
+		}
 	}
 
 	&__pagination {

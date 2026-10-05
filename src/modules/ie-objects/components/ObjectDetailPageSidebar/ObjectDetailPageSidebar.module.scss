@@ -28,6 +28,7 @@
 	position: sticky;
 	top: 0;
 	z-index: 1;
+	flex-shrink: 0;
 	display: flex;
 	flex-direction: column;
 
@@ -70,6 +71,17 @@
 	// so let the list carry its own bottom padding instead.
 	&--ends-in-list {
 		padding-bottom: 0;
+	}
+
+	&--tab-overview {
+		// Flex column so the tab can grow to fill the space below the header (see OverviewTab)
+		display: flex;
+		flex-direction: column;
+
+		// Shrinking children makes scrollHeight undercount, so overflow-y: auto stops engaging
+		> * {
+			flex-shrink: 0;
+		}
 	}
 
 	&--tab-ocr {

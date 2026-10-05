@@ -17,7 +17,10 @@ import {
 import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 import { isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import { CopyButton } from '@shared/components/CopyButton';
+import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import getConfig from '@shared/config/public-runtime-config';
+import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -37,6 +40,8 @@ import { compact, isEmpty, isNil } from 'es-toolkit/compat';
 import React, { type FC, type ReactNode, useCallback, useMemo } from 'react';
 import MetadataList from '../Metadata/MetadataList';
 import styles from './ObjectDetailPageMetadataTab.module.scss';
+
+const { publicRuntimeConfig } = getConfig();
 
 export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> = ({
 	mediaInfo,
@@ -123,6 +128,18 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 		title: string,
 		data: string | ReactNode | null | undefined
 	): ReactNode => renderSimpleMetadataFieldBase(title, data, onReadMoreClicked);
+
+	const renderPermalink = (schemaIdentifier: string | undefined): ReactNode => {
+		if (!schemaIdentifier) {
+			return null;
+		}
+		const permalink = `${publicRuntimeConfig.CLIENT_URL}/${locale}${ROUTES_BY_LOCALE[locale].permalink.replace(':pid', schemaIdentifier)}`;
+		return (
+			<a href={permalink} target="_blank" rel="noreferrer">
+				{permalink}
+			</a>
+		);
+	};
 
 	const renderProviderIdentifier = (mediaInfo: HetArchiefIeObject): ReactNode => {
 		const linkProps = getIeObjectProviderIdentifierLinkProps(mediaInfo, isKiosk);
@@ -218,20 +235,12 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 
 				<MetadataList allowTwoColumns={true}>
 					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___media-type'),
-						mediaInfo.dctermsFormat
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___bestandstype'),
-						activeFile?.mimeType
+						tText('modules/ie-objects/ie-objects___bronvermelding'),
+						rightsAttributionText ? undefined : mediaInfo?.creditText
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___pid'),
 						mediaInfo.schemaIdentifier
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___rechtenstatus'),
-						mediaInfo?.copyrightNotice
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___abraham-id'),
@@ -241,25 +250,41 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 						tText('modules/ie-objects/const/index___identifier-bij-aanbieder'),
 						renderProviderIdentifier(mediaInfo)
 					)}
+					{mapObjectsToMetadata(
+						mediaInfo.premisIdentifier?.filter(
+							(premisEntry) => !['abraham_id', 'abraham_uri'].includes(Object.keys(premisEntry)[0])
+						),
+						tText('modules/ie-objects/ie-objects___premis-identifier')
+					).map((info) => renderSimpleMetadataField(info.title, info.data))}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___permanente-url'),
+						renderPermalink(mediaInfo.schemaIdentifier)
+					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___editie-nummer'),
 						mediaInfo.issueNumber
 					)}
+					{mapObjectOrArrayToMetadata(
+						mediaInfo.creator,
+						tText('modules/ie-objects/ie-objects___maker')
+					).map((info) => renderSimpleMetadataField(info.title, info.data))}
 					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___plaats-van-uitgave'),
-						mediaInfo.locationCreated
+						tText('modules/ie-objects/const/index___cast'),
+						mediaInfo.meemooDescriptionCast
 					)}
 					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___fysieke-drager'),
-						mapArrayToMetadataData(mediaInfo.dctermsMedium)
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___bestandsnaam'),
-						activeFile?.name
+						tText('modules/ie-objects/const/index___creatiedatum'),
+						mediaInfo.dateCreated
+							? formatDateTime(new Date(mediaInfo.dateCreated), locale, 'short', false)
+							: null
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___uitgebreide-beschrijving'),
 						mediaInfo?.abstract ? mediaInfo?.abstract : null
+					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___plaats-van-uitgave'),
+						mediaInfo.locationCreated
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___locatie-van-de-inhoud'),
@@ -268,6 +293,10 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___tijdsperiode-van-de-inhoud'),
 						mapArrayToMetadataData(mediaInfo.temporal)
+					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/const/index___duurtijd'),
+						mediaInfo.duration
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___categorie'),
@@ -284,18 +313,6 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 						) : null
 					)}
 					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___programmabeschrijving'),
-						mediaInfo.synopsis
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___publicatietype'),
-						mediaInfo.bibframeEdition
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___transcriptie'),
-						mediaInfo?.transcript
-					)}
-					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___taal'),
 						mapArrayToMetadataData(
 							mediaInfo.inLanguage?.map(
@@ -306,6 +323,18 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___alternatieve-titels'),
 						mapArrayToMetadataData(mediaInfo.alternativeTitle)
+					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/const/index___programma'),
+						renderIsPartOfValue(mediaInfo.isPartOf, HetArchiefIsPartOfKey.program)
+					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___programmabeschrijving'),
+						mediaInfo.synopsis
+					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___publicatietype'),
+						mediaInfo.bibframeEdition
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___gerelateerde-titels'),
@@ -327,6 +356,10 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 						isNil(mediaInfo?.numberOfPages) ? null : String(mediaInfo.numberOfPages)
 					)}
 					{renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___paginanummer'),
+						mediaInfo?.pageNumber
+					)}
+					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___afmetingen-in-cm'),
 						(mediaInfo?.width
 							? tText('modules/ie-objects/ie-objects___breedte') + mediaInfo?.width
@@ -334,10 +367,6 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 							(mediaInfo?.height
 								? ` ${tText('modules/ie-objects/ie-objects___hoogte')}${mediaInfo?.height}`
 								: '') || null
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___digitaliseringsdatum'),
-						mediaInfo.digitizationDate
 					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___ocr-software'),
@@ -372,61 +401,6 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 						tText('modules/ie-objects/ie-objects___teksttype'),
 						mediaInfo.bibframeProductionMethod
 					)}
-					{mapObjectOrArrayToMetadata(
-						mediaInfo.creator,
-						tText('modules/ie-objects/ie-objects___maker')
-					).map((info) => renderSimpleMetadataField(info.title, info.data))}
-					{mapObjectOrArrayToMetadata(
-						Array.isArray(mediaInfo.publisher?.[0])
-							? mediaInfo.publisher?.[0]
-							: mediaInfo.publisher,
-						tText('modules/ie-objects/ie-objects___uitgever')
-					).map((info) => renderSimpleMetadataField(info.title, info.data))}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___datum-toegevoegd-aan-platform'),
-						renderDate(activeFile?.createdAt)
-					)}
-					{/*{renderSimpleMetadataField(*/}
-					{/*	tText('modules/ie-objects/ie-objects___permanente-url'),*/}
-					{/*	publicRuntimeConfig.CLIENT_URL +*/}
-					{/*		ROUTES_BY_LOCALE[locale].permalink.replace(':pid', mediaInfo.schemaIdentifier)*/}
-					{/*)}*/}
-					{mapObjectsToMetadata(
-						mediaInfo.premisIdentifier?.filter(
-							(premisEntry) => !['abraham_id', 'abraham_uri'].includes(Object.keys(premisEntry)[0])
-						),
-						tText('modules/ie-objects/ie-objects___premis-identifier')
-					).map((info) => renderSimpleMetadataField(info.title, info.data))}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___creatiedatum'),
-						mediaInfo.dateCreated
-							? formatDateTime(new Date(mediaInfo.dateCreated), locale, 'short', false)
-							: null
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___datum-drager'),
-						mediaInfo.carrierDate
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___bronvermelding'),
-						rightsAttributionText ? undefined : mediaInfo?.creditText
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___paginanummer'),
-						mediaInfo?.pageNumber
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___oorsprong'),
-						mediaInfo.meemooOriginalCp
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___archief'),
-						renderIsPartOfValue(mediaInfo.isPartOf, HetArchiefIsPartOfKey.archive)
-					)}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___programma'),
-						renderIsPartOfValue(mediaInfo.isPartOf, HetArchiefIsPartOfKey.program)
-					)}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___serie'),
 						renderIsPartOfValue(mediaInfo.isPartOf, HetArchiefIsPartOfKey.series)
@@ -438,25 +412,83 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 						renderIsPartOfValue(mediaInfo.isPartOf, HetArchiefIsPartOfKey.season)
 					)}
 					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___episode'),
-						renderIsPartOfValue(mediaInfo.isPartOf, HetArchiefIsPartOfKey.episode)
-					)}
-					{renderSimpleMetadataField(
 						tText('modules/ie-objects/const/index___seizoennummer'),
 						mediaInfo.collectionSeasonNumber
 					)}
 					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___objecttype'),
-						mediaInfo.ebucoreObjectType
+						tText('modules/ie-objects/const/index___episode'),
+						renderIsPartOfValue(mediaInfo.isPartOf, HetArchiefIsPartOfKey.episode)
 					)}
 					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___duurtijd'),
-						mediaInfo.duration
+						tText('modules/ie-objects/ie-objects___fysieke-drager'),
+						mapArrayToMetadataData(mediaInfo.dctermsMedium)
 					)}
 					{renderSimpleMetadataField(
-						tText('modules/ie-objects/const/index___cast'),
-						mediaInfo.meemooDescriptionCast
+						tText('modules/ie-objects/ie-objects___media-type'),
+						mediaInfo.dctermsFormat
 					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___bestandstype'),
+						activeFile?.mimeType
+					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___bestandsnaam'),
+						activeFile?.name
+					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___datum-drager'),
+						mediaInfo.carrierDate
+					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___digitaliseringsdatum'),
+						mediaInfo.digitizationDate
+					)}
+					{renderSimpleMetadataField(
+						tText('modules/ie-objects/ie-objects___datum-toegevoegd-aan-platform'),
+						renderDate(activeFile?.createdAt)
+					)}
+					<Metadata
+						title={tText('Disclaimer')}
+						key="metadata-disclaimer"
+						renderedTitleRight={
+							<Icon name={IconNamesLight.Metadata} aria-hidden className="u-font-size-24" />
+						}
+					>
+						{tHtml(
+							'Metadata worden aangeleverd door partners van meemoo. Meemoo is niet verantwoordelijk voor onjuistheden of onvolledigheden in deze gegevens. Meer info'
+						)}
+					</Metadata>
+
+					{/*
+					 * Fields not listed in the FA's field order - kept here, commented out,
+					 * pending confirmation of where they should go.
+					 */}
+					{/*{renderSimpleMetadataField(*/}
+					{/*	tText('modules/ie-objects/ie-objects___rechtenstatus'),*/}
+					{/*	mediaInfo?.copyrightNotice*/}
+					{/*)}*/}
+					{/*{renderSimpleMetadataField(*/}
+					{/*	tText('modules/ie-objects/ie-objects___transcriptie'),*/}
+					{/*	mediaInfo?.transcript*/}
+					{/*)}*/}
+					{/*{mapObjectOrArrayToMetadata(*/}
+					{/*	Array.isArray(mediaInfo.publisher?.[0])*/}
+					{/*		? mediaInfo.publisher?.[0]*/}
+					{/*		: mediaInfo.publisher,*/}
+					{/*	tText('modules/ie-objects/ie-objects___uitgever')*/}
+					{/*).map((info) => renderSimpleMetadataField(info.title, info.data))}*/}
+					{/*{renderSimpleMetadataField(*/}
+					{/*	tText('modules/ie-objects/const/index___oorsprong'),*/}
+					{/*	mediaInfo.meemooOriginalCp*/}
+					{/*)}*/}
+					{/*{renderSimpleMetadataField(*/}
+					{/*	tText('modules/ie-objects/const/index___archief'),*/}
+					{/*	renderIsPartOfValue(mediaInfo.isPartOf, HetArchiefIsPartOfKey.archive)*/}
+					{/*)}*/}
+					{/*{renderSimpleMetadataField(*/}
+					{/*	tText('modules/ie-objects/const/index___objecttype'),*/}
+					{/*	mediaInfo.ebucoreObjectType*/}
+					{/*)}*/}
 				</MetadataList>
 
 				<MetadataList allowTwoColumns={false}>

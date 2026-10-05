@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "sass:map";
 @use "sass:math";
 @use "src/styles/abstracts" as *;
 
@@ -103,6 +104,74 @@ $scrollable-tabs-gradient-width-lg: $spacer-md + $scrollable-tabs-gradient-width
 					border-radius: math.div($tab-min-height-medium, 2);
 				}
 			}
+		}
+	}
+}
+
+// Nav buttons (`showNavButtons` prop), shared by all variants
+$nav-button-solid-width: 4rem;
+$nav-button-width: 6.4rem;
+
+// Gradient fades from this color to transparent.
+@mixin nav-button-gradient($angle, $color) {
+	background: linear-gradient(#{$angle}, #{$color} 0, #{$color} $nav-button-solid-width, transparent $nav-button-width);
+}
+
+// Same background tokens as the variant's edge-fade. --dark icon is from Figma; --light has no
+// spec yet, so black for contrast.
+$nav-button-variant-colors: (
+	dark: (
+		background: $black,
+		icon: $zinc,
+	),
+	light: (
+		background: $white,
+		icon: $black,
+	),
+);
+
+.#{$component}__nav-button {
+	// Compound selector to outweigh the base `.c-button` rules regardless of source order
+	&:global(.c-button) {
+		position: absolute;
+		top: 0;
+		z-index: get-z-layer("foreground") + 1;
+		width: $nav-button-width;
+		height: 100%;
+		padding: 0;
+		border: 0;
+		border-radius: 0;
+
+		// Color comes from the per-variant gradient below, not the base .c-button background
+		background-color: transparent;
+
+		&:hover,
+		&:active {
+			background-color: transparent;
+		}
+	}
+
+	&--left:global(.c-button) {
+		left: 0;
+	}
+
+	&--right:global(.c-button) {
+		right: 0;
+	}
+}
+
+@each $variant, $colors in $nav-button-variant-colors {
+	.#{$component}--#{$variant} .#{$component}__nav-button {
+		&:global(.c-button) {
+			color: map.get($colors, icon);
+		}
+
+		&--left:global(.c-button) {
+			@include nav-button-gradient(90deg, map.get($colors, background));
+		}
+
+		&--right:global(.c-button) {
+			@include nav-button-gradient(270deg, map.get($colors, background));
 		}
 	}
 }

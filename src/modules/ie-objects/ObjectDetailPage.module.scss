@@ -100,12 +100,34 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		@media (max-width: abstracts.$breakpoint-lg) {
 			grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);
 			grid-template-columns: max-content 1fr;
+
+			// A plain grid item (not absolutely positioned) so it sits at the top of row 2
+			// regardless of row 1's height, which varies with whether the visitor space
+			// navigation bar is rendered there. Needs its own z-index: as the wrapper's
+			// ::before it paints before the back button/tabs (same row, same cell) and
+			// would otherwise be covered by their opaque backgrounds.
+			&::before {
+				content: "";
+				z-index: abstracts.get-z-layer("foreground") + 1;
+				grid-row: 2;
+				grid-column: 1 / -1;
+				align-self: start;
+				height: 1px;
+				margin: 0 2rem;
+				background-color: abstracts.$shade;
+			}
 		}
 	}
 
 	&__sidebar--expanded {
 		.p-object-detail__wrapper {
-			grid-template-columns: $back-to-global-search-button-width-mobile 10fr 16fr;
+			// Desktop only: this selector's 2 classes outrank &__wrapper's own 1-class mobile
+			// media-query override above, so without this guard it would replace the mobile
+			// 2-column layout with these (unrelated, desktop-ratio) 3 columns whenever
+			// expandSidebar is true, even on a narrow viewport.
+			@media (min-width: abstracts.$breakpoint-lg) {
+				grid-template-columns: $back-to-global-search-button-width-mobile 10fr 16fr;
+			}
 		}
 	}
 
@@ -123,8 +145,27 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		outline-offset: -1px;
 
 		@media (max-width: abstracts.$breakpoint-lg) {
-			height: auto;
+			// Explicit, not auto: with height:auto this button has no real size of its own (its
+			// bare content is ~26px) and is entirely dependent on CSS grid "stretch" to reach the
+			// row's height. A stretch-resolved box and an explicitly-sized box (the tabs row,
+			// which gets an explicit JS-measured height) can rasterize their edges through
+			// different sub-pixel rounding even when their final layout numbers are identical -
+			// visible as the two elements' black fills not quite lining up top or bottom. Using
+			// the same literal value .c-tab is given below removes that dependency on stretch.
+			height: 4.8rem;
 			width: $back-to-global-search-button-width-mobile;
+
+			// The tabs beside this button have no border at all (just a background fill), so a
+			// border here - even just border-right - can rasterize this button's edges at a
+			// different sub-pixel position than theirs, visible as the two black fills not quite
+			// lining up. Drop the base .c-button border entirely and paint only the one divider
+			// we actually want as a background, not a border.
+			border: none;
+			background-image: linear-gradient(abstracts.$shade, abstracts.$shade);
+			background-repeat: no-repeat;
+			background-position: right;
+			background-size: 1px 100%;
+			z-index: auto;
 		}
 	}
 
@@ -168,12 +209,27 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		}
 
 		.p-object-detail__tabs {
-			display: none;
-
 			@media (max-width: abstracts.$breakpoint-lg) {
-				display: flex;
+				display: block;
 				grid-row: 2 !important;
 				grid-column: 1 / 3 !important;
+			}
+		}
+
+		// The visitor space navigation bar now sits where the plain back button used to (the
+		// topmost row), so it needs the same top divider that row gets in the other state. A
+		// separate pseudo-element rather than moving &__wrapper's own ::before: that one stays at
+		// grid-row 2 for the (still present) divider between this bar and the tabs below it.
+		.p-object-detail__wrapper::after {
+			@media (max-width: abstracts.$breakpoint-lg) {
+				content: "";
+				z-index: abstracts.get-z-layer("foreground") + 1;
+				grid-row: 1;
+				grid-column: 1 / -1;
+				align-self: start;
+				height: 1px;
+				margin: 0 2rem;
+				background-color: abstracts.$shade;
 			}
 		}
 	}
@@ -217,32 +273,32 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 	}
 
 	&__tabs {
-		// Shrink-to-fit tabs, left-aligned; any leftover width just shows the row's own black
-		// background (see :global(.c-tab) below) instead of stretching tabs to fill it.
-		display: flex;
-		justify-content: flex-start;
-
-		// The row's own background, behind any width the (shrink-to-fit) tabs don't fill.
-		background-color: abstracts.$black;
-
-		@media (min-width: abstracts.$breakpoint-lg) {
-			// Desktop - not a grid item here: it renders inside the sidebar's sticky unit
-			// (ObjectDetailPageSidebar.module.scss), directly below the header. Mobile keeps its own
-			// separate grid-row placement, since mobile puts the tab strip above the header instead
-			// (see the mobile FA).
-			width: 100%;
-			height: $metadata-media-ocr-tabs-height-desktop;
-			flex-shrink: 0;
-
-			:global(.c-tab--media) {
-				display: none !important;
-			}
-		}
-
 		@media (max-width: abstracts.$breakpoint-lg) {
 			// Mobile
 			grid-column: 1 / 4;
 			width: 100%;
+		}
+
+		// Style the row (`.c-tabs`), not this wrapper: ScrollableTabs sets the wrapper's height inline
+		// from the row's measured height, so a flex/height here can lock it at 0.
+		:global(.c-tabs) {
+			// Shrink-to-fit tabs, left-aligned; leftover width shows the row's black background
+			display: flex;
+			justify-content: flex-start;
+
+			// The row's own background, behind any width the (shrink-to-fit) tabs don't fill.
+			background-color: abstracts.$black;
+
+			@media (min-width: abstracts.$breakpoint-lg) {
+				// Desktop: not a grid item, renders in the sidebar's sticky unit below the header
+				width: 100%;
+				height: $metadata-media-ocr-tabs-height-desktop;
+				flex-shrink: 0;
+
+				:global(.c-tab--media) {
+					display: none !important;
+				}
+			}
 		}
 
 		:global(.c-tabs__item) {
@@ -260,12 +316,22 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			gap: abstracts.$spacer-xs; // 8px
 			background-color: abstracts.$black;
 
+			@media (max-width: abstracts.$breakpoint-lg) {
+				padding: 0 abstracts.$spacer-md;
+			}
+
 			// Active/inactive background already gives clear visual feedback; the browser's
 			// default focus ring on this <button> isn't part of the design here.
 			outline: none;
 
 			:global(.c-tab__icon) {
 				font-size: abstracts.$font-size-lg;
+
+				// Unset here, this icon font glyph falls back to the browser's default ~1.2
+				// line-height, which renders it a few px lower than the back button's own icon
+				// (.c-button__icon, which inherits line-height: 1.125 from .c-button) - visibly
+				// offset against it on mobile where the two sit side by side.
+				line-height: 1;
 			}
 
 			:global(.c-tab__label) {
@@ -284,6 +350,27 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 					// No matching token for this weight (same precedent as the header title/detail pages elsewhere).
 					font-weight: 800;
+				}
+
+				// Mobile: content tabs (Overzicht/Metadata/OCR/Gerelateerd) get a purple active state
+				// instead of white. Video/Audio/Krant (Media) keeps the white active state from above.
+				@media (max-width: abstracts.$breakpoint-lg) {
+					&:not(:global(.c-tab--media)) {
+						background-color: abstracts.$lila;
+
+						// This tab's own purple can rasterize a 1px blend with whatever sits right
+						// below it (sub-pixel rounding) - invisible on the other (black-on-black)
+						// tabs, but visible here since it's the one spot where the surrounding color
+						// isn't black. A box-shadow (not margin - margin doesn't enlarge this item's
+						// own fixed-height box, so it has no visual effect here) paints solid purple
+						// over that blend pixel without affecting layout.
+						box-shadow: 0 0.2rem 0 0 abstracts.$lila;
+
+						:global(.c-tab__label) {
+							font-size: abstracts.$font-size-sm; // 14px
+							line-height: 2rem; // 20px - no matching token for 142.857% of 14px
+						}
+					}
 				}
 			}
 		}
@@ -449,7 +536,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		border-radius: abstracts.$button-radius-sm;
 		transform: translate(-50%, $expand-button-vertical-position);
 		transition: right abstracts.$animate-default;
-		box-shadow: abstracts.$shadow-12-black-16;
+		box-shadow: abstracts.$shadow-12-black-16 !important;
 
 		:global(.c-button__icon span) {
 			font-size: abstracts.$font-size-2xm;
@@ -462,6 +549,14 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		// `include respond-at(md)` -fix for safari
 		@media screen and (width >= #{abstracts.$breakpoint-lg}) {
 			visibility: visible;
+		}
+
+		// Mobile's grid only has 2 columns. Staying in column 3 here (hidden, but still laid
+		// out) forces a 3rd implicit column sized to this button's own width, overflowing the
+		// wrapper - which in turn threw off anything spanning the full grid width (e.g. the
+		// back-button/tabs divider). Column placement doesn't matter since it's invisible here.
+		@media (max-width: abstracts.$breakpoint-lg) {
+			grid-column: 1;
 		}
 	}
 

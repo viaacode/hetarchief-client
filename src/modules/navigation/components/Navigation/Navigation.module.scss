@@ -47,6 +47,14 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 	background-color: abstracts.$black;
 	color: abstracts.$white;
 
+	// This bar's own bottom edge doesn't always land on an exact device pixel, so it can
+	// antialias against the page's blank canvas rather than the (separately-painted, often also
+	// black) content below - a near-invisible hairline on light pages, but a visible one on any
+	// page with dark content directly underneath. A solid box-shadow extends this bar's own
+	// black a fraction further down to paint over that antialiased edge instead of leaving it
+	// exposed.
+	box-shadow: 0 1px 0 0 abstracts.$black;
+
 	@media (min-width: abstracts.$breakpoint-xxl) {
 		min-height: abstracts.$c-navigation-height;
 		padding: 0 3.2rem;

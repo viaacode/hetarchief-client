@@ -136,7 +136,7 @@ export const OBJECT_DETAIL_TABS = (
 	 */
 	isMediaPlayable = true,
 	ocrAvailable = true,
-	hasRelated = true
+	relatedCount = 0
 ): TabProps[] => {
 	const typeWithDefault = mediaType || HetArchiefIeObjectType.VIDEO;
 	return [
@@ -178,12 +178,16 @@ export const OBJECT_DETAIL_TABS = (
 					},
 				]
 			: []),
-		...(hasRelated
+		...(relatedCount > 0
 			? [
 					{
 						id: ObjectDetailTabs.Related,
-						label: tText('modules/ie-objects/const/index___gerelateerd'),
-						ariaLabel: tText('modules/ie-objects/const/index___gerelateerd'),
+						label: tText('modules/ie-objects/const/index___amount-gerelateerd', {
+							amount: relatedCount,
+						}),
+						ariaLabel: tText('modules/ie-objects/const/index___amount-gerelateerd', {
+							amount: relatedCount,
+						}),
 						active: ObjectDetailTabs.Related === activeTab,
 					},
 				]

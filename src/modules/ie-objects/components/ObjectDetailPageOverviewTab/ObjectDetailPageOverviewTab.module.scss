@@ -4,16 +4,11 @@
 // .p-object-detail__metadata-component class (see ObjectDetailPage.module.scss), same as the
 // Metadata tab. Padding here too would double it up and make this tab's items narrower.
 
-.p-object-detail-overview-tab__no-divider {
-	// Cancels MetadataList's own built-in top divider (its ::before), only for the tab's first
-	// section - the class lives here rather than on Metadata.module.scss since every other
-	// MetadataList usage in the app still wants that divider by default.
-	// !important: same specificity as Metadata.module.scss's own .c-metadata::before, which this
-	// class is combined with on the same element - source order between the two compiled CSS
-	// modules isn't guaranteed, so specificity alone can't be relied on here.
-	&::before {
-		display: none !important;
-	}
+.p-object-detail-overview-tab {
+	// Grow-only flex item so the tab fills the sidebar (see the sidebar's `> * { flex-shrink: 0 }`)
+	display: flex;
+	flex-direction: column;
+	flex: 1 0 auto;
 }
 
 .p-object-detail-overview-tab__maintainer-title {

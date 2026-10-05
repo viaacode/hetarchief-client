@@ -9,14 +9,35 @@
 
 	&__primary {
 		&-item {
+			// Lets the label's u-text-ellipsis actually truncate instead of overflowing the row
+			min-width: 0;
+			flex-shrink: 1;
+			overflow: hidden;
 			padding-right: abstracts.$spacer-xs;
+
+			// Constrain the nested button/content too, or they overlap the secondary buttons
+			:global(.c-button) {
+				display: flex;
+				max-width: 100%;
+			}
+
+			:global(.c-button__content) {
+				min-width: 0;
+			}
+
+			:global(.u-text-ellipsis) {
+				min-width: 0;
+			}
 		}
 	}
 
 	&__secondary {
 		list-style: none;
-		width: 100%;
+
+		// No width: 100%: as a flex-basis it creates shrink pressure even with room to spare
 		min-width: 0; // prevent overflow in flex container
+		// Fixed-size icon buttons; the primary label absorbs the squeeze
+		flex-shrink: 0;
 		display: flex;
 
 		&-item:not(:last-of-type) {

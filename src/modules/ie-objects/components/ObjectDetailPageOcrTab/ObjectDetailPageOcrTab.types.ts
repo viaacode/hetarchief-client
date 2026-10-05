@@ -27,7 +27,9 @@ export interface ObjectDetailPageOcrTabProps {
 	// ObjectDetailPageOcrTab.tsx's own comment), which happens later than - and independently of -
 	// the page's header collapsing, so that signal can't be reused here.
 	scrollContainerRef: RefObject<HTMLDivElement | null>;
-	// Set while this tab is auto-scrolling to a search result, so ObjectDetailPageSidebar's
-	// collapse-sentinel observer can tell that apart from the user scrolling back up.
-	isProgrammaticScrollRef: RefObject<boolean>;
+	// Called with true when this tab starts auto-scrolling to a search result and false once it has
+	// settled, so ObjectDetailPageSidebar's collapse-sentinel observer can tell that apart from the
+	// user scrolling back up. Must be referentially stable: it's a dependency of the scroll effect,
+	// so an inline function would re-scroll on every render.
+	onProgrammaticScrollChange: (isProgrammatic: boolean) => void;
 }

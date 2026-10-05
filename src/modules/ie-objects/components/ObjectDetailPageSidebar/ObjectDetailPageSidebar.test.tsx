@@ -130,6 +130,12 @@ describe('Component: <ObjectDetailPageSidebar />', () => {
 		expect(container).not.toHaveClass('c-object-detail-sidebar__content--ends-in-list');
 	});
 
+	it('removes the bottom padding for the related tab, which always ends in its card list', () => {
+		const { container } = renderSidebar({ activeTab: ObjectDetailTabs.Related });
+
+		expect(container).toHaveClass('c-object-detail-sidebar__content--ends-in-list');
+	});
+
 	describe('header collapse', () => {
 		it('observes the sentinel inside the scroll container', () => {
 			const { container } = renderSidebar();

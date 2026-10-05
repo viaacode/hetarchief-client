@@ -482,7 +482,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 			label={tText(
 				'pages/bezoekersruimte/visitor-space-slug/object-id/index___voor-sleutelgebruikers'
 			)}
-			className="u-bg-mustard"
+			className="u-bg-white"
 		/>
 	);
 
@@ -596,6 +596,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 						)}
 						onReadMoreClicked={onReadMoreClicked}
 						readMoreButtonVariant="onHeader"
+						maxLength={250}
 					/>
 				)}
 
