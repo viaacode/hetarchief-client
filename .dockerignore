@@ -3,3 +3,12 @@
 .next
 .storybook
 tmp
+.git
+.github
+storybook-static
+coverage
+tests/test_results
+*.tsbuildinfo
+.env
+.env.*
+!.env.template

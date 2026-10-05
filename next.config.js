@@ -27,6 +27,9 @@ const SHARED_RESOLVE_ALIASES = {
 
 /** @type {import("next").NextConfig} */
 module.exports = {
+	// Produces .next/standalone with a minimal server + only the node_modules files it needs,
+	// so the docker image doesn't have to ship the full node_modules folder
+	output: 'standalone',
 	transpilePackages: ['ky-universal', '@viaa/avo2-components', '@meemoo/react-components'],
 	i18n: {
 		locales: ['nl', 'en'],
