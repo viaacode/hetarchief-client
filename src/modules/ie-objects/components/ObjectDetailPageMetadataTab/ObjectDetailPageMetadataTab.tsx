@@ -16,6 +16,7 @@ import {
 } from '@ie-objects/utils/map-metadata';
 import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 import { isNewspaperType } from '@meemoo/admin-core-ui/admin';
+import { Alert } from '@meemoo/react-components';
 import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -446,19 +447,17 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 						tText('modules/ie-objects/ie-objects___datum-toegevoegd-aan-platform'),
 						renderDate(activeFile?.createdAt)
 					)}
-					<Metadata
-						title={tText(
-							'modules/ie-objects/components/object-detail-page-metadata-tab/object-detail-page-metadata-tab___disclaimer'
-						)}
-						key="metadata-disclaimer"
-						renderedTitleRight={
-							<Icon name={IconNamesLight.Metadata} aria-hidden className="u-font-size-24" />
+
+					<Alert
+						content={
+							<div className={styles['p-object-detail__disclaimer']}>
+								{tHtml(
+									'modules/ie-objects/components/object-detail-page-metadata-tab/object-detail-page-metadata-tab___metadata-worden-aangeleverd-door-partners-van-meemoo-meemoo-is-niet-verantwoordelijk-voor-onjuistheden-of-onvolledigheden-in-deze-gegevens-meer-info'
+								)}
+								<Icon name={IconNamesLight.Metadata} aria-hidden className="u-font-size-24" />
+							</div>
 						}
-					>
-						{tHtml(
-							'modules/ie-objects/components/object-detail-page-metadata-tab/object-detail-page-metadata-tab___metadata-worden-aangeleverd-door-partners-van-meemoo-meemoo-is-niet-verantwoordelijk-voor-onjuistheden-of-onvolledigheden-in-deze-gegevens-meer-info'
-						)}
-					</Metadata>
+					/>
 
 					{/*
 					 * Fields not listed in the FA's field order - kept here, commented out,
