@@ -17,13 +17,17 @@ import { ObjectDetailPageSidebar } from '@ie-objects/components/ObjectDetailPage
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
 import type { MediaObject } from '@ie-objects/components/RelatedObject';
 import { useGetAltoJsonFileContent } from '@ie-objects/hooks/use-get-alto-json-file-content';
-import { useGetIeObjectBySchemaIdentifier } from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
+import {
+	isServerSideIeObject,
+	useGetIeObjectBySchemaIdentifier,
+} from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
 import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/use-get-ie-object-ticket-service-tokens';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/use-get-ie-objects-related';
 import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/use-get-ie-objects-similar';
 import { useGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
 import { useIsPublicNewspaper } from '@ie-objects/hooks/use-get-is-public-newspaper';
 import {
+	parseObjectDetailTab,
 	useObjectDetailActiveTab,
 	useResetUnavailableTab,
 } from '@ie-objects/hooks/use-object-detail-active-tab';
@@ -46,6 +50,7 @@ import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-te
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
+import { updateQueryParamsShallow } from '@ie-objects/utils/update-query-params-shallow';
 import {
 	iiifGoToHome,
 	iiifGoToPage,
@@ -204,6 +209,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
 	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
+	// Read once on load: later the url also holds the tab we set ourselves
+	const [hasExplicitTabInUrl] = useState<boolean>(
+		() => !!parseObjectDetailTab(router.query[QUERY_PARAM_KEY.ACTIVE_TAB])
+	);
 	/**
 	 * Ensure that we only trigger the 'view' event once per unique URL/href
 	 */
@@ -305,6 +314,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		useGetIeObjectThumbnail(ieObjectId);
 
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
+
+	// The anonymous server side object has no pages / ocr yet, so no ocr tab either
+	const isMediaInfoComplete = !!mediaInfo && !isServerSideIeObject(mediaInfo);
 
 	const currentPage: HetArchiefIeObjectPage | null = mediaInfo?.pages?.[currentPageIndex] || null;
 
@@ -562,7 +574,10 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
 	const handleSearch = useCallback(
-		async (newSearchTerms: string): Promise<void> => {
+		async (
+			newSearchTerms: string,
+			{ switchToOcrTab = true }: { switchToOcrTab?: boolean } = {}
+		): Promise<void> => {
 			if (newSearchTerms === '') {
 				// Reset search
 				// Zoom to whole page
@@ -590,22 +605,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				return;
 			}
 
-			updateActiveTab(ObjectDetailTabs.Ocr);
 			setHighlightMode(HighlightMode.OCR_SEARCH);
 			setSearchTerms(newSearchTerms.toLowerCase());
 			setCurrentSearchResultIndex(-1);
 			handleIsTextOverlayVisibleChange(true);
-
-			const parsedUrl = parseUrl(window.location.href);
-			const newUrl = stringifyUrl({
-				url: parsedUrl.url,
-				query: {
-					...parsedUrl.query,
-					[QUERY_PARAM_KEY.ACTIVE_TAB]: ObjectDetailTabs.Ocr,
-					[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED]: true,
-				},
-			});
-			await router.replace(newUrl, undefined, { shallow: true });
+			if (switchToOcrTab) {
+				await updateActiveTab(ObjectDetailTabs.Ocr);
+			}
 		},
 		[currentPageIndex, mediaInfo?.hasAccessToEssence, pageOcrTranscripts, router]
 	);
@@ -621,15 +627,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			// See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
 			// This could probably be solved by using the latest version of use-query-params and the next-query-params package
 			// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
-			const parsedUrl = parseUrl(window.location.href);
-			const newUrl = stringifyUrl({
-				url: parsedUrl.url,
-				query: {
-					...parsedUrl.query,
-					[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED]: isVisible,
-				},
-			});
-			router.replace(newUrl, undefined, { shallow: true });
+			updateQueryParamsShallow(router, {
+				[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED]: isVisible,
+			}).then(noop);
 		},
 		[router]
 	);
@@ -898,6 +898,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		if (
 			highlightedSearchTerms &&
 			isNewspaper &&
+			isMediaInfoComplete &&
 			!hasAppliedUrlSearchTerms &&
 			simplifiedAltoInfo?.altoJsonContent
 		) {
@@ -915,13 +916,16 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 			setSearchTermsTemp(newSearchTerms);
 			setSearchTerms(newSearchTerms);
-			handleSearch(newSearchTerms).then(noop);
+			// An explicit tab in the url (refresh, bookmark) wins over the ocr tab that search terms default to
+			handleSearch(newSearchTerms, { switchToOcrTab: !hasExplicitTabInUrl }).then(noop);
 			handleIsTextOverlayVisibleChange(true);
 			setHasAppliedUrlSearchTerms(true);
 		}
 	}, [
 		isNewspaper,
+		isMediaInfoComplete,
 		hasAppliedUrlSearchTerms,
+		hasExplicitTabInUrl,
 		handleSearch,
 		highlightedSearchTerms,
 		handleIsTextOverlayVisibleChange,
@@ -991,7 +995,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	useEffect(() => {
 		if (!isMobile) {
 			// Check media content and license for default tab on desktop
-			setExpandSidebar(!mediaInfo?.dctermsFormat || !hasMedia, 'replaceIn');
+			// Not via setExpandSidebar: it builds the url from a stale location and drops params that
+			// are being set at the same moment (eg: the ocr tab)
+			const shouldExpandSidebar = !mediaInfo?.dctermsFormat || !hasMedia;
+			updateQueryParamsShallow(router, {
+				// Omitted from the url when equal to the default (see BooleanParamWithDefault)
+				[QUERY_PARAM_KEY.EXPAND_SIDEBAR]: shouldExpandSidebar ? '1' : undefined,
+			}).then(noop);
 		}
 	}, [mediaInfo]);
 
@@ -1246,7 +1256,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		availableTabIds,
 		isMobile,
 		// Wait for the data the tabs depend on, or a valid deep link is reset before its tab appears
-		isReady: !!mediaInfo && !relatedIeObjectsIsLoading && !relatedIeObjectsIsPlaceholder,
+		isReady: isMediaInfoComplete && !relatedIeObjectsIsLoading && !relatedIeObjectsIsPlaceholder,
 		updateActiveTab,
 	});
 
@@ -1323,15 +1333,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		if (currentPageIndex !== newPageIndex) {
 			// Needing to parse the current url because the router keeps the first route in memory
 			// https://meemoo.atlassian.net/browse/ARC-3587
-			const parsedUrl = parseUrl(window.location.href);
-			const newUrl = stringifyUrl({
-				url: parsedUrl.url,
-				query: {
-					...parsedUrl.query,
-					[QUERY_PARAM_KEY.ACTIVE_PAGE]: newPageIndex,
-				},
-			});
-			router.replace(newUrl, undefined, { shallow: true }).then(noop);
+			updateQueryParamsShallow(router, {
+				[QUERY_PARAM_KEY.ACTIVE_PAGE]: newPageIndex,
+			}).then(noop);
 		}
 	};
 

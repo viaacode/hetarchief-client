@@ -70,6 +70,8 @@ export function makeServerSideRequestGetIeObjectInfo(
 	});
 }
 
+const IS_SERVER_SIDE_IE_OBJECT_KEY = 'isServerSideIeObject';
+
 /**
  * Store an ieObject that was already fetched during server side rendering in the query cache,
  * so the client can render it immediately instead of waiting for the request to resolve in the browser.
@@ -82,5 +84,18 @@ export function setServerSideIeObjectInfo(
 	schemaIdentifier: string,
 	ieObject: HetArchiefIeObject
 ): void {
-	queryClient.setQueryData([QUERY_KEYS.getIeObjectsInfo, schemaIdentifier], ieObject);
+	queryClient.setQueryData([QUERY_KEYS.getIeObjectsInfo, schemaIdentifier], {
+		...ieObject,
+		[IS_SERVER_SIDE_IE_OBJECT_KEY]: true,
+	});
 }
+
+/**
+ * The server side render is always anonymous, so the hydrated ie object lacks what the user's
+ * session is entitled to (eg: pages and ocr texts) until the browser has refetched it. Only the
+ * refetched object is complete. Query state like isFetching can't tell these apart reliably,
+ * since hydrating resets it while the refetch is still running.
+ */
+export const isServerSideIeObject = (ieObject: HetArchiefIeObject | null | undefined): boolean =>
+	!!ieObject &&
+	(ieObject as unknown as Record<string, unknown>)[IS_SERVER_SIDE_IE_OBJECT_KEY] === true;

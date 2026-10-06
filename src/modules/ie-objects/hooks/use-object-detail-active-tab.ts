@@ -1,8 +1,9 @@
 import { ObjectDetailTabs } from '@ie-objects/ie-objects.types';
+import { updateQueryParamsShallow } from '@ie-objects/utils/update-query-params-shallow';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SearchFilterId } from '@visitor-space/types';
 import { useRouter } from 'next/router';
-import { parseUrl, stringifyUrl } from 'query-string';
+import { parseUrl } from 'query-string';
 import { useCallback, useEffect, useState } from 'react';
 
 interface UseObjectDetailActiveTabProps {
@@ -49,21 +50,9 @@ export const useObjectDetailActiveTab = ({
 			// See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
 			// This could probably be solved by using the latest version of use-query-params and the next-query-params package
 			// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
-			const parsedUrl = parseUrl(window.location.href);
-			const newUrl = stringifyUrl({
-				url: parsedUrl.url,
-				query: {
-					...parsedUrl.query,
-					[QUERY_PARAM_KEY.ACTIVE_TAB]: tab,
-				},
-			});
-			try {
-				await router.replace(newUrl, undefined, { shallow: true });
-			} catch {
-				// A newer navigation cancelled this route change; the tab state is already updated
-			}
+			await updateQueryParamsShallow(router, { [QUERY_PARAM_KEY.ACTIVE_TAB]: tab });
 		},
-		[router.replace]
+		[router]
 	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: only reset the tab when the object changes, not on every refetch
