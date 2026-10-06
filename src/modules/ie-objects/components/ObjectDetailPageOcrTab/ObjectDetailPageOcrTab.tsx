@@ -176,7 +176,7 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 						{tHtml(
 							'modules/ie-objects/object-detail-page___deze-ocr-kan-fouten-bevatten-a-href-ocr-betrouwbaarheid-info-meer-info-vind-je-hier-a'
 						)}
-						<Icon name={IconNamesLight.Ai} aria-hidden className="u-font-size-24" />
+						<Icon name={IconNamesLight.Console} aria-hidden className="u-font-size-24" />
 					</div>
 				}
 			/>

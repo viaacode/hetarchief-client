@@ -179,7 +179,7 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 
 	const renderSourceAttributionDisclaimerTooltip = () => (
 		<ObjectDetailPageMetadataDisclaimerTooltip
-			iconName={IconNamesLight.Info}
+			iconName={IconNamesLight.Console}
 			position="left"
 			className={styles['p-object-detail__source-attribution-info']}
 			ariaLabel={tText(
