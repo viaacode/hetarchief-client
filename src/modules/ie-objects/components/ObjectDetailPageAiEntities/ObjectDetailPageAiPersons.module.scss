@@ -1,0 +1,8 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-object-detail-page-ai-persons {
+	display: flex;
+	flex-direction: column;
+	gap: abstracts.$spacer-sm;
+	padding-top: abstracts.$spacer-xs;
+}

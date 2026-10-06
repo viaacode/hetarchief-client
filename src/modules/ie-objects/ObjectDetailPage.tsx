@@ -354,6 +354,23 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		);
 	}, [mediaInfo, allFilesToDisplayInCurrentPage, currentFileIndex]);
 
+	// The file the player plays, which is also the file the AI entities belong to
+	const currentPlayableFileId =
+		getRepresentationByCurrentFileIndex()?.files.find((file) =>
+			FLOWPLAYER_FORMATS.includes(file.mimeType)
+		)?.id ?? null;
+
+	// Seeks only: the player keeps playing or staying paused. Does nothing when the player isn't
+	// rendered, which is the case on mobile while another tab is open.
+	const seekPlayer = useCallback((seconds: number) => {
+		const video = document.querySelector<HTMLVideoElement>(
+			'.p-object-detail__flowplayer.c-video-player video.fp-engine'
+		);
+		if (video) {
+			video.currentTime = seconds;
+		}
+	}, []);
+
 	const getMaterialRequest = useCallback(
 		(mediaInfo: HetArchiefIeObject) => {
 			return {
@@ -1577,6 +1594,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							visitRequest={visitRequest || null}
 							similar={similar}
 							onReadMoreClicked={setSelectedMetadataField}
+							playableFileId={currentPlayableFileId}
+							onSeekPlayer={seekPlayer}
 						/>
 					)}
 					{/*

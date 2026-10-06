@@ -29,6 +29,50 @@ type aggregateKeys =
 
 export type IeObjectSearchAggregations = Record<aggregateKeys, IeObjectSearchAggregation<string>>;
 
+// AI entities on an AV file (GET /ie-objects/mentions), mirrors the proxy's FileMentionsResponse
+
+export enum FileMentionEntityType {
+	PERSON = 'person',
+	PLACE = 'place',
+	ORGANIZATION = 'organization',
+}
+
+export enum FileMentionAnnotationType {
+	FACE = 'face',
+	SPEAKER = 'speaker',
+	NAMED_ENTITY = 'named-entity',
+}
+
+export interface FileMentionOccurrence {
+	/** TC-in in seconds, null for annotations without a media fragment (some NER hits) */
+	startTime: number | null;
+	/** TC-out in seconds */
+	endTime: number | null;
+	confidence: number | null;
+	annotationType: FileMentionAnnotationType | null;
+	isAiGenerated: boolean;
+}
+
+export interface FileMention {
+	id: string;
+	iri: string;
+	name: string;
+	type: FileMentionEntityType | null;
+	wikidataId: string | null;
+	wikidataUrl: string | null;
+	thumbnailUrl: string | null;
+	occurrences: FileMentionOccurrence[];
+}
+
+export interface FileMentionsResponse {
+	fileId: string;
+	/** Full length of the AV item: the width of the timeline */
+	durationSeconds: number | null;
+	/** False -> the timeline must be rendered non-interactively */
+	hasAccessToEssence: boolean;
+	mentions: FileMention[];
+}
+
 // UI
 
 export enum ObjectDetailTabs {

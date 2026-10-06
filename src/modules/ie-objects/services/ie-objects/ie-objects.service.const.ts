@@ -8,3 +8,4 @@ export const IE_OBJECTS_SERVICE_SIMILAR = 'similar';
 export const IO_OBJECTS_SERVICE_RELATED = 'related';
 export const IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON = 'alto-json';
 export const IE_OBJECTS_SERVICE_DEBUG = 'debug';
+export const IE_OBJECTS_SERVICE_MENTIONS = 'mentions';

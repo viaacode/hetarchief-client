@@ -5,18 +5,22 @@ import { IeObjectCardList } from '@ie-objects/components/IeObjectCardList/IeObje
 import Metadata from '@ie-objects/components/Metadata/Metadata';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import { renderSimpleMetadataField as renderSimpleMetadataFieldBase } from '@ie-objects/components/Metadata/render-simple-metadata-field';
+import { ObjectDetailPageAiPersons } from '@ie-objects/components/ObjectDetailPageAiEntities/ObjectDetailPageAiPersons';
 import { ObjectDetailPageMetadataRights } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataRights';
 import { ObjectDetailPageMetadataThemes } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataThemes';
 import type { ObjectDetailPageOverviewTabProps } from '@ie-objects/components/ObjectDetailPageOverviewTab/ObjectDetailPageOverviewTab.types';
 import { SearchLinkTag } from '@ie-objects/components/SearchLinkTag/SearchLinkTag';
+import { useGetIeObjectFileMentions } from '@ie-objects/hooks/use-get-ie-object-file-mentions';
 import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/use-get-ie-object-previous-next-ids';
 import { renderDate } from '@ie-objects/ie-objects.consts';
+import { FileMentionEntityType } from '@ie-objects/ie-objects.types';
 import {
 	getIeObjectAvRightsIcon,
 	getIeObjectAvRightsLabel,
 	getIeObjectAvRightsUrl,
 } from '@ie-objects/utils/get-ie-object-av-rights-icon';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
+import { mapFileMentionsToAiEntities } from '@ie-objects/utils/map-ai-entities';
 import { renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
 import { isAudioVideoType, isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import { Button } from '@meemoo/react-components';
@@ -26,6 +30,7 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { Locale } from '@shared/utils/i18n';
 import {
@@ -39,7 +44,7 @@ import { isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import type { FC, ReactNode } from 'react';
+import { type FC, type ReactNode, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { ArrayParam, useQueryParam } from 'use-query-params';
 import styles from './ObjectDetailPageOverviewTab.module.scss';
@@ -49,13 +54,14 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 	visitRequest,
 	similar,
 	onReadMoreClicked,
+	playableFileId,
+	onSeekPlayer,
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const user: User | null = useSelector(selectUser);
 	const isKiosk = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	// AI-entity filters (Personen/Plaatsen/Organisaties) carried over from the search results page
-	// biome-ignore lint/correctness/noUnusedVariables: consumed once the visitekaartje card UI exists, see renderAiEntities below
 	const [mentionPersonFilter] = useQueryParam(SearchFilterId.MentionPerson, ArrayParam);
 	// biome-ignore lint/correctness/noUnusedVariables: consumed once the visitekaartje card UI exists, see renderAiEntities below
 	const [mentionPlaceFilter] = useQueryParam(SearchFilterId.MentionPlace, ArrayParam);
@@ -63,6 +69,17 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 	const [mentionOrganisationFilter] = useQueryParam(SearchFilterId.MentionOrganisation, ArrayParam);
 
 	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
+	const isKeyUser = useIsKeyUser();
+	// The proxy only discloses AI entities to key users, on AV objects that have the AI licence
+	const { data: fileMentions } = useGetIeObjectFileMentions(
+		mediaInfo?.schemaIdentifier,
+		playableFileId,
+		{ enabled: isKeyUser && isAudioVideoType(mediaInfo?.dctermsFormat) }
+	);
+	const aiPersons = useMemo(
+		() => mapFileMentionsToAiEntities(fileMentions?.mentions ?? [], FileMentionEntityType.PERSON),
+		[fileMentions]
+	);
 	const { data: ieObjectPreviousNextIds } = useGetIeObjectPreviousNextIds(
 		mediaInfo?.collectionId,
 		mediaInfo?.iri,
@@ -305,10 +322,31 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 		}
 	};
 
-	// TODO: once the visitekaartje card UI exists, render it here, and when one of the filters
-	// above has a value, open the first matching entity's card automatically (scenario 2's "open
-	// the first filtered entity's visitekaartje").
-	const renderAiEntities = (): ReactNode => null;
+	// TODO: places and organisations, with the same visitekaartje (mentionPlaceFilter / mentionOrganisationFilter)
+	const renderAiEntities = (): ReactNode => {
+		if (!aiPersons.length) {
+			return null;
+		}
+		// The person filtered on in the search results opens straight away
+		const personFromFilter = aiPersons.find((person) =>
+			(mentionPersonFilter ?? []).includes(person.name)
+		);
+		return (
+			<ObjectDetailPageAiPersons
+				persons={aiPersons}
+				durationSeconds={fileMentions?.durationSeconds ?? null}
+				isTimelineInteractive={!!fileMentions?.hasAccessToEssence}
+				onSeek={onSeekPlayer}
+				initialSelectedId={personFromFilter?.id ?? null}
+				disclaimerAriaLabel={tText(
+					'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___meer-info-over-ai-herkende-personen'
+				)}
+				disclaimer={tHtml(
+					'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___deze-personen-zijn-automatisch-herkend-met-ai-en-kunnen-fouten-bevatten-meer-info'
+				)}
+			/>
+		);
+	};
 
 	if (isNil(mediaInfo)) {
 		return null;

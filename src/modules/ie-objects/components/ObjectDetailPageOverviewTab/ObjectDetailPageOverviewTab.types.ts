@@ -10,4 +10,8 @@ export interface ObjectDetailPageOverviewTabProps {
 	/** Opens the shared "read more" metadata field blade; owned by the page so the header, this
 	 * tab and the metadata tab all share a single blade instead of each having their own. */
 	onReadMoreClicked: (item: MetadataItem) => void;
+	/** The file the player currently plays, the AI entities are fetched for this file */
+	playableFileId: string | null;
+	/** Moves the player to this moment, without changing whether it plays */
+	onSeekPlayer: (seconds: number) => void;
 }

@@ -1,0 +1,69 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-ai-entity-card {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	align-self: stretch;
+	gap: abstracts.$spacer-sm;
+
+	// 12px; the pills (with their pagination row) carry the bottom spacing themselves
+	padding: (abstracts.$spacer-xs + abstracts.$spacer-xxs) (abstracts.$spacer-xs + abstracts.$spacer-xxs) 0;
+	border-radius: abstracts.$spacer-xs + abstracts.$spacer-xxs;
+	background-color: abstracts.$silver;
+
+	&--without-intervals {
+		padding-bottom: abstracts.$spacer-xs + abstracts.$spacer-xxs;
+	}
+
+	&__header {
+		display: flex;
+		align-items: center;
+		align-self: stretch;
+		gap: abstracts.$spacer-sm;
+	}
+
+	&__title {
+		flex: 1 1 0;
+		min-width: 0;
+	}
+
+	&__name {
+		margin: 0;
+		font-size: abstracts.$font-size-base;
+		font-weight: 800;
+		line-height: 2rem;
+		overflow-wrap: break-word;
+		color: abstracts.$black;
+	}
+
+	&__wikidata {
+		margin: 0;
+		color: abstracts.$slate;
+		font-size: abstracts.$font-size-sm;
+		line-height: 2rem;
+	}
+
+	&__wikidata-link {
+		color: abstracts.$lagune;
+		text-decoration: underline;
+	}
+
+	&__search {
+		display: inline-flex;
+		flex: none;
+		color: abstracts.$lagune;
+		font-size: abstracts.$font-size-lg;
+		line-height: abstracts.$line-height-base;
+		text-decoration: none;
+
+		&:focus {
+			outline: 0;
+		}
+
+		&:focus-visible {
+			outline: 0.2rem solid abstracts.$teal;
+			outline-offset: 0.2rem;
+		}
+	}
+}

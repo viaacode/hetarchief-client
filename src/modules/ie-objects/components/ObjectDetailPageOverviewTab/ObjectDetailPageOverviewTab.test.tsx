@@ -10,6 +10,9 @@ const state = vi.hoisted(() => ({
 	previousNext: undefined as
 		| { previousIeObjectId: string | null; nextIeObjectId: string | null }
 		| undefined,
+	queryParams: {} as Record<string, string[]>,
+	fileMentions: undefined as unknown,
+	fileMentionsOptions: undefined as { enabled: boolean } | undefined,
 }));
 
 vi.mock('@shared/helpers/translate', () => ({
@@ -22,6 +25,35 @@ vi.mock('@shared/hooks/use-locale/use-locale', () => ({ useLocale: () => 'nl' })
 vi.mock('@shared/hooks/has-group', () => ({ useHasAnyGroup: () => state.isKiosk }));
 vi.mock('@ie-objects/hooks/use-get-ie-object-previous-next-ids', () => ({
 	useGetIeObjectPreviousNextIds: () => ({ data: state.previousNext }),
+}));
+vi.mock('@ie-objects/hooks/use-get-ie-object-file-mentions', () => ({
+	useGetIeObjectFileMentions: (
+		_schemaIdentifier: string,
+		_fileId: string,
+		options: { enabled: boolean }
+	) => {
+		state.fileMentionsOptions = options;
+		return { data: state.fileMentions };
+	},
+}));
+vi.mock('@ie-objects/components/ObjectDetailPageAiEntities/ObjectDetailPageAiPersons', () => ({
+	ObjectDetailPageAiPersons: ({
+		persons,
+		isTimelineInteractive,
+		initialSelectedId,
+	}: {
+		persons: { id: string; name: string }[];
+		isTimelineInteractive: boolean;
+		initialSelectedId: string | null;
+	}) => (
+		<div
+			data-testid="ai-persons"
+			data-interactive={isTimelineInteractive}
+			data-initial-selected={initialSelectedId}
+		>
+			{persons.map((person) => person.name).join(',')}
+		</div>
+	),
 }));
 vi.mock('@ie-objects/components/SearchLinkTag/SearchLinkTag', () => ({
 	SearchLinkTag: ({ label }: { label: string }) => <span data-testid="search-tag">{label}</span>,
@@ -44,7 +76,7 @@ vi.mock('use-query-params', async (importOriginal) => {
 	const actual = await importOriginal<typeof import('use-query-params')>();
 	return {
 		...actual,
-		useQueryParam: () => [null, vi.fn()],
+		useQueryParam: (name: string) => [state.queryParams[name] ?? null, vi.fn()],
 	};
 });
 
@@ -83,6 +115,8 @@ const renderTab = (
 			visitRequest={null}
 			similar={props.similar ?? []}
 			onReadMoreClicked={vi.fn()}
+			playableFileId="file-1"
+			onSeekPlayer={vi.fn()}
 		/>
 	);
 
@@ -91,6 +125,9 @@ describe('Component: <ObjectDetailPageOverviewTab />', () => {
 		state.isKiosk = false;
 		state.user = null;
 		state.previousNext = undefined;
+		state.fileMentions = undefined;
+		state.fileMentionsOptions = undefined;
+		state.queryParams = {};
 	});
 
 	it('renders nothing without media info', () => {
@@ -100,10 +137,76 @@ describe('Component: <ObjectDetailPageOverviewTab />', () => {
 				visitRequest={null}
 				similar={[]}
 				onReadMoreClicked={vi.fn()}
+				playableFileId={null}
+				onSeekPlayer={vi.fn()}
 			/>
 		);
 
 		expect(container).toBeEmptyDOMElement();
+	});
+
+	describe('AI persons', () => {
+		const mention = (id: string, name: string, startTime: number) => ({
+			id,
+			iri: id,
+			name,
+			type: 'person',
+			wikidataId: null,
+			wikidataUrl: null,
+			thumbnailUrl: null,
+			occurrences: [{ startTime, endTime: startTime + 5, confidence: 1, annotationType: 'face' }],
+		});
+		const fileMentions = (hasAccessToEssence: boolean) => ({
+			fileId: 'file-1',
+			durationSeconds: 100,
+			hasAccessToEssence,
+			mentions: [
+				mention('b', 'Bea Peeters', 30),
+				mention('a', 'An Janssens', 5),
+				{ ...mention('p', 'Gent', 1), type: 'place' },
+			],
+		});
+
+		it('only fetches AI entities for key users on audio or video', () => {
+			renderTab();
+			expect(state.fileMentionsOptions?.enabled).toBe(false);
+
+			state.user = { permissions: [], isKeyUser: true } as never;
+			renderTab();
+			expect(state.fileMentionsOptions?.enabled).toBe(true);
+
+			renderTab({ dctermsFormat: HetArchiefIeObjectType.NEWSPAPER });
+			expect(state.fileMentionsOptions?.enabled).toBe(false);
+		});
+
+		it('shows the recognised persons in order of appearance, without the places', () => {
+			state.fileMentions = fileMentions(true);
+			renderTab();
+
+			expect(screen.getByTestId('ai-persons')).toHaveTextContent('An Janssens,Bea Peeters');
+		});
+
+		it('shows nothing without recognised persons', () => {
+			state.fileMentions = { ...fileMentions(true), mentions: [] };
+			renderTab();
+
+			expect(screen.queryByTestId('ai-persons')).not.toBeInTheDocument();
+		});
+
+		it('makes the timeline interactive only with access to the essence', () => {
+			state.fileMentions = fileMentions(false);
+			renderTab();
+
+			expect(screen.getByTestId('ai-persons')).toHaveAttribute('data-interactive', 'false');
+		});
+
+		it('opens the person that the search filtered on', () => {
+			state.fileMentions = fileMentions(true);
+			state.queryParams = { mentionPerson: ['Bea Peeters'] };
+			renderTab();
+
+			expect(screen.getByTestId('ai-persons')).toHaveAttribute('data-initial-selected', 'b');
+		});
 	});
 
 	describe('maintainer', () => {
