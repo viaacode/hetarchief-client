@@ -1,10 +1,16 @@
-import { Tooltip, TooltipContent, TooltipTrigger } from '@meemoo/react-components';
+import {
+	Button,
+	type ButtonProps,
+	Tooltip,
+	TooltipContent,
+	TooltipTrigger,
+} from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import type { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { tText } from '@shared/helpers/translate';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
-
 import styles from './ObjectDetailPageMetadataDisclaimerTooltip.module.scss';
 
 export interface ObjectDetailPageMetadataDisclaimerTooltipProps {
@@ -12,7 +18,6 @@ export interface ObjectDetailPageMetadataDisclaimerTooltipProps {
 	ariaLabel: string;
 	content: ReactNode;
 	position?: 'top' | 'top-end' | 'left';
-	iconSize?: 'base' | 'lg';
 	className?: string;
 }
 
@@ -21,7 +26,6 @@ export function ObjectDetailPageMetadataDisclaimerTooltip({
 	ariaLabel,
 	content,
 	position = 'top',
-	iconSize = 'base',
 	className,
 }: ObjectDetailPageMetadataDisclaimerTooltipProps) {
 	return (
@@ -32,17 +36,12 @@ export function ObjectDetailPageMetadataDisclaimerTooltip({
 				contentClassName={styles['c-object-detail-page-metadata-disclaimer-tooltip__content']}
 			>
 				<TooltipTrigger>
-					<button
-						type="button"
-						className={clsx(
-							styles['c-object-detail-page-metadata-disclaimer-tooltip'],
-							styles[`c-object-detail-page-metadata-disclaimer-tooltip--icon-${iconSize}`],
-							className
-						)}
-						aria-label={ariaLabel}
-					>
-						<Icon name={iconName} aria-hidden />
-					</button>
+					<Button
+						icon={<Icon name={iconName} aria-hidden />}
+						ariaLabel={ariaLabel}
+						className={clsx(styles['c-object-detail-page-metadata-disclaimer-tooltip'], className)}
+						variants={['white']}
+					/>
 				</TooltipTrigger>
 				<TooltipContent>{content}</TooltipContent>
 			</Tooltip>

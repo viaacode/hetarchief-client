@@ -179,7 +179,6 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 	const renderSourceAttributionDisclaimerTooltip = () => (
 		<ObjectDetailPageMetadataDisclaimerTooltip
 			iconName={IconNamesLight.Info}
-			iconSize="lg"
 			position="left"
 			className={styles['p-object-detail__source-attribution-info']}
 			ariaLabel={tText(
@@ -201,7 +200,7 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 				title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
 				key="metadata-source-attribution"
 				renderedTitleRight={
-					<div className="u-flex u-flex-row u-gap-xs ">
+					<div className="u-flex u-flex-row">
 						<CopyButton
 							text={rightsAttributionText}
 							title={tText(
