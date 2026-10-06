@@ -73,9 +73,10 @@ export const AiEntityTimeline: FC<AiEntityTimelineProps> = ({
 						className={segmentClassName}
 						style={style}
 						aria-pressed={isActive}
-						aria-label={`${tText(
-							'modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-timeline___spring-naar'
-						)} ${formatAiEntityTimestamp(intervals[firstIndex].start)}`}
+						aria-label={tText(
+							'modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-timeline___spring-naar-timestamp',
+							{ timestamp: formatAiEntityTimestamp(intervals[firstIndex].start) }
+						)}
 						onClick={() => onSelect(firstIndex)}
 					/>
 				);

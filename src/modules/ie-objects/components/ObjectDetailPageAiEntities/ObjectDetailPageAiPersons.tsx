@@ -48,15 +48,16 @@ export const ObjectDetailPageAiPersons: FC<ObjectDetailPageAiPersonsProps> = ({
 		<Metadata
 			key="ai-persons"
 			className={styles['c-object-detail-page-ai-persons__field']}
-			title={`${persons.length} ${
+			title={
 				persons.length === 1
 					? tText(
-							'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___persoon'
+							'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___1-persoon'
 						)
 					: tText(
-							'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___personen'
+							'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___count-personen',
+							{ count: persons.length }
 						)
-			}`}
+			}
 			renderedTitleRight={
 				<ObjectDetailPageMetadataDisclaimerTooltip
 					iconName={IconNamesLight.Ai}

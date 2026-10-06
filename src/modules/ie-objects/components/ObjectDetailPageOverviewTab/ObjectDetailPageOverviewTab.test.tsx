@@ -235,7 +235,7 @@ describe('Component: <ObjectDetailPageOverviewTab />', () => {
 
 			const places = screen.getByTestId('ai-pills-mentionPlace');
 			expect(places).toHaveTextContent('Brugge,Gent');
-			expect(places.getAttribute('data-title')).toMatch(/^2 /);
+			expect(places.getAttribute('data-title')).toContain('count-plaatsen');
 		});
 
 		it('shows no places field without recognised places', () => {
@@ -265,7 +265,7 @@ describe('Component: <ObjectDetailPageOverviewTab />', () => {
 
 			const organisations = screen.getByTestId('ai-pills-mentionOrganisation');
 			expect(organisations).toHaveTextContent('VRT');
-			expect(organisations.getAttribute('data-title')).toMatch(/^1 /);
+			expect(organisations.getAttribute('data-title')).toContain('1-organisatie');
 		});
 
 		it('shows no organisations field without recognised organisations', () => {

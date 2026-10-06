@@ -7,7 +7,8 @@ import { SearchFilterId } from '@visitor-space/types';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@shared/helpers/translate', () => ({
-	tText: (key: string) => key.split('___')[1] ?? key,
+	tText: (key: string, params?: Record<string, unknown>) =>
+		[key.split('___')[1] ?? key, ...Object.values(params ?? {})].join(' '),
 	tHtml: (key: string) => key.split('___')[1] ?? key,
 }));
 vi.mock('@shared/hooks/use-locale/use-locale', () => ({ useLocale: () => 'nl' }));

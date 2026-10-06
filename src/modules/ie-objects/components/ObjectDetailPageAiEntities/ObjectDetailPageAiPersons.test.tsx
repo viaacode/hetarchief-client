@@ -6,7 +6,8 @@ import type { AiEntity } from '@ie-objects/utils/map-ai-entities';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@shared/helpers/translate', () => ({
-	tText: (key: string) => key.split('___')[1] ?? key,
+	tText: (key: string, params?: Record<string, unknown>) =>
+		[key.split('___')[1] ?? key, ...Object.values(params ?? {})].join(' '),
 	tHtml: (key: string) => key.split('___')[1] ?? key,
 }));
 vi.mock('@shared/hooks/use-locale/use-locale', () => ({ useLocale: () => 'nl' }));
@@ -120,11 +121,11 @@ describe('Component: <ObjectDetailPageAiPersons />', () => {
 
 	it('shows the number of persons with a singular or plural label', () => {
 		const { unmount } = renderPersons();
-		expect(screen.getByText('2 personen')).toBeInTheDocument();
+		expect(screen.getByText('count-personen 2')).toBeInTheDocument();
 		unmount();
 
 		renderPersons({ persons: [person('a', 'Jane Eve Doe')] });
-		expect(screen.getByText('1 persoon')).toBeInTheDocument();
+		expect(screen.getByText('1-persoon')).toBeInTheDocument();
 	});
 
 	it('renders nothing without persons', () => {
@@ -155,7 +156,7 @@ describe('Component: <ObjectDetailPageAiPersons />', () => {
 			renderPersons({ persons: sevenPersons });
 
 			expect(getAvatarButtons()).toHaveLength(3);
-			expect(screen.getByRole('button', { name: 'toon-meer' })).toHaveTextContent('+4');
+			expect(screen.getByRole('button', { name: 'toon-meer' })).toHaveTextContent('plus-count 4');
 		});
 
 		it('shows every avatar with +N, and collapses again with the Toon minder link', () => {
@@ -277,7 +278,7 @@ describe('Component: <ObjectDetailPageAiPersons />', () => {
 		it('seeks to TC-in when a timeline segment is clicked', () => {
 			const { onSeek } = renderPersons({ initialSelectedId: 'a' });
 
-			fireEvent.click(screen.getByRole('button', { name: 'spring-naar 01:58' }));
+			fireEvent.click(screen.getByRole('button', { name: 'spring-naar-timestamp 01:58' }));
 
 			expect(onSeek).toHaveBeenCalledWith(118);
 		});
@@ -309,7 +310,7 @@ describe('Component: <ObjectDetailPageAiPersons />', () => {
 			renderMany();
 
 			expect(getPillButtons()).toHaveLength(6);
-			expect(screen.getByText(/^1 van 3$|^1\s+van\s+3$/)).toBeInTheDocument();
+			expect(screen.getByText('page-van-pageCount 1 3')).toBeInTheDocument();
 		});
 
 		it('disables Vorige on the first page and Volgende on the last', () => {
@@ -332,7 +333,7 @@ describe('Component: <ObjectDetailPageAiPersons />', () => {
 			const { onSeek } = renderMany();
 
 			// The pill of the 13th interval is on the third page
-			fireEvent.click(screen.getByRole('button', { name: 'spring-naar 02:00' }));
+			fireEvent.click(screen.getByRole('button', { name: 'spring-naar-timestamp 02:00' }));
 
 			expect(onSeek).toHaveBeenCalledWith(120);
 			expect(

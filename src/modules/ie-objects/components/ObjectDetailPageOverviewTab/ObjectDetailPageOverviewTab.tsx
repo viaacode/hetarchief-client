@@ -361,15 +361,16 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 				/>
 				<ObjectDetailPageAiPills
 					entities={aiPlaces}
-					title={`${aiPlaces.length} ${
+					title={
 						aiPlaces.length === 1
 							? tText(
-									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___plaats'
+									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___1-plaats'
 								)
 							: tText(
-									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___plaatsen'
+									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___count-plaatsen',
+									{ count: aiPlaces.length }
 								)
-					}`}
+					}
 					searchFilterId={SearchFilterId.MentionPlace}
 					durationSeconds={durationSeconds}
 					isTimelineInteractive={isTimelineInteractive}
@@ -384,15 +385,16 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 				/>
 				<ObjectDetailPageAiPills
 					entities={aiOrganisations}
-					title={`${aiOrganisations.length} ${
+					title={
 						aiOrganisations.length === 1
 							? tText(
-									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-organisations___organisatie'
+									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-organisations___1-organisatie'
 								)
 							: tText(
-									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-organisations___organisaties'
+									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-organisations___count-organisaties',
+									{ count: aiOrganisations.length }
 								)
-					}`}
+					}
 					searchFilterId={SearchFilterId.MentionOrganisation}
 					durationSeconds={durationSeconds}
 					isTimelineInteractive={isTimelineInteractive}
