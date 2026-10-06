@@ -44,6 +44,25 @@ $sticky-overlap-search: 3px;
 
 	@include ocr-tab-inset;
 
+	&__disclaimer {
+		margin-top: abstracts.$spacer-md;
+
+		@media (max-width: abstracts.$breakpoint-lg) {
+			margin-top: abstracts.$spacer-xs;
+		}
+
+		&-content {
+			display: flex;
+			flex-direction: row;
+			gap: abstracts.$spacer-xs;
+			justify-content: space-between;
+
+			a {
+				color: abstracts.$jade;
+			}
+		}
+	}
+
 	&__search-sentinel {
 		// Rendered $header-collapsed-height + $tabs-height-desktop above its own place in the flow
 		// (via relative positioning, which doesn't affect sibling layout) - the same distance as
