@@ -192,6 +192,7 @@ describe('Component: <ObjectDetailPageOverviewTab />', () => {
 				mention('a', 'An Janssens', 5),
 				{ ...mention('p', 'Gent', 1), type: 'place' },
 				{ ...mention('q', 'Brugge', 0.5), type: 'place' },
+				{ ...mention('o', 'VRT', 2), type: 'organization' },
 			],
 		});
 
@@ -255,6 +256,36 @@ describe('Component: <ObjectDetailPageOverviewTab />', () => {
 			expect(screen.getByTestId('ai-pills-mentionPlace')).toHaveAttribute(
 				'data-initial-selected',
 				'p'
+			);
+		});
+
+		it('shows the recognised organisations with their own filter and counter', () => {
+			state.fileMentions = fileMentions(true);
+			renderTab();
+
+			const organisations = screen.getByTestId('ai-pills-mentionOrganisation');
+			expect(organisations).toHaveTextContent('VRT');
+			expect(organisations.getAttribute('data-title')).toMatch(/^1 /);
+		});
+
+		it('shows no organisations field without recognised organisations', () => {
+			state.fileMentions = {
+				...fileMentions(true),
+				mentions: fileMentions(true).mentions.filter((mention) => mention.type !== 'organization'),
+			};
+			renderTab();
+
+			expect(screen.queryByTestId('ai-pills-mentionOrganisation')).not.toBeInTheDocument();
+		});
+
+		it('opens the organisation that the search filtered on', () => {
+			state.fileMentions = fileMentions(true);
+			state.queryParams = { mentionOrganisation: ['VRT'] };
+			renderTab();
+
+			expect(screen.getByTestId('ai-pills-mentionOrganisation')).toHaveAttribute(
+				'data-initial-selected',
+				'o'
 			);
 		});
 

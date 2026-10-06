@@ -65,7 +65,6 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 	// AI-entity filters (Personen/Plaatsen/Organisaties) carried over from the search results page
 	const [mentionPersonFilter] = useQueryParam(SearchFilterId.MentionPerson, ArrayParam);
 	const [mentionPlaceFilter] = useQueryParam(SearchFilterId.MentionPlace, ArrayParam);
-	// biome-ignore lint/correctness/noUnusedVariables: consumed once the visitekaartje card UI exists, see renderAiEntities below
 	const [mentionOrganisationFilter] = useQueryParam(SearchFilterId.MentionOrganisation, ArrayParam);
 
 	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
@@ -82,6 +81,11 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 	);
 	const aiPlaces = useMemo(
 		() => mapFileMentionsToAiEntities(fileMentions?.mentions ?? [], FileMentionEntityType.PLACE),
+		[fileMentions]
+	);
+	const aiOrganisations = useMemo(
+		() =>
+			mapFileMentionsToAiEntities(fileMentions?.mentions ?? [], FileMentionEntityType.ORGANIZATION),
 		[fileMentions]
 	);
 	const { data: ieObjectPreviousNextIds } = useGetIeObjectPreviousNextIds(
@@ -326,7 +330,6 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 		}
 	};
 
-	// TODO: organisations, with the same visitekaartje (mentionOrganisationFilter)
 	const renderAiEntities = (): ReactNode => {
 		// The entity filtered on in the search results opens straight away
 		const personFromFilter = aiPersons.find((person) =>
@@ -334,6 +337,9 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 		);
 		const placeFromFilter = aiPlaces.find((place) =>
 			(mentionPlaceFilter ?? []).includes(place.name)
+		);
+		const organisationFromFilter = aiOrganisations.find((organisation) =>
+			(mentionOrganisationFilter ?? []).includes(organisation.name)
 		);
 		const durationSeconds = fileMentions?.durationSeconds ?? null;
 		const isTimelineInteractive = !!fileMentions?.hasAccessToEssence;
@@ -374,6 +380,29 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 					)}
 					disclaimer={tHtml(
 						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___deze-plaatsen-zijn-automatisch-herkend-met-ai-en-kunnen-fouten-bevatten-meer-info'
+					)}
+				/>
+				<ObjectDetailPageAiPills
+					entities={aiOrganisations}
+					title={`${aiOrganisations.length} ${
+						aiOrganisations.length === 1
+							? tText(
+									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-organisations___organisatie'
+								)
+							: tText(
+									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-organisations___organisaties'
+								)
+					}`}
+					searchFilterId={SearchFilterId.MentionOrganisation}
+					durationSeconds={durationSeconds}
+					isTimelineInteractive={isTimelineInteractive}
+					onSeek={onSeekPlayer}
+					initialSelectedId={organisationFromFilter?.id ?? null}
+					disclaimerAriaLabel={tText(
+						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-organisations___meer-info-over-ai-herkende-organisaties'
+					)}
+					disclaimer={tHtml(
+						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-organisations___deze-organisaties-zijn-automatisch-herkend-met-ai-en-kunnen-fouten-bevatten-meer-info'
 					)}
 				/>
 			</>
