@@ -1,0 +1,86 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-ai-entity-pill-row {
+	position: relative;
+	align-self: stretch;
+
+	&__list,
+	&__measure {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: abstracts.$spacer-xs;
+	}
+
+	// Same layout as the list, but out of sight and out of the way
+	&__measure {
+		position: absolute;
+		inset: 0 0 auto;
+		height: 0;
+		overflow: hidden;
+		visibility: hidden;
+		pointer-events: none;
+	}
+
+	&__pill {
+		display: inline-flex;
+		align-items: center;
+		max-width: 100%;
+		height: 2.4rem;
+		padding: 0.6rem abstracts.$spacer-xs;
+		border: 0;
+		border-radius: 2.5rem;
+		background-color: abstracts.$silver;
+		color: abstracts.$black;
+		font-family: inherit;
+		font-size: abstracts.$font-size-sm;
+		font-weight: 800;
+		line-height: 2rem;
+		white-space: nowrap;
+		cursor: pointer;
+
+		@include abstracts.hover {
+			background-color: abstracts.$zinc;
+		}
+
+		&:focus {
+			outline: 0;
+		}
+
+		&:focus-visible {
+			outline: 0.2rem solid abstracts.$teal;
+			outline-offset: 0.2rem;
+		}
+
+		&--selected,
+		&--selected:hover {
+			background-color: abstracts.$black;
+			color: abstracts.$white;
+		}
+	}
+
+	&__toggle {
+		padding: 0;
+		border: 0;
+		background: none;
+		color: abstracts.$jade;
+		font-family: abstracts.$font-family-primary;
+		font-size: abstracts.$font-size-sm;
+		line-height: 2rem;
+		white-space: nowrap;
+		cursor: pointer;
+
+		&:hover {
+			text-decoration: underline;
+		}
+
+		&:focus {
+			outline: 0;
+		}
+
+		&:focus-visible {
+			outline: 0.2rem solid abstracts.$teal;
+			outline-offset: 0.2rem;
+		}
+	}
+}

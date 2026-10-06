@@ -1,33 +1,39 @@
 import Metadata from '@ie-objects/components/Metadata/Metadata';
-import { AiEntityAvatarRow } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityAvatarRow';
 import { AiEntityCard } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityCard';
+import { AiEntityPillRow } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityPillRow';
 import { ObjectDetailPageMetadataDisclaimerTooltip } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataDisclaimerTooltip';
 import type { AiEntity } from '@ie-objects/utils/map-ai-entities';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getSearchLink } from '@shared/helpers/get-search-link';
-import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
-import { SearchFilterId } from '@visitor-space/types';
+import type { SearchFilterId } from '@visitor-space/types';
 import { type FC, type ReactNode, useId, useState } from 'react';
 
-import styles from './ObjectDetailPageAiPersons.module.scss';
+import styles from './ObjectDetailPageAiPills.module.scss';
 
-export interface ObjectDetailPageAiPersonsProps {
-	persons: AiEntity[];
+export interface ObjectDetailPageAiPillsProps {
+	/** Places or organisations, shown as one pill each */
+	entities: AiEntity[];
+	/** Label of the field with the counter, e.g. "11 plaatsen" */
+	title: string;
+	/** Search filter the card's search link filters on */
+	searchFilterId: SearchFilterId;
 	/** Full length of the AV item, the width of the timeline */
 	durationSeconds: number | null;
 	/** False without access to the essence: the timeline and pills are display only */
 	isTimelineInteractive: boolean;
 	onSeek: (seconds: number) => void;
-	/** Explains that the persons are AI generated; set per entity type by the caller */
+	/** Explains that the entities are AI generated; set per entity type by the caller */
 	disclaimer: ReactNode;
 	disclaimerAriaLabel: string;
-	/** Person whose card is open from the start, e.g. the one filtered on in the search page */
+	/** Entity whose card is open from the start, e.g. the one filtered on in the search page */
 	initialSelectedId?: string | null;
 }
 
-export const ObjectDetailPageAiPersons: FC<ObjectDetailPageAiPersonsProps> = ({
-	persons,
+export const ObjectDetailPageAiPills: FC<ObjectDetailPageAiPillsProps> = ({
+	entities,
+	title,
+	searchFilterId,
 	durationSeconds,
 	isTimelineInteractive,
 	onSeek,
@@ -38,25 +44,17 @@ export const ObjectDetailPageAiPersons: FC<ObjectDetailPageAiPersonsProps> = ({
 	const locale = useLocale();
 	const cardId = useId();
 	const [selectedId, setSelectedId] = useState<string | null>(initialSelectedId);
-	const selectedPerson = persons.find((person) => person.id === selectedId) ?? null;
+	const selectedEntity = entities.find((entity) => entity.id === selectedId) ?? null;
 
-	if (!persons.length) {
+	if (!entities.length) {
 		return null;
 	}
 
 	return (
 		<Metadata
-			key="ai-persons"
-			className={styles['c-object-detail-page-ai-persons__field']}
-			title={`${persons.length} ${
-				persons.length === 1
-					? tText(
-							'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___persoon'
-						)
-					: tText(
-							'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___personen'
-						)
-			}`}
+			key={`ai-${searchFilterId}`}
+			className={styles['c-object-detail-page-ai-pills__field']}
+			title={title}
 			renderedTitleRight={
 				<ObjectDetailPageMetadataDisclaimerTooltip
 					iconName={IconNamesLight.Ai}
@@ -66,25 +64,23 @@ export const ObjectDetailPageAiPersons: FC<ObjectDetailPageAiPersonsProps> = ({
 				/>
 			}
 		>
-			<div className={styles['c-object-detail-page-ai-persons']}>
-				<AiEntityAvatarRow
-					entities={persons}
-					selectedId={selectedPerson?.id ?? null}
+			<div className={styles['c-object-detail-page-ai-pills']}>
+				<AiEntityPillRow
+					entities={entities}
+					selectedId={selectedEntity?.id ?? null}
 					controlsId={cardId}
-					onSelect={(personId) =>
-						setSelectedId((current) => (current === personId ? null : personId))
+					onSelect={(entityId) =>
+						setSelectedId((current) => (current === entityId ? null : entityId))
 					}
 				/>
-				{selectedPerson && (
+				{selectedEntity && (
 					<AiEntityCard
-						key={selectedPerson.id}
+						key={selectedEntity.id}
 						id={cardId}
-						entity={selectedPerson}
+						entity={selectedEntity}
 						durationSeconds={durationSeconds}
 						isInteractive={isTimelineInteractive}
-						searchLink={getSearchLink(locale, {
-							[SearchFilterId.MentionPerson]: selectedPerson.name,
-						})}
+						searchLink={getSearchLink(locale, { [searchFilterId]: selectedEntity.name })}
 						onSeek={onSeek}
 					/>
 				)}

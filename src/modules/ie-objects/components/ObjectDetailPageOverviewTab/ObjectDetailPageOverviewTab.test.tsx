@@ -45,15 +45,42 @@ vi.mock('@ie-objects/components/ObjectDetailPageAiEntities/ObjectDetailPageAiPer
 		persons: { id: string; name: string }[];
 		isTimelineInteractive: boolean;
 		initialSelectedId: string | null;
-	}) => (
-		<div
-			data-testid="ai-persons"
-			data-interactive={isTimelineInteractive}
-			data-initial-selected={initialSelectedId}
-		>
-			{persons.map((person) => person.name).join(',')}
-		</div>
-	),
+	}) =>
+		// Like the real component, nothing without persons
+		persons.length > 0 && (
+			<div
+				data-testid="ai-persons"
+				data-interactive={isTimelineInteractive}
+				data-initial-selected={initialSelectedId}
+			>
+				{persons.map((person) => person.name).join(',')}
+			</div>
+		),
+}));
+vi.mock('@ie-objects/components/ObjectDetailPageAiEntities/ObjectDetailPageAiPills', () => ({
+	ObjectDetailPageAiPills: ({
+		entities,
+		title,
+		searchFilterId,
+		isTimelineInteractive,
+		initialSelectedId,
+	}: {
+		entities: { id: string; name: string }[];
+		title: string;
+		searchFilterId: string;
+		isTimelineInteractive: boolean;
+		initialSelectedId: string | null;
+	}) =>
+		entities.length > 0 && (
+			<div
+				data-testid={`ai-pills-${searchFilterId}`}
+				data-title={title}
+				data-interactive={isTimelineInteractive}
+				data-initial-selected={initialSelectedId}
+			>
+				{entities.map((entity) => entity.name).join(',')}
+			</div>
+		),
 }));
 vi.mock('@ie-objects/components/SearchLinkTag/SearchLinkTag', () => ({
 	SearchLinkTag: ({ label }: { label: string }) => <span data-testid="search-tag">{label}</span>,
@@ -164,6 +191,7 @@ describe('Component: <ObjectDetailPageOverviewTab />', () => {
 				mention('b', 'Bea Peeters', 30),
 				mention('a', 'An Janssens', 5),
 				{ ...mention('p', 'Gent', 1), type: 'place' },
+				{ ...mention('q', 'Brugge', 0.5), type: 'place' },
 			],
 		});
 
@@ -198,6 +226,36 @@ describe('Component: <ObjectDetailPageOverviewTab />', () => {
 			renderTab();
 
 			expect(screen.getByTestId('ai-persons')).toHaveAttribute('data-interactive', 'false');
+		});
+
+		it('shows the recognised places in order of appearance, with a counter in the title', () => {
+			state.fileMentions = fileMentions(true);
+			renderTab();
+
+			const places = screen.getByTestId('ai-pills-mentionPlace');
+			expect(places).toHaveTextContent('Brugge,Gent');
+			expect(places.getAttribute('data-title')).toMatch(/^2 /);
+		});
+
+		it('shows no places field without recognised places', () => {
+			state.fileMentions = {
+				...fileMentions(true),
+				mentions: fileMentions(true).mentions.filter((mention) => mention.type === 'person'),
+			};
+			renderTab();
+
+			expect(screen.queryByTestId('ai-pills-mentionPlace')).not.toBeInTheDocument();
+		});
+
+		it('opens the place that the search filtered on', () => {
+			state.fileMentions = fileMentions(true);
+			state.queryParams = { mentionPlace: ['Gent'] };
+			renderTab();
+
+			expect(screen.getByTestId('ai-pills-mentionPlace')).toHaveAttribute(
+				'data-initial-selected',
+				'p'
+			);
 		});
 
 		it('opens the person that the search filtered on', () => {

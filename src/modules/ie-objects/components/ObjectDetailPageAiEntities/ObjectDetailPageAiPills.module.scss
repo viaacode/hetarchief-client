@@ -1,6 +1,6 @@
 @use "src/styles/abstracts" as abstracts;
 
-.c-object-detail-page-ai-persons {
+.c-object-detail-page-ai-pills {
 	display: flex;
 	flex-direction: column;
 	gap: abstracts.$spacer-sm;
@@ -9,6 +9,6 @@
 
 // The floating feedback button would cover the field when it ends the list. :last-child also
 // outweighs the item's own padding.
-.c-object-detail-page-ai-persons__field:last-child {
+.c-object-detail-page-ai-pills__field:last-child {
 	padding-bottom: abstracts.$spacer-md + abstracts.$c-feedback-button-height;
 }

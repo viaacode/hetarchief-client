@@ -6,6 +6,7 @@ import Metadata from '@ie-objects/components/Metadata/Metadata';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import { renderSimpleMetadataField as renderSimpleMetadataFieldBase } from '@ie-objects/components/Metadata/render-simple-metadata-field';
 import { ObjectDetailPageAiPersons } from '@ie-objects/components/ObjectDetailPageAiEntities/ObjectDetailPageAiPersons';
+import { ObjectDetailPageAiPills } from '@ie-objects/components/ObjectDetailPageAiEntities/ObjectDetailPageAiPills';
 import { ObjectDetailPageMetadataRights } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataRights';
 import { ObjectDetailPageMetadataThemes } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataThemes';
 import type { ObjectDetailPageOverviewTabProps } from '@ie-objects/components/ObjectDetailPageOverviewTab/ObjectDetailPageOverviewTab.types';
@@ -63,7 +64,6 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 	const isKiosk = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	// AI-entity filters (Personen/Plaatsen/Organisaties) carried over from the search results page
 	const [mentionPersonFilter] = useQueryParam(SearchFilterId.MentionPerson, ArrayParam);
-	// biome-ignore lint/correctness/noUnusedVariables: consumed once the visitekaartje card UI exists, see renderAiEntities below
 	const [mentionPlaceFilter] = useQueryParam(SearchFilterId.MentionPlace, ArrayParam);
 	// biome-ignore lint/correctness/noUnusedVariables: consumed once the visitekaartje card UI exists, see renderAiEntities below
 	const [mentionOrganisationFilter] = useQueryParam(SearchFilterId.MentionOrganisation, ArrayParam);
@@ -78,6 +78,10 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 	);
 	const aiPersons = useMemo(
 		() => mapFileMentionsToAiEntities(fileMentions?.mentions ?? [], FileMentionEntityType.PERSON),
+		[fileMentions]
+	);
+	const aiPlaces = useMemo(
+		() => mapFileMentionsToAiEntities(fileMentions?.mentions ?? [], FileMentionEntityType.PLACE),
 		[fileMentions]
 	);
 	const { data: ieObjectPreviousNextIds } = useGetIeObjectPreviousNextIds(
@@ -322,29 +326,57 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 		}
 	};
 
-	// TODO: places and organisations, with the same visitekaartje (mentionPlaceFilter / mentionOrganisationFilter)
+	// TODO: organisations, with the same visitekaartje (mentionOrganisationFilter)
 	const renderAiEntities = (): ReactNode => {
-		if (!aiPersons.length) {
-			return null;
-		}
-		// The person filtered on in the search results opens straight away
+		// The entity filtered on in the search results opens straight away
 		const personFromFilter = aiPersons.find((person) =>
 			(mentionPersonFilter ?? []).includes(person.name)
 		);
+		const placeFromFilter = aiPlaces.find((place) =>
+			(mentionPlaceFilter ?? []).includes(place.name)
+		);
+		const durationSeconds = fileMentions?.durationSeconds ?? null;
+		const isTimelineInteractive = !!fileMentions?.hasAccessToEssence;
+
 		return (
-			<ObjectDetailPageAiPersons
-				persons={aiPersons}
-				durationSeconds={fileMentions?.durationSeconds ?? null}
-				isTimelineInteractive={!!fileMentions?.hasAccessToEssence}
-				onSeek={onSeekPlayer}
-				initialSelectedId={personFromFilter?.id ?? null}
-				disclaimerAriaLabel={tText(
-					'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___meer-info-over-ai-herkende-personen'
-				)}
-				disclaimer={tHtml(
-					'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___deze-personen-zijn-automatisch-herkend-met-ai-en-kunnen-fouten-bevatten-meer-info'
-				)}
-			/>
+			<>
+				<ObjectDetailPageAiPersons
+					persons={aiPersons}
+					durationSeconds={durationSeconds}
+					isTimelineInteractive={isTimelineInteractive}
+					onSeek={onSeekPlayer}
+					initialSelectedId={personFromFilter?.id ?? null}
+					disclaimerAriaLabel={tText(
+						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___meer-info-over-ai-herkende-personen'
+					)}
+					disclaimer={tHtml(
+						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___deze-personen-zijn-automatisch-herkend-met-ai-en-kunnen-fouten-bevatten-meer-info'
+					)}
+				/>
+				<ObjectDetailPageAiPills
+					entities={aiPlaces}
+					title={`${aiPlaces.length} ${
+						aiPlaces.length === 1
+							? tText(
+									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___plaats'
+								)
+							: tText(
+									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___plaatsen'
+								)
+					}`}
+					searchFilterId={SearchFilterId.MentionPlace}
+					durationSeconds={durationSeconds}
+					isTimelineInteractive={isTimelineInteractive}
+					onSeek={onSeekPlayer}
+					initialSelectedId={placeFromFilter?.id ?? null}
+					disclaimerAriaLabel={tText(
+						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___meer-info-over-ai-herkende-plaatsen'
+					)}
+					disclaimer={tHtml(
+						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___deze-plaatsen-zijn-automatisch-herkend-met-ai-en-kunnen-fouten-bevatten-meer-info'
+					)}
+				/>
+			</>
 		);
 	};
 
@@ -395,7 +427,11 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 						)}
 					</>
 				)}
-				{renderAiEntities()}
+			</MetadataList>
+
+			<MetadataList allowTwoColumns={false}>{renderAiEntities()}</MetadataList>
+
+			<MetadataList allowTwoColumns={true}>
 				{renderRightsInfo(mediaInfo)}
 				{renderAuthorRightsHolder(mediaInfo)}
 				{showThemes && (

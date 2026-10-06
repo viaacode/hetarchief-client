@@ -1,6 +1,7 @@
 import { AiEntityIntervalPills } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityIntervalPills';
 import { AiEntityPortrait } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityPortrait';
 import { AiEntityTimeline } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityTimeline';
+import { FileMentionEntityType } from '@ie-objects/ie-objects.types';
 import type { AiEntity } from '@ie-objects/utils/map-ai-entities';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -52,7 +53,10 @@ export const AiEntityCard: FC<AiEntityCardProps> = ({
 			)}
 		>
 			<div className={styles['c-ai-entity-card__header']}>
-				<AiEntityPortrait name={entity.name} still={entity.still} size="lg" />
+				{/* Places and organisations have no picture: their name moves to the left */}
+				{entity.type === FileMentionEntityType.PERSON && (
+					<AiEntityPortrait name={entity.name} still={entity.still} size="lg" />
+				)}
 				<div className={styles['c-ai-entity-card__title']}>
 					<h3 className={styles['c-ai-entity-card__name']}>{entity.name}</h3>
 					{entity.wikidataId && (
