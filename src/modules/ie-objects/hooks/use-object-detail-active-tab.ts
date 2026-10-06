@@ -43,13 +43,7 @@ export const useObjectDetailActiveTab = ({
 			const tab = newActiveTab || ObjectDetailTabs.Overview;
 			setActiveTab(tab);
 
-			// Also update the query param
-			// We cannot use the useQueryParam hook here because
-			// There seems to be a disconnect between React/NextJS router and the useQueryParam hook
-			// Probably because of the hacky way we had to get the use query param hook to work with NextJS
-			// See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
-			// This could probably be solved by using the latest version of use-query-params and the next-query-params package
-			// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
+			// Also update the query param (not via useQueryParam, see updateQueryParamsShallow)
 			await updateQueryParamsShallow(router, { [QUERY_PARAM_KEY.ACTIVE_TAB]: tab });
 		},
 		[router]

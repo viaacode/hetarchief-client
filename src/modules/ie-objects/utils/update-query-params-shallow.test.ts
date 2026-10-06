@@ -57,4 +57,23 @@ describe('updateQueryParamsShallow', () => {
 
 		await expect(updateQueryParamsShallow({ replace }, { tab: 'ocr' })).resolves.toBeUndefined();
 	});
+
+	it('starts from the url again after a failed update', async () => {
+		const replace = vi.fn().mockRejectedValueOnce(new Error('boom')).mockResolvedValue(true);
+		await updateQueryParamsShallow({ replace }, { tab: 'ocr' });
+		await updateQueryParamsShallow({ replace }, { textOverlay: true });
+
+		expect(queryOf(replace.mock.calls[1][0])).toEqual({ foo: 'bar', textOverlay: 'true' });
+	});
+
+	it('removes params set to undefined while other updates are pending', async () => {
+		setUrl('?foo=bar&expandSidebar=1');
+		const replace = vi.fn().mockResolvedValue(true);
+		await Promise.all([
+			updateQueryParamsShallow({ replace }, { tab: 'ocr' }),
+			updateQueryParamsShallow({ replace }, { expandSidebar: undefined }),
+		]);
+
+		expect(queryOf(replace.mock.calls[1][0])).toEqual({ foo: 'bar', tab: 'ocr' });
+	});
 });

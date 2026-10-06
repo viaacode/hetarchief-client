@@ -316,7 +316,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const isNoAccessError = (mediaInfoError as HTTPError)?.response?.status === 403;
 
 	// The anonymous server side object has no pages / ocr yet, so no ocr tab either
-	const isMediaInfoComplete = !!mediaInfo && !isServerSideIeObject(mediaInfo);
+	// (unless the refetch failed: then the server side object is all we'll get)
+	const isMediaInfoComplete = !!mediaInfo && (!isServerSideIeObject(mediaInfo) || !!mediaInfoError);
 
 	const currentPage: HetArchiefIeObjectPage | null = mediaInfo?.pages?.[currentPageIndex] || null;
 
@@ -620,13 +621,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		(isVisible: boolean): void => {
 			setIsTextOverlayVisible(isVisible);
 
-			// Also update the query param
-			// We cannot use the useQueryParam hook here because
-			// There seems to be a disconnect between React/NextJS router and the useQueryParam hook
-			// Probably because of the hacky way we had to get the use query param hook to work with NextJS
-			// See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
-			// This could probably be solved by using the latest version of use-query-params and the next-query-params package
-			// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
+			// Also update the query param (not via useQueryParam, see updateQueryParamsShallow)
 			updateQueryParamsShallow(router, {
 				[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED]: isVisible,
 			}).then(noop);
