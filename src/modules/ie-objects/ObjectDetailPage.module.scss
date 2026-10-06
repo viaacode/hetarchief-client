@@ -320,9 +320,14 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 				padding: 0 abstracts.$spacer-md;
 			}
 
-			// Active/inactive background already gives clear visual feedback; the browser's
-			// default focus ring on this <button> isn't part of the design here.
+			// No ring for mouse clicks (the active/inactive background already shows the state), but
+			// keyboard focus needs one. Inset so the row's overflow clipping can't cut it off.
 			outline: none;
+
+			&:focus-visible {
+				outline: 0.2rem solid abstracts.$teal;
+				outline-offset: -0.2rem;
+			}
 
 			:global(.c-tab__icon) {
 				font-size: abstracts.$font-size-lg;
