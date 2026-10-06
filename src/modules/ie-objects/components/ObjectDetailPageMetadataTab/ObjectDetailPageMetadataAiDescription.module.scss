@@ -7,10 +7,21 @@
 	align-items: flex-start;
 	align-self: stretch;
 	gap: abstracts.$spacer-xs;
+	padding: abstracts.$spacer-sm 0 abstracts.$spacer-lg;
 
-	// Top padding is abstracts.$spacer-xs, not abstracts.$spacer-sm: combined with the parent gap it reproduces the
-	// original 16px gap after the divider, which is now a sibling <hr> rather than a border.
-	padding: abstracts.$spacer-xs 0 abstracts.$spacer-lg;
+	&--has-divider {
+		padding-top: 0;
+	}
+
+	&__divider {
+		// A real <hr> rather than a border on the AI description block, so the parent's gap handles spacing
+		align-self: stretch;
+		width: 100%;
+		height: 1px;
+		border: 0;
+		background-color: rgba(abstracts.$black, 0.12); // 12% opacity black, per Figma
+		margin: 0 0 abstracts.$spacer-sm;
+	}
 }
 
 .c-object-detail-page-metadata-ai-description__header {
