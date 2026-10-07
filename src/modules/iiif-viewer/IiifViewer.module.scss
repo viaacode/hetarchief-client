@@ -16,7 +16,7 @@ $controls-margin-bottom: $spacer-sm;
 		inset: 0;
 
 		:global(.openseadragon-container) {
-			background-color: #222 !important;
+			background-color: $graphite !important;
 		}
 
 		:global(.c-iiif-viewer__iiif__alto__text) {
@@ -74,7 +74,7 @@ $controls-margin-bottom: $spacer-sm;
 		flex-flow: row wrap;
 		gap: 3rem;
 		overflow-y: auto;
-		background-color: #222;
+		background-color: $graphite;
 		justify-content: center;
 		align-items: center;
 		height: calc($view-height - 10rem);
@@ -89,7 +89,7 @@ $controls-margin-bottom: $spacer-sm;
 		> button {
 			cursor: pointer;
 			padding: 0;
-			border: 0.4rem solid #222;
+			border: 0.4rem solid $graphite;
 			width: 25%;
 
 			@media (max-width: $breakpoint-lg) {
