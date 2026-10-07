@@ -45,14 +45,14 @@
 	}
 
 	&__wikidata-link {
-		color: abstracts.$lagune;
+		color: abstracts.$lagoon;
 		text-decoration: underline;
 	}
 
 	&__search {
 		display: inline-flex;
 		flex: none;
-		color: abstracts.$lagune;
+		color: abstracts.$lagoon;
 		font-size: abstracts.$font-size-lg;
 		line-height: abstracts.$line-height-base;
 		text-decoration: none;

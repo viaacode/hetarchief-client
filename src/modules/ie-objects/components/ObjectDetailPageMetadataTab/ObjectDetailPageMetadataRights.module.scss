@@ -19,7 +19,7 @@
 		display: inline-flex;
 		flex-shrink: 0;
 		align-items: center;
-		width: abstracts.$font-size-1xl;
+		width: fit-content;
 		height: abstracts.$font-size-1xl;
 		line-height: 1;
 		text-decoration: none;
@@ -27,11 +27,12 @@
 		:global([class*="c-icon"]) {
 			font-size: abstracts.$font-size-1xl;
 			line-height: 1;
+			color: abstracts.$black;
 		}
 	}
 
 	&__label-text {
-		color: abstracts.$jade;
+		color: abstracts.$teal-dark;
 
 		&--link {
 			text-decoration: underline;
