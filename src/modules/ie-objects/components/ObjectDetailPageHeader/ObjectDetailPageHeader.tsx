@@ -600,30 +600,13 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 					/>
 				)}
 
-				{!mediaInfo.description && !isNewspaper && (
-					<div className={styles['p-object-detail-header__description-fallback']}>
-						<div className={styles['p-object-detail-header__description-fallback__text']}>
-							{tHtml(
-								'pages/bezoekersruimte/visitor-space-slug/object-id/index___geen-beschrijving'
-							)}
-						</div>
-						<Icon
-							name={IconNamesLight.MissingText}
-							className={styles['p-object-detail-header__description-fallback__icon']}
-							aria-hidden
-						/>
-					</div>
-				)}
-
 				{showAiDescription && (
-					<>
-						<hr className={styles['p-object-detail-header__divider']} />
-						<ObjectDetailPageMetadataAiDescription
-							name={mediaInfo.nameAi}
-							synopsis={mediaInfo.synopsisAi}
-							onReadMoreClicked={onReadMoreClicked}
-						/>
-					</>
+					<ObjectDetailPageMetadataAiDescription
+						showDivider={!!mediaInfo.description}
+						name={mediaInfo.nameAi}
+						synopsis={mediaInfo.synopsisAi}
+						onReadMoreClicked={onReadMoreClicked}
+					/>
 				)}
 			</div>
 

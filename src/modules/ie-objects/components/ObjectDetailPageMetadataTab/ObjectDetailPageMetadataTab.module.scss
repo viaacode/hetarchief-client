@@ -53,8 +53,20 @@
 	}
 }
 
+.p-object-detail__disclaimer {
+	display: flex;
+	flex-direction: row;
+	gap: abstracts.$spacer-xs;
+	justify-content: space-between;
+
+	a {
+		color: abstracts.$jade;
+	}
+}
+
 .p-object-detail__icon-button {
 	width: fit-content;
 	height: fit-content;
+	padding: abstracts.$spacer-xxxs;
 }
 

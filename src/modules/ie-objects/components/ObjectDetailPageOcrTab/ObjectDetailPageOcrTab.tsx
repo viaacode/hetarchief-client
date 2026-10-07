@@ -1,12 +1,12 @@
 import Metadata from '@ie-objects/components/Metadata/Metadata';
 import { OcrSearchInputWithResultsPagination } from '@iiif-viewer/components/SearchInputWithResults/OcrSearchInputWithResultsPagination';
-import { Button } from '@meemoo/react-components';
+import { Alert, Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tHtml, tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import { isEqual } from 'es-toolkit/compat';
-import { type FC, useEffect, useMemo, useRef, useState } from 'react';
+import { type FC, useEffect, useMemo, useRef } from 'react';
 import styles from './ObjectDetailPageOcrTab.module.scss';
 import type { ObjectDetailPageOcrTabProps } from './ObjectDetailPageOcrTab.types';
 
@@ -37,34 +37,11 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 	scrollContainerRef,
 	onProgrammaticScrollChange,
 }) => {
-	// Whether the search item is actually stuck (pinned at its sticky offset), not merely whether
-	// scrolling has started - see &__search-sentinel's own comment for how the sentinel's position
-	// makes this line up with the item's real sticky `top`.
-	const [isSearchStuck, setIsSearchStuck] = useState(false);
 	const searchStickySentinelRef = useRef<HTMLDivElement>(null);
 	const activeWordRef = useRef<HTMLSpanElement>(null);
 	// Which result (page + index) we last scrolled to, so unrelated re-renders of the OCR text
 	// (overlay toggle, new callback identities after a router.replace) don't yank the user back
 	const lastScrolledResultRef = useRef<string | null>(null);
-
-	// The sentinel only renders once the OCR texts are available, which can be after mount
-	// biome-ignore lint/correctness/useExhaustiveDependencies: arePagesOcrTextsAvailable decides whether the sentinel exists
-	useEffect(() => {
-		const root = scrollContainerRef.current;
-		const sentinel = searchStickySentinelRef.current;
-		if (!root || !sentinel) {
-			return;
-		}
-		const observer = new IntersectionObserver(
-			([entry]) => setIsSearchStuck(!entry.isIntersecting),
-			{
-				root,
-				threshold: 0,
-			}
-		);
-		observer.observe(sentinel);
-		return () => observer.disconnect();
-	}, [scrollContainerRef, arePagesOcrTextsAvailable]);
 
 	const renderedOcrText = useMemo(() => {
 		let searchTermIndex = 0;
@@ -192,18 +169,17 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 
 	return (
 		<div className={clsx(styles['p-object-detail-ocr-tab'])}>
-			<Metadata
-				title={tText('modules/ie-objects/object-detail-page___ocr-betrouwbaarheid')}
-				key="ocr-disclaimer"
-				renderedTitleRight={
-					<Icon name={IconNamesLight.Ai} aria-hidden className="u-font-size-24" />
+			<Alert
+				className={styles['p-object-detail-ocr-tab__disclaimer']}
+				content={
+					<div className={styles['p-object-detail-ocr-tab__disclaimer-content']}>
+						{tHtml(
+							'modules/ie-objects/object-detail-page___deze-ocr-kan-fouten-bevatten-a-href-ocr-betrouwbaarheid-info-meer-info-vind-je-hier-a'
+						)}
+						<Icon name={IconNamesLight.Console} aria-hidden className="u-font-size-24" />
+					</div>
 				}
-				className="u-bt-0"
-			>
-				{tHtml(
-					'modules/ie-objects/object-detail-page___deze-ocr-kan-fouten-bevatten-a-href-ocr-betrouwbaarheid-info-meer-info-vind-je-hier-a'
-				)}
-			</Metadata>
+			/>
 
 			{arePagesOcrTextsAvailable && (
 				<div
@@ -218,9 +194,7 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 				// disclaimer above.
 				<Metadata
 					key="ocr-search"
-					className={clsx(styles['p-object-detail-ocr-tab__search'], {
-						'u-bt-0': isSearchStuck,
-					})}
+					className={clsx(styles['p-object-detail-ocr-tab__search'], 'u-bt-0')}
 				>
 					<OcrSearchInputWithResultsPagination
 						id="object-detail-page__ocr-search-input"
