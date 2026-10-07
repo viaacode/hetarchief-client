@@ -20,6 +20,13 @@ export interface AiEntity {
 	intervals: AiEntityInterval[];
 }
 
+/** The one interval that is highlighted across all entity types, and shown in the mobile player bar */
+export interface ActiveAiInterval {
+	entity: AiEntity;
+	/** Index into entity.intervals */
+	intervalIndex: number;
+}
+
 const mapOccurrencesToIntervals = (mention: FileMention): AiEntityInterval[] => {
 	return mention.occurrences
 		.filter((occurrence) => typeof occurrence.startTime === 'number')
@@ -57,6 +64,21 @@ export const mapFileMentionsToAiEntities = (
 				(a.intervals[0]?.start ?? Number.POSITIVE_INFINITY) -
 				(b.intervals[0]?.start ?? Number.POSITIVE_INFINITY)
 		);
+};
+
+/**
+ * Entities the search was filtered on come first, so a match is never hidden behind "Toon meer".
+ * Both groups keep their chronological order.
+ */
+export const prioritizeAiEntitiesByName = (
+	entities: AiEntity[],
+	filteredNames: readonly (string | null)[] | null | undefined
+): AiEntity[] => {
+	if (!filteredNames?.length) {
+		return entities;
+	}
+	const isFiltered = (entity: AiEntity) => filteredNames.includes(entity.name);
+	return [...entities.filter(isFiltered), ...entities.filter((entity) => !isFiltered(entity))];
 };
 
 // mm:ss, or hh:mm:ss from an hour on

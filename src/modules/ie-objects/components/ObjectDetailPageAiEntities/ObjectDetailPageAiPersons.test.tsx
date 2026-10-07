@@ -2,7 +2,8 @@ import { fireEvent, render, screen, within } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
 import { FileMentionEntityType } from '@ie-objects/ie-objects.types';
-import type { AiEntity } from '@ie-objects/utils/map-ai-entities';
+import type { ActiveAiInterval, AiEntity } from '@ie-objects/utils/map-ai-entities';
+import { useState } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@shared/helpers/translate', () => ({
@@ -62,12 +63,37 @@ const person = (id: string, name: string, overrides: Partial<AiEntity> = {}): Ai
 	...overrides,
 });
 
+// The page owns the highlighted interval; this mimics it
+const StatefulObjectDetailPageAiPersons = ({
+	onSeek,
+	activeInterval: forcedActiveInterval,
+	...props
+}: Omit<
+	React.ComponentProps<typeof ObjectDetailPageAiPersons>,
+	'activeInterval' | 'onSelectInterval'
+> & {
+	onSeek: (seconds: number) => void;
+	activeInterval?: ActiveAiInterval | null;
+}) => {
+	const [activeInterval, setActiveInterval] = useState<ActiveAiInterval | null>(null);
+	return (
+		<ObjectDetailPageAiPersons
+			{...props}
+			activeInterval={forcedActiveInterval ?? activeInterval}
+			onSelectInterval={(entity, intervalIndex) => {
+				setActiveInterval({ entity, intervalIndex });
+				onSeek(entity.intervals[intervalIndex].start);
+			}}
+		/>
+	);
+};
+
 const renderPersons = (
 	props: Partial<React.ComponentProps<typeof ObjectDetailPageAiPersons>> = {}
 ) => {
 	const onSeek = vi.fn();
 	const result = render(
-		<ObjectDetailPageAiPersons
+		<StatefulObjectDetailPageAiPersons
 			persons={[person('a', 'Jane Eve Doe'), person('b', 'Marjolein De Wilde')]}
 			durationSeconds={200}
 			isTimelineInteractive={true}
@@ -156,7 +182,7 @@ describe('Component: <ObjectDetailPageAiPersons />', () => {
 			renderPersons({ persons: sevenPersons });
 
 			expect(getAvatarButtons()).toHaveLength(3);
-			expect(screen.getByRole('button', { name: 'toon-meer' })).toHaveTextContent('plus-count 4');
+			expect(screen.getByRole('button', { name: 'toon-meer' })).toHaveTextContent('+4');
 		});
 
 		it('shows every avatar with +N, and collapses again with the Toon minder link', () => {
@@ -217,6 +243,36 @@ describe('Component: <ObjectDetailPageAiPersons />', () => {
 
 	it('opens the initially selected person straight away', () => {
 		renderPersons({ initialSelectedId: 'b' });
+
+		expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('Marjolein De Wilde');
+	});
+
+	it('opens the filtered person when the persons arrive after the first render', () => {
+		const props = {
+			durationSeconds: 200,
+			isTimelineInteractive: true,
+			activeInterval: null,
+			onSelectInterval: vi.fn(),
+			disclaimer: 'disclaimer',
+			disclaimerAriaLabel: 'meer info',
+		};
+		const { rerender } = render(<ObjectDetailPageAiPersons {...props} persons={[]} />);
+
+		rerender(
+			<ObjectDetailPageAiPersons
+				{...props}
+				persons={[person('a', 'Jane Eve Doe'), person('b', 'Marjolein De Wilde')]}
+				initialSelectedId="b"
+			/>
+		);
+
+		expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('Marjolein De Wilde');
+	});
+
+	it('reopens the card of the active interval when it mounts again, e.g. back from the media tab', () => {
+		renderPersons({
+			activeInterval: { entity: person('b', 'Marjolein De Wilde'), intervalIndex: 1 },
+		});
 
 		expect(screen.getByRole('heading', { level: 3 })).toHaveTextContent('Marjolein De Wilde');
 	});
@@ -283,13 +339,62 @@ describe('Component: <ObjectDetailPageAiPersons />', () => {
 			expect(onSeek).toHaveBeenCalledWith(118);
 		});
 
-		it('is display only without access to the essence', () => {
-			const { onSeek } = renderPersons({ initialSelectedId: 'a', isTimelineInteractive: false });
+		it('shows the intervals without any interaction when there is no access to the essence', () => {
+			const { onSeek, container } = renderPersons({
+				initialSelectedId: 'a',
+				isTimelineInteractive: false,
+			});
 
+			expect(screen.getAllByText('01:58').length).toBeGreaterThan(0);
 			expect(screen.queryByRole('button', { name: /spring-naar/ })).not.toBeInTheDocument();
 			expect(screen.queryByRole('button', { name: '01:58' })).not.toBeInTheDocument();
-			expect(screen.getAllByText('01:58').length).toBeGreaterThan(0);
+			expect(container.querySelector('[class*="--interactive"]')).toBeNull();
 			expect(onSeek).not.toHaveBeenCalled();
+		});
+
+		it('highlights no interval without access to the essence, even when one is active', () => {
+			const entity = person('a', 'Jane Eve Doe');
+			const { container } = renderPersons({
+				initialSelectedId: 'a',
+				isTimelineInteractive: false,
+				activeInterval: { entity, intervalIndex: 1 },
+			});
+
+			expect(container.querySelector('[class*="--active"]')).toBeNull();
+		});
+	});
+
+	describe('single highlighted interval', () => {
+		it('keeps the highlight on the entity it belongs to when another card is opened and closed again', () => {
+			renderPersons({ initialSelectedId: 'a' });
+			fireEvent.click(screen.getAllByRole('button', { name: '01:58' })[0]);
+
+			fireEvent.click(screen.getByRole('button', { name: 'Marjolein De Wilde' }));
+			expect(
+				screen
+					.getAllByRole('button', { name: '01:58' })
+					.some((pill) => pill.getAttribute('aria-pressed') === 'true')
+			).toBe(false);
+
+			fireEvent.click(screen.getByRole('button', { name: 'Jane Eve Doe' }));
+			expect(
+				screen
+					.getAllByRole('button', { name: '01:58' })
+					.some((pill) => pill.getAttribute('aria-pressed') === 'true')
+			).toBe(true);
+		});
+
+		it('shows no highlight for an interval that belongs to another entity', () => {
+			renderPersons({
+				initialSelectedId: 'a',
+				activeInterval: { entity: person('other', 'Someone Else'), intervalIndex: 1 },
+			});
+
+			expect(
+				screen
+					.getAllByRole('button', { name: '01:58' })
+					.some((pill) => pill.getAttribute('aria-pressed') === 'true')
+			).toBe(false);
 		});
 	});
 

@@ -143,7 +143,8 @@ const renderTab = (
 			similar={props.similar ?? []}
 			onReadMoreClicked={vi.fn()}
 			playableFileId="file-1"
-			onSeekPlayer={vi.fn()}
+			activeAiInterval={null}
+			onSelectAiInterval={vi.fn()}
 		/>
 	);
 
@@ -165,7 +166,8 @@ describe('Component: <ObjectDetailPageOverviewTab />', () => {
 				similar={[]}
 				onReadMoreClicked={vi.fn()}
 				playableFileId={null}
-				onSeekPlayer={vi.fn()}
+				activeAiInterval={null}
+				onSelectAiInterval={vi.fn()}
 			/>
 		);
 

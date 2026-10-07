@@ -9,6 +9,7 @@ import { useCreateVisitRequest } from '@home/hooks/create-visit-request';
 import { ContextDisclaimer } from '@ie-objects/components/ContextDisclaimer/ContextDisclaimer';
 import { FragmentSlider } from '@ie-objects/components/FragmentSlider';
 import type { MetadataItem } from '@ie-objects/components/Metadata/Metadata.types';
+import { AiEntityNavigationOverlay } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityNavigationOverlay';
 import { ObjectDetailPageMetadataTab } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataTab';
 import { ObjectDetailPageOcrTab } from '@ie-objects/components/ObjectDetailPageOcrTab/ObjectDetailPageOcrTab';
 import { ObjectDetailPageOverviewTab } from '@ie-objects/components/ObjectDetailPageOverviewTab/ObjectDetailPageOverviewTab';
@@ -21,6 +22,7 @@ import {
 	isServerSideIeObject,
 	useGetIeObjectBySchemaIdentifier,
 } from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
+import { useGetIeObjectFileMentions } from '@ie-objects/hooks/use-get-ie-object-file-mentions';
 import { useGetIeObjectTicketServiceTokens } from '@ie-objects/hooks/use-get-ie-object-ticket-service-tokens';
 import { useGetIeObjectsRelated } from '@ie-objects/hooks/use-get-ie-objects-related';
 import { useGetIeObjectsAlsoInteresting } from '@ie-objects/hooks/use-get-ie-objects-similar';
@@ -31,6 +33,7 @@ import {
 	useObjectDetailActiveTab,
 	useResetUnavailableTab,
 } from '@ie-objects/hooks/use-object-detail-active-tab';
+import { usePlayerControlsVisible } from '@ie-objects/hooks/use-player-controls-visible';
 import {
 	FLOWPLAYER_FORMATS,
 	getNoLicensePlaceholderLabels,
@@ -40,7 +43,12 @@ import {
 	OBJECT_DETAIL_TABS,
 	XML_FORMATS,
 } from '@ie-objects/ie-objects.consts';
-import { HighlightMode, MediaActions, ObjectDetailTabs } from '@ie-objects/ie-objects.types';
+import {
+	FileMentionEntityType,
+	HighlightMode,
+	MediaActions,
+	ObjectDetailTabs,
+} from '@ie-objects/ie-objects.types';
 import {
 	IE_OBJECTS_SERVICE_EXPORT,
 	NEWSPAPERS_SERVICE_BASE_URL,
@@ -48,8 +56,14 @@ import {
 import { filterAltoBySearchTerms } from '@ie-objects/utils/filter-alto-by-search-terms';
 import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-terms-in-transcription';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
+import {
+	type ActiveAiInterval,
+	type AiEntity,
+	mapFileMentionsToAiEntities,
+} from '@ie-objects/utils/map-ai-entities';
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
+import { getPlayerVideoElement, seekPlayerVideo } from '@ie-objects/utils/seek-player-video';
 import { updateQueryParamsShallow } from '@ie-objects/utils/update-query-params-shallow';
 import {
 	iiifGoToHome,
@@ -89,6 +103,7 @@ import { getIeObjectNameSlug } from '@shared/helpers/ie-object-urls';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useHasAllPermission, useHasAnyPermission } from '@shared/hooks/has-permission';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useHideFooter } from '@shared/hooks/use-hide-footer';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useStickyLayout } from '@shared/hooks/use-sticky-layout';
@@ -373,16 +388,60 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			FLOWPLAYER_FORMATS.includes(file.mimeType)
 		)?.id ?? null;
 
-	// Seeks only: the player keeps playing or staying paused. Does nothing when the player isn't
-	// rendered, which is the case on mobile while another tab is open.
+	// The AI interval that is highlighted, across persons, places and organisations. It belongs to
+	// the file that plays, so it goes when another file is shown.
+	const [activeAiInterval, setActiveAiInterval] = useState<ActiveAiInterval | null>(null);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: reset whenever the played file changes
+	useEffect(() => {
+		setActiveAiInterval(null);
+	}, [currentPlayableFileId]);
+
+	// The mentions are also needed here: after a refresh on the media tab the overview tab that
+	// normally loads them isn't rendered. Same query, so it is fetched once.
+	const isKeyUser = useIsKeyUser();
+	const { data: fileMentions } = useGetIeObjectFileMentions(
+		mediaInfo?.schemaIdentifier,
+		currentPlayableFileId,
+		{ enabled: isKeyUser && isAudioVideoType(mediaInfo?.dctermsFormat) }
+	);
+	// A seek asked for while the player isn't rendered yet (mobile, on another tab; or a restore
+	// on load) waits here for it. State, so the effect below runs when a seek is queued.
+	const [pendingSeekSeconds, setPendingSeekSeconds] = useState<number | null>(null);
+
+	// Seeks only: the player keeps playing or staying paused
 	const seekPlayer = useCallback((seconds: number) => {
-		const video = document.querySelector<HTMLVideoElement>(
-			'.p-object-detail__flowplayer.c-video-player video.fp-engine'
-		);
+		const video = getPlayerVideoElement();
 		if (video) {
-			video.currentTime = seconds;
+			seekPlayerVideo(video, seconds);
+			setPendingSeekSeconds(null);
+		} else {
+			setPendingSeekSeconds(seconds);
 		}
 	}, []);
+
+	// A refresh or a shared link restores the interval from the URL, once
+	const hasRestoredAiIntervalRef = useRef(false);
+	useEffect(() => {
+		if (!fileMentions || hasRestoredAiIntervalRef.current) {
+			return;
+		}
+		hasRestoredAiIntervalRef.current = true;
+		const { query } = parseUrl(window.location.href);
+		const entityId = query[QUERY_PARAM_KEY.ACTIVE_AI_ENTITY];
+		const intervalIndex = Number(query[QUERY_PARAM_KEY.ACTIVE_AI_INTERVAL]);
+		const entity = [
+			FileMentionEntityType.PERSON,
+			FileMentionEntityType.PLACE,
+			FileMentionEntityType.ORGANIZATION,
+		]
+			.flatMap((type) => mapFileMentionsToAiEntities(fileMentions.mentions, type))
+			.find((candidate) => candidate.id === entityId);
+		// Without access to the essence the intervals can't be selected, whatever the url says
+		if (fileMentions.hasAccessToEssence && entity?.intervals[intervalIndex]) {
+			setActiveAiInterval({ entity, intervalIndex });
+			seekPlayer(entity.intervals[intervalIndex].start);
+		}
+	}, [fileMentions, seekPlayer]);
 
 	const getMaterialRequest = useCallback(
 		(mediaInfo: HetArchiefIeObject) => {
@@ -483,7 +542,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, [relatedIeObjects]);
 	const relatedCount = mappedRelatedIeObjects.length;
 
-	const { activeTab, updateActiveTab } = useObjectDetailActiveTab({
+	const { activeTab, updateActiveTab, updateQueryParams } = useObjectDetailActiveTab({
 		objectId: mediaInfo?.schemaIdentifier,
 		isNewspaper,
 	});
@@ -536,6 +595,61 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const showFragmentSlider = allFilesToDisplayInCurrentPage.length > 1 && !isNewspaper;
 	const isMobile = isTabletPortraitSize(windowSize); // mobile and tablet portrait
+
+	// The player isn't there yet on load, and on mobile only exists on the Media tab, a few renders after it opens
+	useEffect(() => {
+		if (pendingSeekSeconds === null || (isMobile && activeTab !== ObjectDetailTabs.Media)) {
+			return;
+		}
+		const applyPendingSeek = (): boolean => {
+			const video = getPlayerVideoElement();
+			if (!video) {
+				return false;
+			}
+			seekPlayerVideo(video, pendingSeekSeconds);
+			if (video.readyState < HTMLMediaElement.HAVE_METADATA) {
+				// The position can be reset while the media loads
+				video.addEventListener('loadedmetadata', () => seekPlayerVideo(video, pendingSeekSeconds), {
+					once: true,
+				});
+			}
+			setPendingSeekSeconds(null);
+			return true;
+		};
+		if (applyPendingSeek()) {
+			return;
+		}
+		const observer = new MutationObserver(() => {
+			if (applyPendingSeek()) {
+				observer.disconnect();
+			}
+		});
+		observer.observe(document.body, { childList: true, subtree: true });
+		return () => observer.disconnect();
+	}, [pendingSeekSeconds, isMobile, activeTab]);
+
+	const areAiNavigationControlsVisible = usePlayerControlsVisible(
+		isMobile && activeTab === ObjectDetailTabs.Media && !!activeAiInterval
+	);
+
+	const selectAiInterval = useCallback(
+		(entity: AiEntity, intervalIndex: number) => {
+			setActiveAiInterval({ entity, intervalIndex });
+			seekPlayer(entity.intervals[intervalIndex].start);
+			const aiIntervalQuery = {
+				[QUERY_PARAM_KEY.ACTIVE_AI_ENTITY]: entity.id,
+				[QUERY_PARAM_KEY.ACTIVE_AI_INTERVAL]: String(intervalIndex),
+			};
+			if (isMobile && activeTab !== ObjectDetailTabs.Media) {
+				// On mobile the player is on the Media tab, so show it
+				updateActiveTab(ObjectDetailTabs.Media, aiIntervalQuery).then(noop);
+			} else {
+				updateQueryParams(aiIntervalQuery).then(noop);
+			}
+		},
+		[seekPlayer, isMobile, activeTab, updateActiveTab, updateQueryParams]
+	);
+
 	const hasAccessToVisitorSpaceOfObject =
 		intersection(mediaInfo?.accessThrough, [
 			HetArchiefIeObjectAccessThrough.VISITOR_SPACE_FOLDERS,
@@ -1270,8 +1384,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		activeTab,
 		availableTabIds,
 		isMobile,
-		// Wait for the data the tabs depend on, or a valid deep link is reset before its tab appears
-		isReady: isMediaInfoComplete && !relatedIeObjectsIsLoading && !relatedIeObjectsIsPlaceholder,
+		// Wait for the data the tabs depend on, or a valid deep link is reset before its tab appears.
+		// The window size is unknown on the first render, which would make the mobile-only media tab look unavailable.
+		isReady:
+			isMediaInfoComplete &&
+			!relatedIeObjectsIsLoading &&
+			!relatedIeObjectsIsPlaceholder &&
+			windowSize.width !== undefined,
 		updateActiveTab,
 	});
 
@@ -1422,7 +1541,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			);
 		}
 
-		// TODO: mobile AI-entity navigation overlay
 		return (
 			<>
 				<AudioOrVideoPlayer
@@ -1444,7 +1562,29 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		);
 	};
 
-	const renderAiEntityNavigationOverlay = (): ReactNode => null;
+	// Previous / next interval of the entity that was last selected, above the player's controls
+	const renderAiEntityNavigationOverlay = (): ReactNode => {
+		if (!activeAiInterval) {
+			return null;
+		}
+		return (
+			<AiEntityNavigationOverlay
+				entity={activeAiInterval.entity}
+				intervalIndex={activeAiInterval.intervalIndex}
+				onSelectInterval={(intervalIndex) =>
+					selectAiInterval(activeAiInterval.entity, intervalIndex)
+				}
+				onClose={() => {
+					setActiveAiInterval(null);
+					updateQueryParams({
+						[QUERY_PARAM_KEY.ACTIVE_AI_ENTITY]: undefined,
+						[QUERY_PARAM_KEY.ACTIVE_AI_INTERVAL]: undefined,
+					}).then(noop);
+				}}
+				isRaised={areAiNavigationControlsVisible}
+			/>
+		);
+	};
 
 	const renderObjectMedia = () => {
 		if (mediaInfo?.hasAccessToEssence) {
@@ -1598,7 +1738,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							similar={similar}
 							onReadMoreClicked={setSelectedMetadataField}
 							playableFileId={currentPlayableFileId}
-							onSeekPlayer={seekPlayer}
+							activeAiInterval={activeAiInterval}
+							onSelectAiInterval={selectAiInterval}
 						/>
 					)}
 					{/*

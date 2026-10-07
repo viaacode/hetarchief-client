@@ -21,7 +21,10 @@ import {
 	getIeObjectAvRightsUrl,
 } from '@ie-objects/utils/get-ie-object-av-rights-icon';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
-import { mapFileMentionsToAiEntities } from '@ie-objects/utils/map-ai-entities';
+import {
+	mapFileMentionsToAiEntities,
+	prioritizeAiEntitiesByName,
+} from '@ie-objects/utils/map-ai-entities';
 import { renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
 import { isAudioVideoType, isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import { Button } from '@meemoo/react-components';
@@ -56,7 +59,8 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 	similar,
 	onReadMoreClicked,
 	playableFileId,
-	onSeekPlayer,
+	activeAiInterval,
+	onSelectAiInterval,
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
@@ -75,18 +79,33 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 		playableFileId,
 		{ enabled: isKeyUser && isAudioVideoType(mediaInfo?.dctermsFormat) }
 	);
+	// The entities filtered on in the search results come first
 	const aiPersons = useMemo(
-		() => mapFileMentionsToAiEntities(fileMentions?.mentions ?? [], FileMentionEntityType.PERSON),
-		[fileMentions]
+		() =>
+			prioritizeAiEntitiesByName(
+				mapFileMentionsToAiEntities(fileMentions?.mentions ?? [], FileMentionEntityType.PERSON),
+				mentionPersonFilter
+			),
+		[fileMentions, mentionPersonFilter]
 	);
 	const aiPlaces = useMemo(
-		() => mapFileMentionsToAiEntities(fileMentions?.mentions ?? [], FileMentionEntityType.PLACE),
-		[fileMentions]
+		() =>
+			prioritizeAiEntitiesByName(
+				mapFileMentionsToAiEntities(fileMentions?.mentions ?? [], FileMentionEntityType.PLACE),
+				mentionPlaceFilter
+			),
+		[fileMentions, mentionPlaceFilter]
 	);
 	const aiOrganisations = useMemo(
 		() =>
-			mapFileMentionsToAiEntities(fileMentions?.mentions ?? [], FileMentionEntityType.ORGANIZATION),
-		[fileMentions]
+			prioritizeAiEntitiesByName(
+				mapFileMentionsToAiEntities(
+					fileMentions?.mentions ?? [],
+					FileMentionEntityType.ORGANIZATION
+				),
+				mentionOrganisationFilter
+			),
+		[fileMentions, mentionOrganisationFilter]
 	);
 	const { data: ieObjectPreviousNextIds } = useGetIeObjectPreviousNextIds(
 		mediaInfo?.collectionId,
@@ -350,7 +369,8 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 					persons={aiPersons}
 					durationSeconds={durationSeconds}
 					isTimelineInteractive={isTimelineInteractive}
-					onSeek={onSeekPlayer}
+					activeInterval={activeAiInterval}
+					onSelectInterval={onSelectAiInterval}
 					initialSelectedId={personFromFilter?.id ?? null}
 					disclaimerAriaLabel={tText(
 						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___meer-info-over-ai-herkende-personen'
@@ -374,7 +394,8 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 					searchFilterId={SearchFilterId.MentionPlace}
 					durationSeconds={durationSeconds}
 					isTimelineInteractive={isTimelineInteractive}
-					onSeek={onSeekPlayer}
+					activeInterval={activeAiInterval}
+					onSelectInterval={onSelectAiInterval}
 					initialSelectedId={placeFromFilter?.id ?? null}
 					disclaimerAriaLabel={tText(
 						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___meer-info-over-ai-herkende-plaatsen'
@@ -398,7 +419,8 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 					searchFilterId={SearchFilterId.MentionOrganisation}
 					durationSeconds={durationSeconds}
 					isTimelineInteractive={isTimelineInteractive}
-					onSeek={onSeekPlayer}
+					activeInterval={activeAiInterval}
+					onSelectInterval={onSelectAiInterval}
 					initialSelectedId={organisationFromFilter?.id ?? null}
 					disclaimerAriaLabel={tText(
 						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-organisations___meer-info-over-ai-herkende-organisaties'

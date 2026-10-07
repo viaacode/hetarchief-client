@@ -3,12 +3,14 @@ import {
 	FileMentionAnnotationType,
 	FileMentionEntityType,
 } from '@ie-objects/ie-objects.types';
+import type { AiEntity } from '@ie-objects/utils/map-ai-entities';
 import { describe, expect, it } from 'vitest';
 
 import {
 	formatAiEntityTimestamp,
 	getAiEntityIntervalLabels,
 	mapFileMentionsToAiEntities,
+	prioritizeAiEntitiesByName,
 } from './map-ai-entities';
 
 const mention = (overrides: Partial<FileMention>): FileMention => ({
@@ -122,5 +124,31 @@ describe('getAiEntityIntervalLabels', () => {
 			start: '00:36',
 			end: '01:06',
 		});
+	});
+});
+
+describe('prioritizeAiEntitiesByName', () => {
+	const entity = (id: string, name: string) =>
+		({ id, name, type: FileMentionEntityType.PERSON, intervals: [] }) as unknown as AiEntity;
+	const entities = [entity('1', 'A'), entity('2', 'B'), entity('3', 'C'), entity('4', 'D')];
+
+	it('puts the filtered entities first and keeps the order within both groups', () => {
+		expect(prioritizeAiEntitiesByName(entities, ['D', 'B']).map(({ id }) => id)).toEqual([
+			'2',
+			'4',
+			'1',
+			'3',
+		]);
+	});
+
+	it('keeps the order without a filter or without a match', () => {
+		expect(prioritizeAiEntitiesByName(entities, undefined)).toBe(entities);
+		expect(prioritizeAiEntitiesByName(entities, [])).toBe(entities);
+		expect(prioritizeAiEntitiesByName(entities, ['X']).map(({ id }) => id)).toEqual([
+			'1',
+			'2',
+			'3',
+			'4',
+		]);
 	});
 });

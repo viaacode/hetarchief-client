@@ -8,7 +8,7 @@ import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import Link from 'next/link';
-import { type FC, useState } from 'react';
+import type { FC } from 'react';
 
 import styles from './AiEntityCard.module.scss';
 
@@ -20,8 +20,10 @@ export interface AiEntityCardProps {
 	isInteractive: boolean;
 	/** Search page filtered on this entity */
 	searchLink: string;
-	/** Moves the player to this moment */
-	onSeek: (seconds: number) => void;
+	/** Interval highlighted on the timeline and its pills; owned by the caller so only one interval
+	 * is highlighted across all entity types */
+	activeIntervalIndex: number | null;
+	onSelectInterval: (intervalIndex: number) => void;
 	id?: string;
 	className?: string;
 }
@@ -31,17 +33,14 @@ export const AiEntityCard: FC<AiEntityCardProps> = ({
 	durationSeconds,
 	isInteractive,
 	searchLink,
-	onSeek,
+	activeIntervalIndex,
+	onSelectInterval,
 	id,
 	className,
 }) => {
-	const [activeIndex, setActiveIndex] = useState<number | null>(null);
 	const hasIntervals = entity.intervals.length > 0;
-
-	const handleSelect = (intervalIndex: number) => {
-		setActiveIndex(intervalIndex);
-		onSeek(entity.intervals[intervalIndex].start);
-	};
+	// Without access to the essence nothing can be selected, not even through the url
+	const interactiveActiveIndex = isInteractive ? activeIntervalIndex : null;
 
 	return (
 		<div
@@ -94,18 +93,18 @@ export const AiEntityCard: FC<AiEntityCardProps> = ({
 				<AiEntityTimeline
 					intervals={entity.intervals}
 					durationSeconds={durationSeconds}
-					activeIndex={activeIndex}
+					activeIndex={interactiveActiveIndex}
 					isInteractive={isInteractive}
-					onSelect={handleSelect}
+					onSelect={onSelectInterval}
 				/>
 			) : null}
 
 			{hasIntervals && (
 				<AiEntityIntervalPills
 					intervals={entity.intervals}
-					activeIndex={activeIndex}
+					activeIndex={interactiveActiveIndex}
 					isInteractive={isInteractive}
-					onSelect={handleSelect}
+					onSelect={onSelectInterval}
 				/>
 			)}
 		</div>

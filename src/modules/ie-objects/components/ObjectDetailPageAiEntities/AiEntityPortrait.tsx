@@ -11,7 +11,7 @@ export interface AiEntityPortraitProps {
 	name: string;
 	/** Reference still; initials on a tertiary colour take its place when missing or broken */
 	still: string | null;
-	size: 'sm' | 'lg';
+	size: 'xs' | 'sm' | 'lg';
 	className?: string;
 }
 

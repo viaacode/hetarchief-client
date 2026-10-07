@@ -2,13 +2,13 @@ import Metadata from '@ie-objects/components/Metadata/Metadata';
 import { AiEntityAvatarRow } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityAvatarRow';
 import { AiEntityCard } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityCard';
 import { ObjectDetailPageMetadataDisclaimerTooltip } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataDisclaimerTooltip';
-import type { AiEntity } from '@ie-objects/utils/map-ai-entities';
+import type { ActiveAiInterval, AiEntity } from '@ie-objects/utils/map-ai-entities';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { SearchFilterId } from '@visitor-space/types';
-import { type FC, type ReactNode, useId, useState } from 'react';
+import { type FC, type ReactNode, useEffect, useId, useState } from 'react';
 
 import styles from './ObjectDetailPageAiPersons.module.scss';
 
@@ -18,11 +18,14 @@ export interface ObjectDetailPageAiPersonsProps {
 	durationSeconds: number | null;
 	/** False without access to the essence: the timeline and pills are display only */
 	isTimelineInteractive: boolean;
-	onSeek: (seconds: number) => void;
+	/** The interval highlighted across all entity types */
+	activeInterval: ActiveAiInterval | null;
+	/** Highlights the interval and moves the player to it */
+	onSelectInterval: (entity: AiEntity, intervalIndex: number) => void;
 	/** Explains that the persons are AI generated; set per entity type by the caller */
 	disclaimer: ReactNode;
 	disclaimerAriaLabel: string;
-	/** Person whose card is open from the start, e.g. the one filtered on in the search page */
+	/** Person whose card opens as soon as it is known, e.g. the one filtered on in the search page */
 	initialSelectedId?: string | null;
 }
 
@@ -30,14 +33,33 @@ export const ObjectDetailPageAiPersons: FC<ObjectDetailPageAiPersonsProps> = ({
 	persons,
 	durationSeconds,
 	isTimelineInteractive,
-	onSeek,
+	activeInterval,
+	onSelectInterval,
 	disclaimer,
 	disclaimerAriaLabel,
 	initialSelectedId = null,
 }) => {
 	const locale = useLocale();
 	const cardId = useId();
-	const [selectedId, setSelectedId] = useState<string | null>(initialSelectedId);
+	// The overview tab is unmounted while the media tab shows (mobile): reopen the card of the active interval
+	const [selectedId, setSelectedId] = useState<string | null>(() =>
+		activeInterval && persons.some((person) => person.id === activeInterval.entity.id)
+			? activeInterval.entity.id
+			: initialSelectedId
+	);
+	// The entities arrive after the first render, so the filtered one opens when it shows up
+	useEffect(() => {
+		if (initialSelectedId) {
+			setSelectedId(initialSelectedId);
+		}
+	}, [initialSelectedId]);
+	// An interval that is restored later (after a refresh) opens its card too
+	const activeEntityId = activeInterval?.entity.id;
+	useEffect(() => {
+		if (persons.some((person) => person.id === activeEntityId)) {
+			setSelectedId(activeEntityId ?? null);
+		}
+	}, [activeEntityId, persons]);
 	const selectedPerson = persons.find((person) => person.id === selectedId) ?? null;
 
 	if (!persons.length) {
@@ -47,7 +69,6 @@ export const ObjectDetailPageAiPersons: FC<ObjectDetailPageAiPersonsProps> = ({
 	return (
 		<Metadata
 			key="ai-persons"
-			className={styles['c-object-detail-page-ai-persons__field']}
 			title={
 				persons.length === 1
 					? tText(
@@ -86,7 +107,10 @@ export const ObjectDetailPageAiPersons: FC<ObjectDetailPageAiPersonsProps> = ({
 						searchLink={getSearchLink(locale, {
 							[SearchFilterId.MentionPerson]: selectedPerson.name,
 						})}
-						onSeek={onSeek}
+						activeIntervalIndex={
+							activeInterval?.entity.id === selectedPerson.id ? activeInterval.intervalIndex : null
+						}
+						onSelectInterval={(intervalIndex) => onSelectInterval(selectedPerson, intervalIndex)}
 					/>
 				)}
 			</div>

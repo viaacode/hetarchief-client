@@ -1,9 +1,9 @@
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import { FileMentionEntityType } from '@ie-objects/ie-objects.types';
-import type { AiEntity } from '@ie-objects/utils/map-ai-entities';
+import type { ActiveAiInterval, AiEntity } from '@ie-objects/utils/map-ai-entities';
 import type { Meta, StoryFn } from '@storybook/react';
 import { SearchFilterId } from '@visitor-space/types';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { ObjectDetailPageAiPills } from './ObjectDetailPageAiPills';
 
@@ -65,9 +65,20 @@ const places: AiEntity[] = names.map((name, index) =>
 	place(index, name, intervals.slice(index % 6))
 );
 
-const Template: StoryFn<typeof ObjectDetailPageAiPills> = (args) => (
-	<ObjectDetailPageAiPills {...args} />
-);
+// The page owns the highlighted interval; the story keeps it here
+const Template: StoryFn<typeof ObjectDetailPageAiPills> = (args) => {
+	const [activeInterval, setActiveInterval] = useState<ActiveAiInterval | null>(null);
+	return (
+		<ObjectDetailPageAiPills
+			{...args}
+			activeInterval={activeInterval}
+			onSelectInterval={(entity, intervalIndex) => {
+				setActiveInterval({ entity, intervalIndex });
+				console.info('seek to', entity.intervals[intervalIndex].start);
+			}}
+		/>
+	);
+};
 
 const defaultArgs = {
 	entities: places,
@@ -75,7 +86,6 @@ const defaultArgs = {
 	searchFilterId: SearchFilterId.MentionPlace,
 	durationSeconds: DURATION_SECONDS,
 	isTimelineInteractive: true,
-	onSeek: (seconds: number) => console.info('seek to', seconds),
 	disclaimer: 'Deze plaatsen zijn automatisch herkend met AI en kunnen fouten bevatten.',
 	disclaimerAriaLabel: 'Meer info over AI-herkende plaatsen',
 };

@@ -55,6 +55,16 @@ $pill-height: 2.4rem;
 
 		&--interactive {
 			cursor: pointer;
+
+			@include abstracts.hover {
+				background-color: abstracts.$seagreen;
+				color: abstracts.$white;
+
+				.c-ai-entity-interval-pills__end,
+				.c-ai-entity-interval-pills__separator {
+					color: abstracts.$zinc;
+				}
+			}
 		}
 
 		&:focus {
@@ -69,16 +79,6 @@ $pill-height: 2.4rem;
 		&--active,
 		&--active:hover {
 			background-color: abstracts.$black;
-			color: abstracts.$white;
-
-			.c-ai-entity-interval-pills__end,
-			.c-ai-entity-interval-pills__separator {
-				color: abstracts.$zinc;
-			}
-		}
-
-		@include abstracts.hover {
-			background-color: abstracts.$seagreen;
 			color: abstracts.$white;
 
 			.c-ai-entity-interval-pills__end,

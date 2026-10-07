@@ -2,8 +2,9 @@ import { fireEvent, render, screen } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
 import { FileMentionEntityType } from '@ie-objects/ie-objects.types';
-import type { AiEntity } from '@ie-objects/utils/map-ai-entities';
+import type { ActiveAiInterval, AiEntity } from '@ie-objects/utils/map-ai-entities';
 import { SearchFilterId } from '@visitor-space/types';
+import { useState } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@shared/helpers/translate', () => ({
@@ -52,12 +53,37 @@ const place = (id: string, name: string, overrides: Partial<AiEntity> = {}): AiE
 	...overrides,
 });
 
+// The page owns the highlighted interval; this mimics it
+const StatefulObjectDetailPageAiPills = ({
+	onSeek,
+	activeInterval: forcedActiveInterval,
+	...props
+}: Omit<
+	React.ComponentProps<typeof ObjectDetailPageAiPills>,
+	'activeInterval' | 'onSelectInterval'
+> & {
+	onSeek: (seconds: number) => void;
+	activeInterval?: ActiveAiInterval | null;
+}) => {
+	const [activeInterval, setActiveInterval] = useState<ActiveAiInterval | null>(null);
+	return (
+		<ObjectDetailPageAiPills
+			{...props}
+			activeInterval={forcedActiveInterval ?? activeInterval}
+			onSelectInterval={(entity, intervalIndex) => {
+				setActiveInterval({ entity, intervalIndex });
+				onSeek(entity.intervals[intervalIndex].start);
+			}}
+		/>
+	);
+};
+
 const renderPlaces = (
 	props: Partial<React.ComponentProps<typeof ObjectDetailPageAiPills>> = {}
 ) => {
 	const onSeek = vi.fn();
 	const result = render(
-		<ObjectDetailPageAiPills
+		<StatefulObjectDetailPageAiPills
 			entities={[place('a', 'Antwerpen'), place('b', 'Brugge')]}
 			title="2 plaatsen"
 			searchFilterId={SearchFilterId.MentionPlace}

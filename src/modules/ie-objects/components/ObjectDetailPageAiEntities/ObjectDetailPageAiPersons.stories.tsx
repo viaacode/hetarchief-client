@@ -1,8 +1,8 @@
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import { FileMentionEntityType } from '@ie-objects/ie-objects.types';
-import type { AiEntity } from '@ie-objects/utils/map-ai-entities';
+import type { ActiveAiInterval, AiEntity } from '@ie-objects/utils/map-ai-entities';
 import type { Meta, StoryFn } from '@storybook/react';
-import React from 'react';
+import React, { useState } from 'react';
 
 import { ObjectDetailPageAiPersons } from './ObjectDetailPageAiPersons';
 
@@ -66,15 +66,25 @@ const persons: AiEntity[] = [
 	person(6, 'Philip Saey', true, intervals.slice(5)),
 ];
 
-const Template: StoryFn<typeof ObjectDetailPageAiPersons> = (args) => (
-	<ObjectDetailPageAiPersons {...args} />
-);
+// The page owns the highlighted interval; the story keeps it here
+const Template: StoryFn<typeof ObjectDetailPageAiPersons> = (args) => {
+	const [activeInterval, setActiveInterval] = useState<ActiveAiInterval | null>(null);
+	return (
+		<ObjectDetailPageAiPersons
+			{...args}
+			activeInterval={activeInterval}
+			onSelectInterval={(entity, intervalIndex) => {
+				setActiveInterval({ entity, intervalIndex });
+				console.info('seek to', entity.intervals[intervalIndex].start);
+			}}
+		/>
+	);
+};
 
 const defaultArgs = {
 	persons,
 	durationSeconds: DURATION_SECONDS,
 	isTimelineInteractive: true,
-	onSeek: (seconds: number) => console.info('seek to', seconds),
 	disclaimer: 'Deze personen zijn automatisch herkend met AI en kunnen fouten bevatten.',
 	disclaimerAriaLabel: 'Meer info over AI-herkende personen',
 };

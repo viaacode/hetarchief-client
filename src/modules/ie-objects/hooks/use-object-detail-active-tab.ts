@@ -38,15 +38,24 @@ export const useObjectDetailActiveTab = ({
 			parseObjectDetailTab(router.query[QUERY_PARAM_KEY.ACTIVE_TAB]) ?? ObjectDetailTabs.Overview
 	);
 
+	// Query params to change; undefined removes one
+	const replaceQuery = useCallback(
+		(patch: Record<string, string | undefined>) => updateQueryParamsShallow(router, patch),
+		[router]
+	);
+
+	// Changes the tab and, in the same URL update, other query params: two updates in a row would
+	// each start from the URL as it was and undo each other
 	const updateActiveTab = useCallback(
-		async (newActiveTab: ObjectDetailTabs | null) => {
+		async (
+			newActiveTab: ObjectDetailTabs | null,
+			extraQuery: Record<string, string | undefined> = {}
+		) => {
 			const tab = newActiveTab || ObjectDetailTabs.Overview;
 			setActiveTab(tab);
-
-			// Also update the query param (not via useQueryParam, see updateQueryParamsShallow)
-			await updateQueryParamsShallow(router, { [QUERY_PARAM_KEY.ACTIVE_TAB]: tab });
+			await replaceQuery({ ...extraQuery, [QUERY_PARAM_KEY.ACTIVE_TAB]: tab });
 		},
-		[router]
+		[replaceQuery]
 	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: only reset the tab when the object changes, not on every refetch
@@ -71,7 +80,7 @@ export const useObjectDetailActiveTab = ({
 		setActiveTab(getDefaultObjectDetailTab(isNewspaper, hasNamenlijstFilter));
 	}, [objectId]);
 
-	return { activeTab, updateActiveTab };
+	return { activeTab, updateActiveTab, updateQueryParams: replaceQuery };
 };
 
 interface UseResetUnavailableTabProps {

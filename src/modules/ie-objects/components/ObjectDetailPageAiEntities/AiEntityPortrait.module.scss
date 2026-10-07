@@ -12,6 +12,13 @@
 	line-height: 2rem;
 	text-align: center;
 
+	&--xs {
+		width: 2.8rem;
+		height: 2.8rem;
+		font-size: abstracts.$font-size-xs;
+		line-height: 1.6rem;
+	}
+
 	&--sm {
 		width: 4rem;
 		height: 4rem;
