@@ -67,8 +67,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ materialRequests, onCancel, onSuc
 	);
 
 	useEffect(() => {
-		const mostRecentMaterialRequestName =
-			materialRequests.length > 0 ? materialRequests[0].objectSchemaName : '';
+		const mostRecentMaterialRequestName = materialRequests[0]?.objectSchemaName ?? '';
 		const formattedDate = format(new Date(), 'MM-yyyy', { ...getLocalisedOptions() });
 
 		setRequestGroupName(
