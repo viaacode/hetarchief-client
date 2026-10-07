@@ -98,6 +98,8 @@ pipeline {
 					changeRequest target: 'master'
 					changeRequest target: 'develop'
 					changeRequest target: 'development'
+					branch 'develop'
+					branch 'development'
 				}
 			}
 			steps {
@@ -115,26 +117,11 @@ pipeline {
 			post {
 				always {
 					script {
-						env.BRANCH_NAME = env.CHANGE_BRANCH
+						if (env.CHANGE_BRANCH) {
+							env.BRANCH_NAME = env.CHANGE_BRANCH
+						}
 					}
 					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'int', environmentName: 'int', environmentType: 'testing'
-				}
-			}
-		}
-
-
-		stage('Build and Deploy TST') {
-			when {
-				anyOf { branch 'develop'; branch 'development' }
-			}
-			steps {
-				container('oc') {
-					startOpenShiftBuild('tst', '$GIT_SHORT_COMMIT')
-				}
-			}
-			post {
-				always {
-					jiraSendDeploymentInfo site: "${JIRA_URL}", environmentId: 'tst', environmentName: 'tst', environmentType: 'staging'
 				}
 			}
 		}
