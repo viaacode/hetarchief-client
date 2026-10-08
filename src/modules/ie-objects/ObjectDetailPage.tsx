@@ -63,7 +63,11 @@ import {
 } from '@ie-objects/utils/map-ai-entities';
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
-import { getPlayerVideoElement, seekPlayerVideo } from '@ie-objects/utils/seek-player-video';
+import {
+	getPlayerVideoElement,
+	isSeekingPlayerVideo,
+	seekPlayerVideo,
+} from '@ie-objects/utils/seek-player-video';
 import { updateQueryParamsShallow } from '@ie-objects/utils/update-query-params-shallow';
 import {
 	iiifGoToHome,
@@ -1207,6 +1211,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	};
 
 	const handleOnPlay = () => {
+		if (isSeekingPlayerVideo()) {
+			// The muted play of a seek is no playback: no play event to log and the player must not be
+			// told to play. Flowplayer reports only its first play, so wait for the user's own.
+			getPlayerVideoElement()?.addEventListener('playing', handleOnPlay, { once: true });
+			return;
+		}
 		setIsMediaPaused(false);
 		if (!hasMediaPlayed) {
 			// Check state inside setState function since this is an event handler outside React
@@ -1242,6 +1252,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	};
 
 	const handleOnPause = () => {
+		if (isSeekingPlayerVideo()) {
+			return;
+		}
 		setIsMediaPaused(true);
 	};
 

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { seekPlayerVideo } from './seek-player-video';
+import { isSeekingPlayerVideo, seekPlayerVideo } from './seek-player-video';
 
 const createVideo = (isStarting: boolean) => {
 	const root = document.createElement('div');
@@ -62,5 +62,59 @@ describe('seekPlayerVideo', () => {
 
 		expect(video.currentTime).toBe(42);
 		expect(video.pause).not.toHaveBeenCalled();
+	});
+
+	describe('isSeekingPlayerVideo', () => {
+		// A video that really plays: paused follows play() and pause(), and pause() fires its event later
+		const createPlayingVideo = () => {
+			const video = createVideo(true);
+			let isPaused = true;
+			Object.defineProperty(video, 'paused', { get: () => isPaused });
+			video.play = vi.fn().mockImplementation(async () => {
+				isPaused = false;
+			});
+			video.pause = vi.fn().mockImplementation(() => {
+				isPaused = true;
+				setTimeout(() => video.dispatchEvent(new Event('pause')));
+			});
+			return video;
+		};
+
+		it('is true while the muted play runs and until its pause has been delivered', async () => {
+			const video = createPlayingVideo();
+			let seekingDuringPlay: boolean | null = null;
+			const play = video.play;
+			video.play = vi.fn().mockImplementation(async () => {
+				seekingDuringPlay = isSeekingPlayerVideo();
+				return play.call(video);
+			});
+
+			await seekPlayerVideo(video, 42);
+
+			expect(seekingDuringPlay).toBe(true);
+			// The pause event is still on its way, a handler for it must still see the seek
+			expect(isSeekingPlayerVideo()).toBe(true);
+
+			await new Promise((resolve) => setTimeout(resolve));
+
+			expect(isSeekingPlayerVideo()).toBe(false);
+		});
+
+		it('is false again when playback is refused', async () => {
+			const video = createVideo(true);
+			video.play = vi.fn().mockRejectedValue(new Error('NotAllowedError'));
+
+			await seekPlayerVideo(video, 42);
+
+			expect(isSeekingPlayerVideo()).toBe(false);
+		});
+
+		it('is never true for a player that already started', async () => {
+			const video = createVideo(false);
+
+			await seekPlayerVideo(video, 42);
+
+			expect(isSeekingPlayerVideo()).toBe(false);
+		});
 	});
 });

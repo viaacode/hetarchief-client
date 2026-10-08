@@ -5,6 +5,15 @@ export const getPlayerVideoElement = (): HTMLVideoElement | null =>
 		'.p-object-detail__flowplayer.c-video-player video.fp-engine'
 	);
 
+let seekPlaysInProgress = 0;
+
+/**
+ * True while a seek plays the video muted to reveal the frame, until the pause that ends it has been
+ * delivered. The play and pause events of that are not the user playing: play and pause handlers
+ * should ignore them.
+ */
+export const isSeekingPlayerVideo = (): boolean => seekPlaysInProgress > 0;
+
 /**
  * Moves the player to a moment without changing whether it plays.
  *
@@ -22,11 +31,28 @@ export const seekPlayerVideo = async (video: HTMLVideoElement, seconds: number):
 
 	const wasMuted = video.muted;
 	video.muted = true;
+	seekPlaysInProgress++;
+	let isReleased = false;
+	const release = () => {
+		if (!isReleased) {
+			isReleased = true;
+			seekPlaysInProgress--;
+		}
+	};
 	try {
 		await video.play();
+		// The pause event comes after this function returns, so the flag stays up until it arrives
+		const isPlaying = !video.paused;
+		if (isPlaying) {
+			video.addEventListener('pause', release, { once: true });
+		}
 		video.pause();
+		if (!isPlaying) {
+			release();
+		}
 	} catch {
 		// Playback was refused: the poster stays, the position is still set
+		release();
 	} finally {
 		video.muted = wasMuted;
 		// Flowplayer jumps to the first cue point on its first playback, so set the position again
