@@ -34,6 +34,7 @@ vi.mock('@shared/config/public-runtime-config', () => ({
 import {
 	getAdvancedFlyoutFilters,
 	getAvailableSearchPageFilters,
+	getUsableSearchPageFilters,
 	getVisiblePanelFilters,
 	SEARCH_PAGE_FILTERS,
 } from './visitor-space-filters.const';
@@ -119,6 +120,29 @@ describe('SEARCH_PAGE_FILTERS', () => {
 			}
 		}
 	);
+
+	it('keeps a filter of another tab usable, so its pill can stay while the tab is switched', () => {
+		const newspaper = SearchPageMediaType.Newspaper;
+		const idsOf = (filters: { id: SearchFilterId }[]) => filters.map(({ id }) => id);
+
+		expect(idsOf(getAvailableSearchPageFilters(true, false, true, newspaper))).not.toContain(
+			SearchFilterId.Theme
+		);
+		expect(idsOf(getUsableSearchPageFilters(true, false, true, newspaper))).toContain(
+			SearchFilterId.Theme
+		);
+		expect(idsOf(getUsableSearchPageFilters(true, false, true, newspaper))).toContain(
+			SearchFilterId.Medium
+		);
+	});
+
+	it('does not keep a filter usable for an account that cannot use it', () => {
+		const ids = getUsableSearchPageFilters(false, true, false, SearchPageMediaType.All).map(
+			({ id }) => id
+		);
+
+		expect(ids).not.toContain(SearchFilterId.Theme);
+	});
 
 	it('offers the multiselect filters of the FA on the tabs it names', () => {
 		const idsPerTab = (tab: SearchPageMediaType) =>
@@ -339,5 +363,58 @@ describe('getVisiblePanelFilters', () => {
 		).map(({ id }) => id);
 
 		expect(newspaperOnly).not.toContain(SearchFilterId.Mentions);
+	});
+
+	describe('a filter of another tab that still holds a value', () => {
+		const newspaper = SearchPageMediaType.Newspaper;
+		const available = getAvailableSearchPageFilters(true, false, true, newspaper);
+		const usable = getUsableSearchPageFilters(true, false, true, newspaper);
+
+		// The pill stays on this tab, so it has to be able to open the modal of its filter
+		it('shows the filter, so the pill can open its modal', () => {
+			const ids = getVisiblePanelFilters(
+				available,
+				{ [SearchFilterId.Medium]: ['DVD'], filter: SearchFilterId.Medium },
+				usable
+			).map(({ id }) => id);
+
+			expect(ids).toContain(SearchFilterId.Medium);
+		});
+
+		it('shows the filter under the added ones and above "Geavanceerd"', () => {
+			const ids = getVisiblePanelFilters(
+				available,
+				{ [SearchFilterId.Medium]: ['DVD'], [SearchFilterId.Title]: ['concert'] },
+				usable
+			).map(({ id }) => id);
+
+			expect(ids.slice(-3)).toEqual([
+				SearchFilterId.Title,
+				SearchFilterId.Medium,
+				SearchFilterId.Advanced,
+			]);
+		});
+
+		it('hides the filter once its value is gone', () => {
+			const ids = getVisiblePanelFilters(
+				available,
+				{ [SearchFilterId.Medium]: undefined, filter: SearchFilterId.Medium },
+				usable
+			).map(({ id }) => id);
+
+			expect(ids).not.toContain(SearchFilterId.Medium);
+		});
+
+		it('does not show a filter the account cannot use', () => {
+			const kioskNewspaper = getAvailableSearchPageFilters(false, true, false, newspaper);
+			const kioskUsable = getUsableSearchPageFilters(false, true, false, newspaper);
+			const ids = getVisiblePanelFilters(
+				kioskNewspaper,
+				{ [SearchFilterId.Theme]: ['education-learning'] },
+				kioskUsable
+			).map(({ id }) => id);
+
+			expect(ids).not.toContain(SearchFilterId.Theme);
+		});
 	});
 });
