@@ -29,6 +29,7 @@ const AGGREGATION_KEY_BY_FIELD: Partial<
 > = {
 	[IeObjectsSearchFilterField.MAINTAINER_ID]: ElasticsearchFieldNames.Maintainer,
 	[IeObjectsSearchFilterField.MEDIUM]: ElasticsearchFieldNames.Medium,
+	[IeObjectsSearchFilterField.THEME]: ElasticsearchFieldNames.Theme,
 	[IeObjectsSearchFilterField.GENRE]: ElasticsearchFieldNames.Genre,
 	[IeObjectsSearchFilterField.LANGUAGE]: ElasticsearchFieldNames.Language,
 	[IeObjectsSearchFilterField.LOCATION_CREATED]: ElasticsearchFieldNames.LocationCreated,
@@ -43,8 +44,8 @@ export const useGetFilterOptions = (
 	const searchFilters = useSearchQueryFilters();
 	const field = filter.field;
 
-	// Themes are not aggregated in elasticsearch, and the url holds a slug rather than a name,
-	// so the options of this filter come from the themes endpoint. ARC-3797
+	// The buckets of the theme aggregation hold slugs, and the names come from the themes endpoint.
+	// The aggregation is what limits the list to the themes of the active tab. ARC-3797
 	const isThemeFilter = field === IeObjectsSearchFilterField.THEME;
 	const { options: themeOptions, isLoading: isLoadingThemes } = useGetThemeFilterOptions(
 		enabled && isThemeFilter
@@ -58,7 +59,7 @@ export const useGetFilterOptions = (
 			]);
 			return results.aggregations;
 		},
-		enabled: enabled && !!field && !isThemeFilter,
+		enabled: enabled && !!field,
 	});
 
 	// Maintainer buckets hold ids, so the readable names come from somewhere else
@@ -68,12 +69,15 @@ export const useGetFilterOptions = (
 	);
 
 	const options = useMemo((): FilterOption[] => {
-		if (isThemeFilter) {
-			return themeOptions;
-		}
-
 		if (!aggregations || !field) {
 			return [];
+		}
+
+		if (isThemeFilter) {
+			const themeSlugs = new Set(
+				(aggregations[ElasticsearchFieldNames.Theme]?.buckets || []).map((bucket) => bucket.key)
+			);
+			return themeOptions.filter((option) => themeSlugs.has(option.value));
 		}
 
 		if (field === IeObjectsSearchFilterField.RIGHTS) {
@@ -116,5 +120,5 @@ export const useGetFilterOptions = (
 		);
 	}, [aggregations, field, maintainers, locale, isThemeFilter, themeOptions]);
 
-	return { options, isLoading: isThemeFilter ? isLoadingThemes : isLoading };
+	return { options, isLoading: isThemeFilter ? isLoading || isLoadingThemes : isLoading };
 };
