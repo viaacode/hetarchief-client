@@ -1,5 +1,6 @@
 @use "src/styles/abstracts" as abstracts;
 @use "sass:map";
+@use "sass:math";
 
 $expand-button-vertical-position: 35vh; // Visually a litter higher than halfway to compensate for the visual bottom bar
 $metadata-expanded-width: 72vw;
@@ -311,13 +312,14 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			height: 4.8rem; // 48px
+			height: calc(#{$metadata-media-ocr-tabs-height-desktop} + 1px);
 			padding: 0 abstracts.$spacer-lg; // 32px
 			gap: abstracts.$spacer-xs; // 8px
 			background-color: abstracts.$black;
 
 			@media (max-width: abstracts.$breakpoint-lg) {
 				padding: 0 abstracts.$spacer-md;
+				height: 4.8rem;
 			}
 
 			// Active/inactive background already gives clear visual feedback; the browser's
