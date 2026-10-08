@@ -52,7 +52,7 @@
 	&__search {
 		display: inline-flex;
 		flex: none;
-		color: abstracts.$lagoon;
+		color: abstracts.$black !important;
 		font-size: abstracts.$font-size-lg;
 		line-height: abstracts.$line-height-base;
 		text-decoration: none;

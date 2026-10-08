@@ -64,14 +64,14 @@ export const AiEntityCard: FC<AiEntityCardProps> = ({
 								'modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-card___wikidata'
 							)}{' '}
 							{entity.wikidataUrl ? (
-								<a
+								<Link
 									className={styles['c-ai-entity-card__wikidata-link']}
 									href={entity.wikidataUrl}
 									target="_blank"
 									rel="noopener noreferrer"
 								>
 									{entity.wikidataId}
-								</a>
+								</Link>
 							) : (
 								entity.wikidataId
 							)}
