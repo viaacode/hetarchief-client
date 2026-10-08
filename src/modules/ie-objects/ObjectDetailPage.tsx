@@ -17,6 +17,7 @@ import { ObjectDetailPageRelatedTab } from '@ie-objects/components/ObjectDetailP
 import { ObjectDetailPageSidebar } from '@ie-objects/components/ObjectDetailPageSidebar/ObjectDetailPageSidebar';
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
 import type { MediaObject } from '@ie-objects/components/RelatedObject';
+import { useAiIntervalSelection } from '@ie-objects/hooks/use-ai-interval-selection';
 import { useGetAltoJsonFileContent } from '@ie-objects/hooks/use-get-alto-json-file-content';
 import {
 	isServerSideIeObject,
@@ -43,12 +44,7 @@ import {
 	OBJECT_DETAIL_TABS,
 	XML_FORMATS,
 } from '@ie-objects/ie-objects.consts';
-import {
-	FileMentionEntityType,
-	HighlightMode,
-	MediaActions,
-	ObjectDetailTabs,
-} from '@ie-objects/ie-objects.types';
+import { HighlightMode, MediaActions, ObjectDetailTabs } from '@ie-objects/ie-objects.types';
 import {
 	IE_OBJECTS_SERVICE_EXPORT,
 	NEWSPAPERS_SERVICE_BASE_URL,
@@ -56,18 +52,9 @@ import {
 import { filterAltoBySearchTerms } from '@ie-objects/utils/filter-alto-by-search-terms';
 import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-terms-in-transcription';
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
-import {
-	type ActiveAiInterval,
-	type AiEntity,
-	mapFileMentionsToAiEntities,
-} from '@ie-objects/utils/map-ai-entities';
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
-import {
-	getPlayerVideoElement,
-	isSeekingPlayerVideo,
-	seekPlayerVideo,
-} from '@ie-objects/utils/seek-player-video';
+import { getPlayerVideoElement, isSeekingPlayerVideo } from '@ie-objects/utils/seek-player-video';
 import { updateQueryParamsShallow } from '@ie-objects/utils/update-query-params-shallow';
 import {
 	iiifGoToHome,
@@ -392,14 +379,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			FLOWPLAYER_FORMATS.includes(file.mimeType)
 		)?.id ?? null;
 
-	// The AI interval that is highlighted, across persons, places and organisations. It belongs to
-	// the file that plays, so it goes when another file is shown.
-	const [activeAiInterval, setActiveAiInterval] = useState<ActiveAiInterval | null>(null);
-	// biome-ignore lint/correctness/useExhaustiveDependencies: reset whenever the played file changes
-	useEffect(() => {
-		setActiveAiInterval(null);
-	}, [currentPlayableFileId]);
-
 	// The mentions are also needed here: after a refresh on the media tab the overview tab that
 	// normally loads them isn't rendered. Same query, so it is fetched once.
 	const isKeyUser = useIsKeyUser();
@@ -408,44 +387,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		currentPlayableFileId,
 		{ enabled: isKeyUser && isAudioVideoType(mediaInfo?.dctermsFormat) }
 	);
-	// A seek asked for while the player isn't rendered yet (mobile, on another tab; or a restore
-	// on load) waits here for it. State, so the effect below runs when a seek is queued.
-	const [pendingSeekSeconds, setPendingSeekSeconds] = useState<number | null>(null);
-
-	// Seeks only: the player keeps playing or staying paused
-	const seekPlayer = useCallback((seconds: number) => {
-		const video = getPlayerVideoElement();
-		if (video) {
-			seekPlayerVideo(video, seconds);
-			setPendingSeekSeconds(null);
-		} else {
-			setPendingSeekSeconds(seconds);
-		}
-	}, []);
-
-	// A refresh or a shared link restores the interval from the URL, once
-	const hasRestoredAiIntervalRef = useRef(false);
-	useEffect(() => {
-		if (!fileMentions || hasRestoredAiIntervalRef.current) {
-			return;
-		}
-		hasRestoredAiIntervalRef.current = true;
-		const { query } = parseUrl(window.location.href);
-		const entityId = query[QUERY_PARAM_KEY.ACTIVE_AI_ENTITY];
-		const intervalIndex = Number(query[QUERY_PARAM_KEY.ACTIVE_AI_INTERVAL]);
-		const entity = [
-			FileMentionEntityType.PERSON,
-			FileMentionEntityType.PLACE,
-			FileMentionEntityType.ORGANIZATION,
-		]
-			.flatMap((type) => mapFileMentionsToAiEntities(fileMentions.mentions, type))
-			.find((candidate) => candidate.id === entityId);
-		// Without access to the essence the intervals can't be selected, whatever the url says
-		if (fileMentions.hasAccessToEssence && entity?.intervals[intervalIndex]) {
-			setActiveAiInterval({ entity, intervalIndex });
-			seekPlayer(entity.intervals[intervalIndex].start);
-		}
-	}, [fileMentions, seekPlayer]);
 
 	const getMaterialRequest = useCallback(
 		(mediaInfo: HetArchiefIeObject) => {
@@ -600,58 +541,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const showFragmentSlider = allFilesToDisplayInCurrentPage.length > 1 && !isNewspaper;
 	const isMobile = isTabletPortraitSize(windowSize); // mobile and tablet portrait
 
-	// The player isn't there yet on load, and on mobile only exists on the Media tab, a few renders after it opens
-	useEffect(() => {
-		if (pendingSeekSeconds === null || (isMobile && activeTab !== ObjectDetailTabs.Media)) {
-			return;
-		}
-		const applyPendingSeek = (): boolean => {
-			const video = getPlayerVideoElement();
-			if (!video) {
-				return false;
-			}
-			seekPlayerVideo(video, pendingSeekSeconds);
-			if (video.readyState < HTMLMediaElement.HAVE_METADATA) {
-				// The position can be reset while the media loads
-				video.addEventListener('loadedmetadata', () => seekPlayerVideo(video, pendingSeekSeconds), {
-					once: true,
-				});
-			}
-			setPendingSeekSeconds(null);
-			return true;
-		};
-		if (applyPendingSeek()) {
-			return;
-		}
-		const observer = new MutationObserver(() => {
-			if (applyPendingSeek()) {
-				observer.disconnect();
-			}
-		});
-		observer.observe(document.body, { childList: true, subtree: true });
-		return () => observer.disconnect();
-	}, [pendingSeekSeconds, isMobile, activeTab]);
+	const { activeAiInterval, selectAiInterval, clearAiInterval } = useAiIntervalSelection({
+		fileMentions,
+		currentPlayableFileId,
+		isMobile,
+		activeTab,
+		updateActiveTab,
+		updateQueryParams,
+	});
 
 	const areAiNavigationControlsVisible = usePlayerControlsVisible(
 		isMobile && activeTab === ObjectDetailTabs.Media && !!activeAiInterval
-	);
-
-	const selectAiInterval = useCallback(
-		(entity: AiEntity, intervalIndex: number) => {
-			setActiveAiInterval({ entity, intervalIndex });
-			seekPlayer(entity.intervals[intervalIndex].start);
-			const aiIntervalQuery = {
-				[QUERY_PARAM_KEY.ACTIVE_AI_ENTITY]: entity.id,
-				[QUERY_PARAM_KEY.ACTIVE_AI_INTERVAL]: String(intervalIndex),
-			};
-			if (isMobile && activeTab !== ObjectDetailTabs.Media) {
-				// On mobile the player is on the Media tab, so show it
-				updateActiveTab(ObjectDetailTabs.Media, aiIntervalQuery).then(noop);
-			} else {
-				updateQueryParams(aiIntervalQuery).then(noop);
-			}
-		},
-		[seekPlayer, isMobile, activeTab, updateActiveTab, updateQueryParams]
 	);
 
 	const hasAccessToVisitorSpaceOfObject =
@@ -1587,13 +1487,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				onSelectInterval={(intervalIndex) =>
 					selectAiInterval(activeAiInterval.entity, intervalIndex)
 				}
-				onClose={() => {
-					setActiveAiInterval(null);
-					updateQueryParams({
-						[QUERY_PARAM_KEY.ACTIVE_AI_ENTITY]: undefined,
-						[QUERY_PARAM_KEY.ACTIVE_AI_INTERVAL]: undefined,
-					}).then(noop);
-				}}
+				onClose={clearAiInterval}
 				isRaised={areAiNavigationControlsVisible}
 			/>
 		);

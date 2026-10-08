@@ -54,6 +54,30 @@ describe('seekPlayerVideo', () => {
 		expect(video.muted).toBe(true);
 	});
 
+	it('restores the sound after seeks that overlap', async () => {
+		const video = createVideo(true);
+		video.muted = false;
+		const resolvers: (() => void)[] = [];
+		video.play = vi.fn().mockImplementation(
+			() =>
+				new Promise<void>((resolve) => {
+					resolvers.push(resolve);
+				})
+		);
+
+		const first = seekPlayerVideo(video, 10);
+		const second = seekPlayerVideo(video, 20);
+		resolvers[0]();
+		await first;
+		// The second seek is still playing muted
+		expect(video.muted).toBe(true);
+		resolvers[1]();
+		await second;
+
+		expect(video.muted).toBe(false);
+		expect(video.currentTime).toBe(20);
+	});
+
 	it('still sets the position when playback is refused', async () => {
 		const video = createVideo(true);
 		video.play = vi.fn().mockRejectedValue(new Error('NotAllowedError'));

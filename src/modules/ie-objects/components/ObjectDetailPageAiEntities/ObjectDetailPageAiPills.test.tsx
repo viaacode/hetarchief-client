@@ -37,6 +37,7 @@ import { ObjectDetailPageAiPills } from './ObjectDetailPageAiPills';
 
 const ROW_WIDTH_PX = 200;
 const PILL_WIDTH_PX = 80;
+const SHORT_PILL_WIDTH_PX = 20;
 const TOGGLE_WIDTH_PX = 60;
 
 const place = (id: string, name: string, overrides: Partial<AiEntity> = {}): AiEntity => ({
@@ -118,7 +119,7 @@ describe('Component: <ObjectDetailPageAiPills />', () => {
 		Element.prototype.getBoundingClientRect = function (this: Element) {
 			let width = 1000;
 			if (this.hasAttribute('data-pill')) {
-				width = PILL_WIDTH_PX;
+				width = this.textContent?.startsWith('Kort') ? SHORT_PILL_WIDTH_PX : PILL_WIDTH_PX;
 			} else if (this.hasAttribute('data-toggle')) {
 				width = TOGGLE_WIDTH_PX;
 			} else if (this.getAttribute('class')?.includes('__measure')) {
@@ -182,6 +183,30 @@ describe('Component: <ObjectDetailPageAiPills />', () => {
 
 			expect(getPillButtons()).toHaveLength(4);
 			expect(screen.queryByRole('button', { name: 'toon-meer' })).not.toBeInTheDocument();
+		});
+
+		it('measures again when other places of the same number show up', () => {
+			const props = {
+				title: '7 plaatsen',
+				searchFilterId: SearchFilterId.MentionPlace,
+				durationSeconds: 200,
+				isTimelineInteractive: true,
+				onSeek: vi.fn(),
+				disclaimer: 'disclaimer',
+				disclaimerAriaLabel: 'meer info',
+			};
+			const shortPlaces = Array.from({ length: 7 }, (_, index) =>
+				place(`k${index}`, `Kort${index}`)
+			);
+			const { rerender } = render(
+				<StatefulObjectDetailPageAiPills {...props} entities={shortPlaces} />
+			);
+			// 7 * 20 + 6 * 8 fits in one row
+			expect(screen.queryByRole('button', { name: 'toon-meer' })).not.toBeInTheDocument();
+
+			rerender(<StatefulObjectDetailPageAiPills {...props} entities={sevenPlaces} />);
+
+			expect(screen.getByRole('button', { name: 'toon-meer' })).toBeInTheDocument();
 		});
 
 		it('expands by itself when the initially selected place is hidden', () => {

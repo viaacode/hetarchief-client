@@ -6,7 +6,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { isTabletPortraitSize } from '@shared/utils/is-mobile';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import clsx from 'clsx';
-import { type FC, type ReactNode, useLayoutEffect, useRef, useState } from 'react';
+import { type FC, Fragment, type ReactNode, useLayoutEffect, useRef, useState } from 'react';
 
 import styles from './AiEntityAvatarRow.module.scss';
 
@@ -66,13 +66,14 @@ export const AiEntityAvatarRow: FC<AiEntityAvatarRowProps> = ({
 		}
 	}, [selectedIndex, avatarsNextToToggle, fitsInOneRow]);
 
-	const renderWithoutMobileTooltip = (trigger: ReactNode, content: ReactNode) => {
+	// The key is on the wrapper: it is what the avatar list reconciles on
+	const renderWithoutMobileTooltip = (trigger: ReactNode, content: ReactNode, key?: string) => {
 		if (isMobile) {
-			return trigger;
+			return <Fragment key={key}>{trigger}</Fragment>;
 		}
 
 		return (
-			<NoServerSideRendering>
+			<NoServerSideRendering key={key}>
 				<Tooltip position="top" offset={10} enableTooltipOnClick={false}>
 					<TooltipTrigger>{trigger}</TooltipTrigger>
 					<TooltipContent>{content}</TooltipContent>
@@ -141,7 +142,8 @@ export const AiEntityAvatarRow: FC<AiEntityAvatarRowProps> = ({
 					>
 						<AiEntityPortrait entity={entity} size="sm" />
 					</button>,
-					entity.name
+					entity.name,
+					entity.id
 				);
 			})}
 

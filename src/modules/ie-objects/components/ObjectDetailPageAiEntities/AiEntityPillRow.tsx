@@ -30,7 +30,8 @@ export const AiEntityPillRow: FC<AiEntityPillRowProps> = ({
 
 	// Measured on a hidden copy with every pill, so the visible list can change without feeding back
 	// into the measurement
-	// biome-ignore lint/correctness/useExhaustiveDependencies: entities.length stands in for the pills (names) that are observed
+	const pillNames = entities.map((entity) => entity.name).join('\n');
+	// biome-ignore lint/correctness/useExhaustiveDependencies: pillNames stands in for the pills that are observed
 	useLayoutEffect(() => {
 		const measure = measureRef.current;
 		if (!measure) {
@@ -57,7 +58,7 @@ export const AiEntityPillRow: FC<AiEntityPillRowProps> = ({
 			observer.observe(element);
 		}
 		return () => observer.disconnect();
-	}, [entities.length]);
+	}, [pillNames]);
 
 	const hasToggle = collapsedCount < entities.length;
 	const visibleCount = isExpanded || !hasToggle ? entities.length : collapsedCount;

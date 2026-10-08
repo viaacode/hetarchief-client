@@ -6,6 +6,9 @@ export const getPlayerVideoElement = (): HTMLVideoElement | null =>
 	);
 
 let seekPlaysInProgress = 0;
+// Seeks that are between muting the video and restoring its sound, which can overlap
+let mutingSeeks = 0;
+let mutedBeforeSeeks = false;
 
 /**
  * True while a seek plays the video muted to reveal the frame, until the pause that ends it has been
@@ -29,7 +32,11 @@ export const seekPlayerVideo = async (video: HTMLVideoElement, seconds: number):
 		return;
 	}
 
-	const wasMuted = video.muted;
+	// A seek that starts while another one is muting would otherwise take that mute for the user's choice
+	if (mutingSeeks === 0) {
+		mutedBeforeSeeks = video.muted;
+	}
+	mutingSeeks++;
 	video.muted = true;
 	seekPlaysInProgress++;
 	let isReleased = false;
@@ -54,7 +61,10 @@ export const seekPlayerVideo = async (video: HTMLVideoElement, seconds: number):
 		// Playback was refused: the poster stays, the position is still set
 		release();
 	} finally {
-		video.muted = wasMuted;
+		mutingSeeks--;
+		if (mutingSeeks === 0) {
+			video.muted = mutedBeforeSeeks;
+		}
 		// Flowplayer jumps to the first cue point on its first playback, so set the position again
 		video.currentTime = seconds;
 	}
