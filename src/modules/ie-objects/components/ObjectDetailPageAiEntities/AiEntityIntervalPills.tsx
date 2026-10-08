@@ -96,12 +96,14 @@ export const AiEntityIntervalPills: FC<AiEntityIntervalPillsProps> = ({
 					0
 				);
 
-	// Selecting an interval on the timeline must bring its pill into view
+	// Selecting an interval on the timeline must bring its pill into view, also when the new active
+	// pill is on the same page as the previous one and the user paged away in between
+	// biome-ignore lint/correctness/useExhaustiveDependencies: activeIndex only re-triggers the jump
 	useEffect(() => {
 		if (pageOfActive >= 0) {
 			setPage(pageOfActive);
 		}
-	}, [pageOfActive]);
+	}, [activeIndex, pageOfActive]);
 
 	const pageStart = pageStarts[currentPage] ?? 0;
 	const pageEnd = pageStarts[currentPage + 1] ?? intervals.length;
