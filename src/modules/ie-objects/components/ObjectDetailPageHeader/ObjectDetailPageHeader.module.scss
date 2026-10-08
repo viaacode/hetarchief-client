@@ -167,55 +167,6 @@ $max-height-collapsed: 8rem;
 	@include abstracts.inline-read-more-paragraph-styling;
 }
 
-.p-object-detail-header__description-fallback {
-	display: flex;
-	align-items: flex-start;
-	align-self: stretch;
-	gap: abstracts.$spacer-xs; // 8px minimum gap between the text and the icon, per design
-	padding: abstracts.$spacer-sm 0;
-
-	&__icon {
-		flex-shrink: 0;
-		margin-left: auto;
-
-		// Matches the AI description block's disclaimer icon (iconSize="lg" there).
-		font-size: abstracts.$font-size-lg;
-	}
-
-	&__text {
-		p {
-			margin: 0;
-			color: abstracts.$black;
-			font-size: abstracts.$font-size-sm; // 14px
-			font-weight: abstracts.$font-weight-medium;
-			line-height: 2rem; // 20px at 14px font size (1.4286 ratio) - no exact token match
-		}
-
-		a {
-			color: abstracts.$black;
-			font-size: abstracts.$font-size-sm; // 14px
-			font-weight: abstracts.$font-weight-bold;
-			line-height: 2rem; // 20px at 14px font size (1.4286 ratio) - no exact token match
-			text-decoration-line: underline;
-			text-decoration-style: solid;
-			text-decoration-skip-ink: auto;
-			text-decoration-thickness: auto;
-			text-underline-offset: auto;
-			text-underline-position: from-font;
-		}
-	}
-}
-
-.p-object-detail-header__divider {
-	// A real <hr> rather than a border on the AI description block, so the parent's gap handles spacing
-	align-self: stretch;
-	width: 100%;
-	height: 1px;
-	margin: 0;
-	border: 0;
-	background-color: rgba(abstracts.$black, 0.12); // 12% opacity black, per Figma
-}
-
 .p-object-detail-header__read-more {
 	// Standalone styling for the research warning's "Meer info" button (a plain Button, not
 	// composed with MetaDataFieldWithHighlightingAndMaxLength's own read-more styling, which

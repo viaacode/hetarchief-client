@@ -25,7 +25,6 @@ export interface AiEntityCardProps {
 	activeIntervalIndex: number | null;
 	onSelectInterval: (intervalIndex: number) => void;
 	id?: string;
-	className?: string;
 }
 
 export const AiEntityCard: FC<AiEntityCardProps> = ({
@@ -36,7 +35,6 @@ export const AiEntityCard: FC<AiEntityCardProps> = ({
 	activeIntervalIndex,
 	onSelectInterval,
 	id,
-	className,
 }) => {
 	const hasIntervals = entity.intervals.length > 0;
 	// Without access to the essence nothing can be selected, not even through the url
@@ -45,11 +43,9 @@ export const AiEntityCard: FC<AiEntityCardProps> = ({
 	return (
 		<div
 			id={id}
-			className={clsx(
-				styles['c-ai-entity-card'],
-				{ [styles['c-ai-entity-card--without-intervals']]: !hasIntervals },
-				className
-			)}
+			className={clsx(styles['c-ai-entity-card'], {
+				[styles['c-ai-entity-card--without-intervals']]: !hasIntervals,
+			})}
 		>
 			<div className={styles['c-ai-entity-card__header']}>
 				{/* Places and organisations have no picture: their name moves to the left */}
