@@ -66,4 +66,29 @@ describe('Hook: usePlayerControlsVisible', () => {
 
 		expect(screen.getByTestId('visible')).toHaveTextContent('true');
 	});
+
+	it('stops waiting for a player once it is disabled', async () => {
+		const { rerender } = render(<Probe />);
+
+		rerender(<Probe isEnabled={false} />);
+		await act(async () => {
+			addPlayer(true);
+		});
+
+		expect(screen.getByTestId('visible')).toHaveTextContent('true');
+	});
+
+	it('stops following the controls and resets to visible once it is disabled', async () => {
+		const inner = addPlayer(true);
+		const { rerender } = render(<Probe />);
+		expect(screen.getByTestId('visible')).toHaveTextContent('false');
+
+		rerender(<Probe isEnabled={false} />);
+		expect(screen.getByTestId('visible')).toHaveTextContent('true');
+
+		await act(async () => {
+			inner.classList.add('c-video-player-inner--controls-hidden');
+		});
+		expect(screen.getByTestId('visible')).toHaveTextContent('true');
+	});
 });

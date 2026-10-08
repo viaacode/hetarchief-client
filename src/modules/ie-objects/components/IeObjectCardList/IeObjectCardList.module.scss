@@ -14,13 +14,13 @@
 		margin-right: -#{abstracts.$spacer-md};
 		margin-top: abstracts.$spacer-md;
 
-		// Set by the sidebar while the feedback button floats over the end of the tab
-		padding: abstracts.$spacer-md abstracts.$spacer-md calc(#{abstracts.$spacer-md} + #{abstracts.$c-feedback-button-height});
+		// The offset is set by the sidebar only while the feedback button floats over the end of the tab
+		padding: abstracts.$spacer-md abstracts.$spacer-md calc(#{abstracts.$spacer-md} + var(--c-feedback-button-offset, 0rem));
 
 		@media (min-width: abstracts.$breakpoint-lg) {
 			margin-left: -#{abstracts.$spacer-lg};
 			margin-right: -#{abstracts.$spacer-lg};
-			padding: abstracts.$spacer-lg abstracts.$spacer-lg calc(#{abstracts.$spacer-lg} + #{abstracts.$c-feedback-button-height});
+			padding: abstracts.$spacer-lg abstracts.$spacer-lg calc(#{abstracts.$spacer-lg} + var(--c-feedback-button-offset, 0rem));
 		}
 	}
 

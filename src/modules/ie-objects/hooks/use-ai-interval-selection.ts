@@ -48,6 +48,9 @@ export const useAiIntervalSelection = ({
 	// A seek asked for while the player isn't rendered yet (mobile, on another tab; or a restore
 	// on load) waits here until the player reports it is ready
 	const pendingSeekSecondsRef = useRef<number | null>(null);
+	// The moment the player should be at: a later seek or a cleared selection must win over the
+	// re-seek that follows the media load
+	const requestedSeekSecondsRef = useRef<number | null>(null);
 
 	// It belongs to the file that plays, so it goes when another file is shown
 	const [activeAiInterval, setActiveAiInterval] = useState<ActiveAiInterval | null>(null);
@@ -59,6 +62,7 @@ export const useAiIntervalSelection = ({
 		setActiveAiInterval(null);
 		// A seek that waits for the player belongs to the previous file too
 		pendingSeekSecondsRef.current = null;
+		requestedSeekSecondsRef.current = null;
 		// Not on load (no previous file): the url still has to be restored from
 		if (previousFileId && previousFileId !== currentPlayableFileId) {
 			const { query } = parseUrl(window.location.href);
@@ -70,6 +74,7 @@ export const useAiIntervalSelection = ({
 
 	// Seeks only: the player keeps playing or staying paused
 	const seekPlayer = useCallback((seconds: number) => {
+		requestedSeekSecondsRef.current = seconds;
 		const video = getPlayerVideoElement();
 		if (video) {
 			seekPlayerVideo(video, seconds);
@@ -89,9 +94,16 @@ export const useAiIntervalSelection = ({
 		pendingSeekSecondsRef.current = null;
 		seekPlayerVideo(video, seconds);
 		// The position can be reset while the media loads
-		video.addEventListener('loadedmetadata', () => seekPlayerVideo(video, seconds), {
-			once: true,
-		});
+		video.addEventListener(
+			'loadedmetadata',
+			() => {
+				const requestedSeconds = requestedSeekSecondsRef.current;
+				if (requestedSeconds !== null) {
+					seekPlayerVideo(video, requestedSeconds).then(noop);
+				}
+			},
+			{ once: true }
+		);
 	}, []);
 
 	// A refresh or a shared link restores the interval from the URL, once
@@ -139,6 +151,7 @@ export const useAiIntervalSelection = ({
 	const clearAiInterval = useCallback(() => {
 		setActiveAiInterval(null);
 		pendingSeekSecondsRef.current = null;
+		requestedSeekSecondsRef.current = null;
 		updateQueryParams(NO_AI_INTERVAL_QUERY).then(noop);
 	}, [updateQueryParams]);
 

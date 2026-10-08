@@ -264,7 +264,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	);
 
 	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(-1);
-	const [expandSidebar, setExpandSidebar] = useQueryParam(
+	const [expandSidebar] = useQueryParam(
 		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
 		BooleanParamWithDefault(false)
 	);
@@ -552,8 +552,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			updateQueryParams,
 		});
 
+	// Not when the media turned out unavailable: no player will mount to wait for
 	const areAiNavigationControlsVisible = usePlayerControlsVisible(
-		isMobile && activeTab === ObjectDetailTabs.Media && !!activeAiInterval
+		isMobile &&
+			activeTab === ObjectDetailTabs.Media &&
+			!!activeAiInterval &&
+			isFlowPlayerMediaAvailable !== false
 	);
 
 	const hasAccessToVisitorSpaceOfObject =
@@ -1047,7 +1051,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 * Callbacks
 	 */
 	const handleExpandButtonClicked = () => {
-		setExpandSidebar(!expandSidebar, 'replaceIn');
+		updateQueryParamsShallow(router, {
+			[QUERY_PARAM_KEY.EXPAND_SIDEBAR]: expandSidebar ? undefined : '1',
+		}).then(noop);
 	};
 
 	const onCloseBlade = () => {

@@ -72,6 +72,9 @@
 
 	// The floating feedback button would cover whatever ends the tab
 	&--with-feedback-button {
+		// Also read by the card lists, which paint their own background and pad their own bottom
+		--c-feedback-button-offset: #{abstracts.$c-feedback-button-height};
+
 		padding-bottom: calc(#{abstracts.$spacer-md} + #{abstracts.$c-feedback-button-height});
 	}
 

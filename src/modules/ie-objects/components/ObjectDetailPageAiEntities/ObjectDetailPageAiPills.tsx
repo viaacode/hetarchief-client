@@ -2,12 +2,13 @@ import Metadata from '@ie-objects/components/Metadata/Metadata';
 import { AiEntityCard } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityCard';
 import { AiEntityPillRow } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityPillRow';
 import { ObjectDetailPageMetadataDisclaimerTooltip } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataDisclaimerTooltip';
+import { useSelectedAiEntity } from '@ie-objects/hooks/use-selected-ai-entity';
 import type { ActiveAiInterval, AiEntity } from '@ie-objects/utils/map-ai-entities';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getSearchLink } from '@shared/helpers/get-search-link';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { SearchFilterId } from '@visitor-space/types';
-import { type FC, type ReactNode, useEffect, useId, useState } from 'react';
+import { type FC, type ReactNode, useId } from 'react';
 
 import styles from './ObjectDetailPageAiPills.module.scss';
 
@@ -47,26 +48,11 @@ export const ObjectDetailPageAiPills: FC<ObjectDetailPageAiPillsProps> = ({
 }) => {
 	const locale = useLocale();
 	const cardId = useId();
-	// The overview tab is unmounted while the media tab shows (mobile): reopen the card of the active interval
-	const [selectedId, setSelectedId] = useState<string | null>(() =>
-		activeInterval && entities.some((entity) => entity.id === activeInterval.entity.id)
-			? activeInterval.entity.id
-			: initialSelectedId
+	const { setSelectedId, selectedEntity } = useSelectedAiEntity(
+		entities,
+		activeInterval,
+		initialSelectedId
 	);
-	// The entities arrive after the first render, so the filtered one opens when it shows up
-	useEffect(() => {
-		if (initialSelectedId) {
-			setSelectedId(initialSelectedId);
-		}
-	}, [initialSelectedId]);
-	// An interval that is restored later (after a refresh) opens its card too
-	const activeEntityId = activeInterval?.entity.id;
-	useEffect(() => {
-		if (entities.some((entity) => entity.id === activeEntityId)) {
-			setSelectedId(activeEntityId ?? null);
-		}
-	}, [activeEntityId, entities]);
-	const selectedEntity = entities.find((entity) => entity.id === selectedId) ?? null;
 
 	if (!entities.length) {
 		return null;

@@ -56,7 +56,12 @@ export const AiEntityNavigationOverlay: FC<AiEntityNavigationOverlayProps> = ({
 						variants={['sm', 'text', 'white']}
 						onClick={() => onSelectInterval(intervalIndex - 1)}
 					/>
-					<span className={styles['c-ai-entity-navigation-overlay__count']}>
+					{/* Live, so a screen reader hears the new position after previous / next */}
+					<span
+						className={styles['c-ai-entity-navigation-overlay__count']}
+						aria-live="polite"
+						aria-atomic="true"
+					>
 						{tText(
 							'modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-navigation-overlay___index-van-total',
 							{ index: intervalIndex + 1, total }

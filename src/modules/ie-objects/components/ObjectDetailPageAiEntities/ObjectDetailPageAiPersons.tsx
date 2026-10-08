@@ -2,13 +2,14 @@ import Metadata from '@ie-objects/components/Metadata/Metadata';
 import { AiEntityAvatarRow } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityAvatarRow';
 import { AiEntityCard } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityCard';
 import { ObjectDetailPageMetadataDisclaimerTooltip } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataDisclaimerTooltip';
+import { useSelectedAiEntity } from '@ie-objects/hooks/use-selected-ai-entity';
 import type { ActiveAiInterval, AiEntity } from '@ie-objects/utils/map-ai-entities';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tText } from '@shared/helpers/translate';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { SearchFilterId } from '@visitor-space/types';
-import { type FC, type ReactNode, useEffect, useId, useState } from 'react';
+import { type FC, type ReactNode, useId } from 'react';
 
 import styles from './ObjectDetailPageAiPersons.module.scss';
 
@@ -41,26 +42,11 @@ export const ObjectDetailPageAiPersons: FC<ObjectDetailPageAiPersonsProps> = ({
 }) => {
 	const locale = useLocale();
 	const cardId = useId();
-	// The overview tab is unmounted while the media tab shows (mobile): reopen the card of the active interval
-	const [selectedId, setSelectedId] = useState<string | null>(() =>
-		activeInterval && persons.some((person) => person.id === activeInterval.entity.id)
-			? activeInterval.entity.id
-			: initialSelectedId
+	const { setSelectedId, selectedEntity: selectedPerson } = useSelectedAiEntity(
+		persons,
+		activeInterval,
+		initialSelectedId
 	);
-	// The entities arrive after the first render, so the filtered one opens when it shows up
-	useEffect(() => {
-		if (initialSelectedId) {
-			setSelectedId(initialSelectedId);
-		}
-	}, [initialSelectedId]);
-	// An interval that is restored later (after a refresh) opens its card too
-	const activeEntityId = activeInterval?.entity.id;
-	useEffect(() => {
-		if (persons.some((person) => person.id === activeEntityId)) {
-			setSelectedId(activeEntityId ?? null);
-		}
-	}, [activeEntityId, persons]);
-	const selectedPerson = persons.find((person) => person.id === selectedId) ?? null;
 
 	if (!persons.length) {
 		return null;
