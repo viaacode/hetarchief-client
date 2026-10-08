@@ -2,9 +2,11 @@ import { AiEntityPortrait } from '@ie-objects/components/ObjectDetailPageAiEntit
 import type { AiEntity } from '@ie-objects/utils/map-ai-entities';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@meemoo/react-components';
 import { tText } from '@shared/helpers/translate';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { isTabletPortraitSize } from '@shared/utils/is-mobile';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import clsx from 'clsx';
-import { type FC, useLayoutEffect, useRef, useState } from 'react';
+import { type FC, type ReactNode, useLayoutEffect, useRef, useState } from 'react';
 
 import styles from './AiEntityAvatarRow.module.scss';
 
@@ -27,6 +29,8 @@ export const AiEntityAvatarRow: FC<AiEntityAvatarRowProps> = ({
 	controlsId,
 	onSelect,
 }) => {
+	const windowSize = useWindowSizeContext();
+	const isMobile = isTabletPortraitSize(windowSize);
 	const rowRef = useRef<HTMLDivElement>(null);
 	const [rowWidthPx, setRowWidthPx] = useState(0);
 	const [isExpanded, setIsExpanded] = useState(false);
@@ -62,12 +66,57 @@ export const AiEntityAvatarRow: FC<AiEntityAvatarRowProps> = ({
 		}
 	}, [selectedIndex, avatarsNextToToggle, fitsInOneRow]);
 
-	const showMoreLabel = tText(
-		'modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-avatar-row___toon-meer'
-	);
-	const showLessLabel = tText(
-		'modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-avatar-row___toon-minder'
-	);
+	const renderWithoutMobileTooltip = (trigger: ReactNode, content: ReactNode) => {
+		if (isMobile) {
+			return trigger;
+		}
+
+		return (
+			<NoServerSideRendering>
+				<Tooltip position="top" offset={10} enableTooltipOnClick={false}>
+					<TooltipTrigger>{trigger}</TooltipTrigger>
+					<TooltipContent>{content}</TooltipContent>
+				</Tooltip>
+			</NoServerSideRendering>
+		);
+	};
+
+	const renderShowMoreLess = () => {
+		if (!showToggle) {
+			return null;
+		}
+
+		if (isExpanded) {
+			return (
+				<button
+					type="button"
+					className={styles['c-ai-entity-avatar-row__less']}
+					aria-expanded
+					onClick={() => setIsExpanded(false)}
+				>
+					{tText(
+						'modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-avatar-row___toon-minder'
+					)}
+				</button>
+			);
+		}
+
+		const showMoreLabel = tText(
+			'modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-avatar-row___toon-meer'
+		);
+		return renderWithoutMobileTooltip(
+			<button
+				type="button"
+				className={styles['c-ai-entity-avatar-row__more']}
+				aria-label={showMoreLabel}
+				aria-expanded={false}
+				onClick={() => setIsExpanded(true)}
+			>
+				{`+${entities.length - visibleCount}`}
+			</button>,
+			showMoreLabel
+		);
+	};
 
 	return (
 		<div
@@ -78,58 +127,25 @@ export const AiEntityAvatarRow: FC<AiEntityAvatarRowProps> = ({
 		>
 			{entities.slice(0, visibleCount).map((entity) => {
 				const isSelected = entity.id === selectedId;
-				return (
-					<NoServerSideRendering key={entity.id}>
-						<Tooltip position="top" offset={10}>
-							<TooltipTrigger>
-								<button
-									type="button"
-									className={clsx(styles['c-ai-entity-avatar-row__avatar'], {
-										[styles['c-ai-entity-avatar-row__avatar--selected']]: isSelected,
-									})}
-									aria-label={entity.name}
-									aria-expanded={isSelected}
-									aria-controls={controlsId}
-									onClick={() => onSelect(entity.id)}
-								>
-									<AiEntityPortrait name={entity.name} still={entity.still} size="sm" />
-								</button>
-							</TooltipTrigger>
-							<TooltipContent>{entity.name}</TooltipContent>
-						</Tooltip>
-					</NoServerSideRendering>
+
+				return renderWithoutMobileTooltip(
+					<button
+						type="button"
+						className={clsx(styles['c-ai-entity-avatar-row__avatar'], {
+							[styles['c-ai-entity-avatar-row__avatar--selected']]: isSelected,
+						})}
+						aria-label={entity.name}
+						aria-expanded={isSelected}
+						aria-controls={controlsId}
+						onClick={() => onSelect(entity.id)}
+					>
+						<AiEntityPortrait name={entity.name} still={entity.still} size="sm" />
+					</button>,
+					entity.name
 				);
 			})}
 
-			{showToggle && !isExpanded && (
-				<NoServerSideRendering>
-					<Tooltip position="top" offset={10}>
-						<TooltipTrigger>
-							<button
-								type="button"
-								className={styles['c-ai-entity-avatar-row__more']}
-								aria-label={showMoreLabel}
-								aria-expanded={false}
-								onClick={() => setIsExpanded(true)}
-							>
-								{`+${entities.length - visibleCount}`}
-							</button>
-						</TooltipTrigger>
-						<TooltipContent>{showMoreLabel}</TooltipContent>
-					</Tooltip>
-				</NoServerSideRendering>
-			)}
-
-			{showToggle && isExpanded && (
-				<button
-					type="button"
-					className={styles['c-ai-entity-avatar-row__less']}
-					aria-expanded
-					onClick={() => setIsExpanded(false)}
-				>
-					{showLessLabel}
-				</button>
-			)}
+			{renderShowMoreLess()}
 		</div>
 	);
 };
