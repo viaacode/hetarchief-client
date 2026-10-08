@@ -139,7 +139,7 @@ export const AiEntityAvatarRow: FC<AiEntityAvatarRowProps> = ({
 						aria-controls={controlsId}
 						onClick={() => onSelect(entity.id)}
 					>
-						<AiEntityPortrait name={entity.name} still={entity.still} size="sm" />
+						<AiEntityPortrait entity={entity} size="sm" />
 					</button>,
 					entity.name
 				);

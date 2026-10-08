@@ -54,7 +54,7 @@ export const AiEntityCard: FC<AiEntityCardProps> = ({
 			<div className={styles['c-ai-entity-card__header']}>
 				{/* Places and organisations have no picture: their name moves to the left */}
 				{entity.type === FileMentionEntityType.PERSON && (
-					<AiEntityPortrait name={entity.name} still={entity.still} size="lg" />
+					<AiEntityPortrait entity={entity} size="lg" />
 				)}
 				<div className={styles['c-ai-entity-card__title']}>
 					<h3 className={styles['c-ai-entity-card__name']}>{entity.name}</h3>

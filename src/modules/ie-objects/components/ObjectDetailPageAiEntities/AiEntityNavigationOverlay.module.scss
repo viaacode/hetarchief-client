@@ -26,16 +26,11 @@ $control-height: 2.8rem;
 		align-items: center;
 		justify-content: space-between;
 		height: $control-height;
-		padding: 0 abstracts.$spacer-xs;
+		padding: 0 abstracts.$spacer-xs 0 0;
 		border-radius: abstracts.$spacer-md;
 		background-color: abstracts.$graphite;
 		color: abstracts.$white;
 		gap: abstracts.$spacer-xs;
-
-		// Room for the 28px portrait and an 8px gap
-		&--with-portrait {
-			padding-left: 0;
-		}
 	}
 
 	&__name {

@@ -111,19 +111,46 @@ describe('Component: <AiEntityNavigationOverlay />', () => {
 		expect(onClose).toHaveBeenCalled();
 	});
 
-	it('shows initials for a person without still, and nothing for a place', () => {
+	it('shows the initials for a person without still', () => {
+		renderOverlay();
+
+		expect(screen.getByText('JD')).toBeInTheDocument();
+	});
+
+	it('shows the first letter of a place or organisation in a coloured circle', () => {
 		const { unmount } = render(
 			<AiEntityNavigationOverlay
-				entity={entity()}
+				entity={entity({ type: FileMentionEntityType.PLACE, name: 'Antwerpen' })}
 				intervalIndex={0}
 				onSelectInterval={vi.fn()}
 				onClose={vi.fn()}
 			/>
 		);
-		expect(screen.getByText('JD')).toBeInTheDocument();
+		expect(screen.getByText('A')).toHaveAttribute(
+			'style',
+			expect.stringContaining('background-color')
+		);
+		expect(screen.queryByText('AN')).not.toBeInTheDocument();
+		expect(screen.getByText('Antwerpen')).toBeInTheDocument();
 		unmount();
 
-		renderOverlay({ entity: entity({ type: FileMentionEntityType.PLACE, name: 'Antwerpen' }) });
-		expect(screen.queryByText('AN')).not.toBeInTheDocument();
+		renderOverlay({
+			entity: entity({ type: FileMentionEntityType.ORGANIZATION, name: 'Sint Lucas Gent' }),
+		});
+		expect(screen.getByText('S')).toBeInTheDocument();
+		expect(screen.queryByText('SG')).not.toBeInTheDocument();
+	});
+
+	it('does not use the still of a place or organisation', () => {
+		const { container } = render(
+			<AiEntityNavigationOverlay
+				entity={entity({ type: FileMentionEntityType.PLACE, name: 'Antwerpen', still: 'x.jpg' })}
+				intervalIndex={0}
+				onSelectInterval={vi.fn()}
+				onClose={vi.fn()}
+			/>
+		);
+
+		expect(container.querySelector('img')).not.toBeInTheDocument();
 	});
 });

@@ -26,18 +26,22 @@ export const getAiEntityAvatarColors = (name: string): { background: string; tex
 	return AI_ENTITY_AVATAR_COLORS[hash % AI_ENTITY_AVATAR_COLORS.length];
 };
 
-// First letters of the first and last word ("Jane Eve Doe" -> "JD"); a single word gives its first two letters.
 // Names can carry a disambiguating description, "Theo van Gogh (regisseur)", which is not part of the name.
-export const getAiEntityInitials = (name: string): string => {
-	const words = name
+const getNameWords = (name: string): string[] =>
+	name
 		.replace(/\([^)]*\)/g, ' ')
 		.split(/\s+/)
 		.filter((word) => /^[\p{L}\p{N}]/u.test(word));
-	if (words.length === 0) {
-		return '';
+
+// First letters of the first and last word ("Jane Eve Doe" -> "JD"); a single word gives its first two letters.
+export const getAiEntityInitials = (name: string): string => {
+	const words = getNameWords(name);
+	if (words.length <= 1) {
+		return (words[0] ?? '').substring(0, 2).toUpperCase();
 	}
-	if (words.length === 1) {
-		return Array.from(words[0]).slice(0, 2).join('').toUpperCase();
-	}
-	return (Array.from(words[0])[0] + Array.from(words[words.length - 1])[0]).toUpperCase();
+	return (words[0].substring(0, 1) + words[words.length - 1].substring(0, 1)).toUpperCase();
 };
+
+// First letter of the name ("Sint Lucas Gent" -> "S")
+export const getAiEntityFirstLetter = (name: string): string =>
+	(getNameWords(name)[0] ?? '').substring(0, 1).toUpperCase();

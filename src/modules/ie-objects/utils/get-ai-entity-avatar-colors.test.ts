@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
 	AI_ENTITY_AVATAR_COLORS,
 	getAiEntityAvatarColors,
+	getAiEntityFirstLetter,
 	getAiEntityInitials,
 } from './get-ai-entity-avatar-colors';
 
@@ -48,5 +49,21 @@ describe('getAiEntityInitials', () => {
 	it('copes with extra whitespace and empty names', () => {
 		expect(getAiEntityInitials('  Jane   Doe ')).toBe('JD');
 		expect(getAiEntityInitials('   ')).toBe('');
+	});
+});
+
+describe('getAiEntityFirstLetter', () => {
+	it('takes the first letter of the name', () => {
+		expect(getAiEntityFirstLetter('Antwerpen')).toBe('A');
+		expect(getAiEntityFirstLetter('sint Lucas Gent')).toBe('S');
+	});
+
+	it('skips a description between brackets and words without a letter or digit', () => {
+		expect(getAiEntityFirstLetter('(bij Gent) gent')).toBe('G');
+		expect(getAiEntityFirstLetter('- Gent')).toBe('G');
+	});
+
+	it('gives nothing for an empty name', () => {
+		expect(getAiEntityFirstLetter('   ')).toBe('');
 	});
 });

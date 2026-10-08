@@ -1,5 +1,4 @@
 import { AiEntityPortrait } from '@ie-objects/components/ObjectDetailPageAiEntities/AiEntityPortrait';
-import { FileMentionEntityType } from '@ie-objects/ie-objects.types';
 import type { AiEntity } from '@ie-objects/utils/map-ai-entities';
 import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
@@ -31,7 +30,6 @@ export const AiEntityNavigationOverlay: FC<AiEntityNavigationOverlayProps> = ({
 	isRaised = true,
 }) => {
 	const total = entity.intervals.length;
-	const hasPortrait = entity.type === FileMentionEntityType.PERSON;
 
 	return (
 		<div
@@ -39,19 +37,12 @@ export const AiEntityNavigationOverlay: FC<AiEntityNavigationOverlayProps> = ({
 				[styles['c-ai-entity-navigation-overlay--raised']]: isRaised,
 			})}
 		>
-			<div
-				className={clsx(styles['c-ai-entity-navigation-overlay__bar'], {
-					[styles['c-ai-entity-navigation-overlay__bar--with-portrait']]: hasPortrait,
-				})}
-			>
-				{hasPortrait && (
-					<AiEntityPortrait
-						className={styles['c-ai-entity-navigation-overlay__portrait']}
-						name={entity.name}
-						still={entity.still}
-						size="xs"
-					/>
-				)}
+			<div className={styles['c-ai-entity-navigation-overlay__bar']}>
+				<AiEntityPortrait
+					className={styles['c-ai-entity-navigation-overlay__portrait']}
+					entity={entity}
+					size="xs"
+				/>
 				<span className={styles['c-ai-entity-navigation-overlay__name']}>{entity.name}</span>
 
 				<div className={styles['c-ai-entity-navigation-overlay__controls']}>
