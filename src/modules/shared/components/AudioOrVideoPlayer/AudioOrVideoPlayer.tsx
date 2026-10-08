@@ -36,6 +36,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	onPlay,
 	onPause,
 	onMediaReady,
+	onPlayerReady,
 	onMediaDurationLoaded,
 	representation,
 	dctermsFormat,
@@ -157,6 +158,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		pause: paused,
 		onPlay,
 		onPause,
+		onReady: onPlayerReady,
 		token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
 		dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
 		ui: allowFullScreen ? undefined : 1, // 1 = NO_FULLSCREEN

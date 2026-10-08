@@ -34,6 +34,7 @@ import {
 	useObjectDetailActiveTab,
 	useResetUnavailableTab,
 } from '@ie-objects/hooks/use-object-detail-active-tab';
+import { usePlayAfterSeek } from '@ie-objects/hooks/use-play-after-seek';
 import { usePlayerControlsVisible } from '@ie-objects/hooks/use-player-controls-visible';
 import {
 	FLOWPLAYER_FORMATS,
@@ -54,7 +55,7 @@ import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-te
 import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
-import { getPlayerVideoElement, isSeekingPlayerVideo } from '@ie-objects/utils/seek-player-video';
+import { isSeekingPlayerVideo } from '@ie-objects/utils/seek-player-video';
 import { updateQueryParamsShallow } from '@ie-objects/utils/update-query-params-shallow';
 import {
 	iiifGoToHome,
@@ -541,14 +542,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const showFragmentSlider = allFilesToDisplayInCurrentPage.length > 1 && !isNewspaper;
 	const isMobile = isTabletPortraitSize(windowSize); // mobile and tablet portrait
 
-	const { activeAiInterval, selectAiInterval, clearAiInterval } = useAiIntervalSelection({
-		fileMentions,
-		currentPlayableFileId,
-		isMobile,
-		activeTab,
-		updateActiveTab,
-		updateQueryParams,
-	});
+	const { activeAiInterval, selectAiInterval, clearAiInterval, onPlayerReady } =
+		useAiIntervalSelection({
+			fileMentions,
+			currentPlayableFileId,
+			isMobile,
+			activeTab,
+			updateActiveTab,
+			updateQueryParams,
+		});
 
 	const areAiNavigationControlsVisible = usePlayerControlsVisible(
 		isMobile && activeTab === ObjectDetailTabs.Media && !!activeAiInterval
@@ -1110,13 +1112,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		setActiveBlade(MediaActions.RequestMaterial, 'replaceIn');
 	};
 
-	const handleOnPlay = () => {
-		if (isSeekingPlayerVideo()) {
-			// The muted play of a seek is no playback: no play event to log and the player must not be
-			// told to play. Flowplayer reports only its first play, so wait for the user's own.
-			getPlayerVideoElement()?.addEventListener('playing', handleOnPlay, { once: true });
-			return;
-		}
+	const handleUserPlay = () => {
 		setIsMediaPaused(false);
 		if (!hasMediaPlayed) {
 			// Check state inside setState function since this is an event handler outside React
@@ -1149,6 +1145,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				return true;
 			});
 		}
+	};
+
+	// The muted play of a seek is no playback: no play event to log and the player must not be told
+	// to play (see usePlayAfterSeek)
+	const { handlePlay: handleOnPlay, listenToVideo } = usePlayAfterSeek(handleUserPlay);
+
+	const handlePlayerReady = (video: HTMLVideoElement) => {
+		onPlayerReady(video);
+		listenToVideo(video);
 	};
 
 	const handleOnPause = () => {
@@ -1468,6 +1473,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					paused={isMediaPaused}
 					onPlay={handleOnPlay}
 					onPause={handleOnPause}
+					onPlayerReady={handlePlayerReady}
 					onMediaReady={setIsFlowPlayerMediaAvailable}
 				/>
 				{isMobile && renderAiEntityNavigationOverlay()}

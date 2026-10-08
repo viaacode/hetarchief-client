@@ -133,7 +133,7 @@ describe('Hook: useAiIntervalSelection', () => {
 	});
 
 	describe('seek while the player is not rendered', () => {
-		it('waits for the player to appear and then seeks', async () => {
+		it('waits for the player to report it is ready and then seeks', () => {
 			state.video = null;
 			const { result } = setup();
 
@@ -141,69 +141,101 @@ describe('Hook: useAiIntervalSelection', () => {
 			expect(seekPlayerVideo).not.toHaveBeenCalled();
 
 			const video = createVideo();
-			state.video = video;
-			await act(async () => {
-				// Any DOM change makes the observer look again
-				document.body.appendChild(document.createElement('div'));
-			});
+			act(() => result.current.onPlayerReady(video));
 
 			expect(seekPlayerVideo).toHaveBeenCalledTimes(1);
 			expect(seekPlayerVideo).toHaveBeenCalledWith(video, 10);
 		});
 
-		it('seeks once, not on every later DOM change', async () => {
+		it('seeks once: a player that is mounted again does not repeat it', () => {
 			state.video = null;
 			const { result } = setup();
 			act(() => result.current.selectAiInterval(entity, 0));
-			state.video = createVideo();
-			await act(async () => {
-				document.body.appendChild(document.createElement('div'));
-			});
+			act(() => result.current.onPlayerReady(createVideo()));
 
-			await act(async () => {
-				document.body.appendChild(document.createElement('div'));
-			});
+			act(() => result.current.onPlayerReady(createVideo()));
 
 			expect(seekPlayerVideo).toHaveBeenCalledTimes(1);
 		});
 
-		it('on mobile only seeks once the media tab is open', async () => {
-			state.video = createVideo();
-			const { result, rerender, props } = setup({
-				isMobile: true,
-				activeTab: ObjectDetailTabs.Overview,
-			});
-			// The player exists in the test, but the page doesn't render it on this tab yet
-			const video = state.video;
-			state.video = null;
-			act(() => result.current.selectAiInterval(entity, 1));
+		it('does nothing for a player that is ready when no seek waits', () => {
+			const { result } = setup();
 
-			state.video = video;
-			await act(async () => {
-				document.body.appendChild(document.createElement('div'));
-			});
+			act(() => result.current.onPlayerReady(createVideo()));
+
+			expect(seekPlayerVideo).not.toHaveBeenCalled();
+		});
+
+		it('on mobile the player mounts when the media tab opens, and takes over the seek then', () => {
+			state.video = null;
+			const { result } = setup({ isMobile: true, activeTab: ObjectDetailTabs.Overview });
+			act(() => result.current.selectAiInterval(entity, 1));
 			expect(seekPlayerVideo).not.toHaveBeenCalled();
 
-			rerender({ ...props, activeTab: ObjectDetailTabs.Media });
+			const video = createVideo();
+			act(() => result.current.onPlayerReady(video));
 
 			expect(seekPlayerVideo).toHaveBeenCalledWith(video, 60);
 		});
 
-		it('seeks again when the media has loaded, as loading can reset the position', async () => {
+		it('seeks again when the media has loaded, as loading can reset the position', () => {
 			state.video = null;
 			const { result } = setup();
 			act(() => result.current.selectAiInterval(entity, 0));
 			const video = createVideo(0);
-			state.video = video;
-			await act(async () => {
-				document.body.appendChild(document.createElement('div'));
-			});
+			act(() => result.current.onPlayerReady(video));
 			expect(seekPlayerVideo).toHaveBeenCalledTimes(1);
 
 			video.dispatchEvent(new Event('loadedmetadata'));
 
 			expect(seekPlayerVideo).toHaveBeenCalledTimes(2);
 			expect(seekPlayerVideo).toHaveBeenLastCalledWith(video, 10);
+		});
+
+		it('only the latest selection is seeked to', () => {
+			state.video = null;
+			const { result } = setup();
+			act(() => result.current.selectAiInterval(entity, 0));
+			act(() => result.current.selectAiInterval(entity, 1));
+
+			act(() => result.current.onPlayerReady(createVideo()));
+
+			expect(seekPlayerVideo).toHaveBeenCalledTimes(1);
+			expect(seekPlayerVideo).toHaveBeenCalledWith(expect.anything(), 60);
+		});
+
+		it('forgets the seek when the interval is cleared before the player is there', () => {
+			state.video = null;
+			const { result } = setup();
+			act(() => result.current.selectAiInterval(entity, 0));
+			act(() => result.current.clearAiInterval());
+
+			act(() => result.current.onPlayerReady(createVideo()));
+
+			expect(seekPlayerVideo).not.toHaveBeenCalled();
+		});
+
+		it('forgets the seek when another file is played before the player is there', () => {
+			state.video = null;
+			const { result, rerender, props } = setup();
+			act(() => result.current.selectAiInterval(entity, 0));
+
+			rerender({ ...props, currentPlayableFileId: 'file-2' });
+			act(() => result.current.onPlayerReady(createVideo()));
+
+			expect(seekPlayerVideo).not.toHaveBeenCalled();
+		});
+
+		it('restores from the url into a player that mounts later', () => {
+			state.video = null;
+			window.history.replaceState({}, '', '/object?aiEntity=jane&aiInterval=1');
+			const { result } = setup({ fileMentions: mentions() });
+			expect(seekPlayerVideo).not.toHaveBeenCalled();
+
+			const video = createVideo();
+			act(() => result.current.onPlayerReady(video));
+
+			expect(seekPlayerVideo).toHaveBeenCalledWith(video, 60);
 		});
 	});
 

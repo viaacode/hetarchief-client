@@ -45,6 +45,10 @@ export const useAiIntervalSelection = ({
 	updateActiveTab,
 	updateQueryParams,
 }: UseAiIntervalSelectionProps) => {
+	// A seek asked for while the player isn't rendered yet (mobile, on another tab; or a restore
+	// on load) waits here until the player reports it is ready
+	const pendingSeekSecondsRef = useRef<number | null>(null);
+
 	// It belongs to the file that plays, so it goes when another file is shown
 	const [activeAiInterval, setActiveAiInterval] = useState<ActiveAiInterval | null>(null);
 	const previousPlayableFileIdRef = useRef<string | null>(null);
@@ -53,6 +57,8 @@ export const useAiIntervalSelection = ({
 		const previousFileId = previousPlayableFileIdRef.current;
 		previousPlayableFileIdRef.current = currentPlayableFileId;
 		setActiveAiInterval(null);
+		// A seek that waits for the player belongs to the previous file too
+		pendingSeekSecondsRef.current = null;
 		// Not on load (no previous file): the url still has to be restored from
 		if (previousFileId && previousFileId !== currentPlayableFileId) {
 			const { query } = parseUrl(window.location.href);
@@ -62,19 +68,30 @@ export const useAiIntervalSelection = ({
 		}
 	}, [currentPlayableFileId]);
 
-	// A seek asked for while the player isn't rendered yet (mobile, on another tab; or a restore
-	// on load) waits here for it. State, so the effect below runs when a seek is queued.
-	const [pendingSeekSeconds, setPendingSeekSeconds] = useState<number | null>(null);
-
 	// Seeks only: the player keeps playing or staying paused
 	const seekPlayer = useCallback((seconds: number) => {
 		const video = getPlayerVideoElement();
 		if (video) {
 			seekPlayerVideo(video, seconds);
-			setPendingSeekSeconds(null);
+			pendingSeekSecondsRef.current = null;
 		} else {
-			setPendingSeekSeconds(seconds);
+			pendingSeekSecondsRef.current = seconds;
 		}
+	}, []);
+
+	// For the player's onPlayerReady: a player that mounts after the seek was asked for (it is only
+	// there after the ticket has loaded, and on mobile only on the Media tab) takes it over
+	const onPlayerReady = useCallback((video: HTMLVideoElement) => {
+		const seconds = pendingSeekSecondsRef.current;
+		if (seconds === null) {
+			return;
+		}
+		pendingSeekSecondsRef.current = null;
+		seekPlayerVideo(video, seconds);
+		// The position can be reset while the media loads
+		video.addEventListener('loadedmetadata', () => seekPlayerVideo(video, seconds), {
+			once: true,
+		});
 	}, []);
 
 	// A refresh or a shared link restores the interval from the URL, once
@@ -101,38 +118,6 @@ export const useAiIntervalSelection = ({
 		}
 	}, [fileMentions, seekPlayer]);
 
-	// The player isn't there yet on load, and on mobile only exists on the Media tab, a few renders after it opens
-	useEffect(() => {
-		if (pendingSeekSeconds === null || (isMobile && activeTab !== ObjectDetailTabs.Media)) {
-			return;
-		}
-		const applyPendingSeek = (): boolean => {
-			const video = getPlayerVideoElement();
-			if (!video) {
-				return false;
-			}
-			seekPlayerVideo(video, pendingSeekSeconds);
-			if (video.readyState < HTMLMediaElement.HAVE_METADATA) {
-				// The position can be reset while the media loads
-				video.addEventListener('loadedmetadata', () => seekPlayerVideo(video, pendingSeekSeconds), {
-					once: true,
-				});
-			}
-			setPendingSeekSeconds(null);
-			return true;
-		};
-		if (applyPendingSeek()) {
-			return;
-		}
-		const observer = new MutationObserver(() => {
-			if (applyPendingSeek()) {
-				observer.disconnect();
-			}
-		});
-		observer.observe(document.body, { childList: true, subtree: true });
-		return () => observer.disconnect();
-	}, [pendingSeekSeconds, isMobile, activeTab]);
-
 	const selectAiInterval = useCallback(
 		(entity: AiEntity, intervalIndex: number) => {
 			setActiveAiInterval({ entity, intervalIndex });
@@ -153,8 +138,9 @@ export const useAiIntervalSelection = ({
 
 	const clearAiInterval = useCallback(() => {
 		setActiveAiInterval(null);
+		pendingSeekSecondsRef.current = null;
 		updateQueryParams(NO_AI_INTERVAL_QUERY).then(noop);
 	}, [updateQueryParams]);
 
-	return { activeAiInterval, selectAiInterval, clearAiInterval };
+	return { activeAiInterval, selectAiInterval, clearAiInterval, onPlayerReady };
 };
