@@ -3,6 +3,8 @@ import type { DefaultComponentProps } from '@meemoo/admin-core-ui/admin';
 import { Button } from '@meemoo/react-components';
 import HighlightedMetadata from '@shared/components/HighlightedMetadata/HighlightedMetadata';
 import { tText } from '@shared/helpers/translate';
+import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { isTabletPortraitSize } from '@shared/utils/is-mobile';
 import { isString } from 'es-toolkit/compat';
 import type { FC, ReactNode } from 'react';
 import { METADATA_FIELD_MAX_LENGTH } from './MetaDataFieldWithHighlightingAndMaxLength.const';
@@ -30,6 +32,7 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 	maxLength = METADATA_FIELD_MAX_LENGTH,
 	readMoreButtonVariant = 'default',
 }) => {
+	const isMobile = isTabletPortraitSize(useWindowSizeContext()); // mobile and tablet portrait
 	const isLongFieldData: boolean = isString(data) && data.length > maxLength;
 
 	const parsedFieldData: string | ReactNode = isLongFieldData
@@ -62,7 +65,9 @@ const MetaDataFieldWithHighlightingAndMaxLength: FC<
 							}
 						}}
 					>
-						{tText('modules/visitor-space/utils/metadata/metadata___lees-meer')}
+						{isMobile
+							? tText('modules/visitor-space/utils/metadata/metadata___lees-meer-mobiel')
+							: tText('modules/visitor-space/utils/metadata/metadata___lees-meer')}
 					</Button>
 				</>
 			)}
