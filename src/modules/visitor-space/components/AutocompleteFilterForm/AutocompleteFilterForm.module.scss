@@ -8,6 +8,7 @@ $autocomplete-filter-form-padding: abstracts.$spacer-lg;
 		background-color: abstracts.$platinum;
 		margin-bottom: abstracts.$spacer-md;
 		padding: abstracts.$spacer-md $autocomplete-filter-form-padding;
+		overflow: auto;
 	}
 
 	&__selection-label {

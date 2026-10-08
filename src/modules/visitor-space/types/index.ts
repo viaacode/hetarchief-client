@@ -81,6 +81,7 @@ export enum ReusabilityFilterOption {
 
 export enum ElasticsearchFieldNames {
 	Medium = 'dcterms_medium',
+	Theme = 'theme',
 	Genre = 'schema_genre',
 	Language = 'schema_in_language',
 	Format = 'dcterms_format',
