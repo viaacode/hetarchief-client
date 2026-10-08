@@ -168,16 +168,6 @@ export const OBJECT_DETAIL_TABS = (
 			ariaLabel: tText('modules/ie-objects/const/index___metadata'),
 			active: ObjectDetailTabs.Metadata === activeTab,
 		},
-		...(ocrAvailable
-			? [
-					{
-						id: ObjectDetailTabs.Ocr,
-						label: tText('modules/ie-objects/ie-objects___ocr'),
-						ariaLabel: tText('modules/ie-objects/ie-objects___ocr'),
-						active: ObjectDetailTabs.Ocr === activeTab,
-					},
-				]
-			: []),
 		...(relatedCount > 0
 			? [
 					{
@@ -189,6 +179,16 @@ export const OBJECT_DETAIL_TABS = (
 							amount: relatedCount,
 						}),
 						active: ObjectDetailTabs.Related === activeTab,
+					},
+				]
+			: []),
+		...(ocrAvailable
+			? [
+					{
+						id: ObjectDetailTabs.Ocr,
+						label: tText('modules/ie-objects/ie-objects___ocr'),
+						ariaLabel: tText('modules/ie-objects/ie-objects___ocr'),
+						active: ObjectDetailTabs.Ocr === activeTab,
 					},
 				]
 			: []),
