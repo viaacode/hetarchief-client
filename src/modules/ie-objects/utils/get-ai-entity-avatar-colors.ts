@@ -1,20 +1,19 @@
+import { Color } from '@meemoo/admin-core-ui/admin';
+
 // The tertiary background colours and the text colour that is WCAG-approved on each of them.
 // Mirrors react-admin-core-module: content-page/const/background-text-colors.ts ("primary" role),
 // which is not exported from @meemoo/admin-core-ui.
-const WHITE = '#FFF';
-const BLACK = '#000';
-
 export const AI_ENTITY_AVATAR_COLORS: { background: string; text: string }[] = [
-	{ background: '#9B6072', text: WHITE }, // OldPink
-	{ background: '#A293AF', text: BLACK }, // Lavender
-	{ background: '#c6c2e0', text: BLACK }, // Lila
-	{ background: '#E694B3', text: BLACK }, // BlossomPink
-	{ background: '#E89B88', text: BLACK }, // Coral
-	{ background: '#BDDEE7', text: BLACK }, // BabyBlue
-	{ background: '#91A9A7', text: BLACK }, // Sage
-	{ background: '#B8BE9A', text: BLACK }, // Pistachio
-	{ background: '#EDD6C4', text: BLACK }, // SandBeige
-	{ background: '#EFCA6A', text: BLACK }, // Mustard
+	{ background: Color.OldPink, text: Color.White },
+	{ background: Color.Lavender, text: Color.Black },
+	{ background: Color.Lila, text: Color.Black },
+	{ background: Color.BlossomPink, text: Color.Black },
+	{ background: Color.Coral, text: Color.Black },
+	{ background: Color.BabyBlue, text: Color.Black },
+	{ background: Color.Sage, text: Color.Black },
+	{ background: Color.Pistachio, text: Color.Black },
+	{ background: Color.SandBeige, text: Color.Black },
+	{ background: Color.Mustard, text: Color.Black },
 ];
 
 // A hash instead of Math.random(): the same person keeps the same colour across renders
