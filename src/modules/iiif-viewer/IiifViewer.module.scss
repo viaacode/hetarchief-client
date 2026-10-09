@@ -1,9 +1,9 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $navigator-margin-top: 30rem;
-$controls-margin-left: 10rem + $spacer-sm; // needs space next to the navigator control
-$controls-margin-right: $spacer-sm; // Can go all the way to the edge
-$controls-margin-bottom: $spacer-sm;
+$controls-margin-left: 10rem + abstracts.$spacer-sm; // needs space next to the navigator control
+$controls-margin-right: abstracts.$spacer-sm; // Can go all the way to the edge
+$controls-margin-bottom: abstracts.$spacer-sm;
 
 .c-iiif-viewer {
 	container-name: iiif-viewer;
@@ -16,30 +16,30 @@ $controls-margin-bottom: $spacer-sm;
 		inset: 0;
 
 		:global(.openseadragon-container) {
-			background-color: #222 !important;
+			background-color: abstracts.$graphite !important;
 		}
 
 		:global(.c-iiif-viewer__iiif__alto__text) {
 			&:global(--highlighted) {
-				border: solid 2px $teal;
-				background-color: rgba($teal, 0.5);
+				border: solid 2px abstracts.$teal;
+				background-color: rgba(abstracts.$teal, 0.5);
 			}
 
 			&:global(--selected) {
-				border: solid 4px $teal;
-				background-color: rgba($teal, 0.2);
+				border: solid 4px abstracts.$teal;
+				background-color: rgba(abstracts.$teal, 0.2);
 			}
 		}
 
 		// Navigator zoom bounds indicator
 		:global(.navigator) {
-			padding: $spacer-xs !important;
+			padding: abstracts.$spacer-xs !important;
 			border: 0 !important;
 			margin-bottom: -3px !important; // Push it all the way in the corner of the screen
 
 			:global(.displayregion) {
-				outline: 3px solid black;
-				border: 3px solid white !important;
+				outline: 3px solid abstracts.$black;
+				border: 3px solid abstracts.$white !important;
 			}
 		}
 	}
@@ -65,34 +65,34 @@ $controls-margin-bottom: $spacer-sm;
 	&__grid-view-wrapper {
 		width: 100%;
 		height: 100%;
-		background-color: $shade-darker;
+		background-color: abstracts.$shade-darker;
 	}
 
 	&__grid-view {
-		padding: $spacer-2xl;
+		padding: abstracts.$spacer-2xl;
 		display: flex;
 		flex-flow: row wrap;
 		gap: 3rem;
 		overflow-y: auto;
-		background-color: #222;
+		background-color: abstracts.$graphite;
 		justify-content: center;
 		align-items: center;
-		height: calc($view-height - 10rem);
-		padding-bottom: $spacer-1xl * 4;
+		height: calc(#{abstracts.$view-height} - 10rem);
+		padding-bottom: abstracts.$spacer-1xl * 4;
 
-		@media (max-width: $breakpoint-lg) {
-			padding: $spacer-1xl;
-			padding-bottom: $spacer-1xl * 4;
+		@media (max-width: abstracts.$breakpoint-lg) {
+			padding: abstracts.$spacer-1xl;
+			padding-bottom: abstracts.$spacer-1xl * 4;
 			gap: 2rem;
 		}
 
 		> button {
 			cursor: pointer;
 			padding: 0;
-			border: 0.4rem solid #222;
+			border: 0.4rem solid abstracts.$graphite;
 			width: 25%;
 
-			@media (max-width: $breakpoint-lg) {
+			@media (max-width: abstracts.$breakpoint-lg) {
 				width: 40%;
 			}
 
@@ -104,7 +104,7 @@ $controls-margin-bottom: $spacer-sm;
 			&:hover,
 			&:focus-visible {
 				opacity: 0.9;
-				border: 0.4rem solid #00c8aa;
+				border: 0.4rem solid abstracts.$teal;
 				outline: none;
 			}
 		}
@@ -112,7 +112,7 @@ $controls-margin-bottom: $spacer-sm;
 
 	&__iiif__controls {
 		width: auto;
-		height: $button-height-sm;
+		height: abstracts.$button-height-sm;
 		position: absolute;
 		left: $controls-margin-left;
 		right: $controls-margin-right;
@@ -121,20 +121,20 @@ $controls-margin-bottom: $spacer-sm;
 		display: grid;
 		grid-template-columns: auto 1fr auto;
 		grid-template-rows: auto;
-		grid-gap: $spacer-xs $spacer-xs;
+		grid-gap: abstracts.$spacer-xs abstracts.$spacer-xs;
 		container: iiif__controls / size;
 
-		@media (max-width: $breakpoint-xl) {
+		@media (max-width: abstracts.$breakpoint-xl) {
 			// Avoid buttons behind ipad bottom bar indicator
-			bottom: $spacer-md;
+			bottom: abstracts.$spacer-md;
 		}
 
 		&__button-group {
 			display: flex;
 			flex-flow: row nowrap;
-			height: $button-height-sm;
-			border-radius: $button-radius-sm;
-			background-color: $white;
+			height: abstracts.$button-height-sm;
+			border-radius: abstracts.$button-radius-sm;
+			background-color: abstracts.$white;
 			padding: 0.4rem;
 			align-items: center;
 
@@ -152,37 +152,37 @@ $controls-margin-bottom: $spacer-sm;
 			}
 
 			> span {
-				font-size: $font-size-sm;
-				padding: $spacer-xs;
+				font-size: abstracts.$font-size-sm;
+				padding: abstracts.$spacer-xs;
 			}
 
 			&__divider {
 				width: 1px;
-				height: $button-height-xs;
-				background-color: $silver;
-				margin: $spacer-xxs $spacer-xs;
+				height: abstracts.$button-height-xs;
+				background-color: abstracts.$silver;
+				margin: abstracts.$spacer-xxs abstracts.$spacer-xs;
 			}
 		}
 
 		&__button:global(.c-button--sm) {
-			width: $button-height-sm;
-			height: $button-height-xs;
-			border-radius: $button-radius-xs;
-			padding: $spacer-xs $spacer-xxs;
+			width: abstracts.$button-height-sm;
+			height: abstracts.$button-height-xs;
+			border-radius: abstracts.$button-radius-xs;
+			padding: abstracts.$spacer-xs abstracts.$spacer-xxs;
 		}
 
 		:global(.c-iiif-viewer__iiif__controls__grid-view__disable) {
-			width: $button-height;
-			height: $button-height;
-			border-radius: $button-radius;
+			width: abstracts.$button-height;
+			height: abstracts.$button-height;
+			border-radius: abstracts.$button-radius;
 			position: absolute;
 			left: 50%;
-			bottom: $spacer-sm;
+			bottom: abstracts.$spacer-sm;
 		}
 	}
 
 	// Hide the navigator when the iiif viewer gets too narrow
-	@container iiif-viewer (max-width: #{$breakpoint-md}) {
+	@container iiif-viewer (max-width: #{abstracts.$breakpoint-md}) {
 		:global(.navigator) {
 			display: none !important;
 		}
@@ -192,12 +192,12 @@ $controls-margin-bottom: $spacer-sm;
 		}
 
 		&__iiif__controls {
-			left: $spacer-xs;
-			right: $spacer-xs;
+			left: abstracts.$spacer-xs;
+			right: abstracts.$spacer-xs;
 			grid-template-columns: auto 1fr auto;
-			grid-template-rows: $button-height-sm $button-height-sm;
-			height: $button-height-sm + $spacer-xs + $button-height-sm;
-			margin-bottom: $spacer-xs;
+			grid-template-rows: abstracts.$button-height-sm abstracts.$button-height-sm;
+			height: abstracts.$button-height-sm + abstracts.$spacer-xs + abstracts.$button-height-sm;
+			margin-bottom: abstracts.$spacer-xs;
 
 			// Mobile search should be shown in separate grid row above other controls
 			&__button-group__pagination {
@@ -221,8 +221,8 @@ $controls-margin-bottom: $spacer-sm;
 		}
 
 		&__grid-view {
-			padding: $spacer-1xl;
-			padding-bottom: $spacer-1xl * 4;
+			padding: abstracts.$spacer-1xl;
+			padding-bottom: abstracts.$spacer-1xl * 4;
 			gap: 2rem;
 		}
 	}
@@ -235,9 +235,9 @@ $controls-margin-bottom: $spacer-sm;
 	max-height: calc(100% - $navigator-margin-top) !important;
 	display: flex;
 	flex-direction: column;
-	width: calc(10rem + $spacer-sm);
+	width: calc(10rem + #{abstracts.$spacer-sm});
 	overflow-y: auto;
-	padding-right: $spacer-sm;
+	padding-right: abstracts.$spacer-sm;
 	padding-bottom: 0.5rem;
 
 	&.c-iiif-viewer__iiif__reference-strip--scrollable::after {
@@ -250,13 +250,13 @@ $controls-margin-bottom: $spacer-sm;
 		margin-top: -1rem;
 	}
 
-	@media (max-width: $breakpoint-lg) {
+	@media (max-width: abstracts.$breakpoint-lg) {
 		display: none;
 	}
 
 	> div {
-		background-color: $black;
-		padding: $spacer-xs;
+		background-color: abstracts.$black;
+		padding: abstracts.$spacer-xs;
 
 		> button {
 			cursor: pointer;
@@ -275,7 +275,7 @@ $controls-margin-bottom: $spacer-sm;
 			&:hover,
 			&:focus-visible {
 				opacity: 0.9;
-				outline: 0.2rem solid $teal;
+				outline: 0.2rem solid abstracts.$teal;
 				outline-offset: 0.1rem;
 			}
 		}
@@ -288,7 +288,7 @@ $controls-margin-bottom: $spacer-sm;
 	&__fake-newspaper-thumbnail {
 		width: 8rem;
 		height: 10.5rem;
-		background-color: $newspaper-bg;
+		background-color: abstracts.$newspaper-bg;
 	}
 }
 

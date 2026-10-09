@@ -70,10 +70,12 @@
 	// interessant", ...), so the content never ends flush against the bottom edge
 	padding-bottom: abstracts.$spacer-md;
 
-	// The list paints its own background. Padding here would leave a white band underneath it,
-	// so let the list carry its own bottom padding instead.
-	&--ends-in-list {
-		padding-bottom: 0;
+	// The floating feedback button would cover whatever ends the tab
+	&--with-feedback-button {
+		// Also read by the card lists, which paint their own background and pad their own bottom
+		--c-feedback-button-offset: #{abstracts.$c-feedback-button-height};
+
+		padding-bottom: calc(#{abstracts.$spacer-md} + #{abstracts.$c-feedback-button-height});
 	}
 
 	&--tab-overview {
@@ -87,7 +89,9 @@
 		}
 	}
 
-	&--tab-ocr {
+	&--tab-ocr,
+	&--tab-media,
+	&--ends-in-list {
 		// The OCR tab's own pagination bar (position: sticky; bottom: 0) already provides
 		// bottom spacing - avoid doubling it up with this container's own default.
 		padding-bottom: 0;

@@ -20,8 +20,6 @@ import { Alert } from '@meemoo/react-components';
 import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import getConfig from '@shared/config/public-runtime-config';
-import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -42,7 +40,7 @@ import React, { type FC, type ReactNode, useCallback, useMemo } from 'react';
 import MetadataList from '../Metadata/MetadataList';
 import styles from './ObjectDetailPageMetadataTab.module.scss';
 
-const { publicRuntimeConfig } = getConfig();
+// const { publicRuntimeConfig } = getConfig();
 
 export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> = ({
 	mediaInfo,
@@ -130,6 +128,7 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 		data: string | ReactNode | null | undefined
 	): ReactNode => renderSimpleMetadataFieldBase(title, data, onReadMoreClicked);
 
+	/*
 	const renderPermalink = (schemaIdentifier: string | undefined): ReactNode => {
 		if (!schemaIdentifier) {
 			return null;
@@ -141,6 +140,7 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 			</a>
 		);
 	};
+	 */
 
 	const renderProviderIdentifier = (mediaInfo: HetArchiefIeObject): ReactNode => {
 		const linkProps = getIeObjectProviderIdentifierLinkProps(mediaInfo, isKiosk);
@@ -256,10 +256,11 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 						),
 						tText('modules/ie-objects/ie-objects___premis-identifier')
 					).map((info) => renderSimpleMetadataField(info.title, info.data))}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___permanente-url'),
-						renderPermalink(mediaInfo.schemaIdentifier)
-					)}
+					{/* Permanente URL (field 5): the place is reserved, but it is not shown yet */}
+					{/*{renderSimpleMetadataField(*/}
+					{/*	tText('modules/ie-objects/ie-objects___permanente-url'),*/}
+					{/*	renderPermalink(mediaInfo.schemaIdentifier)*/}
+					{/*)}*/}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___editie-nummer'),
 						mediaInfo.issueNumber

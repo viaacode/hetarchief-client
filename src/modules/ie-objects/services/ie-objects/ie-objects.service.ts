@@ -2,7 +2,7 @@ import type {
 	IeObjectAccessDebugRequest,
 	IeObjectAccessDebugResponse,
 } from '@admin/views/ie-object-access/IeObjectAccessPage.types';
-import type { IeObjectSimilar } from '@ie-objects/ie-objects.types';
+import type { FileMentionsResponse, IeObjectSimilar } from '@ie-objects/ie-objects.types';
 import type {
 	IeObjectPreviousNextIds,
 	IeObjectSeo,
@@ -29,6 +29,7 @@ import {
 	IE_OBJECT_TICKET_SERVICE_URL,
 	IE_OBJECTS_SERVICE_BASE_URL,
 	IE_OBJECTS_SERVICE_DEBUG,
+	IE_OBJECTS_SERVICE_MENTIONS,
 	IE_OBJECTS_SERVICE_SIMILAR,
 	IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON,
 	IO_OBJECTS_SERVICE_RELATED,
@@ -216,6 +217,20 @@ export class IeObjectsService {
 			.json<string[]>();
 
 		return tokens || [];
+	}
+
+	public static async getFileMentions(
+		schemaIdentifier: string,
+		fileId: string
+	): Promise<FileMentionsResponse> {
+		return await ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECTS_SERVICE_MENTIONS}`,
+					query: { schemaIdentifier, fileId },
+				})
+			)
+			.json<FileMentionsResponse>();
 	}
 
 	// Used for "ook interessant" on the detail page

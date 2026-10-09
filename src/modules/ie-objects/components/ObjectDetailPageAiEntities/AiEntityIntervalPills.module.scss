@@ -1,0 +1,111 @@
+@use "src/styles/abstracts" as abstracts;
+
+$pill-height: 2.4rem;
+
+.c-ai-entity-interval-pills {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-self: stretch;
+	gap: abstracts.$spacer-xs;
+
+	// The pagination row ends flush with the card; without it the pills need the card's bottom padding
+	&--without-pagination {
+		padding-bottom: abstracts.$spacer-xs + abstracts.$spacer-xxs;
+	}
+
+	&__list,
+	&__measure {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: abstracts.$spacer-xs;
+	}
+
+	// Same layout as the list, but out of sight and out of the way
+	&__measure {
+		position: absolute;
+		inset: 0 0 auto;
+		height: 0;
+		overflow: hidden;
+		visibility: hidden;
+		pointer-events: none;
+	}
+
+	&__end,
+	&__separator {
+		color: abstracts.$neutral;
+	}
+
+	&__pill {
+		display: inline-flex;
+		align-items: center;
+		gap: abstracts.$spacer-xs;
+		height: $pill-height;
+		padding: 0.6rem abstracts.$spacer-xs;
+		border: 0;
+		border-radius: 2.5rem;
+		background-color: abstracts.$white;
+		color: abstracts.$black;
+		font-family: inherit;
+		font-size: abstracts.$font-size-sm;
+		font-weight: 800;
+		line-height: 2rem;
+		white-space: nowrap;
+
+		&--interactive {
+			cursor: pointer;
+
+			@include abstracts.hover {
+				background-color: abstracts.$seagreen;
+				color: abstracts.$white;
+
+				.c-ai-entity-interval-pills__end,
+				.c-ai-entity-interval-pills__separator {
+					color: abstracts.$zinc;
+				}
+			}
+		}
+
+		&:focus {
+			outline: 0;
+		}
+
+		&:focus-visible {
+			outline: 0.2rem solid abstracts.$teal;
+			outline-offset: 0.2rem;
+		}
+
+		&--active,
+		&--active:hover {
+			background-color: abstracts.$black;
+			color: abstracts.$white;
+
+			.c-ai-entity-interval-pills__end,
+			.c-ai-entity-interval-pills__separator {
+				color: abstracts.$zinc;
+			}
+		}
+	}
+
+	&__separator {
+		font-size: abstracts.$font-size-xs;
+	}
+
+	&__pagination {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		height: 3.6rem;
+		font-size: abstracts.$font-size-sm;
+		line-height: 2rem;
+	}
+
+	&__pagination-indicator {
+		color: abstracts.$black;
+	}
+
+	&__pagination-button {
+		padding: 0;
+	}
+}

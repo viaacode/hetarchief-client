@@ -9,7 +9,7 @@
 		}
 	}
 
-	@media (min-width: abstracts.$breakpoint-md) {
+	@media (min-width: abstracts.$breakpoint-lg) {
 		padding: 0 abstracts.$spacer-lg;
 	}
 
@@ -60,7 +60,7 @@
 	justify-content: space-between;
 
 	a {
-		color: abstracts.$jade;
+		color: abstracts.$teal-dark;
 	}
 }
 

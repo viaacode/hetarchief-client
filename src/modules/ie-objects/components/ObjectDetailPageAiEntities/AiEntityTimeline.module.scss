@@ -1,0 +1,61 @@
+@use "src/styles/abstracts" as abstracts;
+
+$track-height: 1.6rem;
+$segment-height: 1rem;
+$segment-offset: ($track-height - $segment-height) * 0.5;
+
+.c-ai-entity-timeline {
+	position: relative;
+	align-self: stretch;
+	height: $track-height;
+	border-radius: $track-height;
+	background-color: abstracts.$white;
+
+	&__segment {
+		position: absolute;
+		top: 0;
+		height: $track-height;
+		min-width: $segment-height;
+		padding: 0;
+		border: 0;
+		background: none;
+
+		// The visual segment is smaller than the click area
+		&::before {
+			content: "";
+			position: absolute;
+			inset: $segment-offset 0;
+			border-radius: $track-height;
+			background-color: abstracts.$teal;
+		}
+
+		&--interactive {
+			cursor: pointer;
+
+			@include abstracts.hover {
+				&::before {
+					background-color: abstracts.$seagreen;
+				}
+			}
+		}
+
+		&:focus {
+			outline: 0;
+		}
+
+		&:focus-visible::before {
+			outline: 0.2rem solid abstracts.$teal;
+			outline-offset: 0.4rem;
+		}
+
+		&--active::before,
+		&--active:hover::before {
+			background-color: abstracts.$teal;
+
+			// White hairline between the segment and the black ring, per design
+			box-shadow:
+				0 0 0 0.1rem abstracts.$white,
+				0 0 0 0.3rem abstracts.$black;
+		}
+	}
+}

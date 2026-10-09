@@ -5,18 +5,26 @@ import { IeObjectCardList } from '@ie-objects/components/IeObjectCardList/IeObje
 import Metadata from '@ie-objects/components/Metadata/Metadata';
 import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import { renderSimpleMetadataField as renderSimpleMetadataFieldBase } from '@ie-objects/components/Metadata/render-simple-metadata-field';
+import { ObjectDetailPageAiPersons } from '@ie-objects/components/ObjectDetailPageAiEntities/ObjectDetailPageAiPersons';
+import { ObjectDetailPageAiPills } from '@ie-objects/components/ObjectDetailPageAiEntities/ObjectDetailPageAiPills';
 import { ObjectDetailPageMetadataRights } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataRights';
 import { ObjectDetailPageMetadataThemes } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataThemes';
 import type { ObjectDetailPageOverviewTabProps } from '@ie-objects/components/ObjectDetailPageOverviewTab/ObjectDetailPageOverviewTab.types';
 import { SearchLinkTag } from '@ie-objects/components/SearchLinkTag/SearchLinkTag';
+import { useGetIeObjectFileMentions } from '@ie-objects/hooks/use-get-ie-object-file-mentions';
 import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/use-get-ie-object-previous-next-ids';
 import { renderDate } from '@ie-objects/ie-objects.consts';
+import { FileMentionEntityType } from '@ie-objects/ie-objects.types';
 import {
 	getIeObjectAvRightsIcon,
 	getIeObjectAvRightsLabel,
 	getIeObjectAvRightsUrl,
 } from '@ie-objects/utils/get-ie-object-av-rights-icon';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
+import {
+	mapFileMentionsToAiEntities,
+	prioritizeAiEntitiesByName,
+} from '@ie-objects/utils/map-ai-entities';
 import { renderKeywordsAsTags } from '@ie-objects/utils/map-metadata';
 import { isAudioVideoType, isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import { Button } from '@meemoo/react-components';
@@ -26,6 +34,7 @@ import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
+import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { Locale } from '@shared/utils/i18n';
 import {
@@ -39,7 +48,7 @@ import { isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import type { FC, ReactNode } from 'react';
+import { type FC, type ReactNode, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { ArrayParam, useQueryParam } from 'use-query-params';
 import styles from './ObjectDetailPageOverviewTab.module.scss';
@@ -49,20 +58,55 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 	visitRequest,
 	similar,
 	onReadMoreClicked,
+	playableFileId,
+	activeAiInterval,
+	onSelectAiInterval,
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
 	const user: User | null = useSelector(selectUser);
 	const isKiosk = useHasAnyGroup(GroupName.KIOSK_VISITOR);
 	// AI-entity filters (Personen/Plaatsen/Organisaties) carried over from the search results page
-	// biome-ignore lint/correctness/noUnusedVariables: consumed once the visitekaartje card UI exists, see renderAiEntities below
 	const [mentionPersonFilter] = useQueryParam(SearchFilterId.MentionPerson, ArrayParam);
-	// biome-ignore lint/correctness/noUnusedVariables: consumed once the visitekaartje card UI exists, see renderAiEntities below
 	const [mentionPlaceFilter] = useQueryParam(SearchFilterId.MentionPlace, ArrayParam);
-	// biome-ignore lint/correctness/noUnusedVariables: consumed once the visitekaartje card UI exists, see renderAiEntities below
 	const [mentionOrganisationFilter] = useQueryParam(SearchFilterId.MentionOrganisation, ArrayParam);
 
 	const isNewspaper = isNewspaperType(mediaInfo?.dctermsFormat);
+	const isKeyUser = useIsKeyUser();
+	// The proxy only discloses AI entities to key users, on AV objects that have the AI licence
+	const { data: fileMentions } = useGetIeObjectFileMentions(
+		mediaInfo?.schemaIdentifier,
+		playableFileId,
+		{ enabled: isKeyUser && isAudioVideoType(mediaInfo?.dctermsFormat) }
+	);
+	// The entities filtered on in the search results come first
+	const aiPersons = useMemo(
+		() =>
+			prioritizeAiEntitiesByName(
+				mapFileMentionsToAiEntities(fileMentions?.mentions ?? [], FileMentionEntityType.PERSON),
+				mentionPersonFilter
+			),
+		[fileMentions, mentionPersonFilter]
+	);
+	const aiPlaces = useMemo(
+		() =>
+			prioritizeAiEntitiesByName(
+				mapFileMentionsToAiEntities(fileMentions?.mentions ?? [], FileMentionEntityType.PLACE),
+				mentionPlaceFilter
+			),
+		[fileMentions, mentionPlaceFilter]
+	);
+	const aiOrganisations = useMemo(
+		() =>
+			prioritizeAiEntitiesByName(
+				mapFileMentionsToAiEntities(
+					fileMentions?.mentions ?? [],
+					FileMentionEntityType.ORGANIZATION
+				),
+				mentionOrganisationFilter
+			),
+		[fileMentions, mentionOrganisationFilter]
+	);
 	const { data: ieObjectPreviousNextIds } = useGetIeObjectPreviousNextIds(
 		mediaInfo?.collectionId,
 		mediaInfo?.iri,
@@ -305,10 +349,89 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 		}
 	};
 
-	// TODO: once the visitekaartje card UI exists, render it here, and when one of the filters
-	// above has a value, open the first matching entity's card automatically (scenario 2's "open
-	// the first filtered entity's visitekaartje").
-	const renderAiEntities = (): ReactNode => null;
+	const renderAiEntities = (): ReactNode => {
+		// The entity filtered on in the search results opens straight away
+		const personFromFilter = aiPersons.find((person) =>
+			(mentionPersonFilter ?? []).includes(person.name)
+		);
+		const placeFromFilter = aiPlaces.find((place) =>
+			(mentionPlaceFilter ?? []).includes(place.name)
+		);
+		const organisationFromFilter = aiOrganisations.find((organisation) =>
+			(mentionOrganisationFilter ?? []).includes(organisation.name)
+		);
+		const durationSeconds = fileMentions?.durationSeconds ?? null;
+		const isTimelineInteractive = !!fileMentions?.hasAccessToEssence;
+
+		return (
+			<>
+				<ObjectDetailPageAiPersons
+					persons={aiPersons}
+					durationSeconds={durationSeconds}
+					isTimelineInteractive={isTimelineInteractive}
+					activeInterval={activeAiInterval}
+					onSelectInterval={onSelectAiInterval}
+					initialSelectedId={personFromFilter?.id ?? null}
+					disclaimerAriaLabel={tText(
+						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___meer-info-over-ai-herkende-personen'
+					)}
+					disclaimer={tHtml(
+						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-persons___deze-personen-zijn-automatisch-herkend-met-ai-en-kunnen-fouten-bevatten-meer-info'
+					)}
+				/>
+				<ObjectDetailPageAiPills
+					entities={aiPlaces}
+					title={
+						aiPlaces.length === 1
+							? tText(
+									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___1-plaats'
+								)
+							: tText(
+									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___count-plaatsen',
+									{ count: aiPlaces.length }
+								)
+					}
+					searchFilterId={SearchFilterId.MentionPlace}
+					durationSeconds={durationSeconds}
+					isTimelineInteractive={isTimelineInteractive}
+					activeInterval={activeAiInterval}
+					onSelectInterval={onSelectAiInterval}
+					initialSelectedId={placeFromFilter?.id ?? null}
+					disclaimerAriaLabel={tText(
+						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___meer-info-over-ai-herkende-plaatsen'
+					)}
+					disclaimer={tHtml(
+						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-places___deze-plaatsen-zijn-automatisch-herkend-met-ai-en-kunnen-fouten-bevatten-meer-info'
+					)}
+				/>
+				<ObjectDetailPageAiPills
+					entities={aiOrganisations}
+					title={
+						aiOrganisations.length === 1
+							? tText(
+									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-organisations___1-organisatie'
+								)
+							: tText(
+									'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-organisations___count-organisaties',
+									{ count: aiOrganisations.length }
+								)
+					}
+					searchFilterId={SearchFilterId.MentionOrganisation}
+					durationSeconds={durationSeconds}
+					isTimelineInteractive={isTimelineInteractive}
+					activeInterval={activeAiInterval}
+					onSelectInterval={onSelectAiInterval}
+					initialSelectedId={organisationFromFilter?.id ?? null}
+					disclaimerAriaLabel={tText(
+						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-organisations___meer-info-over-ai-herkende-organisaties'
+					)}
+					disclaimer={tHtml(
+						'modules/ie-objects/components/object-detail-page-ai-entities/object-detail-page-ai-organisations___deze-organisaties-zijn-automatisch-herkend-met-ai-en-kunnen-fouten-bevatten-meer-info'
+					)}
+				/>
+			</>
+		);
+	};
 
 	if (isNil(mediaInfo)) {
 		return null;
@@ -357,7 +480,11 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 						)}
 					</>
 				)}
-				{renderAiEntities()}
+			</MetadataList>
+
+			<MetadataList allowTwoColumns={false}>{renderAiEntities()}</MetadataList>
+
+			<MetadataList allowTwoColumns={true}>
 				{renderRightsInfo(mediaInfo)}
 				{renderAuthorRightsHolder(mediaInfo)}
 				{showThemes && (

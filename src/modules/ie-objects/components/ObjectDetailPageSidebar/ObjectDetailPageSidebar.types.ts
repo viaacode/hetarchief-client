@@ -14,6 +14,8 @@ export interface ObjectDetailPageSidebarProps {
 	 * Media tab - see ObjectDetailPageSidebar.tsx). */
 	activeTab: ObjectDetailTabs;
 	similar: MediaObject[];
+	/** The floating feedback button is shown over the bottom of the content: leave room under it */
+	hasFeedbackButton?: boolean;
 	/** Desktop tabs, rendered inside the sticky header+tabs unit. Mobile renders its own tabs
 	 * elsewhere on the page, so resolving which (if either) to pass here is left to the caller. */
 	tabs: ReactNode;
