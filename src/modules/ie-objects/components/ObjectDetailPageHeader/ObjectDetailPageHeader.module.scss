@@ -252,6 +252,13 @@ $max-height-collapsed: 8rem;
 	:global(.c-menu) {
 		margin: 0;
 	}
+
+	// The trigger is a content-sized inline-block, so the button's max-width: 100% resolves against
+	// its own full width and the label never truncates.
+	:global(.c-dropdown__trigger) {
+		display: block;
+		max-width: 100%;
+	}
 }
 
 .p-object-detail__actions {
