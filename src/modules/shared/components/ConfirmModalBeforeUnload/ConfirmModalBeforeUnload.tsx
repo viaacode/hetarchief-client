@@ -142,7 +142,10 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 					locale: router.locale,
 				});
 			} else {
-				void router.push(nextRoute);
+				// A query-only change (eg: closing a blade) was shallow before we intercepted it.
+				// Replaying it non-shallow would re-run getServerSideProps and reset the page props.
+				const isSamePath = parseUrl(nextRoute).url === window.location.pathname;
+				void router.push(nextRoute, undefined, { shallow: isSamePath, scroll: !isSamePath });
 			}
 		}
 	}, [nextRoute, hasConfirmed, router]);
