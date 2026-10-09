@@ -77,7 +77,7 @@ $controls-margin-bottom: abstracts.$spacer-sm;
 		background-color: abstracts.$graphite;
 		justify-content: center;
 		align-items: center;
-		height: calc($view-height - 10rem);
+		height: calc(#{abstracts.$view-height} - 10rem);
 		padding-bottom: abstracts.$spacer-1xl * 4;
 
 		@media (max-width: abstracts.$breakpoint-lg) {
@@ -112,7 +112,7 @@ $controls-margin-bottom: abstracts.$spacer-sm;
 
 	&__iiif__controls {
 		width: auto;
-		height: $button-height-sm;
+		height: abstracts.$button-height-sm;
 		position: absolute;
 		left: $controls-margin-left;
 		right: $controls-margin-right;
