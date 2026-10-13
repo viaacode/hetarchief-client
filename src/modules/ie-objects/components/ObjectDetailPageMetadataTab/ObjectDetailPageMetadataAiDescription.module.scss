@@ -46,5 +46,8 @@
 }
 
 .c-object-detail-page-metadata-ai-description__synopsis {
+	// Same weight as the main description in the header
+	font-weight: abstracts.$font-weight-medium;
+
 	@include abstracts.inline-read-more-paragraph-styling;
 }

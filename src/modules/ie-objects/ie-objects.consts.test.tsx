@@ -16,6 +16,29 @@ const getTabIds = (relatedCount?: number) =>
 	);
 
 describe('OBJECT_DETAIL_TABS', () => {
+	it('puts the ocr tab last, after the related tab', () => {
+		expect(getTabIds(2)).toEqual([
+			ObjectDetailTabs.Media,
+			ObjectDetailTabs.Overview,
+			ObjectDetailTabs.Metadata,
+			ObjectDetailTabs.Related,
+			ObjectDetailTabs.Ocr,
+		]);
+	});
+
+	it('keeps the ocr tab last without related objects too', () => {
+		expect(getTabIds().at(-1)).toBe(ObjectDetailTabs.Ocr);
+	});
+
+	it('omits the ocr tab when there is no ocr', () => {
+		const tabIds = OBJECT_DETAIL_TABS(HetArchiefIeObjectType.VIDEO, undefined, true, false, 2).map(
+			(tab) => tab.id
+		);
+
+		expect(tabIds).not.toContain(ObjectDetailTabs.Ocr);
+		expect(tabIds.at(-1)).toBe(ObjectDetailTabs.Related);
+	});
+
 	it('omits the related tab without related objects', () => {
 		expect(getTabIds()).not.toContain(ObjectDetailTabs.Related);
 		expect(getTabIds(0)).not.toContain(ObjectDetailTabs.Related);

@@ -1,0 +1,70 @@
+@use "src/styles/abstracts" as abstracts;
+
+$control-height: 2.8rem;
+
+.c-ai-entity-navigation-overlay {
+	position: absolute;
+	right: abstracts.$spacer-xs;
+	left: abstracts.$spacer-xs;
+	bottom: abstracts.$spacer-xs;
+	display: flex;
+	padding: abstracts.$spacer-xxs;
+	border-radius: 4.1rem;
+	background-color: abstracts.$black;
+	transition: bottom 0.2s ease;
+
+	// Over the player's controls: their 36px, the 8px gap and the 8px margin to the screen
+	&--raised {
+		bottom: 5.2rem;
+	}
+
+	&__bar {
+		position: relative;
+		display: flex;
+		flex: 1 1 0;
+		min-width: 0;
+		align-items: center;
+		justify-content: space-between;
+		height: $control-height;
+		padding: 0 abstracts.$spacer-xs 0 0;
+		border-radius: abstracts.$spacer-md;
+		background-color: abstracts.$graphite;
+		color: abstracts.$white;
+		gap: abstracts.$spacer-xs;
+	}
+
+	&__name {
+		flex: 1 1 auto;
+		min-width: 0;
+		overflow: hidden;
+		font-size: abstracts.$font-size-base;
+		line-height: 2rem;
+
+		@include abstracts.text-ellipsis;
+	}
+
+	&__controls {
+		display: flex;
+		flex: none;
+		align-items: center;
+		gap: abstracts.$spacer-xs;
+	}
+
+	&__count {
+		font-size: abstracts.$font-size-sm;
+		line-height: 2rem;
+		white-space: nowrap;
+	}
+
+	&__divider {
+		width: 1px;
+		height: abstracts.$spacer-sm;
+		background-color: abstracts.$white;
+		opacity: 0.12;
+	}
+
+	&__button {
+		height: $control-height !important;
+		width: $control-height !important;
+	}
+}

@@ -1,16 +1,10 @@
-import {
-	Button,
-	type ButtonProps,
-	Tooltip,
-	TooltipContent,
-	TooltipTrigger,
-} from '@meemoo/react-components';
+import { Button, Tooltip, TooltipContent, TooltipTrigger } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import type { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { tText } from '@shared/helpers/translate';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
+
 import styles from './ObjectDetailPageMetadataDisclaimerTooltip.module.scss';
 
 export interface ObjectDetailPageMetadataDisclaimerTooltipProps {
