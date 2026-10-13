@@ -1,15 +1,9 @@
 @use "sass:math";
 @use "src/styles/abstracts" as abstracts;
 
-/**
- * The checkbox area sits on a grey band, between a white title and a white footer. The space the
- * filter form puts above and below that area is split in half: half stays white, half turns grey.
- */
 // The class is doubled so it wins from the padding .c-filter-form__body sets, whatever order the
 // two css modules end up in
 .c-checkbox-filter-form__body.c-checkbox-filter-form__body {
-	background-color: abstracts.$platinum;
-
 	// .c-filter-form__body puts abstracts.$spacer-md above and abstracts.$spacer-xs below. Part of each moves out of
 	// the element as margin, so the band starts and ends inside that space.
 	padding-top: 2rem;

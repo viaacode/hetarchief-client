@@ -5,16 +5,22 @@ import {
 	useGetIeObjectBySchemaIdentifier,
 } from '@ie-objects/hooks/use-get-ie-object-by-schema-identifier';
 import { makeServerSideRequestGetIeObjectThumbnail } from '@ie-objects/hooks/use-get-ie-objects-thumbnail';
+import { MIN_LENGTH_SCHEMA_IDENTIFIER_V2 } from '@ie-objects/ie-objects.consts';
+import { IeObjectsService } from '@ie-objects/services';
 import { ErrorNotFound } from '@shared/components/ErrorNotFound';
 import { Loading } from '@shared/components/Loading';
 import { SeoTags } from '@shared/components/SeoTags/SeoTags';
 import { getDefaultStaticProps } from '@shared/helpers/get-default-server-side-props';
-import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
+import {
+	getIeObjectDetailPath,
+	getIeObjectDetailRedirectDestination,
+} from '@shared/helpers/ie-object-urls';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import withUser, { type UserProps } from '@shared/hooks/with-user';
 import { setShowZendesk } from '@shared/store/ui';
 import type { DefaultSeoInfo } from '@shared/types/seo';
+import { Locale } from '@shared/utils/i18n';
 import { QueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
 import type { GetServerSidePropsResult, NextPage } from 'next';
@@ -103,6 +109,38 @@ export async function getServerSideProps(
 	context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<DefaultSeoInfo>> {
 	const schemaIdentifier = context.query.schemaIdentifier as string;
+	const locale = (context.locale || Locale.nl) as Locale;
+
+	// Redirect server side whenever the object can be resolved, so crawlers get a proper redirect
+	// instead of a 200 page. Objects that cannot be resolved server side (eg private objects that
+	// return a 403) fall back to the client side redirect in the component above.
+	try {
+		let newSchemaIdentifier = schemaIdentifier;
+		if (schemaIdentifier.length > MIN_LENGTH_SCHEMA_IDENTIFIER_V2) {
+			// This is an old schema identifier (v2), we need to convert it to a new one (v3)
+			const v3IdentifierResponse = await IeObjectsService.lookupV2Id(schemaIdentifier);
+			newSchemaIdentifier = v3IdentifierResponse.schemaIdentifierV3;
+		}
+		const ieObject = (
+			await IeObjectsService.getBySchemaIdentifiers([newSchemaIdentifier], false)
+		)?.[0];
+		if (ieObject?.maintainerSlug) {
+			return {
+				redirect: {
+					// Next.js uses the destination verbatim, so the locale prefix has to be included
+					destination: getIeObjectDetailRedirectDestination(
+						locale,
+						ieObject.maintainerSlug,
+						ieObject.schemaIdentifier,
+						ieObject.name
+					),
+					permanent: true,
+				},
+			};
+		}
+	} catch (err) {
+		console.error(`Failed to resolve pid server side: ${schemaIdentifier}`, err);
+	}
 
 	const queryClient = new QueryClient();
 	await makeServerSideRequestGetIeObjectInfo(queryClient, schemaIdentifier, false);

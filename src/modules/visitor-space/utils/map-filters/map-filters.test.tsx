@@ -1,5 +1,9 @@
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { IeObjectsSearchFilterField, IeObjectsSearchOperator } from '@shared/types/ie-objects';
+import {
+	IeObjectsSearchFilterField,
+	IeObjectsSearchOperator,
+	SearchPageMediaType,
+} from '@shared/types/ie-objects';
 import { Locale } from '@shared/utils/i18n';
 import type { FilterMenuFilterOption } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { FilterMenuType } from '@visitor-space/components/FilterMenu/FilterMenu.types';
@@ -104,6 +108,22 @@ describe('Utils', () => {
 			expect(filters[0].value).toBe(
 				tagPrefix(QUERY_PARAM_KEY.SEARCH_QUERY_KEY) + query[QUERY_PARAM_KEY.SEARCH_QUERY_KEY][0]
 			);
+		});
+
+		describe('a filter that is not offered on the open tab', () => {
+			// Themes are only assigned to audio and video objects, so the newspaper tab has no theme filter
+			const AUDIO_VIDEO_THEME_FILTER: FilterMenuFilterOption = {
+				...THEME_FILTER,
+				tabs: [SearchPageMediaType.All, SearchPageMediaType.Video, SearchPageMediaType.Audio],
+			};
+			const query = { [SearchFilterId.Theme]: ['education-learning'] };
+
+			it('should keep the pill, since the value still narrows the results', () => {
+				const tags = toTags(query, [AUDIO_VIDEO_THEME_FILTER]);
+
+				expect(tags).toHaveLength(1);
+				expect(asText(tags[0].label)).toContain('education-learning');
+			});
 		});
 
 		it('should label the theme filter with the theme name in the language of the UI', () => {
@@ -380,6 +400,26 @@ describe('getQueryForRemainingTags()', () => {
 		const updated = getQueryForRemainingTags(tags, query, [GENRE_FILTER]);
 
 		expect(updated[SearchFilterId.Genre]).toEqual(['jazz', 'klassiek']);
+	});
+
+	it('keeps the value of a filter that is not offered on the open tab when another pill goes', () => {
+		const query = {
+			[SearchFilterId.Theme]: ['education-learning'],
+			[SearchFilterId.Genre]: ['jazz'],
+		} as unknown as SearchPageQueryParams;
+		const audioVideoThemeFilter = { ...THEME_FILTER, tabs: [SearchPageMediaType.Video] };
+
+		const tags = mapFiltersToTags(query, [audioVideoThemeFilter, GENRE_FILTER], {
+			locale: Locale.nl,
+		});
+		// The visitor removes the genre pill on the newspaper tab
+		const remaining = tags.filter((tag) => tag.key !== SearchFilterId.Genre);
+		const updated = getQueryForRemainingTags(remaining, query, [
+			audioVideoThemeFilter,
+			GENRE_FILTER,
+		]);
+
+		expect(updated).toEqual({ [SearchFilterId.Theme]: ['education-learning'] });
 	});
 
 	it('drops a filter whose pills were all removed', () => {

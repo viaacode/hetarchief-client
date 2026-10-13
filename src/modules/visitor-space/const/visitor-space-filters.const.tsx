@@ -326,6 +326,20 @@ export const SEARCH_PAGE_FILTERS = (
 export const ALL_SEARCH_FILTERS = (): FilterMenuFilterOption[] =>
 	SEARCH_PAGE_FILTERS(true, false, true, SearchPageMediaType.All);
 
+/**
+ * The filters the account may use on any tab. A value of such a filter stays in the url and in the
+ * search request when the tab switches, so its pill has to stay visible as well.
+ */
+export const getUsableSearchPageFilters = (
+	isGlobalArchive: boolean,
+	isKioskUser: boolean,
+	isKeyUser: boolean,
+	activeTab: SearchPageMediaType
+): FilterMenuFilterOption[] =>
+	SEARCH_PAGE_FILTERS(isGlobalArchive, isKioskUser, isKeyUser, activeTab).filter(
+		({ isDisabled }) => !isDisabled?.()
+	);
+
 /** The filters a user may reach on this tab, with the ones their account cannot use removed. */
 export const getAvailableSearchPageFilters = (
 	isGlobalArchive: boolean,
@@ -333,8 +347,8 @@ export const getAvailableSearchPageFilters = (
 	isKeyUser: boolean,
 	activeTab: SearchPageMediaType
 ): FilterMenuFilterOption[] =>
-	SEARCH_PAGE_FILTERS(isGlobalArchive, isKioskUser, isKeyUser, activeTab).filter(
-		({ isDisabled, tabs }) => !isDisabled?.() && tabs.includes(activeTab)
+	getUsableSearchPageFilters(isGlobalArchive, isKioskUser, isKeyUser, activeTab).filter(
+		({ tabs }) => tabs.includes(activeTab)
 	);
 
 /**
@@ -367,22 +381,34 @@ export const getAdvancedFlyoutFilters = (
  * The url alone carries every case the FA of ARC-3806 names: an activated filter survives a tab
  * switch, a trip to a detail page and back, and a url typed by hand, and it leaves the panel in
  * the three ways the FA allows, since all three drop the parameter.
+ *
+ * A filter that this tab does not offer keeps its value in the url, and its pill stays. So that the
+ * pill can still open the modal, such a filter shows underneath the added ones as long as the url
+ * holds a value for it. Pass every filter the account may use as `usableFilters` for that.
  */
 export const ACTIVE_FILTER_PARAM = 'filter';
 
 export const getVisiblePanelFilters = (
 	availableFilters: FilterMenuFilterOption[],
-	query: Record<string, unknown>
+	query: Record<string, unknown>,
+	usableFilters: FilterMenuFilterOption[] = availableFilters
 ): FilterMenuFilterOption[] => {
 	const isAdded = (filter: FilterMenuFilterOption): boolean =>
 		!filter.inMainPanelByDefault &&
 		(!isNil(query[filter.id]) || query[ACTIVE_FILTER_PARAM] === filter.id);
+
+	const availableIds = new Set(availableFilters.map(({ id }) => id));
+	const isCarriedOver = (filter: FilterMenuFilterOption): boolean =>
+		!availableIds.has(filter.id) &&
+		filter.id !== SearchFilterId.Advanced &&
+		!isNil(query[filter.id]);
 
 	return [
 		...availableFilters.filter(
 			(filter) => filter.inMainPanelByDefault && filter.id !== SearchFilterId.Advanced
 		),
 		...availableFilters.filter(isAdded),
+		...usableFilters.filter(isCarriedOver),
 		...availableFilters.filter((filter) => filter.id === SearchFilterId.Advanced),
 	];
 };

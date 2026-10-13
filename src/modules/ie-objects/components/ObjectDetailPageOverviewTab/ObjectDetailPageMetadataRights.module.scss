@@ -32,9 +32,8 @@
 	}
 
 	&__label-text {
-		color: abstracts.$teal-dark;
-
 		&--link {
+			color: abstracts.$teal-dark;
 			text-decoration: underline;
 			text-underline-offset: 0.2rem;
 		}

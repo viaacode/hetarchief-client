@@ -233,7 +233,7 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 					{renderRightsAttributionText(rightsAttributionText)}
 				</div>
 
-				<MetadataList allowTwoColumns={true}>
+				<MetadataList allowTwoColumns={true} noDivider={!rightsAttributionText}>
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___bronvermelding'),
 						rightsAttributionText ? undefined : mediaInfo?.creditText
