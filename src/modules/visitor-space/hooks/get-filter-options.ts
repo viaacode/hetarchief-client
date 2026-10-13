@@ -9,13 +9,15 @@ import {
 	LANGUAGES,
 	type LanguageCode,
 } from '@visitor-space/components/LanguageFilterForm/languages';
+import { SEARCH_PAGE_QUERY_PARAM_CONFIG } from '@visitor-space/const';
 import { getRightsOptions, type RightsLabel } from '@visitor-space/const/rights-filter.const';
 import { useGetContentPartners } from '@visitor-space/hooks/get-content-partner';
 import { useSearchQueryFilters } from '@visitor-space/hooks/get-search-query-filters';
 import { useGetThemeFilterOptions } from '@visitor-space/hooks/use-get-theme-filter-options';
 import { ElasticsearchFieldNames, FILTER_LABEL_VALUE_DELIMITER } from '@visitor-space/types';
-import { keyBy, mapValues, uniqBy } from 'es-toolkit/compat';
+import { compact, keyBy, mapValues, uniqBy } from 'es-toolkit/compat';
 import { useMemo } from 'react';
+import { useQueryParams } from 'use-query-params';
 
 export interface FilterOption {
 	label: string;
@@ -29,6 +31,7 @@ const AGGREGATION_KEY_BY_FIELD: Partial<
 > = {
 	[IeObjectsSearchFilterField.MAINTAINER_ID]: ElasticsearchFieldNames.Maintainer,
 	[IeObjectsSearchFilterField.MEDIUM]: ElasticsearchFieldNames.Medium,
+	[IeObjectsSearchFilterField.THEME]: ElasticsearchFieldNames.Theme,
 	[IeObjectsSearchFilterField.GENRE]: ElasticsearchFieldNames.Genre,
 	[IeObjectsSearchFilterField.LANGUAGE]: ElasticsearchFieldNames.Language,
 	[IeObjectsSearchFilterField.LOCATION_CREATED]: ElasticsearchFieldNames.LocationCreated,
@@ -41,10 +44,11 @@ export const useGetFilterOptions = (
 ): { options: FilterOption[]; isLoading: boolean } => {
 	const locale = useLocale();
 	const searchFilters = useSearchQueryFilters();
+	const [query] = useQueryParams(SEARCH_PAGE_QUERY_PARAM_CONFIG);
 	const field = filter.field;
 
-	// Themes are not aggregated in elasticsearch, and the url holds a slug rather than a name,
-	// so the options of this filter come from the themes endpoint. ARC-3797
+	// The buckets of the theme aggregation hold slugs, and the names come from the themes endpoint.
+	// The aggregation is what limits the list to the themes of the active tab. ARC-3797
 	const isThemeFilter = field === IeObjectsSearchFilterField.THEME;
 	const { options: themeOptions, isLoading: isLoadingThemes } = useGetThemeFilterOptions(
 		enabled && isThemeFilter
@@ -58,7 +62,7 @@ export const useGetFilterOptions = (
 			]);
 			return results.aggregations;
 		},
-		enabled: enabled && !!field && !isThemeFilter,
+		enabled: enabled && !!field,
 	});
 
 	// Maintainer buckets hold ids, so the readable names come from somewhere else
@@ -67,13 +71,16 @@ export const useGetFilterOptions = (
 		enabled && field === IeObjectsSearchFilterField.MAINTAINER_ID
 	);
 
-	const options = useMemo((): FilterOption[] => {
-		if (isThemeFilter) {
-			return themeOptions;
-		}
-
+	const aggregatedOptions = useMemo((): FilterOption[] => {
 		if (!aggregations || !field) {
 			return [];
+		}
+
+		if (isThemeFilter) {
+			const themeSlugs = new Set(
+				(aggregations[ElasticsearchFieldNames.Theme]?.buckets || []).map((bucket) => bucket.key)
+			);
+			return themeOptions.filter((option) => themeSlugs.has(option.value));
 		}
 
 		if (field === IeObjectsSearchFilterField.RIGHTS) {
@@ -116,5 +123,24 @@ export const useGetFilterOptions = (
 		);
 	}, [aggregations, field, maintainers, locale, isThemeFilter, themeOptions]);
 
-	return { options, isLoading: isThemeFilter ? isLoadingThemes : isLoading };
+	// The aggregation only knows the values the current search still matches, so a value the visitor
+	// picked earlier would drop out of the list as soon as the search has no hits for it, e.g. on a
+	// tab this filter does not belong to. An applied value is always offered, so it can be unticked.
+	const applied = query[filter.id];
+	const options = useMemo((): FilterOption[] => {
+		const offered = new Set(aggregatedOptions.map((option) => option.value));
+		const missing = compact(Array.isArray(applied) ? applied : [])
+			.filter((value): value is string => typeof value === 'string' && !offered.has(value))
+			.map((value) => ({
+				value,
+				label:
+					(isThemeFilter && themeOptions.find((option) => option.value === value)?.label) ||
+					value.split(FILTER_LABEL_VALUE_DELIMITER).pop() ||
+					value,
+			}));
+
+		return [...aggregatedOptions, ...missing];
+	}, [aggregatedOptions, applied, isThemeFilter, themeOptions]);
+
+	return { options, isLoading: isThemeFilter ? isLoading || isLoadingThemes : isLoading };
 };

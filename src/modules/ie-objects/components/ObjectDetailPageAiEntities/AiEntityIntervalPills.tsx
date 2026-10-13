@@ -7,6 +7,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
+import { findLastIndex } from 'es-toolkit/compat';
 import { type FC, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import styles from './AiEntityIntervalPills.module.scss';
@@ -88,13 +89,9 @@ export const AiEntityIntervalPills: FC<AiEntityIntervalPillsProps> = ({
 
 	const pageCount = pageStarts.length;
 	const currentPage = Math.min(page, pageCount - 1);
+	// The active pill sits on the last page that starts at or before its index
 	const pageOfActive =
-		activeIndex === null
-			? -1
-			: pageStarts.reduce(
-					(found, start, pageIndex) => (activeIndex >= start ? pageIndex : found),
-					0
-				);
+		activeIndex === null ? -1 : findLastIndex(pageStarts, (start) => start <= activeIndex);
 
 	// Selecting an interval on the timeline must bring its pill into view, also when the new active
 	// pill is on the same page as the previous one and the user paged away in between

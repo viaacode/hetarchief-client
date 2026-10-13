@@ -23,6 +23,8 @@ export class AuthService {
 	 */
 	private static queryClient: QueryClient | null = null;
 
+	private static isLoggingOut = false;
+
 	public static setQueryClient(queryClient: QueryClient): void {
 		AuthService.queryClient = queryClient;
 	}
@@ -110,6 +112,13 @@ export class AuthService {
 	}
 
 	public static async logout(shouldRedirectToOriginalPage = false): Promise<void> {
+		// Every request that fails with a 401 calls logout, only the first one should do anything.
+		// The page navigates away, so this flag never needs to be reset.
+		if (AuthService.isLoggingOut) {
+			return;
+		}
+		AuthService.isLoggingOut = true;
+
 		const locale = TranslationService.getLocale();
 		let returnToUrl = `${publicRuntimeConfig.CLIENT_URL}/${locale}`;
 		if (shouldRedirectToOriginalPage) {
@@ -131,10 +140,10 @@ export class AuthService {
 
 		// Clear react-query cache to avoid any pages still being accessible using the browser back button
 		// https://meemoo.atlassian.net/browse/ARC-1828
-		if (AuthService.queryClient) {
-			await AuthService.queryClient.invalidateQueries();
-			AuthService.queryClient.clear();
-		}
+		// Do NOT invalidate here: that refetches every active query, those fail with 401 again and call
+		// logout again. Awaiting it also deadlocks on the query whose 401 triggered this logout, so the
+		// redirect below was never reached and the refetches looped at ~100 req/s.
+		AuthService.queryClient?.clear();
 
 		window.location.href = stringifyUrl({
 			url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,

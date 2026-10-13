@@ -350,7 +350,6 @@ const ReportBlade: FC<ReportBladeProps> = (props) => {
 				</div>,
 			]}
 			id="reportMessage"
-			label={tText('modules/visitor-space/components/report-blade/report-blade___opmerking')}
 		>
 			<TextArea
 				id="reportMessage"

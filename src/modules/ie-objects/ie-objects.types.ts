@@ -19,6 +19,7 @@ export type IeObjectSimilar = IPagination<Partial<HetArchiefIeObject>>;
 type aggregateKeys =
 	| ElasticsearchFieldNames.Format
 	| ElasticsearchFieldNames.Medium
+	| ElasticsearchFieldNames.Theme
 	| ElasticsearchFieldNames.ObjectType
 	| ElasticsearchFieldNames.Genre
 	| ElasticsearchFieldNames.Language

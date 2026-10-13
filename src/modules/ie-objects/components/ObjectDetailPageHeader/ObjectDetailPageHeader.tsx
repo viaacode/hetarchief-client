@@ -62,7 +62,7 @@ import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { selectBreadcrumbs } from '@shared/store/ui';
-import { isMobileSize } from '@shared/utils/is-mobile';
+import { isMobileSize, isTabletPortraitSize } from '@shared/utils/is-mobile';
 import { HetArchiefIeObjectAccessThrough, HetArchiefIeObjectLicense } from '@viaa/avo2-types';
 import { SearchFilterId } from '@visitor-space/types';
 import clsx from 'clsx';
@@ -88,6 +88,8 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
+	const windowSize = useWindowSizeContext();
+	const isMobile = isTabletPortraitSize(windowSize);
 
 	/**
 	 * Content
@@ -161,7 +163,6 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 	// https://meemoo.atlassian.net/browse/ARC-3117
 	const canDownloadNewspaper: boolean = ieObjectPermissions.canDownloadEssence;
 
-	const windowSize = useWindowSizeContext();
 	const { data: folders } = useGetFolders();
 
 	/**
@@ -333,18 +334,12 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 							{isPrimary ? (
 								<Button
 									variants={['black']}
-									className={styles['p-object-detail__export-dropdown']}
+									className={clsx(styles['p-object-detail__export-dropdown'], 'u-text-ellipsis')}
 									iconStart={icon}
 									iconEnd={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+									label={isMobile ? buttonLabelMobile : buttonLabelDesktop}
 									title={buttonLabelDesktop}
-								>
-									<span className="u-text-ellipsis u-display-none u-display-block-lg">
-										{buttonLabelDesktop}
-									</span>
-									<span className="u-text-ellipsis u-display-block u-display-none-lg">
-										{buttonLabelMobile}
-									</span>
-								</Button>
+								/>
 							) : (
 								<Button icon={icon} variants={['white']} title={buttonLabelDesktop} />
 							)}
@@ -368,6 +363,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 			metadataExportDropdownOpen,
 			onExportClick,
 			mediaInfo?.schemaIdentifier,
+			isMobile,
 		]
 	);
 

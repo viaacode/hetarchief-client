@@ -93,6 +93,7 @@ import {
 import {
 	getAdvancedFlyoutFilters,
 	getAvailableSearchPageFilters,
+	getUsableSearchPageFilters,
 	getVisiblePanelFilters,
 } from '@visitor-space/const/visitor-space-filters.const';
 import { SEARCH_PAGE_IE_OBJECT_TABS } from '@visitor-space/const/visitor-space-tabs.const';
@@ -408,14 +409,21 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		[isGlobalArchive, isKioskUser, isKeyUser, format]
 	);
 
+	// The value of a filter that is not offered on this tab stays in the url and in the search
+	// request, so its pill stays as well
+	const pillFilters = useMemo(
+		() => getUsableSearchPageFilters(isGlobalArchive, isKioskUser, isKeyUser, format),
+		[isGlobalArchive, isKioskUser, isKeyUser, format]
+	);
+
 	const flyoutFilters = useMemo(
 		() => getAdvancedFlyoutFilters(availableFilters, locale),
 		[availableFilters, locale]
 	);
 
 	const filters = useMemo(
-		(): FilterMenuFilterOption[] => getVisiblePanelFilters(availableFilters, query),
-		[availableFilters, query]
+		(): FilterMenuFilterOption[] => getVisiblePanelFilters(availableFilters, query, pillFilters),
+		[availableFilters, query, pillFilters]
 	);
 
 	/** Clicking a pill opens the modal of that filter, with the selected values filled in. */
@@ -541,7 +549,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 	const onRemoveTag = (tags: MultiValue<TagIdentity>) => {
 		// The tag list hands back the tags that survive, so the query is rebuilt from those
-		const updatedQuery = getQueryForRemainingTags(tags, query, availableFilters);
+		const updatedQuery = getQueryForRemainingTags(tags, query, pillFilters);
 
 		// Destructure to keyword-able filters
 		// biome-ignore-start lint/correctness/noUnusedVariables: filter it out of the query
@@ -593,8 +601,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const searchResultsNoAccess = (searchResultsError as HTTPError)?.response?.status === 403;
 	const showVisitorSpacesDropdown = isUserWithAccount && accessibleVisitorSpaceRequests.length > 0;
 	const activeFilters = useMemo(
-		() => mapFiltersToTags(query, availableFilters, { themeLabelsBySlug, locale }),
-		[query, availableFilters, themeLabelsBySlug, locale]
+		() => mapFiltersToTags(query, pillFilters, { themeLabelsBySlug, locale }),
+		[query, pillFilters, themeLabelsBySlug, locale]
 	);
 
 	const searchResultCardData = useMemo((): IdentifiableMediaCard[] => {

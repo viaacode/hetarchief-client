@@ -7,19 +7,15 @@ import MetadataList from '@ie-objects/components/Metadata/MetadataList';
 import { renderSimpleMetadataField as renderSimpleMetadataFieldBase } from '@ie-objects/components/Metadata/render-simple-metadata-field';
 import { ObjectDetailPageAiPersons } from '@ie-objects/components/ObjectDetailPageAiEntities/ObjectDetailPageAiPersons';
 import { ObjectDetailPageAiPills } from '@ie-objects/components/ObjectDetailPageAiEntities/ObjectDetailPageAiPills';
-import { ObjectDetailPageMetadataRights } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataRights';
-import { ObjectDetailPageMetadataThemes } from '@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataThemes';
+import { ObjectDetailPageMetadataRights } from '@ie-objects/components/ObjectDetailPageOverviewTab/ObjectDetailPageMetadataRights';
+import { ObjectDetailPageMetadataThemes } from '@ie-objects/components/ObjectDetailPageOverviewTab/ObjectDetailPageMetadataThemes';
 import type { ObjectDetailPageOverviewTabProps } from '@ie-objects/components/ObjectDetailPageOverviewTab/ObjectDetailPageOverviewTab.types';
 import { SearchLinkTag } from '@ie-objects/components/SearchLinkTag/SearchLinkTag';
 import { useGetIeObjectFileMentions } from '@ie-objects/hooks/use-get-ie-object-file-mentions';
 import { useGetIeObjectPreviousNextIds } from '@ie-objects/hooks/use-get-ie-object-previous-next-ids';
 import { renderDate } from '@ie-objects/ie-objects.consts';
 import { FileMentionEntityType } from '@ie-objects/ie-objects.types';
-import {
-	getIeObjectAvRightsIcon,
-	getIeObjectAvRightsLabel,
-	getIeObjectAvRightsUrl,
-} from '@ie-objects/utils/get-ie-object-av-rights-icon';
+import { getIeObjectAvRights } from '@ie-objects/utils/get-ie-object-av-rights';
 import { getIeObjectRightsStatusInfo } from '@ie-objects/utils/get-ie-object-rights-status';
 import {
 	mapFileMentionsToAiEntities,
@@ -293,11 +289,8 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 	};
 
 	const renderRightsInfo = (mediaInfo: HetArchiefIeObject) => {
-		const rightsInfoNewspapers = isNewspaper ? getIeObjectRightsStatusInfo(mediaInfo) : null;
-		const rightsInfoAudioVideo = getRightsInfoForAudioVideo(mediaInfo);
-		const avRightsIcon = getIeObjectAvRightsIcon(rightsInfoAudioVideo);
-		const avRightsLabel = getIeObjectAvRightsLabel(rightsInfoAudioVideo);
-		const avRightsUrl = getIeObjectAvRightsUrl(rightsInfoAudioVideo);
+		const rightsInfoNewspapers = getIeObjectRightsStatusInfo(mediaInfo);
+		const ieObjectAvRights = getIeObjectAvRights(mediaInfo);
 		const rightsMoreInfoTitle = tText(
 			'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-de-rechten-van-dit-object'
 		);
@@ -315,14 +308,16 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 				/>
 			);
 		}
-		if (rightsInfoAudioVideo) {
+		if (ieObjectAvRights) {
+			const rightsInfoAudioVideo = getRightsInfoForAudioVideo(mediaInfo);
+
 			return (
 				<ObjectDetailPageMetadataRights
 					title={tHtml('modules/ie-objects/object-detail-page___rechten')}
 					className={styles['p-object-detail-overview-tab__rights-status']}
-					label={avRightsLabel}
-					labelIcon={avRightsIcon}
-					labelUrl={avRightsUrl}
+					label={ieObjectAvRights.label}
+					labelIcon={ieObjectAvRights.icon}
+					labelUrl={ieObjectAvRights.url}
 					moreInfoUrl={tText(
 						'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-internal-link',
 						{
@@ -332,7 +327,7 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 					moreInfoTitle={rightsMoreInfoTitle}
 					copyrightHolder={mediaInfo.copyrightHolder}
 					copyrightHolderLabel={tText('modules/ie-objects/ie-objects___rechthebbende')}
-					licenseDistributor={rightsInfoAudioVideo.licenseDistributor || undefined}
+					licenseDistributor={rightsInfoAudioVideo?.licenseDistributor || undefined}
 					licenseDistributorLabel={tText('modules/ie-objects/ie-objects___licentiegever')}
 				/>
 			);
