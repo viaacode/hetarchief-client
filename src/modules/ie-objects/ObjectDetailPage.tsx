@@ -90,7 +90,6 @@ import { ScrollableTabs } from '@shared/components/Tabs';
 import getConfig from '@shared/config/public-runtime-config';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { CUE_POINTS_SEPARATOR, QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
-import { BooleanParamWithDefault } from '@shared/helpers/boolean-param-with-default';
 import { getIeObjectNameSlug } from '@shared/helpers/ie-object-urls';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -139,7 +138,13 @@ import { useRouter } from 'next/router';
 import { parseUrl, stringifyUrl } from 'query-string';
 import { type FC, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { NumberParam, StringParam, useQueryParam, withDefault } from 'use-query-params';
+import {
+	BooleanParam,
+	NumberParam,
+	StringParam,
+	useQueryParam,
+	withDefault,
+} from 'use-query-params';
 import styles from './ObjectDetailPage.module.scss';
 
 const { publicRuntimeConfig } = getConfig();
@@ -264,10 +269,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	);
 
 	const [currentSearchResultIndex, setCurrentSearchResultIndex] = useState<number>(-1);
-	const [expandSidebar] = useQueryParam(
-		QUERY_PARAM_KEY.EXPAND_SIDEBAR,
-		BooleanParamWithDefault(false)
-	);
+	// Only in the url when the user toggled the sidebar, otherwise undefined (see isSidebarExpandedByDefault)
+	const [expandSidebarFromUrl] = useQueryParam(QUERY_PARAM_KEY.EXPAND_SIDEBAR, BooleanParam);
 
 	// Shared with ObjectDetailPageSidebar (its own collapsible header/scroll behavior) and with
 	// ObjectDetailPageOcrTab (scrollContainerRef), so both act on the same scrollable element.
@@ -488,10 +491,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, [relatedIeObjects]);
 	const relatedCount = mappedRelatedIeObjects.length;
 
-	const { activeTab, updateActiveTab, updateQueryParams } = useObjectDetailActiveTab({
-		objectId: mediaInfo?.schemaIdentifier,
-		isNewspaper,
-	});
+	const { activeTab, updateActiveTab, setActiveTabWithoutUrlUpdate, updateQueryParams } =
+		useObjectDetailActiveTab({
+			objectId: mediaInfo?.schemaIdentifier,
+			isNewspaper,
+		});
 
 	// visit info
 	const { data: visitRequest, error: visitRequestError } = useGetActiveVisitRequestForUserAndSpace(
@@ -541,6 +545,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const isErrorSpaceNotActive = (visitorSpaceError as HTTPError)?.response?.status === 410;
 	const showFragmentSlider = allFilesToDisplayInCurrentPage.length > 1 && !isNewspaper;
 	const isMobile = isTabletPortraitSize(windowSize); // mobile and tablet portrait
+	// Check media content and license for the default sidebar state on desktop
+	// Derived instead of written to the url on page load: search engines treat a url that changes
+	// right after loading as a client side redirect, so the page would never get indexed
+	const isSidebarExpandedByDefault = !isMobile && (!mediaInfo?.dctermsFormat || !hasMedia);
+	const expandSidebar = expandSidebarFromUrl ?? isSidebarExpandedByDefault;
 
 	const { activeAiInterval, selectAiInterval, clearAiInterval, onPlayerReady } =
 		useAiIntervalSelection({
@@ -618,7 +627,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	const handleSearch = useCallback(
 		async (
 			newSearchTerms: string,
-			{ switchToOcrTab = true }: { switchToOcrTab?: boolean } = {}
+			{
+				switchToOcrTab = true,
+				updateUrl = true,
+			}: {
+				switchToOcrTab?: boolean;
+				// False when applying the search terms from the url on page load: search engines treat a
+				// url that changes right after loading as a client side redirect
+				updateUrl?: boolean;
+			} = {}
 		): Promise<void> => {
 			if (newSearchTerms === '') {
 				// Reset search
@@ -650,9 +667,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			setHighlightMode(HighlightMode.OCR_SEARCH);
 			setSearchTerms(newSearchTerms.toLowerCase());
 			setCurrentSearchResultIndex(-1);
-			handleIsTextOverlayVisibleChange(true);
+			if (updateUrl) {
+				handleIsTextOverlayVisibleChange(true);
+			} else {
+				setIsTextOverlayVisible(true);
+			}
 			if (switchToOcrTab) {
-				await updateActiveTab(ObjectDetailTabs.Ocr);
+				if (updateUrl) {
+					await updateActiveTab(ObjectDetailTabs.Ocr);
+				} else {
+					setActiveTabWithoutUrlUpdate(ObjectDetailTabs.Ocr);
+				}
 			}
 		},
 		[currentPageIndex, mediaInfo?.hasAccessToEssence, pageOcrTranscripts, router]
@@ -950,12 +975,19 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				console.error('Could not parse search terms, wrong format: ', highlightedSearchTerms);
 			}
 
+			setHasAppliedUrlSearchTerms(true);
+			if (!newSearchTerms) {
+				// eg: searchTerms=[], nothing to search or highlight
+				return;
+			}
 			setSearchTermsTemp(newSearchTerms);
 			setSearchTerms(newSearchTerms);
 			// An explicit tab in the url (refresh, bookmark) wins over the ocr tab that search terms default to
-			handleSearch(newSearchTerms, { switchToOcrTab: !hasExplicitTabInUrl }).then(noop);
-			handleIsTextOverlayVisibleChange(true);
-			setHasAppliedUrlSearchTerms(true);
+			// The url already holds the search terms, so the resulting state is not written back to it
+			handleSearch(newSearchTerms, {
+				switchToOcrTab: !hasExplicitTabInUrl,
+				updateUrl: false,
+			}).then(noop);
 		}
 	}, [
 		isNewspaper,
@@ -964,7 +996,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		hasExplicitTabInUrl,
 		handleSearch,
 		highlightedSearchTerms,
-		handleIsTextOverlayVisibleChange,
 		simplifiedAltoInfo?.altoJsonContent,
 	]);
 
@@ -1030,20 +1061,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 	}, [activeTab, isMobile]);
 
-	// biome-ignore lint/correctness/useExhaustiveDependencies: render loop
-	useEffect(() => {
-		if (!isMobile) {
-			// Check media content and license for default tab on desktop
-			// Not via setExpandSidebar: it builds the url from a stale location and drops params that
-			// are being set at the same moment (eg: the ocr tab)
-			const shouldExpandSidebar = !mediaInfo?.dctermsFormat || !hasMedia;
-			updateQueryParamsShallow(router, {
-				// Omitted from the url when equal to the default (see BooleanParamWithDefault)
-				[QUERY_PARAM_KEY.EXPAND_SIDEBAR]: shouldExpandSidebar ? '1' : undefined,
-			}).then(noop);
-		}
-	}, [mediaInfo]);
-
 	/**
 	 * Mapping
 	 */
@@ -1051,8 +1068,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 * Callbacks
 	 */
 	const handleExpandButtonClicked = () => {
+		const newExpandSidebar = !expandSidebar;
+		// Not via a useQueryParam setter: it builds the url from a stale location and drops params that
+		// are being set at the same moment (eg: the ocr tab)
 		updateQueryParamsShallow(router, {
-			[QUERY_PARAM_KEY.EXPAND_SIDEBAR]: expandSidebar ? undefined : '1',
+			// Omitted from the url when equal to the default
+			[QUERY_PARAM_KEY.EXPAND_SIDEBAR]:
+				newExpandSidebar === isSidebarExpandedByDefault ? undefined : newExpandSidebar ? '1' : '0',
 		}).then(noop);
 	};
 

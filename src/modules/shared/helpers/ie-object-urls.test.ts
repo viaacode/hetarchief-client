@@ -43,6 +43,16 @@ describe('getIeObjectNameSlug', () => {
 		}
 	});
 
+	it('only keeps ascii letters, digits and dashes, so the url never needs percent encoding', () => {
+		expect(getIeObjectNameSlug('Heart ❤️ heart')).toBe('heart-heart');
+		expect(getIeObjectNameSlug('Lukas Lelie gids Itali\uFFFDreis')).toBe(
+			'lukas-lelie-gids-itali-reis'
+		);
+		expect(getIeObjectNameSlug('Titel \uFFFD ve meer')).toBe('titel-ve-meer');
+		expect(getIeObjectNameSlug('東京 tokyo')).toBe('tokyo');
+		expect(getIeObjectNameSlug('東京')).toBe(IE_OBJECT_NAME_SLUG_FALLBACK);
+	});
+
 	it('falls back to a placeholder for empty or unusable titles', () => {
 		expect(getIeObjectNameSlug(null)).toBe(IE_OBJECT_NAME_SLUG_FALLBACK);
 		expect(getIeObjectNameSlug(undefined)).toBe(IE_OBJECT_NAME_SLUG_FALLBACK);

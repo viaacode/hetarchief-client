@@ -1,6 +1,15 @@
+import { getIeObjectDetailRedirectDestination } from '@shared/helpers/ie-object-urls';
+import { Locale } from '@shared/utils/i18n';
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { Locale } from '../tests/helpers/get-site-translations';
+
+/**
+ * The locale (nl/en) is already stripped from the pathname by Next.js, fr and de are not
+ * Captures: 1: locale, 2: media mosa id (the optional page number after it is ignored)
+ * The id has to contain a letter, so a page number is never mistaken for it
+ */
+export const MEDIA_MOSA_ID_PATH_REGEX =
+	/^(?:\/(fr|nl|de|en))?(?:\/iframe)?\/media\/(?:[^/]+\/)?([a-zA-Z0-9]*[a-zA-Z][a-zA-Z0-9]*)(?:\/[0-9]+)?\/?$/;
 
 interface IeObjectRedirectInfo {
 	schema_identifier: string;
@@ -27,36 +36,39 @@ export async function proxy(request: NextRequest) {
 			return new NextResponse('Not found', { status: 404 });
 		}
 
-		// Handle media mosa ids and redirect them to the equivalent ie-object page
-		if (
-			pathName.startsWith('/media/') ||
-			pathName.startsWith('/nl/media/') ||
-			pathName.startsWith('/en/media/')
-		) {
-			const pathParts = pathName.split('/media/');
-			const mediaMosaId = pathParts.pop()?.split('/').pop();
-			if (!mediaMosaId) {
-				console.error('No mediaMosaId found in the URL: ', pathName);
-				return NextResponse.next();
-			}
+		// Handle media mosa ids (old NieuwsVanDeGroteOorlog urls) and redirect them to the equivalent ie-object page
+		// All variants are handled here, instead of in next.config.js redirects, so they reach the
+		// canonical url in a single permanent redirect: search engines flag redirect chains
+		// eg: /media/:id, /en/media/:id, /fr/media/:title/:id/:pageNumber, /de/iframe/media/:title/:id
+		const mediaMosaIdMatch = pathName.match(MEDIA_MOSA_ID_PATH_REGEX);
+		if (mediaMosaIdMatch) {
+			const [, pathLocale, mediaMosaId] = mediaMosaIdMatch;
 			const ieObjectRedirectInfo: IeObjectRedirectInfo = (await (
 				await fetch(`${process.env.PROXY_URL}/ie-objects/lookup/nvdgo/${mediaMosaId}`)
 			).json()) as IeObjectRedirectInfo;
 			const schemaIdentifier = ieObjectRedirectInfo.schema_identifier;
-			if (!schemaIdentifier) {
+			if (!schemaIdentifier || !ieObjectRedirectInfo.maintainerSlug) {
 				console.error(
 					'Fetching the schemaIdentifier for the nvdgo id failed: ',
 					ieObjectRedirectInfo
 				);
 				return NextResponse.rewrite(new URL('/__force-404', request.url));
 			}
-			// Do not import ROUTE_PARTS_BY_LOCALE, since it creates an import chain that pulls in dom purify that needs window. and that isn't available during ssr
-			const search = pathName.startsWith(`/${Locale.En}/`) ? `${Locale.En}/search` : 'zoeken';
-			const maintainerSlug = ieObjectRedirectInfo.maintainerSlug;
-			const title = ieObjectRedirectInfo.title ? ieObjectRedirectInfo.title.replace(/ /g, '-') : '';
+			// fr and de are no longer supported, those go to the default locale
+			const locale =
+				request.nextUrl.locale === Locale.en || pathLocale === Locale.en ? Locale.en : Locale.nl;
 
 			return NextResponse.redirect(
-				new URL(`/${search}/${maintainerSlug}/${schemaIdentifier}/${title}`, request.url)
+				new URL(
+					getIeObjectDetailRedirectDestination(
+						locale,
+						ieObjectRedirectInfo.maintainerSlug,
+						schemaIdentifier,
+						ieObjectRedirectInfo.title
+					),
+					request.url
+				),
+				308
 			);
 		}
 
@@ -72,6 +84,8 @@ export const config = {
 	matcher: [
 		'/media/:path*',
 		'/:locale/media/:path*',
+		'/iframe/media/:path*',
+		'/:locale/iframe/media/:path*',
 		'/sitemap.xml.gz',
 		'/zoeken',
 		'/zoeken/:path*',

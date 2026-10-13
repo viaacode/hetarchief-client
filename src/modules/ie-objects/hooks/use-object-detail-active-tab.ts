@@ -80,7 +80,14 @@ export const useObjectDetailActiveTab = ({
 		setActiveTab(getDefaultObjectDetailTab(isNewspaper, hasNamenlijstFilter));
 	}, [objectId]);
 
-	return { activeTab, updateActiveTab, updateQueryParams: replaceQuery };
+	return {
+		activeTab,
+		updateActiveTab,
+		// State only, for tab changes that follow from the url itself (eg: search terms on page load):
+		// writing those back would change the url right after loading, a client side redirect for search engines
+		setActiveTabWithoutUrlUpdate: setActiveTab,
+		updateQueryParams: replaceQuery,
+	};
 };
 
 interface UseResetUnavailableTabProps {

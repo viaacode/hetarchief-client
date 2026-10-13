@@ -374,54 +374,8 @@ module.exports = {
 				destination: '/pid/:pid',
 				permanent: true,
 			},
-			{
-				// Redirect bad /:language/iframe/media/title/:id/:num urls from the NieuwsVanDeGroteOorlog website to the correct object page
-				source: '/:language(fr|nl|de|en)/iframe/media/:title/:nvdgoId([a-zA-Z0-9]+)/:num([0-9]+)',
-				destination: '/media/:nvdgoId',
-				permanent: true,
-			},
-			{
-				// Redirect bad /:language/iframe/media/title/:id urls from the NieuwsVanDeGroteOorlog website to the correct object page
-				source: '/:language(fr|nl|de|en)/iframe/media/:title/:nvdgoId([a-zA-Z0-9]+)',
-				destination: '/media/:nvdgoId',
-				permanent: true,
-			},
-			{
-				// Redirect bad /:language/media/title/:id/:num urls from the NieuwsVanDeGroteOorlog website to the correct object page
-				source: '/:language(fr|nl|de|en)/media/:title/:nvdgoId([a-zA-Z0-9]+)/:num([0-9]+)',
-				destination: '/media/:nvdgoId',
-				permanent: true,
-			},
-			{
-				// Redirect bad /:language/media/title/:id urls from the NieuwsVanDeGroteOorlog website to the correct object page
-				source: '/:language(fr|nl|de|en)/media/:title/:nvdgoId([a-zA-Z0-9]+)',
-				destination: '/media/:nvdgoId',
-				permanent: true,
-			},
-			{
-				// Redirect bad /:language/iframe/media/title/:id/:num urls from the NieuwsVanDeGroteOorlog website to the correct object page
-				source: '/iframe/media/:title/:nvdgoId([a-zA-Z0-9]+)/:num([0-9]+)',
-				destination: '/media/:nvdgoId',
-				permanent: true,
-			},
-			{
-				// Redirect bad /:language/iframe/media/title/:id urls from the NieuwsVanDeGroteOorlog website to the correct object page
-				source: '/iframe/media/:title/:nvdgoId([a-zA-Z0-9]+)',
-				destination: '/media/:nvdgoId',
-				permanent: true,
-			},
-			{
-				// Redirect bad /:language/media/title/:id/:num urls from the NieuwsVanDeGroteOorlog website to the correct object page
-				source: '/media/:title/:nvdgoId([a-zA-Z0-9]+)/:num([0-9]+)',
-				destination: '/media/:nvdgoId',
-				permanent: true,
-			},
-			{
-				// Redirect bad /:language/media/title/:id urls from the NieuwsVanDeGroteOorlog website to the correct object page
-				source: '/media/:title/:nvdgoId([a-zA-Z0-9]+)',
-				destination: '/media/:nvdgoId',
-				permanent: true,
-			},
+			// The /(:language/)(iframe/)media/:title/:nvdgoId(/:num) urls from the NieuwsVanDeGroteOorlog
+			// website are redirected by src/proxy.ts, so they reach the object page in a single redirect
 		];
 	},
 };
