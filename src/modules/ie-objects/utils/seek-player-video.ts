@@ -25,10 +25,16 @@ export const isSeekingPlayerVideo = (): boolean => seekPlaysInProgress > 0;
  * play-then-pause that react-components uses to initialize embedded players reveals it, without
  * the user hearing anything or the video running on.
  */
-export const seekPlayerVideo = async (video: HTMLVideoElement, seconds: number): Promise<void> => {
+export const seekPlayerVideo = async (
+	video: HTMLVideoElement,
+	seconds: number,
+	forceReveal = false
+): Promise<void> => {
 	video.currentTime = seconds;
 
-	if (!video.closest('.is-starting')) {
+	// Flowplayer drops is-starting while the media loads, so a seek that waited for it asks for the
+	// reveal itself. A playing video is never paused
+	if (!video.closest('.is-starting') && !(forceReveal && video.paused)) {
 		return;
 	}
 

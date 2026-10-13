@@ -1,4 +1,5 @@
 import { ObjectPlaceholder } from '@ie-objects/components/ObjectPlaceholder';
+import { useGetIeObjectSubtitles } from '@ie-objects/hooks/use-get-ie-object-subtitles';
 import { useGetIeObjectsTicketUrl } from '@ie-objects/hooks/use-get-ie-objects-ticket-url';
 import {
 	FLOWPLAYER_AUDIO_FORMATS,
@@ -7,6 +8,7 @@ import {
 	getTicketErrorPlaceholderLabels,
 	JSON_FORMATS,
 } from '@ie-objects/ie-objects.consts';
+import { getSubtitleFile, getSubtitleTracks } from '@ie-objects/utils/get-subtitle-tracks';
 import {
 	Color,
 	FLOWPLAYER_CUSTOM_CONTROL_COLORS_HET_ARCHIEF,
@@ -19,12 +21,21 @@ import {
 	getValidStartAndEnd,
 } from '@meemoo/react-components';
 import { Loading } from '@shared/components/Loading';
+import { SubtitlesTeaser } from '@shared/components/SubtitlesTeaser';
 import getConfig from '@shared/config/public-runtime-config';
+import { tText } from '@shared/helpers/translate';
 import { useGetFileDuration } from '@shared/hooks/use-get-file-duration';
 import { useGetPeakFile } from '@shared/hooks/use-get-peak-file/use-get-peak-file';
 import type { HetArchiefIeObjectFile } from '@viaa/avo2-types';
 import { isNil } from 'es-toolkit/compat';
-import React, { type FC, useCallback, useEffect, useState } from 'react';
+import React, {
+	type ComponentProps,
+	type FC,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState,
+} from 'react';
 import type { AudioOrVideoPlayerProps } from './AudioOrVideoPlayer.types';
 
 const { publicRuntimeConfig } = getConfig();
@@ -49,6 +60,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	endTime,
 }) => {
 	const [flowPlayerKey, setFlowPlayerKey] = useState<string | null>(null);
+	const [playerRoot, setPlayerRoot] = useState<HTMLElement | null>(null);
 
 	const allFilesToInRepresentation =
 		representation?.files.filter((file) => FLOWPLAYER_FORMATS.includes(file.mimeType)) || [];
@@ -110,7 +122,36 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		isAudioType(dctermsFormat)
 	);
 
-	if (isLoadingPlayableUrl || isLoadingMediaDuration) {
+	const subtitleFile = getSubtitleFile(representation?.files);
+	const { subtitlesUrl, isLoading: isLoadingSubtitles } = useGetIeObjectSubtitles(
+		subtitleFile?.id,
+		schemaIdentifier
+	);
+	// The player re-initialises whenever the subtitles prop changes identity
+	const subtitleTracks = useMemo(
+		() =>
+			getSubtitleTracks(subtitleFile, {
+				src: subtitlesUrl,
+				label: tText(
+					'modules/shared/components/audio-or-video-player/audio-or-video-player___nederlands'
+				),
+				disclaimer: tText(
+					'modules/shared/components/audio-or-video-player/audio-or-video-player___ondertitels-zijn-ai-gegenereerd-door-meemoo-er-werd-geen-menselijke-controle-op-uitgevoerd'
+				),
+			}),
+		[subtitleFile, subtitlesUrl]
+	);
+
+	const handlePlayerReady = useCallback(
+		(video: HTMLVideoElement) => {
+			setPlayerRoot(video.closest<HTMLElement>('.c-video-player-inner'));
+			onPlayerReady?.(video);
+		},
+		[onPlayerReady]
+	);
+
+	// Subtitles added later would re-initialise the player while it plays
+	if (isLoadingPlayableUrl || isLoadingMediaDuration || isLoadingSubtitles) {
 		return <Loading fullscreen locationId={`${locationId}: render media`} mode="light" />;
 	}
 
@@ -158,7 +199,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		pause: paused,
 		onPlay,
 		onPause,
-		onReady: onPlayerReady,
+		onReady: handlePlayerReady,
 		token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
 		dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
 		ui: allowFullScreen ? undefined : 1, // 1 = NO_FULLSCREEN
@@ -170,27 +211,38 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		start,
 		end,
 		controlsVariant: 'custom',
+		preload: 'metadata',
+		subtitles: subtitleTracks,
 	};
+
+	const renderFlowPlayer = (
+		typeProps: Pick<ComponentProps<typeof FlowPlayer>, 'type' | 'src'> &
+			Partial<ComponentProps<typeof FlowPlayer>>
+	) => (
+		<>
+			<FlowPlayer
+				key={`${flowPlayerKey}__${currentPlayableFile.id}`}
+				{...shared}
+				{...typeProps}
+				customControlsConfig={{
+					...sharedCustomControls,
+					showFullscreen: typeProps.type === 'video',
+				}}
+			/>
+			{subtitleTracks && <SubtitlesTeaser playerRoot={playerRoot} />}
+		</>
+	);
 
 	if (playableUrl && FLOWPLAYER_VIDEO_FORMATS.includes(currentPlayableFile.mimeType)) {
 		if (isFetchingPlayableUrl) {
 			return <Loading fullscreen locationId={`${locationId}: render video`} mode="light" />;
 		}
-		return (
-			<FlowPlayer
-				key={`${flowPlayerKey}__${currentPlayableFile.id}`}
-				type="video"
-				src={playableUrl as string}
-				poster={poster || representation?.thumbnailUrl || currentPlayableFile.thumbnailUrl}
-				renderLoader={() => <Loading locationId="flowplayer suspense" fullscreen mode="light" />}
-				preload="metadata"
-				{...shared}
-				customControlsConfig={{
-					...sharedCustomControls,
-					showFullscreen: true,
-				}}
-			/>
-		);
+		return renderFlowPlayer({
+			type: 'video',
+			src: playableUrl,
+			poster: poster || representation?.thumbnailUrl || currentPlayableFile.thumbnailUrl,
+			renderLoader: () => <Loading locationId="flowplayer suspense" fullscreen mode="light" />,
+		});
 	}
 	// Audio player
 	if (playableUrl && FLOWPLAYER_AUDIO_FORMATS.includes(currentPlayableFile.mimeType)) {
@@ -203,24 +255,10 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				/>
 			);
 		}
-		return (
-			<FlowPlayer
-				key={`${flowPlayerKey}__${currentPlayableFile.id}`}
-				type="audio"
-				src={[
-					{
-						src: playableUrl as string,
-						type: currentPlayableFile.mimeType,
-					},
-				]}
-				waveformData={peakJson?.data || undefined}
-				preload="metadata"
-				{...shared}
-				customControlsConfig={{
-					...sharedCustomControls,
-					showFullscreen: false,
-				}}
-			/>
-		);
+		return renderFlowPlayer({
+			type: 'audio',
+			src: [{ src: playableUrl, type: currentPlayableFile.mimeType }],
+			waveformData: peakJson?.data || undefined,
+		});
 	}
 };

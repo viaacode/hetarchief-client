@@ -1,0 +1,99 @@
+@use "src/styles/abstracts" as abstracts;
+
+// Sizes from the design (Figma)
+$teaser-width: 25.6rem;
+$teaser-padding-x: abstracts.$spacer-sm;
+$teaser-gap: abstracts.$spacer-xs + abstracts.$spacer-xxs;
+$edge-margin: abstracts.$spacer-xs;
+$button-gap: abstracts.$spacer-xs + abstracts.$spacer-xxs;
+$arrow-width: 3.4rem;
+$arrow-height: 1.3rem;
+$arrow-offset-from-right: 4.9rem;
+$arrow-overlap: abstracts.$spacer-xs;
+
+// Nested under .flowplayer on purpose: the player resets every descendant with `.flowplayer *`
+// (transparent background, white text), which would win against a single class.
+// The component only measures (px): --subtitles-teaser-anchor-x is the middle of the subtitles
+// button from the player's left edge, --subtitles-teaser-button-offset runs from the player's bottom
+// to the top of the button. On a narrow player the pill shrinks and the arrow slides along it.
+:global(.flowplayer) .c-subtitles-teaser {
+	--subtitles-teaser-width: min(#{$teaser-width}, calc(var(--subtitles-teaser-player-width) - #{2 * $edge-margin}));
+	--subtitles-teaser-left: clamp(
+		#{$edge-margin},
+		calc(var(--subtitles-teaser-anchor-x) + #{$arrow-offset-from-right} - var(--subtitles-teaser-width)),
+		calc(var(--subtitles-teaser-player-width) - #{$edge-margin} - var(--subtitles-teaser-width))
+	);
+
+	position: absolute;
+	z-index: 2;
+	left: var(--subtitles-teaser-left);
+
+	// Without the controls there is no button to point at, so it drops to the bottom edge
+	bottom: $edge-margin;
+	display: flex;
+	align-items: center;
+	gap: $teaser-gap;
+	width: var(--subtitles-teaser-width);
+	margin: 0;
+	padding: abstracts.$spacer-xs $teaser-padding-x;
+	border: 0;
+	border-radius: abstracts.$border-radius;
+	background-color: abstracts.$teal;
+	box-shadow: 0 0 0.8rem 0 rgba(abstracts.$black, 0.24);
+	color: abstracts.$black;
+	font-family: inherit;
+	font-size: abstracts.$font-size-sm;
+	font-weight: abstracts.$font-weight-medium;
+	line-height: 1.6rem;
+	text-align: left;
+	cursor: pointer;
+	transition: bottom abstracts.$timing-default;
+
+	&--above-button {
+		bottom: calc(var(--subtitles-teaser-button-offset) + #{$button-gap});
+	}
+
+	// The player's own focus outline is teal, which disappears on the teal pill
+	&:focus-visible {
+		outline: 0.2rem solid abstracts.$white;
+		outline-offset: 0.2rem;
+		box-shadow:
+			0 0 0 0.2rem abstracts.$black,
+			0 0 0.8rem 0 rgba(abstracts.$black, 0.24);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+
+	&__icon {
+		flex-shrink: 0;
+		color: inherit;
+		font-size: abstracts.$font-size-lg;
+	}
+
+	&__label {
+		flex: 1 0 0;
+		color: inherit;
+	}
+
+	&__arrow {
+		position: absolute;
+		top: calc(100% - #{$arrow-overlap});
+		left: clamp(
+			#{$teaser-padding-x},
+			calc(var(--subtitles-teaser-anchor-x) - var(--subtitles-teaser-left) - #{$arrow-width * 0.5}),
+			calc(var(--subtitles-teaser-width) - #{$teaser-padding-x} - #{$arrow-width})
+		);
+		width: $arrow-width;
+		height: $arrow-height;
+		background-color: transparent;
+		color: abstracts.$teal;
+		pointer-events: none;
+
+		// currentColor would resolve on the path, which the player's reset turned white
+		path {
+			fill: abstracts.$teal;
+		}
+	}
+}

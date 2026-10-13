@@ -29,6 +29,27 @@ describe('seekPlayerVideo', () => {
 		expect(video.play).not.toHaveBeenCalled();
 	});
 
+	it('reveals the frame of a started player when asked to, as long as it is paused', async () => {
+		const video = createVideo(false);
+
+		await seekPlayerVideo(video, 42, true);
+
+		expect(video.play).toHaveBeenCalled();
+		expect(video.pause).toHaveBeenCalled();
+		expect(video.currentTime).toBe(42);
+	});
+
+	it('does not pause a started player that is playing when asked to reveal', async () => {
+		const video = createVideo(false);
+		Object.defineProperty(video, 'paused', { get: () => false });
+
+		await seekPlayerVideo(video, 42, true);
+
+		expect(video.play).not.toHaveBeenCalled();
+		expect(video.pause).not.toHaveBeenCalled();
+		expect(video.currentTime).toBe(42);
+	});
+
 	it('plays muted and pauses on a player that has not played yet, then restores the sound', async () => {
 		const video = createVideo(true);
 		video.muted = false;

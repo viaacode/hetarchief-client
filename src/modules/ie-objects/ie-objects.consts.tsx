@@ -48,6 +48,13 @@ export const IMAGE_API_FORMATS: string[] = ['image/jph', 'image/jp2'];
 export const IMAGE_BROWSE_COPY_FORMATS: string[] = ['image/jpeg'];
 export const XML_FORMATS: string[] = ['application/xml'];
 export const JSON_FORMATS: string[] = ['application/json'];
+// The proxy converts SRT to VTT, so the player always receives VTT
+export const SUBTITLE_FORMATS: string[] = [
+	'text/vtt',
+	'application/x-subrip',
+	'text/srt',
+	'application/x-srt',
+];
 export const MIN_LENGTH_SCHEMA_IDENTIFIER_V2 = 36;
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
