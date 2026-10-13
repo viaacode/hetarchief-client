@@ -33,7 +33,7 @@ const LANGUAGE_FILTER = {
 	tabs: [],
 };
 
-/** Herbruikbaarheid brings its own list, so it never queries the aggregations. */
+/** Herbruikbaarheid brings its own list of every value, the hook narrows it to the ones with hits. */
 const REUSABILITY_FILTER = {
 	id: SearchFilterId.Reusability,
 	// No tText since this is a test file
@@ -108,19 +108,18 @@ describe('CheckboxListFilterForm', () => {
 		expect(labels).toEqual(['Frans', 'Nederlands']);
 	});
 
-	it('takes its options from the registry when the filter carries its own list', () => {
+	// Which of the fixed options have hits is decided by useGetFilterOptions, so the form must not
+	// list the filter's own options itself
+	it('lists what the hook returns for a filter that carries its own list', () => {
+		useGetFilterOptions.mockReturnValue({
+			options: [{ label: 'Publiek domein', value: 'public-domain' }],
+			isLoading: false,
+		});
+
 		renderForm(REUSABILITY_FILTER);
 
-		expect(screen.getByText('Copyright onbepaald')).toBeInTheDocument();
 		expect(screen.getByText('Publiek domein')).toBeInTheDocument();
-		expect(screen.queryByText('Nederlands')).not.toBeInTheDocument();
-	});
-
-	// A filter with its own list must not fire the extra aggregation request of ARC-3806 goal 6
-	it('does not query the aggregations for a filter that carries its own list', () => {
-		renderForm(REUSABILITY_FILTER);
-
-		expect(useGetFilterOptions).toHaveBeenCalledWith(REUSABILITY_FILTER, false);
+		expect(screen.queryByText('Copyright onbepaald')).not.toBeInTheDocument();
 	});
 
 	it('hands the ticked values back, and drops one that is unticked again', () => {

@@ -90,6 +90,8 @@ export enum ElasticsearchFieldNames {
 	RightsForNewspaper = 'dcterms_rights_statement',
 	RightsForAudioVideo = 'reuse_category.id',
 	LocationCreated = 'schema_location_created',
+	/** Derived by the proxy from the rights, one bucket per reusability category with hits. */
+	Reusability = 'reusability',
 }
 
 export enum VisitorSpaceOrderProps {
