@@ -85,7 +85,7 @@ export const AiEntityCard: FC<AiEntityCardProps> = ({
 				</Link>
 			</div>
 
-			{hasIntervals && durationSeconds ? (
+			{hasIntervals && !!durationSeconds && (
 				<AiEntityTimeline
 					intervals={entity.intervals}
 					durationSeconds={durationSeconds}
@@ -93,7 +93,7 @@ export const AiEntityCard: FC<AiEntityCardProps> = ({
 					isInteractive={isInteractive}
 					onSelect={onSelectInterval}
 				/>
-			) : null}
+			)}
 
 			{hasIntervals && (
 				<AiEntityIntervalPills
