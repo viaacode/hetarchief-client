@@ -1,9 +1,9 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
 import { FileMentionEntityType } from '@ie-objects/ie-objects.types';
 import type { AiEntity } from '@ie-objects/utils/map-ai-entities';
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@shared/helpers/translate', () => ({
 	tText: (key: string, params?: Record<string, unknown>) =>
@@ -11,6 +11,23 @@ vi.mock('@shared/helpers/translate', () => ({
 }));
 
 import { AiEntityNavigationOverlay } from './AiEntityNavigationOverlay';
+
+const CONTROLS_HIDDEN_CLASS = 'c-video-player-inner--controls-hidden';
+
+let root: HTMLElement;
+
+beforeEach(() => {
+	root = document.createElement('div');
+	root.classList.add('c-video-player-inner');
+	document.body.appendChild(root);
+});
+
+afterEach(() => {
+	document.body.innerHTML = '';
+});
+
+const getOverlay = () =>
+	root.querySelector<HTMLElement>('[class*="c-ai-entity-navigation-overlay"]');
 
 const entity = (overrides: Partial<AiEntity> = {}): AiEntity => ({
 	id: 'a',
@@ -34,6 +51,7 @@ const renderOverlay = (
 	const onClose = vi.fn();
 	render(
 		<AiEntityNavigationOverlay
+			playerRoot={root}
 			entity={entity()}
 			intervalIndex={1}
 			onSelectInterval={onSelectInterval}
@@ -52,28 +70,140 @@ describe('Component: <AiEntityNavigationOverlay />', () => {
 		expect(screen.getByText('index-van-total 2 3')).toBeInTheDocument();
 	});
 
-	it('sits above the player controls, or at the bottom edge without them', () => {
-		const { container, rerender } = render(
-			<AiEntityNavigationOverlay
-				entity={entity()}
-				intervalIndex={1}
-				onSelectInterval={vi.fn()}
-				onClose={vi.fn()}
-			/>
-		);
-		const overlay = container.firstElementChild;
-		expect(overlay?.className).toContain('--raised');
+	it('sits above the player controls, or at the bottom edge while they are hidden', async () => {
+		renderOverlay();
+		expect(getOverlay()?.className).toContain('--raised');
 
-		rerender(
+		await act(async () => {
+			root.classList.add(CONTROLS_HIDDEN_CLASS);
+		});
+		expect(getOverlay()?.className).not.toContain('--raised');
+
+		await act(async () => {
+			root.classList.remove(CONTROLS_HIDDEN_CLASS);
+		});
+		expect(getOverlay()?.className).toContain('--raised');
+	});
+
+	it('is rendered inside the player, so hovering it is not leaving the player', () => {
+		renderOverlay();
+
+		expect(root).toContainElement(screen.getByText('Jane Eve Doe'));
+	});
+
+	it('shows nothing without a player', () => {
+		const { container } = render(
 			<AiEntityNavigationOverlay
+				playerRoot={null}
 				entity={entity()}
 				intervalIndex={1}
 				onSelectInterval={vi.fn()}
 				onClose={vi.fn()}
-				isRaised={false}
 			/>
 		);
-		expect(overlay?.className).not.toContain('--raised');
+
+		expect(container).toBeEmptyDOMElement();
+		expect(screen.queryByText('Jane Eve Doe')).not.toBeInTheDocument();
+	});
+
+	it('keeps the clicks away from the player, which toggles playback on them, and still works', () => {
+		const { onSelectInterval } = renderOverlay();
+		const playerClick = vi.fn();
+		root.addEventListener('click', playerClick);
+
+		fireEvent.click(screen.getByRole('button', { name: 'volgend-moment' }));
+
+		expect(onSelectInterval).toHaveBeenCalledWith(2);
+		expect(playerClick).not.toHaveBeenCalled();
+	});
+
+	it('keeps the player awake while the controls show, without waking it from the bar', async () => {
+		renderOverlay();
+		const playerMove = vi.fn();
+		root.addEventListener('mousemove', playerMove);
+		const button = screen.getByRole('button', { name: 'volgend-moment' });
+
+		fireEvent.touchStart(button);
+		fireEvent.pointerDown(button);
+		expect(playerMove).toHaveBeenCalledTimes(1);
+
+		await act(async () => {
+			root.classList.add(CONTROLS_HIDDEN_CLASS);
+		});
+		fireEvent.touchStart(button);
+		expect(playerMove).toHaveBeenCalledTimes(1);
+	});
+
+	it('keeps the player awake on a key press while the controls show', async () => {
+		renderOverlay();
+		const playerMove = vi.fn();
+		root.addEventListener('mousemove', playerMove);
+		const button = screen.getByRole('button', { name: 'volgend-moment' });
+
+		fireEvent.keyDown(button, { key: 'Enter' });
+		expect(playerMove).toHaveBeenCalledTimes(1);
+
+		await act(async () => {
+			root.classList.add(CONTROLS_HIDDEN_CLASS);
+		});
+		fireEvent.keyDown(button, { key: 'Enter' });
+		expect(playerMove).toHaveBeenCalledTimes(1);
+	});
+
+	it('keeps the player awake on a click without touch or key events, as assistive tech sends', () => {
+		renderOverlay();
+		const playerMove = vi.fn();
+		root.addEventListener('mousemove', playerMove);
+
+		fireEvent.click(screen.getByRole('button', { name: 'volgend-moment' }));
+
+		expect(playerMove).toHaveBeenCalledTimes(1);
+	});
+
+	it('keeps the keys away from the player, which would take Space and the arrows', () => {
+		renderOverlay();
+		const playerKey = vi.fn();
+		root.addEventListener('keydown', playerKey);
+		root.addEventListener('keyup', playerKey);
+
+		const button = screen.getByRole('button', { name: 'volgend-moment' });
+		fireEvent.keyDown(button, { key: ' ' });
+		fireEvent.keyUp(button, { key: ' ' });
+
+		expect(playerKey).not.toHaveBeenCalled();
+	});
+
+	it('shows nothing in the root of a player that was replaced', () => {
+		root.remove();
+
+		render(
+			<AiEntityNavigationOverlay
+				playerRoot={root}
+				entity={entity()}
+				intervalIndex={1}
+				onSelectInterval={vi.fn()}
+				onClose={vi.fn()}
+			/>
+		);
+
+		expect(root.childElementCount).toBe(0);
+	});
+
+	it('removes itself from the player when it unmounts', () => {
+		const { unmount } = render(
+			<AiEntityNavigationOverlay
+				playerRoot={root}
+				entity={entity()}
+				intervalIndex={1}
+				onSelectInterval={vi.fn()}
+				onClose={vi.fn()}
+			/>
+		);
+		expect(root.childElementCount).toBe(1);
+
+		unmount();
+
+		expect(root.childElementCount).toBe(0);
 	});
 
 	it('goes to the previous and the next interval', () => {
@@ -89,6 +219,7 @@ describe('Component: <AiEntityNavigationOverlay />', () => {
 	it('cannot go before the first or after the last interval', () => {
 		const { unmount } = render(
 			<AiEntityNavigationOverlay
+				playerRoot={root}
 				entity={entity()}
 				intervalIndex={0}
 				onSelectInterval={vi.fn()}
@@ -120,6 +251,7 @@ describe('Component: <AiEntityNavigationOverlay />', () => {
 	it('shows the first letter of a place or organisation in a coloured circle', () => {
 		const { unmount } = render(
 			<AiEntityNavigationOverlay
+				playerRoot={root}
 				entity={entity({ type: FileMentionEntityType.PLACE, name: 'Antwerpen' })}
 				intervalIndex={0}
 				onSelectInterval={vi.fn()}
@@ -142,8 +274,9 @@ describe('Component: <AiEntityNavigationOverlay />', () => {
 	});
 
 	it('does not use the still of a place or organisation', () => {
-		const { container } = render(
+		render(
 			<AiEntityNavigationOverlay
+				playerRoot={root}
 				entity={entity({ type: FileMentionEntityType.PLACE, name: 'Antwerpen', still: 'x.jpg' })}
 				intervalIndex={0}
 				onSelectInterval={vi.fn()}
@@ -151,6 +284,6 @@ describe('Component: <AiEntityNavigationOverlay />', () => {
 			/>
 		);
 
-		expect(container.querySelector('img')).not.toBeInTheDocument();
+		expect(root.querySelector('img')).not.toBeInTheDocument();
 	});
 });

@@ -182,7 +182,7 @@ describe('AudioOrVideoPlayer subtitles', () => {
 		});
 
 		expect(mocks.subtitlesTeaser).toHaveBeenLastCalledWith({ playerRoot });
-		expect(onPlayerReady).toHaveBeenCalledWith(video);
+		expect(onPlayerReady).toHaveBeenCalledWith(video, playerRoot);
 	});
 
 	it('also offers the subtitles on an audio player, without a fullscreen button', () => {

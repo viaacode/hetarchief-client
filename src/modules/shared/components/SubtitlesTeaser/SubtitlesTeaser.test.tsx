@@ -1,13 +1,10 @@
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 
 import '@testing-library/jest-dom';
+import { CONTROLS_HIDDEN_CLASS } from '@shared/hooks/use-player-controls-visible';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SubtitlesTeaser } from './SubtitlesTeaser';
-import {
-	CONTROLS_HIDDEN_CLASS,
-	SUBTITLES_TEASER_COOKIE,
-	SUBTITLES_TEASER_DURATION_MS,
-} from './SubtitlesTeaser.const';
+import { SUBTITLES_TEASER_COOKIE, SUBTITLES_TEASER_DURATION_MS } from './SubtitlesTeaser.const';
 
 vi.mock('@shared/helpers/translate', () => ({
 	tText: (key: string) => key.split('___')[1] ?? key,

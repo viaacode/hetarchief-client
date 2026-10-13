@@ -144,8 +144,9 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 
 	const handlePlayerReady = useCallback(
 		(video: HTMLVideoElement) => {
-			setPlayerRoot(video.closest<HTMLElement>('.c-video-player-inner'));
-			onPlayerReady?.(video);
+			const root = video.closest<HTMLElement>('.c-video-player-inner');
+			setPlayerRoot(root);
+			onPlayerReady?.(video, root);
 		},
 		[onPlayerReady]
 	);

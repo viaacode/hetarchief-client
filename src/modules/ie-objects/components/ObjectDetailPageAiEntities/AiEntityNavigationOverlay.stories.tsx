@@ -8,16 +8,6 @@ import { AiEntityNavigationOverlay } from './AiEntityNavigationOverlay';
 export default {
 	title: 'Components/AiEntityNavigationOverlay',
 	component: AiEntityNavigationOverlay,
-	decorators: [
-		(Story) => (
-			// Stands in for the media container the overlay is positioned in
-			<div
-				style={{ position: 'relative', width: '37.5rem', height: '24rem', background: '#303030' }}
-			>
-				<Story />
-			</div>
-		),
-	],
 } as Meta<typeof AiEntityNavigationOverlay>;
 
 const entity = (type: FileMentionEntityType, name: string): AiEntity => ({
@@ -35,12 +25,21 @@ const entity = (type: FileMentionEntityType, name: string): AiEntity => ({
 
 const Template: StoryFn<typeof AiEntityNavigationOverlay> = (args) => {
 	const [intervalIndex, setIntervalIndex] = useState(args.intervalIndex);
+	// Stands in for the player: the overlay is rendered into it
+	const [playerRoot, setPlayerRoot] = useState<HTMLDivElement | null>(null);
 	return (
-		<AiEntityNavigationOverlay
-			{...args}
-			intervalIndex={intervalIndex}
-			onSelectInterval={setIntervalIndex}
-		/>
+		<div
+			ref={setPlayerRoot}
+			className="flowplayer c-video-player-inner"
+			style={{ position: 'relative', width: '37.5rem', height: '24rem', background: '#303030' }}
+		>
+			<AiEntityNavigationOverlay
+				{...args}
+				playerRoot={playerRoot}
+				intervalIndex={intervalIndex}
+				onSelectInterval={setIntervalIndex}
+			/>
+		</div>
 	);
 };
 

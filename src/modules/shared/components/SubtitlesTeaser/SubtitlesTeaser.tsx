@@ -1,11 +1,11 @@
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
+import { usePlayerControlsVisible } from '@shared/hooks/use-player-controls-visible';
 import clsx from 'clsx';
 import { type CSSProperties, type FC, useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
-	CONTROLS_HIDDEN_CLASS,
 	SUBTITLES_BUTTON_SELECTOR,
 	SUBTITLES_TEASER_COOKIE,
 	SUBTITLES_TEASER_COOKIE_MAX_AGE_SECONDS,
@@ -62,8 +62,8 @@ export const SubtitlesTeaser: FC<SubtitlesTeaserProps> = ({ playerRoot: candidat
 	const [isExpired, setIsExpired] = useState(false);
 	const [isTriggered, setIsTriggered] = useState(false);
 	const [isHeld, setIsHeld] = useState(false);
-	const [areControlsVisible, setAreControlsVisible] = useState(false);
 	const [position, setPosition] = useState<TeaserPosition | null>(null);
+	const areControlsVisible = usePlayerControlsVisible(playerRoot);
 
 	useEffect(() => {
 		setIsDismissed(document.cookie.split('; ').includes(`${SUBTITLES_TEASER_COOKIE}=true`));
@@ -77,20 +77,6 @@ export const SubtitlesTeaser: FC<SubtitlesTeaserProps> = ({ playerRoot: candidat
 		}
 		setIsDismissed(true);
 	}, []);
-
-	useEffect(() => {
-		if (!playerRoot) {
-			return;
-		}
-
-		const update = () =>
-			setAreControlsVisible(!playerRoot.classList.contains(CONTROLS_HIDDEN_CLASS));
-		update();
-
-		const observer = new MutationObserver(update);
-		observer.observe(playerRoot, { attributes: true, attributeFilter: ['class'] });
-		return () => observer.disconnect();
-	}, [playerRoot]);
 
 	useEffect(() => {
 		if (areControlsVisible) {

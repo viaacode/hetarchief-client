@@ -2,8 +2,11 @@
 
 $control-height: 2.8rem;
 
-.c-ai-entity-navigation-overlay {
+// Nested under .flowplayer on purpose: the player resets every descendant with `.flowplayer *`
+// (transparent background, white text), which would win against a single class.
+:global(.flowplayer) .c-ai-entity-navigation-overlay {
 	position: absolute;
+	z-index: 2;
 	right: abstracts.$spacer-xs;
 	left: abstracts.$spacer-xs;
 	bottom: abstracts.$spacer-xs;
