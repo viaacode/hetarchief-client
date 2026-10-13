@@ -153,7 +153,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			// different sub-pixel rounding even when their final layout numbers are identical -
 			// visible as the two elements' black fills not quite lining up top or bottom. Using
 			// the same literal value .c-tab is given below removes that dependency on stretch.
-			height: 4.8rem;
+			height: 100%;
 			width: $back-to-global-search-button-width-mobile;
 
 			// The tabs beside this button have no border at all (just a background fill), so a
