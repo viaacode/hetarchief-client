@@ -802,6 +802,7 @@
   "modules/ie-objects/object-detail-page___vraag-toegang-tot-dit-object-aan-blade-aria-label": "Vraag toegang tot dit object aan",
   "modules/ie-objects/object-detail-page___zoek-tekst-in-deze-krant-input-aria-label": "Zoek hier door de tekst in deze krant ",
   "modules/ie-objects/object-detail-page___zoeken": "Zoeken",
+  "modules/ie-objects/utils/get-ie-object-av-rights___deze-informatie-wordt-verder-verzameld": "deze informatie wordt verder verzameld",
   "modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined": "Auteursrechtelijke bescherming niet bepaald",
   "modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined-external-link": "https://creativecommons.org/publicdomain/mark/1.0/deed.nl",
   "modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined-internal-link": "https://creativecommons.org/publicdomain/mark/1.0/deed.nl",
