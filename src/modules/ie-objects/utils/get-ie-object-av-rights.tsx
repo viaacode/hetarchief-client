@@ -215,7 +215,12 @@ export function getIeObjectAvRights(
 
 	if (ieObject.licenses.some((license) => METADATA_LICENSES.has(license))) {
 		// Placeholder label: neither a link nor an icon
-		return { label: tText('deze informatie wordt verder verzameld'), icon: null };
+		return {
+			label: tText(
+				'modules/ie-objects/utils/get-ie-object-av-rights___deze-informatie-wordt-verder-verzameld'
+			),
+			icon: null,
+		};
 	}
 
 	return null;
