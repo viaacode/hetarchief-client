@@ -1,3 +1,4 @@
+import { isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import Icon from '@shared/components/Icon/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
@@ -10,9 +11,14 @@ export function getIeObjectRightsStatusInfo(ieObject: HetArchiefIeObject): {
 	externalLink: string;
 	internalLink: string;
 } | null {
+	if (!isNewspaperType(ieObject.dctermsFormat)) {
+		return null;
+	}
+
 	if (!ieObject.licenses.includes(HetArchiefIeObjectLicense.PUBLIEK_CONTENT)) {
 		return null; // Only objects with the public content can have a rights label: https://meemoo.atlassian.net/browse/ARC-2975
 	}
+
 	if (ieObject.licenses.includes(HetArchiefIeObjectLicense.PUBLIC_DOMAIN)) {
 		return {
 			label: tText('modules/ie-objects/utils/get-ie-object-rights-status___public-domein'),
@@ -25,10 +31,8 @@ export function getIeObjectRightsStatusInfo(ieObject: HetArchiefIeObject): {
 			),
 		};
 	}
-	if (
-		ieObject.licenses.includes(HetArchiefIeObjectLicense.COPYRIGHT_UNDETERMINED) &&
-		!ieObject.licenses.includes(HetArchiefIeObjectLicense.PUBLIC_DOMAIN)
-	) {
+
+	if (ieObject.licenses.includes(HetArchiefIeObjectLicense.COPYRIGHT_UNDETERMINED)) {
 		return {
 			label: tText('modules/ie-objects/utils/get-ie-object-rights-status___copyright-undetermined'),
 			icon: <Icon name={IconNamesLight.CopyrightUndetermined} aria-hidden />,

@@ -932,14 +932,17 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 * - kiosk users
 	 * - users with access to the visitor space of the object
 	 * - when the ocr tab is active (otherwise it overlaps with the ocr next page button)
+	 * - on the media tab
 	 */
+	const isFeedbackButtonShown =
+		!isKiosk &&
+		!hasAccessToVisitorSpaceOfObject &&
+		activeTab !== ObjectDetailTabs.Ocr &&
+		activeTab !== ObjectDetailTabs.Media;
+
 	useEffect(() => {
-		dispatch(
-			setShowZendesk(
-				!isKiosk && !hasAccessToVisitorSpaceOfObject && activeTab !== ObjectDetailTabs.Ocr
-			)
-		);
-	}, [dispatch, hasAccessToVisitorSpaceOfObject, isKiosk, activeTab]);
+		dispatch(setShowZendesk(isFeedbackButtonShown));
+	}, [dispatch, isFeedbackButtonShown]);
 
 	/**
 	 * Trigger events for viewing the ie object
