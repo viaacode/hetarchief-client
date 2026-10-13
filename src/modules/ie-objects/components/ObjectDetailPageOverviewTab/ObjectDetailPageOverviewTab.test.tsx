@@ -27,7 +27,7 @@ vi.mock('@ie-objects/components/SearchLinkTag/SearchLinkTag', () => ({
 	SearchLinkTag: ({ label }: { label: string }) => <span data-testid="search-tag">{label}</span>,
 }));
 vi.mock(
-	'@ie-objects/components/ObjectDetailPageMetadataTab/ObjectDetailPageMetadataThemes',
+	'@ie-objects/components/ObjectDetailPageOverviewTab/ObjectDetailPageMetadataThemes',
 	() => ({
 		ObjectDetailPageMetadataThemes: () => <div data-testid="themes" />,
 	})
@@ -215,6 +215,108 @@ describe('Component: <ObjectDetailPageOverviewTab />', () => {
 			renderTab();
 
 			expect(screen.queryByTestId('cards-similar')).not.toBeInTheDocument();
+		});
+	});
+
+	describe('rights', () => {
+		const RIGHTS_TITLE = 'modules/ie-objects/object-detail-page___rechten';
+		const PLACEHOLDER_LABEL = 'deze informatie wordt verder verzameld';
+
+		it('shows the placeholder without a link for audio/video with a metadata license', () => {
+			renderTab({ licenses: [HetArchiefIeObjectLicense.PUBLIEK_METADATA_LTD] });
+
+			expect(screen.getByText(RIGHTS_TITLE)).toBeInTheDocument();
+			expect(screen.getByText(PLACEHOLDER_LABEL)).toBeInTheDocument();
+			expect(screen.getByText(PLACEHOLDER_LABEL).closest('a')).toBeNull();
+		});
+
+		it('shows the placeholder to kiosk visitors too', () => {
+			state.isKiosk = true;
+			renderTab({ licenses: [HetArchiefIeObjectLicense.PUBLIEK_METADATA_ALL] });
+
+			expect(screen.getByText(PLACEHOLDER_LABEL)).toBeInTheDocument();
+		});
+
+		it('leaves the section out for audio/video without a metadata license', () => {
+			renderTab({ licenses: [] });
+
+			expect(screen.queryByText(RIGHTS_TITLE)).not.toBeInTheDocument();
+		});
+
+		it('shows the newspaper rights status with its links for public newspapers', () => {
+			renderTab({
+				dctermsFormat: HetArchiefIeObjectType.NEWSPAPER,
+				licenses: [
+					HetArchiefIeObjectLicense.PUBLIEK_CONTENT,
+					HetArchiefIeObjectLicense.PUBLIC_DOMAIN,
+				],
+			});
+
+			expect(screen.getByText(RIGHTS_TITLE)).toBeInTheDocument();
+			expect(
+				screen.getByRole('link', {
+					name: 'modules/ie-objects/utils/get-ie-object-rights-status___public-domein',
+				})
+			).toHaveAttribute(
+				'href',
+				'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-internal-link'
+			);
+			expect(
+				screen
+					.getAllByRole('link')
+					.some(
+						(link) =>
+							link.getAttribute('href') ===
+							'modules/ie-objects/utils/get-ie-object-rights-status___public-domain-external-link'
+					)
+			).toBe(true);
+		});
+
+		it('leaves the section out for newspapers without public content', () => {
+			renderTab({
+				dctermsFormat: HetArchiefIeObjectType.NEWSPAPER,
+				licenses: [HetArchiefIeObjectLicense.PUBLIC_DOMAIN],
+			});
+
+			expect(screen.queryByText(RIGHTS_TITLE)).not.toBeInTheDocument();
+		});
+
+		it('does not show the newspaper rights status for audio/video in the public domain', () => {
+			renderTab({
+				licenses: [
+					HetArchiefIeObjectLicense.PUBLIEK_CONTENT,
+					HetArchiefIeObjectLicense.PUBLIC_DOMAIN,
+					HetArchiefIeObjectLicense.PUBLIEK_METADATA_LTD,
+				],
+			});
+
+			expect(
+				screen.queryByText('modules/ie-objects/utils/get-ie-object-rights-status___public-domein')
+			).not.toBeInTheDocument();
+			expect(screen.getByText(PLACEHOLDER_LABEL)).toBeInTheDocument();
+		});
+
+		it('shows the copyright holder and license distributor next to the usage label', () => {
+			renderTab({
+				licenses: [HetArchiefIeObjectLicense.PUBLIEK_METADATA_LTD],
+				copyrightHolder: 'SABAM',
+				rightsInfo: { reuseLabel: '© Vlaams Parlement', licenseDistributor: 'Licentiegever X' },
+			} as Partial<HetArchiefIeObject>);
+
+			expect(screen.getByText('modules/ie-objects/ie-objects___rechthebbende')).toBeInTheDocument();
+			expect(screen.getByText('SABAM')).toBeInTheDocument();
+			expect(screen.getByText('modules/ie-objects/ie-objects___licentiegever')).toBeInTheDocument();
+			expect(screen.getByText('Licentiegever X')).toBeInTheDocument();
+		});
+
+		it('shows the usage label instead of the placeholder when there is one', () => {
+			renderTab({
+				licenses: [HetArchiefIeObjectLicense.PUBLIEK_METADATA_LTD],
+				rightsInfo: { reuseLabel: '© Vlaams Parlement' },
+			} as Partial<HetArchiefIeObject>);
+
+			expect(screen.getByText('© Vlaams Parlement')).toBeInTheDocument();
+			expect(screen.queryByText(PLACEHOLDER_LABEL)).not.toBeInTheDocument();
 		});
 	});
 
