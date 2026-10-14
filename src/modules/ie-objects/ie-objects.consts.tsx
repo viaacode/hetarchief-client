@@ -361,7 +361,6 @@ export const MEDIA_ACTIONS = ({
 					]
 				: []) as ActionItem[]),
 		],
-		limit: 1,
 		onClickAction: () => null,
 		id: 'object-detail-page__metadata__media-actions',
 	};

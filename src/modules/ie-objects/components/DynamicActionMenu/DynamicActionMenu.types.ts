@@ -5,7 +5,6 @@ import type { ReactNode } from 'react';
 export interface DynamicActionMenuProps extends DefaultComponentProps {
 	children?: ReactNode;
 	actions: ActionItem[];
-	limit?: number;
 	onClickAction: (id: MediaActions) => void;
 	id: string;
 	/** Defaults to the site-wide teal primary CTA; overridden by the object detail page header */
