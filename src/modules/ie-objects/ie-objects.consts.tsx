@@ -5,6 +5,7 @@ import {
 	MediaActions,
 	MetadataExportFormats,
 	ObjectDetailTabs,
+	SubtitleFormat,
 } from '@ie-objects/ie-objects.types';
 import type { MenuItemInfo, TabProps } from '@meemoo/react-components';
 import { Icon, type IconName } from '@shared/components/Icon';
@@ -48,6 +49,7 @@ export const IMAGE_API_FORMATS: string[] = ['image/jph', 'image/jp2'];
 export const IMAGE_BROWSE_COPY_FORMATS: string[] = ['image/jpeg'];
 export const XML_FORMATS: string[] = ['application/xml'];
 export const JSON_FORMATS: string[] = ['application/json'];
+export const SUBTITLE_FORMATS: string[] = Object.values(SubtitleFormat);
 export const MIN_LENGTH_SCHEMA_IDENTIFIER_V2 = 36;
 
 export const METADATA_EXPORT_OPTIONS = (): MenuItemInfo[] => [
@@ -168,16 +170,6 @@ export const OBJECT_DETAIL_TABS = (
 			ariaLabel: tText('modules/ie-objects/const/index___metadata'),
 			active: ObjectDetailTabs.Metadata === activeTab,
 		},
-		...(ocrAvailable
-			? [
-					{
-						id: ObjectDetailTabs.Ocr,
-						label: tText('modules/ie-objects/ie-objects___ocr'),
-						ariaLabel: tText('modules/ie-objects/ie-objects___ocr'),
-						active: ObjectDetailTabs.Ocr === activeTab,
-					},
-				]
-			: []),
 		...(relatedCount > 0
 			? [
 					{
@@ -189,6 +181,16 @@ export const OBJECT_DETAIL_TABS = (
 							amount: relatedCount,
 						}),
 						active: ObjectDetailTabs.Related === activeTab,
+					},
+				]
+			: []),
+		...(ocrAvailable
+			? [
+					{
+						id: ObjectDetailTabs.Ocr,
+						label: tText('modules/ie-objects/ie-objects___ocr'),
+						ariaLabel: tText('modules/ie-objects/ie-objects___ocr'),
+						active: ObjectDetailTabs.Ocr === activeTab,
 					},
 				]
 			: []),

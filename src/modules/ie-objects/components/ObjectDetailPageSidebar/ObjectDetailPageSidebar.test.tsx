@@ -103,6 +103,30 @@ describe('Component: <ObjectDetailPageSidebar />', () => {
 		expect(container).toHaveClass('c-object-detail-sidebar__content--tab-ocr');
 	});
 
+	it('leaves room under the content for the floating feedback button, only when it is shown', () => {
+		const { container, rerender } = renderSidebar({ hasFeedbackButton: true });
+		expect(container).toHaveClass('c-object-detail-sidebar__content--with-feedback-button');
+
+		rerender(
+			<ObjectDetailPageSidebar
+				mediaInfo={undefined}
+				onClickAction={vi.fn()}
+				hasAccessToVisitorSpaceOfObject={false}
+				currentPageIndex={0}
+				onReadMoreClicked={vi.fn()}
+				activeTab={ObjectDetailTabs.Metadata}
+				similar={[]}
+				tabs={<div data-testid="tabs" />}
+				containerRef={{ current: container }}
+				isProgrammaticScrollRef={{ current: false }}
+			>
+				<div data-testid="content" />
+			</ObjectDetailPageSidebar>
+		);
+
+		expect(container).not.toHaveClass('c-object-detail-sidebar__content--with-feedback-button');
+	});
+
 	it('only removes the bottom padding for the overview when it ends in the similar list', () => {
 		const similar = [{ id: 'a', title: 'a', subtitle: '', description: '', type: null }];
 		const { container, rerender } = renderSidebar({

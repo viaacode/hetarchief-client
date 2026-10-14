@@ -12,6 +12,7 @@ export interface ObjectDetailPageMetadataAiDescriptionProps {
 	synopsis?: string | null;
 	onReadMoreClicked: (item: MetadataItem) => void;
 	className?: string;
+	showDivider?: boolean;
 }
 
 export function ObjectDetailPageMetadataAiDescription({
@@ -19,13 +20,23 @@ export function ObjectDetailPageMetadataAiDescription({
 	synopsis,
 	onReadMoreClicked,
 	className,
+	showDivider,
 }: ObjectDetailPageMetadataAiDescriptionProps) {
 	if (!name && !synopsis) {
 		return null;
 	}
 
 	return (
-		<div className={clsx(styles['c-object-detail-page-metadata-ai-description'], className)}>
+		<div
+			className={clsx(
+				styles['c-object-detail-page-metadata-ai-description'],
+				showDivider && styles['c-object-detail-page-metadata-ai-description--has-divider'],
+				className
+			)}
+		>
+			{showDivider && (
+				<hr className={styles['c-object-detail-page-metadata-ai-description__divider']} />
+			)}
 			<div className={styles['c-object-detail-page-metadata-ai-description__header']}>
 				{name && (
 					<h2 className={styles['c-object-detail-page-metadata-ai-description__title']}>{name}</h2>
@@ -34,7 +45,6 @@ export function ObjectDetailPageMetadataAiDescription({
 				<ObjectDetailPageMetadataDisclaimerTooltip
 					iconName={IconNamesLight.Ai}
 					position="top-end"
-					iconSize="lg"
 					className={styles['c-object-detail-page-metadata-ai-description__disclaimer']}
 					ariaLabel={tText(
 						'modules/ie-objects/components/object-detail-page-metadata/object-detail-page-metadata___meer-info-over-ai-gegenereerde-titel-en-samenvatting'

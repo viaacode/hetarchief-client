@@ -16,11 +16,10 @@ import {
 } from '@ie-objects/utils/map-metadata';
 import type { TextLine } from '@iiif-viewer/IiifViewer.types';
 import { isNewspaperType } from '@meemoo/admin-core-ui/admin';
+import { Alert } from '@meemoo/react-components';
 import { CopyButton } from '@shared/components/CopyButton';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import getConfig from '@shared/config/public-runtime-config';
-import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getSearchLink } from '@shared/helpers/get-search-link';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
@@ -41,7 +40,7 @@ import React, { type FC, type ReactNode, useCallback, useMemo } from 'react';
 import MetadataList from '../Metadata/MetadataList';
 import styles from './ObjectDetailPageMetadataTab.module.scss';
 
-const { publicRuntimeConfig } = getConfig();
+// const { publicRuntimeConfig } = getConfig();
 
 export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> = ({
 	mediaInfo,
@@ -129,6 +128,7 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 		data: string | ReactNode | null | undefined
 	): ReactNode => renderSimpleMetadataFieldBase(title, data, onReadMoreClicked);
 
+	/*
 	const renderPermalink = (schemaIdentifier: string | undefined): ReactNode => {
 		if (!schemaIdentifier) {
 			return null;
@@ -140,6 +140,7 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 			</a>
 		);
 	};
+	 */
 
 	const renderProviderIdentifier = (mediaInfo: HetArchiefIeObject): ReactNode => {
 		const linkProps = getIeObjectProviderIdentifierLinkProps(mediaInfo, isKiosk);
@@ -178,8 +179,7 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 
 	const renderSourceAttributionDisclaimerTooltip = () => (
 		<ObjectDetailPageMetadataDisclaimerTooltip
-			iconName={IconNamesLight.Info}
-			iconSize="lg"
+			iconName={IconNamesLight.Console}
 			position="left"
 			className={styles['p-object-detail__source-attribution-info']}
 			ariaLabel={tText(
@@ -201,7 +201,7 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 				title={tHtml('modules/ie-objects/object-detail-page___bronvermelding')}
 				key="metadata-source-attribution"
 				renderedTitleRight={
-					<div className="u-flex u-flex-row u-gap-xs ">
+					<div className="u-flex u-flex-row">
 						<CopyButton
 							text={rightsAttributionText}
 							title={tText(
@@ -256,10 +256,11 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 						),
 						tText('modules/ie-objects/ie-objects___premis-identifier')
 					).map((info) => renderSimpleMetadataField(info.title, info.data))}
-					{renderSimpleMetadataField(
-						tText('modules/ie-objects/ie-objects___permanente-url'),
-						renderPermalink(mediaInfo.schemaIdentifier)
-					)}
+					{/* Permanente URL (field 5): the place is reserved, but it is not shown yet */}
+					{/*{renderSimpleMetadataField(*/}
+					{/*	tText('modules/ie-objects/ie-objects___permanente-url'),*/}
+					{/*	renderPermalink(mediaInfo.schemaIdentifier)*/}
+					{/*)}*/}
 					{renderSimpleMetadataField(
 						tText('modules/ie-objects/ie-objects___editie-nummer'),
 						mediaInfo.issueNumber
@@ -447,19 +448,17 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 						tText('modules/ie-objects/ie-objects___datum-toegevoegd-aan-platform'),
 						renderDate(activeFile?.createdAt)
 					)}
-					<Metadata
-						title={tText(
-							'modules/ie-objects/components/object-detail-page-metadata-tab/object-detail-page-metadata-tab___disclaimer'
-						)}
-						key="metadata-disclaimer"
-						renderedTitleRight={
-							<Icon name={IconNamesLight.Metadata} aria-hidden className="u-font-size-24" />
+
+					<Alert
+						content={
+							<div className={styles['p-object-detail__disclaimer']}>
+								{tHtml(
+									'modules/ie-objects/components/object-detail-page-metadata-tab/object-detail-page-metadata-tab___metadata-worden-aangeleverd-door-partners-van-meemoo-meemoo-is-niet-verantwoordelijk-voor-onjuistheden-of-onvolledigheden-in-deze-gegevens-meer-info'
+								)}
+								<Icon name={IconNamesLight.Metadata} aria-hidden className="u-font-size-24" />
+							</div>
 						}
-					>
-						{tHtml(
-							'modules/ie-objects/components/object-detail-page-metadata-tab/object-detail-page-metadata-tab___metadata-worden-aangeleverd-door-partners-van-meemoo-meemoo-is-niet-verantwoordelijk-voor-onjuistheden-of-onvolledigheden-in-deze-gegevens-meer-info'
-						)}
-					</Metadata>
+					/>
 
 					{/*
 					 * Fields not listed in the FA's field order - kept here, commented out,
