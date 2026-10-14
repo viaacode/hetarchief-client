@@ -421,7 +421,8 @@ describe('Component: <ObjectDetailPageOverviewTab />', () => {
 
 	describe('rights', () => {
 		const RIGHTS_TITLE = 'modules/ie-objects/object-detail-page___rechten';
-		const PLACEHOLDER_LABEL = 'deze informatie wordt verder verzameld';
+		const PLACEHOLDER_LABEL =
+			'modules/ie-objects/utils/get-ie-object-av-rights___deze-informatie-wordt-verder-verzameld';
 
 		it('shows the placeholder without a link for audio/video with a metadata license', () => {
 			renderTab({ licenses: [HetArchiefIeObjectLicense.PUBLIEK_METADATA_LTD] });

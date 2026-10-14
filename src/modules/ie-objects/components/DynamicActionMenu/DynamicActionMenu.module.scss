@@ -7,6 +7,12 @@
 	align-items: center;
 	width: 100%;
 
+	// Full layout at its natural width, so the items can be measured against the list's width
+	&--measuring &__primary-item {
+		flex-shrink: 0;
+		overflow: visible;
+	}
+
 	&__primary {
 		&-item {
 			// Lets the label's u-text-ellipsis actually truncate instead of overflowing the row
@@ -43,6 +49,15 @@
 		&-item:not(:last-of-type) {
 			padding-right: abstracts.$spacer-xs;
 		}
+
+		// Kept in the DOM so its width stays measurable, but out of the flow and the a11y tree.
+		// max-content keeps its width the same as in the flow, or measuring would never settle.
+		&-item--hidden {
+			position: absolute;
+			width: max-content;
+			visibility: hidden;
+			pointer-events: none;
+		}
 	}
 
 	&__flyout {
@@ -51,10 +66,5 @@
 
 	&__dropdown-menu {
 		@include abstracts.dropdown-menu-item-styling;
-	}
-
-	&__button {
-		width: 5rem !important;
-		height: 5rem !important;
 	}
 }
