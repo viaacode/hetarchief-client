@@ -265,15 +265,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	// Shared with ObjectDetailPageSidebar (its own collapsible header/scroll behavior) and with
 	// ObjectDetailPageOcrTab (scrollContainerRef), so both act on the same scrollable element.
 	const sidebarContentRef = useRef<HTMLDivElement>(null);
-	// Shared with ObjectDetailPageSidebar and ObjectDetailPageOcrTab: lets the OCR tab's own
-	// scroll-to-search-result flag itself as programmatic, so the sidebar's collapse-sentinel
-	// observer doesn't mistake landing near the top for the user scrolling back up.
-	const isOcrResultAutoScrollingRef = useRef(false);
-	// Writers (the OCR tab) get this setter, the reader (the sidebar) gets the ref itself. Must stay
-	// referentially stable: the OCR tab's scroll effect depends on it.
-	const setIsOcrResultAutoScrolling = useCallback((isAutoScrolling: boolean) => {
-		isOcrResultAutoScrollingRef.current = isAutoScrolling;
-	}, []);
 	// Owned here (rather than in the header/metadata components) so the header and the metadata
 	// tab share a single "read more" blade instead of each being able to open their own.
 	const [selectedMetadataField, setSelectedMetadataField] = useState<MetadataItem | null>(null);
@@ -1570,7 +1561,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					similar={similar}
 					tabs={isMobile ? null : renderTabs()}
 					containerRef={sidebarContentRef}
-					isProgrammaticScrollRef={isOcrResultAutoScrollingRef}
 					className={styles['p-object-detail__sidebar']}
 				>
 					{activeTab === ObjectDetailTabs.Overview && (
@@ -1637,7 +1627,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							onClearSearch={handleClearSearch}
 							onChangeSearchIndex={handleChangeSearchIndex}
 							scrollContainerRef={sidebarContentRef}
-							onProgrammaticScrollChange={setIsOcrResultAutoScrolling}
 						/>
 					)}
 				</ObjectDetailPageSidebar>

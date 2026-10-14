@@ -35,7 +35,6 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 	onClearSearch,
 	onChangeSearchIndex,
 	scrollContainerRef,
-	onProgrammaticScrollChange,
 }) => {
 	// Whether the search item is actually stuck (pinned at its sticky offset), not merely whether
 	// scrolling has started - see &__search-sentinel's own comment for how the sentinel's position
@@ -157,38 +156,8 @@ export const ObjectDetailPageOcrTab: FC<ObjectDetailPageOcrTabProps> = ({
 			container.scrollTop;
 		const target = Math.max(0, wordTop - container.clientHeight / 2);
 
-		// A result near the top of its page (e.g. the first match after a page change) would
-		// otherwise land scrollTop at/near 0 and make the sidebar's collapse-sentinel observer think
-		// the user scrolled back up, re-expanding the header. Flag this as programmatic instead.
-		onProgrammaticScrollChange(true);
 		container.scrollTo({ top: target });
-
-		const clearFlag = () => onProgrammaticScrollChange(false);
-		// Two rAFs, not scrollend: an instant (non-smooth) scrollTo can fire scrollend before the
-		// browser's own IntersectionObserver notification queue - which runs once per rendering
-		// frame - has processed the resulting sentinel intersection, clearing the flag too early.
-		// Two frames reliably lands after that queue has been flushed at least once.
-		let secondFrame = 0;
-		const firstFrame = requestAnimationFrame(() => {
-			secondFrame = requestAnimationFrame(clearFlag);
-		});
-		// Fallback in case rAF never fires (e.g. the tab loses focus) - without it the flag could
-		// get stuck true and permanently block the header from expanding on scroll.
-		const fallbackTimeout = window.setTimeout(clearFlag, 1000);
-
-		return () => {
-			cancelAnimationFrame(firstFrame);
-			cancelAnimationFrame(secondFrame);
-			window.clearTimeout(fallbackTimeout);
-			clearFlag();
-		};
-	}, [
-		scrollContainerRef,
-		currentSearchResultIndex,
-		currentPageIndex,
-		renderedOcrText,
-		onProgrammaticScrollChange,
-	]);
+	}, [scrollContainerRef, currentSearchResultIndex, currentPageIndex, renderedOcrText]);
 
 	return (
 		<div className={clsx(styles['p-object-detail-ocr-tab'])}>

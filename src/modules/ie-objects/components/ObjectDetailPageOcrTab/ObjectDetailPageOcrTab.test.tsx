@@ -54,7 +54,6 @@ const renderTab = (overrides: Partial<ComponentProps<typeof ObjectDetailPageOcrT
 		onClearSearch: vi.fn(),
 		onChangeSearchIndex: vi.fn(),
 		scrollContainerRef: createScrollContainer(),
-		onProgrammaticScrollChange: vi.fn(),
 		...overrides,
 	};
 	return { props, ...render(<ObjectDetailPageOcrTab {...props} />) };

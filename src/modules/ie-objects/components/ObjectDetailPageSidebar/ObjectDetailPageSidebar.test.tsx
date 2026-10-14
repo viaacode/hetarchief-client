@@ -1,4 +1,4 @@
-import { act, createEvent, fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { createRef, type RefObject } from 'react';
 
 import '@testing-library/jest-dom';
@@ -9,13 +9,18 @@ vi.mock('@ie-objects/components/ObjectDetailPageHeader/ObjectDetailPageHeader', 
 	ObjectDetailPageHeader: ({
 		isCollapsed,
 		onShowDetails,
+		onCollapseOffsetChange,
 	}: {
 		isCollapsed: boolean;
 		onShowDetails: () => void;
+		onCollapseOffsetChange: (offset: number) => void;
 	}) => (
 		<div data-testid="header" data-collapsed={String(isCollapsed)}>
 			<button type="button" onClick={onShowDetails}>
 				toon details
+			</button>
+			<button type="button" onClick={() => onCollapseOffsetChange(120)}>
+				report offset
 			</button>
 		</div>
 	),
@@ -44,7 +49,6 @@ const renderSidebar = (overrides: Partial<ObjectDetailPageSidebarProps> = {}) =>
 			similar={[]}
 			tabs={<div data-testid="tabs" />}
 			containerRef={containerRef}
-			isProgrammaticScrollRef={{ current: false }}
 			{...overrides}
 		>
 			<div data-testid="content" />
@@ -53,15 +57,6 @@ const renderSidebar = (overrides: Partial<ObjectDetailPageSidebarProps> = {}) =>
 	const container = containerRef.current as HTMLDivElement;
 	container.scrollTo = vi.fn() as unknown as typeof container.scrollTo;
 	return { ...utils, containerRef, container };
-};
-
-/** Fakes the layout jsdom doesn't compute: whether the container has anything to scroll */
-const setOverflow = (container: HTMLElement, hasOverflow: boolean) => {
-	Object.defineProperty(container, 'scrollHeight', {
-		value: hasOverflow ? 1000 : 400,
-		configurable: true,
-	});
-	Object.defineProperty(container, 'clientHeight', { value: 400, configurable: true });
 };
 
 const isCollapsed = () => screen.getByTestId('header').dataset.collapsed === 'true';
@@ -122,7 +117,6 @@ describe('Component: <ObjectDetailPageSidebar />', () => {
 				similar={similar}
 				tabs={null}
 				containerRef={{ current: container }}
-				isProgrammaticScrollRef={{ current: false }}
 			>
 				{null}
 			</ObjectDetailPageSidebar>
@@ -155,9 +149,8 @@ describe('Component: <ObjectDetailPageSidebar />', () => {
 			);
 		});
 
-		it('expands again when the sentinel returns and the container can scroll', () => {
-			const { container } = renderSidebar();
-			setOverflow(container, true);
+		it('expands again when the sentinel returns', () => {
+			renderSidebar();
 			reportSentinel(false);
 
 			reportSentinel(true);
@@ -165,14 +158,15 @@ describe('Component: <ObjectDetailPageSidebar />', () => {
 			expect(isCollapsed()).toBe(false);
 		});
 
-		it('stays collapsed when the sentinel returns only because a short tab clamped its scroll', () => {
+		it('places the sentinel and pins the sticky unit at the reported collapse offset', () => {
 			const { container } = renderSidebar();
-			setOverflow(container, false);
-			reportSentinel(false);
+			const sentinel = container.firstElementChild as HTMLElement;
+			const sticky = screen.getByTestId('header').parentElement as HTMLElement;
 
-			reportSentinel(true);
+			fireEvent.click(screen.getByRole('button', { name: 'report offset' }));
 
-			expect(isCollapsed()).toBe(true);
+			expect(sentinel.style.top).toBe('120px');
+			expect(sticky.style.top).toBe('-120px');
 		});
 
 		it('stops observing on unmount', () => {
@@ -185,88 +179,31 @@ describe('Component: <ObjectDetailPageSidebar />', () => {
 	});
 
 	describe('expanding through the header', () => {
-		it('expands and scrolls instantly to the top', () => {
+		it('scrolls smoothly to the top', () => {
+			vi.stubGlobal('matchMedia', () => ({ matches: false }));
 			const { container } = renderSidebar();
-			reportSentinel(false);
 
 			fireEvent.click(screen.getByRole('button', { name: 'toon details' }));
 
-			expect(isCollapsed()).toBe(false);
+			expect(container.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'smooth' });
+		});
+
+		it('scrolls instantly when reduced motion is preferred', () => {
+			vi.stubGlobal('matchMedia', () => ({ matches: true }));
+			const { container } = renderSidebar();
+
+			fireEvent.click(screen.getByRole('button', { name: 'toon details' }));
+
 			expect(container.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'auto' });
 		});
 	});
 
-	describe('scroll-up intent on a tab without a scrollbar', () => {
-		it('expands the collapsed header on wheel up', () => {
-			const { container } = renderSidebar();
-			setOverflow(container, false);
-			reportSentinel(false);
-
-			fireEvent.wheel(container, { deltaY: -10 });
-
-			expect(isCollapsed()).toBe(false);
-		});
-
-		it('ignores wheel down', () => {
-			const { container } = renderSidebar();
-			setOverflow(container, false);
-			reportSentinel(false);
-
-			fireEvent.wheel(container, { deltaY: 10 });
-
-			expect(isCollapsed()).toBe(true);
-		});
-
-		it('leaves native scrolling to the browser when the container can scroll', () => {
-			const { container } = renderSidebar();
-			setOverflow(container, true);
-			reportSentinel(false);
-
-			fireEvent.wheel(container, { deltaY: -10 });
-
-			expect(isCollapsed()).toBe(true);
-		});
-
-		it('expands on a downward swipe', () => {
-			const { container } = renderSidebar();
-			setOverflow(container, false);
-			reportSentinel(false);
-
-			fireEvent.touchStart(container, { touches: [{ clientY: 100 }] });
-			fireEvent.touchMove(container, { touches: [{ clientY: 140 }] });
-
-			expect(isCollapsed()).toBe(false);
-		});
-
-		it('ignores an upward swipe', () => {
-			const { container } = renderSidebar();
-			setOverflow(container, false);
-			reportSentinel(false);
-
-			fireEvent.touchStart(container, { touches: [{ clientY: 140 }] });
-			fireEvent.touchMove(container, { touches: [{ clientY: 100 }] });
-
-			expect(isCollapsed()).toBe(true);
-		});
-
-		it('never prevents the default scrolling', () => {
-			const { container } = renderSidebar();
-			setOverflow(container, false);
-			reportSentinel(false);
-
-			const event = createEvent.wheel(container, { deltaY: -10 });
-			fireEvent(container, event);
-
-			expect(event.defaultPrevented).toBe(false);
-		});
-	});
-
 	describe('tab switch', () => {
-		it('keeps a collapsed header collapsed by resting 1px below the top', () => {
-			const { container, rerender } = renderSidebar();
-			reportSentinel(false);
-			(container.scrollTo as ReturnType<typeof vi.fn>).mockClear();
-
+		const rerenderWithTab = (
+			rerender: (ui: React.ReactElement) => void,
+			container: HTMLDivElement,
+			activeTab: ObjectDetailTabs
+		) =>
 			rerender(
 				<ObjectDetailPageSidebar
 					mediaInfo={undefined}
@@ -274,17 +211,44 @@ describe('Component: <ObjectDetailPageSidebar />', () => {
 					hasAccessToVisitorSpaceOfObject={false}
 					currentPageIndex={0}
 					onReadMoreClicked={vi.fn()}
-					activeTab={ObjectDetailTabs.Ocr}
+					activeTab={activeTab}
 					similar={[]}
 					tabs={null}
 					containerRef={{ current: container }}
-					isProgrammaticScrollRef={{ current: false }}
 				>
 					{null}
 				</ObjectDetailPageSidebar>
 			);
 
+		it('starts the new tab at its own top, 1px past the sentinel, when the header is collapsed', () => {
+			const { container, rerender } = renderSidebar();
+			fireEvent.click(screen.getByRole('button', { name: 'report offset' }));
+			reportSentinel(false);
+			(container.scrollTo as ReturnType<typeof vi.fn>).mockClear();
+
+			rerenderWithTab(rerender, container, ObjectDetailTabs.Ocr);
+
+			expect(container.scrollTo).toHaveBeenCalledWith({ top: 121, behavior: 'auto' });
+		});
+
+		it('rests 1px below the top on the media tab, which has no header to scroll away', () => {
+			const { container, rerender } = renderSidebar({ activeTab: ObjectDetailTabs.Ocr });
+			fireEvent.click(screen.getByRole('button', { name: 'report offset' }));
+			reportSentinel(false);
+			(container.scrollTo as ReturnType<typeof vi.fn>).mockClear();
+
+			rerenderWithTab(rerender, container, ObjectDetailTabs.Media);
+
 			expect(container.scrollTo).toHaveBeenCalledWith({ top: 1, behavior: 'auto' });
+		});
+
+		it('leaves the scroll position alone when the header is expanded', () => {
+			const { container, rerender } = renderSidebar();
+			(container.scrollTo as ReturnType<typeof vi.fn>).mockClear();
+
+			rerenderWithTab(rerender, container, ObjectDetailTabs.Ocr);
+
+			expect(container.scrollTo).not.toHaveBeenCalled();
 		});
 	});
 });

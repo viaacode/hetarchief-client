@@ -1,40 +1,29 @@
 @use "src/styles/abstracts" as abstracts;
 
-// max-height transition technique between expanded/collapsed states (CSS can't transition to/from
-// height: auto). 200rem is generous headroom for expanded content (~527px for a plain object);
-// duration is time-based so a larger target doesn't slow the animation down.
-$max-height-expanded: 200rem;
-$max-height-collapsed: 8rem;
-
 .p-object-detail-header {
 	// Not sticky itself: ObjectDetailPageSidebar.module.scss's &__sticky wraps this together
-	// with the (desktop) tabs below it and owns the sticky/scroll-anchor behavior for both, so
-	// the tabs move and collapse as one unit with the header instead of needing their own
-	// independently-computed sticky offset.
+	// with the (desktop) tabs below it and owns the sticky behavior for both, so the tabs pin
+	// together with the collapsed bar instead of needing their own independently-computed sticky
+	// offset. Also the positioning context for the collapsed bar below.
+	position: relative;
 	overflow: hidden;
-	max-height: $max-height-expanded;
 	background-color: abstracts.$lila;
 	color: abstracts.$black;
-	transition: max-height abstracts.$animate-default;
 
 	// The tabs row above sits in a separate grid item/component; at some device-pixel ratios the
 	// shared edge rasterizes as a 1px blend between the two colors instead of a crisp line (most
 	// visible where a black inactive tab meets this purple header). Pulling this element's own
 	// opaque background up by a hair paints over that blend pixel instead of blending with it -
 	// this paints after the tabs in DOM order, so no z-index is needed. 2px (not 1px): the
-	// collapsed state (max-height transition to $max-height-collapsed) rasterizes this edge at a
-	// different sub-pixel offset than the expanded state, and 1px wasn't enough to cover it there.
+	// pinned (collapsed) state rasterizes this edge at a different sub-pixel offset than the
+	// scrolling one, and 1px wasn't enough to cover it there.
 	margin-top: -0.2rem;
 }
 
-.p-object-detail-header--collapsed {
-	max-height: $max-height-collapsed;
-}
-
-// Both states render at once (see ObjectDetailPageHeader.tsx) so the max-height transition above
-// has stable content to animate around. The display swap is delayed with `allow-discrete` until
-// the shrink ends: hiding the expanded content earlier would make the box reach its final size
-// before max-height has visibly animated. Unsupported browsers swap immediately.
+// The header always keeps its full height in the flow: collapsing never resizes it (that would
+// shift the content below). Instead the sticky wrapper pins once only the header's bottom strip is
+// left on screen (see ObjectDetailPageSidebar.tsx), and the collapsed bar below fades in over
+// exactly that strip.
 .p-object-detail-header__expanded-content {
 	display: flex;
 	flex-direction: column;
@@ -47,21 +36,24 @@ $max-height-collapsed: 8rem;
 	}
 }
 
-.p-object-detail-header--collapsed .p-object-detail-header__expanded-content {
-	display: none;
-
-	@supports (transition-behavior: allow-discrete) {
-		transition: display abstracts.$timing-default allow-discrete;
-	}
-}
-
 .p-object-detail-header__collapsed-content {
-	display: none;
+	position: absolute;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	z-index: 1;
+	display: flex;
 	flex-direction: row;
 	align-items: center;
 	justify-content: space-between;
 	gap: abstracts.$spacer-xs; // 8px
 	padding: (abstracts.$spacer-xs * 1.5) abstracts.$spacer-lg; // 12px 32px - 12px has no matching spacer token
+	background-color: abstracts.$lila;
+	opacity: 0;
+	visibility: hidden;
+	transition:
+		opacity abstracts.$animate-default,
+		visibility abstracts.$animate-default;
 
 	@media (max-width: abstracts.$breakpoint-lg) {
 		padding: (abstracts.$spacer-xs * 1.5) 2rem;
@@ -79,33 +71,14 @@ $max-height-collapsed: 8rem;
 	}
 }
 
-// A none -> flex transition flips at its start, so the delay has to come from an animation whose
-// backwards fill keeps display: none until the shrink ends.
-@keyframes collapsed-content-delay {
-	from {
-		display: none;
-	}
-}
-
 .p-object-detail-header--collapsed .p-object-detail-header__collapsed-content {
-	display: flex;
-
-	@supports (transition-behavior: allow-discrete) {
-		animation: collapsed-content-delay 0s abstracts.$timing-default backwards;
-	}
+	opacity: 1;
+	visibility: visible;
 }
 
 @media (prefers-reduced-motion: reduce) {
-	.p-object-detail-header {
+	.p-object-detail-header__collapsed-content {
 		transition: none;
-	}
-
-	.p-object-detail-header--collapsed .p-object-detail-header__expanded-content {
-		transition: none;
-	}
-
-	.p-object-detail-header--collapsed .p-object-detail-header__collapsed-content {
-		animation: none;
 	}
 }
 
