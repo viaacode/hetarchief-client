@@ -151,6 +151,7 @@ $max-height-collapsed: 8rem;
 
 .p-object-detail__title {
 	overflow-wrap: break-word;
+	width: 100%;
 	color: abstracts.$black;
 	padding-bottom: abstracts.$spacer-sm;
 	font-size: abstracts.$font-size-2xl;
