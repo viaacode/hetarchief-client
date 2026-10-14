@@ -36,12 +36,7 @@ export const CheckboxListFilterForm: FC<GenericFilterFormProps> = ({
 	const [selectedValues, setSelectedValues] = useState<string[]>(() => appliedValues);
 
 	const { reset, handleSubmit } = useForm({ defaultValues: {} });
-	const fixedOptions = filter.options?.();
-	const { options: aggregatedOptions, isLoading } = useGetFilterOptions(
-		filter,
-		!disabled && !fixedOptions
-	);
-	const options = fixedOptions ?? aggregatedOptions;
+	const { options, isLoading } = useGetFilterOptions(filter, !disabled);
 
 	// The search field appears and disappears with the number of options the filter offers, so a
 	// filter whose aggregation returns few values never shows one.

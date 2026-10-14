@@ -15,10 +15,17 @@ const state = vi.hoisted(() => ({
 	fileMentionsOptions: undefined as { enabled: boolean } | undefined,
 }));
 
-vi.mock('@shared/helpers/translate', () => ({
-	tText: (key: string) => key,
-	tHtml: (key: string) => key,
-}));
+vi.mock('@shared/helpers/translate', () => {
+	const translations: Record<string, string> = {
+		'modules/ie-objects/utils/get-ie-object-av-rights___deze-informatie-wordt-verder-verzameld':
+			'deze informatie wordt verder verzameld',
+	};
+
+	return {
+		tText: (key: string) => translations[key] ?? key,
+		tHtml: (key: string) => translations[key] ?? key,
+	};
+});
 vi.mock('next/router', () => ({ useRouter: () => ({ query: { slug: 'vrt' } }) }));
 vi.mock('react-redux', () => ({ useSelector: () => state.user }));
 vi.mock('@shared/hooks/use-locale/use-locale', () => ({ useLocale: () => 'nl' }));
