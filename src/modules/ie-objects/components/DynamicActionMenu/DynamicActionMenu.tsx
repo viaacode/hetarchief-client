@@ -13,24 +13,19 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
 import { useElementSize } from '@shared/hooks/use-element-size';
+import useIsomorphicLayoutEffect from '@shared/hooks/use-isomorphic-layout-effect';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import clsx from 'clsx';
 import { type FC, type ReactElement, type ReactNode, useRef, useState } from 'react';
 
-import {
-	DYNAMIC_ACTION_BOX,
-	DYNAMIC_ACTION_SPACER,
-	DYNAMIC_ACTION_WIDTH,
-} from './DynamicActionMenu.const';
 import styles from './DynamicActionMenu.module.scss';
 import type { ActionItem, DynamicActionMenuProps } from './DynamicActionMenu.types';
 
 const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	className,
 	actions,
-	limit = 0,
 	onClickAction,
 	id,
 	primaryButtonVariants = ['teal', 'md'],
@@ -38,8 +33,12 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 }) => {
 	const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
-	const listRef = useRef<HTMLLIElement>(null);
-	const size = useElementSize(listRef);
+	const listRef = useRef<HTMLUListElement>(null);
+	const secondaryRef = useRef<HTMLLIElement>(null);
+	const containerWidth = useElementSize(listRef)?.width;
+	// The secondary buttons (in a client-only tooltip) appear a render after mount, so their
+	// width is part of what has to trigger a re-measure
+	const secondaryWidth = useElementSize(secondaryRef)?.width;
 
 	const windowSize = useWindowSizeContext();
 	const isMobile = isMobileSize(windowSize);
@@ -47,26 +46,51 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	const primaryActions = actions.filter(({ isPrimary }: ActionItem) => isPrimary);
 	const secondaryActions = actions.filter(({ isPrimary }: ActionItem) => !isPrimary);
 
-	const totalWidth =
-		DYNAMIC_ACTION_WIDTH * secondaryActions.length +
-		DYNAMIC_ACTION_SPACER * (secondaryActions.length - 1);
+	// As many secondary actions as fit stay visible; the rest move into the dropdown. What fits is
+	// measured on the full layout: every change that can affect it first renders that layout
+	// (isMeasuring, unshrinkable primary) and reads the result before paint, so there is no flicker
+	// and no feedback loop. The secondary buttons stay mounted (hidden) when they don't fit, so
+	// their width stays measurable.
+	const [isMeasuring, setIsMeasuring] = useState(true);
+	const [visibleCount, setVisibleCount] = useState(secondaryActions.length);
 
-	// Counts buttons that don't fit the container
-	const overflowCount = size?.width
-		? Math.ceil(
-				(totalWidth - size.width) /
-					(size.width < totalWidth ? DYNAMIC_ACTION_BOX : DYNAMIC_ACTION_WIDTH)
-			)
-		: 0;
+	useIsomorphicLayoutEffect(() => {
+		setIsMeasuring(true);
+	}, [containerWidth, secondaryWidth, actions, isMobile]);
 
-	// Clamp items to hide at limit
-	const limitReached = secondaryActions.length - (overflowCount + 1) < limit;
-	const itemsToHide = limitReached ? secondaryActions.length - limit : overflowCount + 1;
+	useIsomorphicLayoutEffect(() => {
+		const list = listRef.current;
+		const secondary = secondaryRef.current;
+		if (!isMeasuring || !list || !secondary) {
+			return;
+		}
 
-	// Divide actions into visible and dropdown actions
-	const visibleActions =
-		itemsToHide > 1 ? secondaryActions.slice(0, -itemsToHide) : secondaryActions;
-	const hiddenActions = itemsToHide > 1 ? secondaryActions.slice(-itemsToHide) : [];
+		const items = Array.from(secondary.children) as HTMLElement[];
+		const itemWidth = items.at(-1)?.offsetWidth ?? 0;
+		// Not mounted yet; the width change once they are triggers a new measurement
+		if (items.length < 2 || !itemWidth) {
+			setVisibleCount(items.length);
+			setIsMeasuring(false);
+			return;
+		}
+
+		const gap = Number.parseFloat(getComputedStyle(items[0]).paddingRight);
+		const primaryWidth = Array.from(list.children).reduce(
+			(width, child) => (child === secondary ? width : width + (child as HTMLElement).offsetWidth),
+			0
+		);
+		const fitsAll =
+			primaryWidth + items.length * itemWidth + (items.length - 1) * gap <= list.clientWidth;
+
+		// Otherwise the last visible button is followed by the dropdown button, which is as wide
+		const fittingCount = Math.floor(
+			(list.clientWidth - primaryWidth - itemWidth) / (itemWidth + gap)
+		);
+		setVisibleCount(fitsAll ? items.length : Math.max(0, Math.min(items.length - 1, fittingCount)));
+		setIsMeasuring(false);
+	}, [isMeasuring]);
+
+	const hiddenActions = isMeasuring ? [] : secondaryActions.slice(visibleCount);
 
 	const renderInTooltip = (trigger: ReactNode, tooltip: string): ReactElement => {
 		return (
@@ -115,7 +139,12 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 		);
 	};
 
-	const renderSecondaryButton = (action: ActionItem) => {
+	const renderSecondaryButton = (action: ActionItem, index: number) => {
+		const itemClassName = clsx(styles['c-dynamic-action-menu__secondary-item'], {
+			[styles['c-dynamic-action-menu__secondary-item--hidden']]:
+				index >= visibleCount && !isMeasuring,
+		});
+
 		const $element = action.customElement ? (
 			action.customElement
 		) : (
@@ -130,10 +159,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 
 		if (action.url) {
 			return (
-				<div
-					className={styles['c-dynamic-action-menu__secondary-item']}
-					key={`media-action-${action.id}`}
-				>
+				<div className={itemClassName} key={`media-action-${action.id}`}>
 					<a href={action.url} target="_blank" referrerPolicy="no-referrer" rel="noreferrer">
 						{action.tooltip && !isMobile ? renderInTooltip($element, action.tooltip) : $element}
 					</a>
@@ -141,10 +167,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			);
 		}
 		return (
-			<div
-				className={styles['c-dynamic-action-menu__secondary-item']}
-				key={`media-action-${action.id}`}
-			>
+			<div className={itemClassName} key={`media-action-${action.id}`}>
 				{action.tooltip && !isMobile ? renderInTooltip($element, action.tooltip) : $element}
 			</div>
 		);
@@ -190,17 +213,16 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	};
 
 	return (
-		<ul className={clsx(className, styles['c-dynamic-action-menu'])}>
+		<ul
+			ref={listRef}
+			className={clsx(className, styles['c-dynamic-action-menu'], {
+				[styles['c-dynamic-action-menu--measuring']]: isMeasuring,
+			})}
+		>
 			{primaryActions.map(renderPrimaryButton)}
-			<li
-				className={styles['c-dynamic-action-menu__secondary']}
-				ref={listRef}
-				style={{
-					minWidth: `${(limit + 1) * DYNAMIC_ACTION_WIDTH + limit * DYNAMIC_ACTION_SPACER}px`,
-				}}
-			>
-				{visibleActions.map(renderSecondaryButton)}
-				{!!hiddenActions.length && renderDropdown(secondaryActions)}
+			<li ref={secondaryRef} className={styles['c-dynamic-action-menu__secondary']}>
+				{secondaryActions.map(renderSecondaryButton)}
+				{!!hiddenActions.length && renderDropdown(hiddenActions)}
 			</li>
 		</ul>
 	);

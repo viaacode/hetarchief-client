@@ -6,6 +6,13 @@
 	display: flex;
 	align-items: center;
 	width: 100%;
+	position: relative;
+
+	// Full layout at its natural width, so the list's scrollWidth shows whether it fits.
+	&--measuring &__primary-item {
+		flex-shrink: 0;
+		overflow: visible;
+	}
 
 	&__primary {
 		&-item {
@@ -42,6 +49,13 @@
 
 		&-item:not(:last-of-type) {
 			padding-right: abstracts.$spacer-xs;
+		}
+
+		// Kept in the DOM so its width stays measurable, but out of the flow and the a11y tree
+		&-item--hidden {
+			position: absolute;
+			visibility: hidden;
+			pointer-events: none;
 		}
 	}
 
