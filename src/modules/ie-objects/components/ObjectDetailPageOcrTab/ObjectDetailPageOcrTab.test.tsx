@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import type { ComponentProps, RefObject } from 'react';
 
 import '@testing-library/jest-dom';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('@shared/helpers/translate', () => ({
 	tText: (key: string) => key,
@@ -28,9 +28,6 @@ const createScrollContainer = (): RefObject<HTMLDivElement | null> => {
 	element.getBoundingClientRect = () => ({ top: 100 }) as DOMRect;
 	return { current: element };
 };
-
-let observe: ReturnType<typeof vi.fn>;
-let disconnect: ReturnType<typeof vi.fn>;
 
 const renderTab = (overrides: Partial<ComponentProps<typeof ObjectDetailPageOcrTab>> = {}) => {
 	const props: ComponentProps<typeof ObjectDetailPageOcrTab> = {
@@ -70,18 +67,6 @@ const searchHitOnSecondWord: Partial<ComponentProps<typeof ObjectDetailPageOcrTa
 };
 
 describe('Component: <ObjectDetailPageOcrTab />', () => {
-	beforeEach(() => {
-		observe = vi.fn();
-		disconnect = vi.fn();
-		vi.stubGlobal(
-			'IntersectionObserver',
-			class {
-				observe = observe;
-				disconnect = disconnect;
-			}
-		);
-	});
-
 	describe('active search result', () => {
 		it('scrolls the container so the active word sits in the middle', () => {
 			const scrollContainerRef = createScrollContainer();
@@ -195,26 +180,16 @@ describe('Component: <ObjectDetailPageOcrTab />', () => {
 	});
 
 	describe('search bar', () => {
-		it('renders when OCR texts are available and observes its sticky sentinel', () => {
+		it('renders when OCR texts are available', () => {
 			renderTab({ arePagesOcrTextsAvailable: true });
 
 			expect(screen.getByTestId('ocr-search')).toBeInTheDocument();
-			expect(observe).toHaveBeenCalledTimes(1);
 		});
 
-		it('is left out, without an observer, when no OCR texts are available', () => {
+		it('is left out when no OCR texts are available', () => {
 			renderTab({ arePagesOcrTextsAvailable: false });
 
 			expect(screen.queryByTestId('ocr-search')).not.toBeInTheDocument();
-			expect(observe).not.toHaveBeenCalled();
-		});
-
-		it('stops observing on unmount', () => {
-			const { unmount } = renderTab();
-
-			unmount();
-
-			expect(disconnect).toHaveBeenCalled();
 		});
 	});
 

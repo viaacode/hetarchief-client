@@ -10,6 +10,10 @@ export enum QUERY_PARAM_KEY {
 	HIGHLIGHTED_SEARCH_TERMS = 'searchTerms',
 	ACTIVE_BLADE = 'blade',
 	ACTIVE_TAB = 'tab',
+	/** Id of the AI entity whose interval is highlighted on the object detail page */
+	ACTIVE_AI_ENTITY = 'aiEntity',
+	/** Index of that interval in the entity's intervals */
+	ACTIVE_AI_INTERVAL = 'aiInterval',
 	IIIF_VIEWER_FOCUS_X = 'focusX',
 	IIIF_VIEWER_FOCUS_Y = 'focusY',
 	IIIF_VIEWER_ZOOM_LEVEL = 'zoomLevel',

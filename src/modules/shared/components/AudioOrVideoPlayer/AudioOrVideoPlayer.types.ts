@@ -16,6 +16,8 @@ export type AudioOrVideoPlayerProps = {
 	onPlay: () => void;
 	onPause: () => void;
 	onMediaReady: (isAvailable: boolean, playableFile: HetArchiefIeObjectFile | null) => void;
+	/** The video element of the flowplayer and its root (.c-video-player-inner), as soon as the player is mounted (not when the media has loaded) */
+	onPlayerReady?: (video: HTMLVideoElement, playerRoot: HTMLElement | null) => void;
 	onMediaDurationLoaded?: (duration: number) => void;
 	dctermsFormat: HetArchiefIeObjectType | null;
 	schemaIdentifier: string | undefined;

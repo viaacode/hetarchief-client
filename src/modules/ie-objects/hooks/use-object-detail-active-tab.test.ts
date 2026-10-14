@@ -115,6 +115,38 @@ describe('useObjectDetailActiveTab', () => {
 		expect(result.current.activeTab).toBe(ObjectDetailTabs.Overview);
 	});
 
+	it('changes the tab and extra query params in one url update', async () => {
+		setUrl('?expandSidebar=1');
+		const { result } = render({ objectId: 'a', isNewspaper: false });
+
+		await act(() =>
+			result.current.updateActiveTab(ObjectDetailTabs.Media, { aiEntity: 'Q1', aiInterval: '2' })
+		);
+
+		expect(replace).toHaveBeenCalledTimes(1);
+		const url = replace.mock.calls[0][0] as string;
+		expect(url).toContain('tab=media');
+		expect(url).toContain('aiEntity=Q1');
+		expect(url).toContain('aiInterval=2');
+		expect(url).toContain('expandSidebar=1');
+	});
+
+	it('updates query params without touching the tab, and removes undefined ones', async () => {
+		setUrl('?aiEntity=Q1&aiInterval=2&other=x');
+		const { result } = render({ objectId: 'a', isNewspaper: false });
+
+		await act(() =>
+			result.current.updateQueryParams({ aiEntity: undefined, aiInterval: undefined })
+		);
+
+		const url = replace.mock.calls[0][0] as string;
+		expect(url).not.toContain('tab=');
+		expect(url).not.toContain('aiEntity');
+		expect(url).not.toContain('aiInterval');
+		expect(url).toContain('other=x');
+		expect(result.current.activeTab).toBe(ObjectDetailTabs.Overview);
+	});
+
 	it('does not reset the tab when only the other props change (refetch)', async () => {
 		const { result, rerender } = render({
 			objectId: 'a',
