@@ -4,9 +4,10 @@
 	// Not sticky itself: ObjectDetailPageSidebar.module.scss's &__sticky wraps this together
 	// with the (desktop) tabs below it and owns the sticky behavior for both, so the tabs pin
 	// together with the collapsed bar instead of needing their own independently-computed sticky
-	// offset. Also the positioning context for the collapsed bar below.
+	// offset. Also the positioning context for the collapsed bar below. Deliberately no overflow
+	// clipping: with `position: relative` here, absolutely positioned dropdowns of the CTAs would
+	// otherwise be clipped at the header's bottom edge, right above the tabs.
 	position: relative;
-	overflow: hidden;
 	background-color: abstracts.$lila;
 	color: abstracts.$black;
 
