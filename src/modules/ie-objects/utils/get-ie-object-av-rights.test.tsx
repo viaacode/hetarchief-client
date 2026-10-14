@@ -24,6 +24,8 @@ vi.mock('@shared/helpers/translate', () => {
 			'Rechthebbenden niet lokaliseerbaar of niet identificeerbaar',
 		'modules/visitor-space/const/rights-filter___auteursrechtelijk-beschermd':
 			'Auteursrechtelijk beschermd',
+		'modules/ie-objects/utils/get-ie-object-av-rights___deze-informatie-wordt-verder-verzameld':
+			'deze informatie wordt verder verzameld',
 	};
 
 	return { tText: (key: string) => translations[key] ?? key };

@@ -31,6 +31,7 @@ export enum IconNamesLight {
 	CollectionShuffle = 'collection-shuffle--light',
 	Compress = 'compress--light',
 	Contact = 'contact--light',
+	Console = 'console--light',
 	Copy = 'copy--light',
 	Copyright = 'copyright--light',
 	CopyrightProtected = 'copyright--light',

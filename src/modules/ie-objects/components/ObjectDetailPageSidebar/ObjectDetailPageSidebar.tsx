@@ -20,6 +20,7 @@ export const ObjectDetailPageSidebar: FC<ObjectDetailPageSidebarProps> = ({
 	onReadMoreClicked,
 	activeTab,
 	similar,
+	hasFeedbackButton = false,
 	tabs,
 	containerRef,
 	className,
@@ -83,6 +84,7 @@ export const ObjectDetailPageSidebar: FC<ObjectDetailPageSidebarProps> = ({
 					styles['c-object-detail-sidebar__content'],
 					styles[`c-object-detail-sidebar__content--tab-${activeTab}`],
 					{
+						[styles['c-object-detail-sidebar__content--with-feedback-button']]: hasFeedbackButton,
 						// Both end in a card list that paints its own padding/background
 						[styles['c-object-detail-sidebar__content--ends-in-list']]:
 							(activeTab === ObjectDetailTabs.Overview && similar.length > 0) ||

@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-video-player {
 	.c-logo-overlay .c-logo-overlay__img {
@@ -12,7 +12,7 @@
 	}
 
 	.c-video-player-inner {
-		background-color: $shade-darker;
+		background-color: abstracts.$shade-darker;
 
 		.c-video-player-inner.c-video-player-inner--audio {
 			background-size: contain !important;
@@ -23,7 +23,7 @@
 .c-video-player-inner {
 	.fp-progress,
 	.fp-color {
-		background-color: $teal !important;
+		background-color: abstracts.$teal !important;
 	}
 
 	.fp-icon:focus,
@@ -36,17 +36,30 @@
 	.fp-volume:focus,
 	.fp-volumebtn:focus,
 	li[tabindex="0"]:focus {
-		outline: $teal solid 1px !important;
+		outline: abstracts.$teal solid 1px !important;
 	}
 
 	// We need to be more specific than the react-components
 	// so adding the fp-controls in between to make sure the styling will be overridden
 	.fp-controls .fp-cuepoint {
-		background-color: $teal-dark !important;
+		background-color: abstracts.$teal-dark !important;
+	}
+
+	// The AI subtitles must not be copy-pasted
+	.fp-captions {
+		user-select: none;
+		-webkit-touch-callout: none;
+
+		// The player's default of 16px is too small to read
+		font-size: abstracts.$font-size-md;
+
+		@media (width >= 700px) {
+			font-size: abstracts.$font-size-lg;
+		}
 	}
 
 	.c-video-player-inner {
-		background-color: $silver !important;
+		background-color: abstracts.$silver !important;
 	}
 
 	.fp-header {

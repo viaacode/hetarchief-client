@@ -1,80 +1,99 @@
 @use "sass:color";
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
 h1,
 h2,
 h3,
 h4,
 h5,
-h6 {
-	font-weight: $font-weight-bold;
+h6,
+.c-content-page-preview .c-rich-text-editor__content h1,
+.c-content-page-preview .c-rich-text-editor__content h2,
+.c-content-page-preview .c-rich-text-editor__content h3,
+.c-content-page-preview .c-rich-text-editor__content h4,
+.c-content-page-preview .c-rich-text-editor__content h5,
+.c-content-page-preview .c-rich-text-editor__content h6 {
+	font-family: abstracts.$font-family-primary;
+	font-weight: abstracts.$font-weight-bold;
 }
 
-h1 {
-	font-size: $font-size-4xl;
-	line-height: $line-height-lg;
+h1,
+.c-content-page-preview .c-rich-text-editor__content h1 {
+	font-size: abstracts.$font-size-4xl;
+	line-height: abstracts.$line-height-lg;
 }
 
-h2 {
-	font-size: $font-size-3xl;
-	line-height: $line-height-lg;
+h2,
+.c-content-page-preview .c-rich-text-editor__content h2 {
+	font-size: abstracts.$font-size-3xl;
+	line-height: abstracts.$line-height-lg;
 }
 
-h3 {
-	font-size: $font-size-2xl;
-	line-height: $line-height-md;
+h3,
+.c-content-page-preview .c-rich-text-editor__content h3 {
+	font-size: abstracts.$font-size-2xl;
+	line-height: abstracts.$line-height-md;
 }
 
-h4 {
-	font-size: $font-size-lg;
-	line-height: $line-height-lg;
+h4,
+.c-content-page-preview .c-rich-text-editor__content h4 {
+	font-size: abstracts.$font-size-lg;
+	line-height: abstracts.$line-height-lg;
 }
 
-h5 {
-	font-size: $font-size-2xm;
-	line-height: $line-height-lg;
+h5,
+.c-content-page-preview .c-rich-text-editor__content h5 {
+	font-size: abstracts.$font-size-2xm;
+	line-height: abstracts.$line-height-lg;
 }
 
-h6 {
-	font-size: $font-size-md;
-	line-height: $line-height-lg;
+h6,
+.c-content-page-preview .c-rich-text-editor__content h6 {
+	font-size: abstracts.$font-size-md;
+	line-height: abstracts.$line-height-lg;
 }
 
-@media (max-width: $breakpoint-md) {
-	h1 {
-		font-size: $font-size-3xl;
-		line-height: $line-height-md;
+@media (max-width: abstracts.$breakpoint-md) {
+	h1,
+	.c-content-page-preview .c-rich-text-editor__content h1 {
+		font-size: abstracts.$font-size-3xl;
+		line-height: abstracts.$line-height-md;
 	}
 
-	h2 {
-		font-size: $font-size-2xl;
-		line-height: $line-height-lg;
+	h2,
+	.c-content-page-preview .c-rich-text-editor__content h2 {
+		font-size: abstracts.$font-size-2xl;
+		line-height: abstracts.$line-height-lg;
 	}
 
-	h3 {
-		font-size: $font-size-2xm;
-		line-height: $line-height-lg;
+	h3,
+	.c-content-page-preview .c-rich-text-editor__content h3 {
+		font-size: abstracts.$font-size-2xm;
+		line-height: abstracts.$line-height-lg;
 	}
 
-	h4 {
-		font-size: $font-size-md;
-		line-height: $line-height-lg;
+	h4,
+	.c-content-page-preview .c-rich-text-editor__content h4 {
+		font-size: abstracts.$font-size-md;
+		line-height: abstracts.$line-height-lg;
 	}
 
-	h5 {
-		font-size: $font-size-md;
-		line-height: $line-height-lg;
+	h5,
+	.c-content-page-preview .c-rich-text-editor__content h5 {
+		font-size: abstracts.$font-size-md;
+		line-height: abstracts.$line-height-lg;
 	}
 
-	h6 {
-		font-size: $font-size-md;
-		line-height: $line-height-lg;
+	h6,
+	.c-content-page-preview .c-rich-text-editor__content h6 {
+		font-size: abstracts.$font-size-md;
+		line-height: abstracts.$line-height-lg;
 	}
 }
 
 p {
-	font-size: $font-size-base;
-	line-height: $line-height-lg;
+	font-size: abstracts.$font-size-base;
+	line-height: abstracts.$line-height-lg;
 	margin-block: 0;
 }
 
@@ -84,22 +103,22 @@ a {
 
 	&:focus-visible {
 		outline-offset: 0.2rem;
-		outline-color: $teal;
+		outline-color: abstracts.$teal;
 		outline-style: solid;
 	}
 }
 
 small {
-	font-size: $font-size-sm;
+	font-size: abstracts.$font-size-sm;
 }
 
 strong {
-	font-weight: $font-weight-bold;
+	font-weight: abstracts.$font-weight-bold;
 }
 
 mark {
 	background-color: transparent;
-	background-image: linear-gradient(#0000, #0000), linear-gradient($teal-64, $teal-64);
+	background-image: linear-gradient(#0000, #0000), linear-gradient(abstracts.$teal-64, abstracts.$teal-64);
 	background-size:
 		0,
 		100% 50%; // height

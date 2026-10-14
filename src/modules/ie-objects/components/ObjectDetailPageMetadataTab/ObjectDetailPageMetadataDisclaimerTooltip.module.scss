@@ -4,27 +4,17 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	padding: 0;
+	padding: abstracts.$spacer-xxxs;
 	border: 0;
 	background: none;
 	color: abstracts.$black;
 	cursor: pointer;
+	width: fit-content;
+	height: fit-content;
 
 	&:focus-visible {
 		outline: 0.2rem solid abstracts.$teal;
 		outline-offset: 0.2rem;
-	}
-}
-
-.c-object-detail-page-metadata-disclaimer-tooltip--icon-base {
-	:global([class*="c-icon"]) {
-		font-size: abstracts.$font-size-base;
-	}
-}
-
-.c-object-detail-page-metadata-disclaimer-tooltip--icon-lg {
-	:global([class*="c-icon"]) {
-		font-size: abstracts.$font-size-lg;
 	}
 }
 
