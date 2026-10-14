@@ -70,7 +70,15 @@ import { compact, indexOf, isEmpty, isNil, noop, sortBy } from 'es-toolkit/compa
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { stringifyUrl } from 'query-string';
-import React, { type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+	type ReactNode,
+	useCallback,
+	useEffect,
+	useLayoutEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { useSelector } from 'react-redux';
 import styles from './ObjectDetailPageHeader.module.scss';
 import type { ObjectDetailPageHeaderProps } from './ObjectDetailPageHeader.types';
@@ -85,6 +93,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 	isCollapsed,
 	onShowDetails,
 	onReadMoreClicked,
+	onCollapseOffsetChange,
 }) => {
 	const router = useRouter();
 	const locale = useLocale();
@@ -173,6 +182,8 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 	const [onConfirmCopyright, setOnConfirmCopyright] = useState<() => void>(noop);
 	const [copyrightModalOpen, setCopyrightModalOpen] = useState(false);
 
+	const headerRef = useRef<HTMLDivElement>(null);
+	const collapsedBarRef = useRef<HTMLDivElement>(null);
 	const expandedTitleRef = useRef<HTMLHeadingElement>(null);
 	// Set only by the explicit "Toon details" click, never by an incidental scroll-driven expand
 	// (moving focus in response to mere scrolling, with no control interacted with, would itself be
@@ -188,12 +199,33 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 		setMetadataExportDropdownOpen(false);
 	}, [windowSize]);
 
+	// Reports how far the header has to scroll before only the collapsed bar's worth of it is left on
+	// screen: the parent pins its sticky unit and places its collapse sentinel there. The header
+	// never resizes on collapse, so this only changes with its content/width.
+	const hasMediaInfo = !isNil(mediaInfo);
+	// biome-ignore lint/correctness/useExhaustiveDependencies: re-attach once the refs exist, i.e. when mediaInfo arrives
+	useLayoutEffect(() => {
+		const header = headerRef.current;
+		const bar = collapsedBarRef.current;
+		if (!header || !bar) {
+			return;
+		}
+		const report = () =>
+			onCollapseOffsetChange(Math.max(0, header.offsetHeight - bar.offsetHeight));
+		report();
+		const observer = new ResizeObserver(report);
+		observer.observe(header);
+		observer.observe(bar);
+		return () => observer.disconnect();
+	}, [hasMediaInfo, onCollapseOffsetChange]);
+
 	// After an explicit "Toon details" click, the focused button disappears (display:none) and focus
 	// would drop to <body>, so move it into the expanded header instead.
 	useEffect(() => {
 		if (!isCollapsed && shouldFocusExpandedTitleRef.current) {
 			shouldFocusExpandedTitleRef.current = false;
-			expandedTitleRef.current?.focus();
+			// preventScroll: the smooth scroll back to the top is still running at this point
+			expandedTitleRef.current?.focus({ preventScroll: true });
 		}
 	}, [isCollapsed]);
 
@@ -540,15 +572,17 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 
 	return (
 		<div
+			ref={headerRef}
 			className={clsx(styles['p-object-detail-header'], {
 				[styles['p-object-detail-header--collapsed']]: isCollapsed,
 			})}
 		>
-			{/* Both states render at once so the max-height transition has stable content to animate around */}
+			{/* Overlays the header's bottom edge, so the header itself never changes size on collapse */}
 			<div
+				ref={collapsedBarRef}
 				className={styles['p-object-detail-header__collapsed-content']}
-				// Mirrors the expanded content's inert below; aria-hidden as well since inert only takes
-				// effect after the class change has rendered, and the name is repeated in the expanded h3
+				// aria-hidden as well as inert since inert only takes effect after the class change has
+				// rendered, and the name is repeated in the expanded h3
 				inert={!isCollapsed}
 				aria-hidden={!isCollapsed}
 			>
@@ -567,12 +601,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 				/>
 			</div>
 
-			<div
-				className={styles['p-object-detail-header__expanded-content']}
-				// Still displayed while the collapse animation runs (see the scss), so keep it out of the
-				// tab order and accessibility tree meanwhile
-				inert={isCollapsed}
-			>
+			<div className={styles['p-object-detail-header__expanded-content']}>
 				{showResearchWarning && renderResearchWarning()}
 				{renderBreadcrumbs()}
 				{showKeyUserPill && renderKeyUserPill()}

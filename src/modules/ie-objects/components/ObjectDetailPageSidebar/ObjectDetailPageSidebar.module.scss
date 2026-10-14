@@ -18,10 +18,13 @@
 }
 
 .c-object-detail-sidebar__sticky {
-	// Sticky wrapper for the header + (desktop-only) tabs, so they move and collapse together
+	// Sticky wrapper for the header + (desktop-only) tabs, so they scroll away and pin together
 	// as one unit: this element - not the header itself - owns the stickiness, so the tabs
-	// just sit in normal flow directly below the header, growing/shrinking with its own
-	// collapse animation instead of needing their own independently-computed sticky offset.
+	// just sit in normal flow directly below the header instead of needing their own
+	// independently-computed sticky offset.
+	// Its `top` is set inline to minus the header's scroll-away distance (see the sentinel in
+	// ObjectDetailPageSidebar.tsx), so it pins once only the compact bar's strip of the header is
+	// left on screen - the header never resizes, so the pinning is seamless.
 	// z-index: sticky alone already paints above plain tab content below it, without needing
 	// one - but the OCR tab's own search item (ObjectDetailPageOcrTab.module.scss's &__search)
 	// is sticky too, and being later in the DOM would otherwise paint over (hide) this
@@ -35,12 +38,8 @@
 	display: flex;
 	flex-direction: column;
 
-	// Without this, scroll anchoring "corrects" scrollTop as the header inside here
-	// collapses/expands, re-triggering its IntersectionObserver and causing a flicker loop.
-	overflow-anchor: none;
-
-	// Fades alongside the header's own max-height transition (same duration) instead of
-	// snapping in/out the instant the --scrolled modifier toggles.
+	// Fades alongside the collapsed bar (same duration) instead of snapping in/out the instant the
+	// --scrolled modifier toggles.
 	box-shadow: none;
 	transition: box-shadow abstracts.$animate-default;
 
@@ -61,14 +60,28 @@
 	min-height: 0;
 	overflow-y: auto;
 
-	// Without this, scroll anchoring "corrects" scrollTop as the sticky header collapses/expands,
-	// re-triggering its IntersectionObserver and causing a flicker loop.
-	overflow-anchor: none;
+	// Containing block for the collapse sentinel and the scroll room below, which scroll along with
+	// the content
+	position: relative;
 	box-shadow: abstracts.$shadow-24-black-12;
 
 	// Breathing room under whatever the last section happens to be (metadata, "ook
 	// interessant", ...), so the content never ends flush against the bottom edge
 	padding-bottom: abstracts.$spacer-md;
+
+	// Guarantees the container can always scroll by the header's scroll-away distance (+1px), however
+	// short the tab. Otherwise a short tab couldn't keep the header collapsed after a tab switch: the
+	// browser would clamp the scroll position back and the header would re-expand. Absolutely
+	// positioned, so it adds nothing to a tab that is long enough anyway.
+	&::after {
+		content: "";
+		position: absolute;
+		top: calc(100% + var(--collapse-offset, 0px));
+		left: 0;
+		width: 1px;
+		height: 1px;
+		pointer-events: none;
+	}
 
 	// The floating feedback button would cover whatever ends the tab
 	&--with-feedback-button {
@@ -96,4 +109,13 @@
 		// bottom spacing - avoid doubling it up with this container's own default.
 		padding-bottom: 0;
 	}
+}
+
+.c-object-detail-sidebar__collapse-sentinel {
+	// Out of flow so it doesn't push the sticky unit down; `top` is set inline (see the sticky unit)
+	position: absolute;
+	left: 0;
+	width: 100%;
+	height: 0;
+	pointer-events: none;
 }

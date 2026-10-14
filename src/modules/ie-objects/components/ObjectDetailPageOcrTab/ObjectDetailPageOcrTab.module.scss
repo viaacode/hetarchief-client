@@ -17,11 +17,9 @@
 // The search item below uses these to sit its own `top` right beneath the collapsed header+tabs
 // unit. $tabs-height-desktop mirrors ObjectDetailPage.module.scss's own
 // $metadata-media-ocr-tabs-height-desktop (a component-local constant there too, not a shared
-// token - keep in sync by hand if it changes). $header-collapsed-height is NOT
-// ObjectDetailPageHeader.module.scss's $max-height-collapsed (8rem) - that's only a ceiling
-// (max-height), and the collapsed row's actual rendered height is smaller than it; this is the
-// real measured value (getBoundingClientRect, collapsed state), so keep it in sync the same way
-// if the collapsed header's own padding/font-size/line-height ever changes.
+// token - keep in sync by hand if it changes). $header-collapsed-height is the collapsed bar's
+// real measured height (getBoundingClientRect, collapsed state), so keep it in sync the same way
+// if the bar's own padding/font-size/line-height ever changes.
 $header-collapsed-height: 6.6rem;
 $tabs-height-desktop: 5.6rem;
 

@@ -13,4 +13,6 @@ export interface ObjectDetailPageHeaderProps {
 	/** Opens the shared "read more" metadata field blade; owned by the parent so the header and
 	 * the metadata tab share a single blade instead of each having their own. */
 	onReadMoreClicked: (item: MetadataItem) => void;
+	/** Scroll distance in px after which only the collapsed bar's height of the header is still visible */
+	onCollapseOffsetChange: (offset: number) => void;
 }
