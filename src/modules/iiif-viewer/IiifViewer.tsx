@@ -495,9 +495,30 @@ export const IiifViewer = ({
 		[highlightedAltoTextInfo]
 	);
 
+	// The viewer also moves on its own on page load, eg: zooming to the first result of the search terms
+	// in the url. Writing that to the url would change the url right after loading, which search engines
+	// treat as a client side redirect, so the viewport is only kept in the url once the user interacted
+	const hasUserInteractedRef = useRef(false);
+	useEffect(() => {
+		const userInteractionEvents = ['pointerdown', 'keydown', 'wheel', 'touchstart'];
+		const removeListeners = () => {
+			for (const eventName of userInteractionEvents) {
+				window.removeEventListener(eventName, handleUserInteraction, true);
+			}
+		};
+		const handleUserInteraction = () => {
+			hasUserInteractedRef.current = true;
+			removeListeners();
+		};
+		for (const eventName of userInteractionEvents) {
+			window.addEventListener(eventName, handleUserInteraction, true);
+		}
+		return removeListeners;
+	}, []);
+
 	const handleViewportChanged = useCallback(
 		(openSeadragonViewerTemp: Viewer) => {
-			if (!openSeadragonViewerTemp) {
+			if (!openSeadragonViewerTemp || !hasUserInteractedRef.current) {
 				return;
 			}
 			if (!window.location.href.includes(id)) {

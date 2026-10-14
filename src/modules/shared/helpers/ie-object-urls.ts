@@ -1,5 +1,7 @@
 import getConfig from '@shared/config/public-runtime-config';
-import { ROUTE_PARTS_BY_LOCALE } from '@shared/const';
+// Not from '@shared/const': its index pulls in dompurify, which needs window, and this file is
+// also used by the proxy (middleware)
+import { ROUTE_PARTS_BY_LOCALE } from '@shared/const/routes';
 import { Locale } from '@shared/utils/i18n';
 import { deburr, kebabCase } from 'es-toolkit/compat';
 
@@ -27,7 +29,21 @@ export const IE_OBJECT_NAME_SLUG_FALLBACK = 'titel';
  * https://meemoo.atlassian.net/browse/ARC-3363
  */
 export function getIeObjectNameSlug(name: string | null | undefined): string {
-	return kebabCase(deburr(name || '')) || IE_OBJECT_NAME_SLUG_FALLBACK;
+	return toAsciiSlug(kebabCase(deburr(name || ''))) || IE_OBJECT_NAME_SLUG_FALLBACK;
+}
+
+/**
+ * Replaces everything kebabCase leaves behind that isn't a plain ascii letter, digit or dash, eg:
+ * emoji, non latin scripts or the replacement character (\uFFFD) of a badly encoded title.
+ * Those would end up percent encoded in the url, and lodash and es-toolkit treat them differently,
+ * so the sitemap and the canonical url would not match.
+ * Keep this in sync with the sitemap generator in hetarchief-proxy (sitemap.service.ts).
+ */
+function toAsciiSlug(slug: string): string {
+	return slug
+		.replace(/[^a-z0-9-]+/g, '-')
+		.replace(/-{2,}/g, '-')
+		.replace(/^-|-$/g, '');
 }
 
 /** '' for the default locale, '/en' for the others */
