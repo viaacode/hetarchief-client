@@ -1,3 +1,4 @@
-export const DYNAMIC_ACTION_WIDTH = 48;
-export const DYNAMIC_ACTION_SPACER = 8;
-export const DYNAMIC_ACTION_BOX = DYNAMIC_ACTION_WIDTH + DYNAMIC_ACTION_SPACER;
+// Set as data-secondary-item on the secondary buttons, so they can be told apart from the dropdown in the same list item
+export const SECONDARY_ITEM_ATTRIBUTE = 'data-secondary-item';
+
+export const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]):not([tabindex="-1"])';

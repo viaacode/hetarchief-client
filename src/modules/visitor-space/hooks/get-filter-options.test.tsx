@@ -12,6 +12,7 @@ import { useGetFilterOptions } from './get-filter-options';
 const useQueryParams = vi.fn();
 const useQuery = vi.fn();
 const useGetThemeFilterOptions = vi.fn();
+const getSearchResults = vi.fn();
 
 vi.mock('use-query-params', async (importOriginal) => ({
 	...(await importOriginal<typeof import('use-query-params')>()),
@@ -31,7 +32,9 @@ vi.mock('@visitor-space/hooks/get-content-partner', () => ({
 vi.mock('@visitor-space/hooks/use-get-theme-filter-options', () => ({
 	useGetThemeFilterOptions: (...args: unknown[]) => useGetThemeFilterOptions(...args),
 }));
-vi.mock('@ie-objects/services', () => ({ IeObjectsService: {} }));
+vi.mock('@ie-objects/services', () => ({
+	IeObjectsService: { getSearchResults: (...args: unknown[]) => getSearchResults(...args) },
+}));
 
 const filter = (id: SearchFilterId, field: IeObjectsSearchFilterField) => ({
 	id,
@@ -46,6 +49,23 @@ const filter = (id: SearchFilterId, field: IeObjectsSearchFilterField) => ({
 const MEDIUM_FILTER = filter(SearchFilterId.Medium, IeObjectsSearchFilterField.MEDIUM);
 const THEME_FILTER = filter(SearchFilterId.Theme, IeObjectsSearchFilterField.THEME);
 const LANGUAGE_FILTER = filter(SearchFilterId.Language, IeObjectsSearchFilterField.LANGUAGE);
+const REUSABILITY_FILTER = {
+	...filter(SearchFilterId.Reusability, IeObjectsSearchFilterField.REUSABILITY),
+	options: () => [
+		{
+			label: 'Vrij herbruikbaar',
+			value: `freely-reusable${FILTER_LABEL_VALUE_DELIMITER}Vrij herbruikbaar`,
+		},
+		{
+			label: 'Herbruikbaar onder voorwaarden',
+			value: `reusable-with-conditions${FILTER_LABEL_VALUE_DELIMITER}Herbruikbaar onder voorwaarden`,
+		},
+		{
+			label: 'Misschien herbruikbaar',
+			value: `possibly-reusable${FILTER_LABEL_VALUE_DELIMITER}Misschien herbruikbaar`,
+		},
+	],
+};
 
 describe('useGetFilterOptions()', () => {
 	beforeEach(() => {
@@ -108,5 +128,69 @@ describe('useGetFilterOptions()', () => {
 
 		expect(result.current.options).toEqual([{ label: 'DVD', value: 'DVD' }]);
 		expect(result.current.isLoading).toBe(true);
+	});
+
+	it('requests the reusability aggregation from the proxy', async () => {
+		getSearchResults.mockResolvedValue({ aggregations: {} });
+
+		renderHook(() => useGetFilterOptions(REUSABILITY_FILTER, true));
+		await useQuery.mock.calls.at(-1)?.[0].queryFn();
+
+		expect(getSearchResults).toHaveBeenCalledWith([], 1, 1, undefined, [
+			IeObjectsSearchFilterField.REUSABILITY,
+		]);
+	});
+
+	it('offers an applied reusability category that has no hits', () => {
+		const appliedValue = `reusable-with-conditions${FILTER_LABEL_VALUE_DELIMITER}Herbruikbaar onder voorwaarden`;
+		useQueryParams.mockReturnValue([{ [SearchFilterId.Reusability]: [appliedValue] }, vi.fn()]);
+		useQuery.mockReturnValue({
+			data: { reusability: { buckets: [{ key: 'freely-reusable' }] } },
+			isLoading: false,
+		});
+
+		const { result } = renderHook(() => useGetFilterOptions(REUSABILITY_FILTER, true));
+
+		expect(result.current.options).toEqual([
+			{
+				label: 'Vrij herbruikbaar',
+				value: `freely-reusable${FILTER_LABEL_VALUE_DELIMITER}Vrij herbruikbaar`,
+			},
+			{ label: 'Herbruikbaar onder voorwaarden', value: appliedValue },
+		]);
+	});
+
+	it('offers no reusability category when the filter has no options of its own', () => {
+		useQuery.mockReturnValue({
+			data: { reusability: { buckets: [{ key: 'freely-reusable' }] } },
+			isLoading: false,
+		});
+
+		const { result } = renderHook(() =>
+			useGetFilterOptions(
+				filter(SearchFilterId.Reusability, IeObjectsSearchFilterField.REUSABILITY),
+				true
+			)
+		);
+
+		expect(result.current.options).toEqual([]);
+	});
+
+	it('only offers the reusability categories the proxy returned', () => {
+		useQuery.mockReturnValue({
+			data: {
+				reusability: {
+					buckets: [{ key: 'freely-reusable' }, { key: 'possibly-reusable' }],
+				},
+			},
+			isLoading: false,
+		});
+
+		const { result } = renderHook(() => useGetFilterOptions(REUSABILITY_FILTER, true));
+
+		expect(result.current.options.map((option) => option.label)).toEqual([
+			'Vrij herbruikbaar',
+			'Misschien herbruikbaar',
+		]);
 	});
 });

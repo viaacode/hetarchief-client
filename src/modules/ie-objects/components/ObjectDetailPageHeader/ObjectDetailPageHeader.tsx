@@ -433,6 +433,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 							...action,
 							isPrimary,
 							customElement: renderExportDropdown(isPrimary),
+							onHide: () => setMetadataExportDropdownOpen(false),
 						};
 					}
 					// Render button

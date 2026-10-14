@@ -83,6 +83,19 @@ export const useGetFilterOptions = (
 			return themeOptions.filter((option) => themeSlugs.has(option.value));
 		}
 
+		// The proxy only returns the categories that have hits. Every option of the filter is
+		// listed, so the labels stay with the filter.
+		if (field === IeObjectsSearchFilterField.REUSABILITY) {
+			const categoriesWithHits = new Set(
+				(aggregations[ElasticsearchFieldNames.Reusability]?.buckets || []).map(
+					(bucket) => bucket.key
+				)
+			);
+			return (filter.options?.() || []).filter((option) =>
+				categoriesWithHits.has(option.value.split(FILTER_LABEL_VALUE_DELIMITER)[0])
+			);
+		}
+
 		if (field === IeObjectsSearchFilterField.RIGHTS) {
 			return getRightsOptions(
 				[],
@@ -121,7 +134,7 @@ export const useGetFilterOptions = (
 			buckets.map((bucket) => ({ label: bucket.key, value: bucket.key })),
 			(option) => option.value
 		);
-	}, [aggregations, field, maintainers, locale, isThemeFilter, themeOptions]);
+	}, [aggregations, field, filter, maintainers, locale, isThemeFilter, themeOptions]);
 
 	// The aggregation only knows the values the current search still matches, so a value the visitor
 	// picked earlier would drop out of the list as soon as the search has no hits for it, e.g. on a

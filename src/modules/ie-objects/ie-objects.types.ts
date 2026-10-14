@@ -28,7 +28,11 @@ type aggregateKeys =
 	| ElasticsearchFieldNames.RightsForAudioVideo
 	| ElasticsearchFieldNames.LocationCreated;
 
-export type IeObjectSearchAggregations = Record<aggregateKeys, IeObjectSearchAggregation<string>>;
+export type IeObjectSearchAggregations = Record<aggregateKeys, IeObjectSearchAggregation<string>> &
+	// Derived by the proxy, and only present when the rights aggregations were requested
+	Partial<
+		Record<ElasticsearchFieldNames.Reusability, Pick<IeObjectSearchAggregation<string>, 'buckets'>>
+	>;
 
 // AI entities on an AV file (GET /ie-objects/mentions), mirrors the proxy's FileMentionsResponse
 
