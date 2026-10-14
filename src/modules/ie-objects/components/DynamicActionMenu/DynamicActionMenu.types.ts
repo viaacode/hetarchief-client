@@ -27,4 +27,10 @@ export interface ActionItem {
 	 * This is needed to avoid safari from blocking opening urls in a new tab
 	 */
 	url?: string | null;
+
+	/** Called when the action moves into the dropdown, so a custom element can close what it opened */
+	onHide?: () => void;
 }
+
+/** The dropdown button, or the index of the secondary button that takes over focus */
+export type FocusHandoff = 'dropdown' | number;

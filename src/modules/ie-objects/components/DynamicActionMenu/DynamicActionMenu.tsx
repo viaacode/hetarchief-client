@@ -12,16 +12,24 @@ import {
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
-import { useElementSize } from '@shared/hooks/use-element-size';
 import useIsomorphicLayoutEffect from '@shared/hooks/use-isomorphic-layout-effect';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import { NoServerSideRendering } from '@visitor-space/components/NoServerSideRendering/NoServerSideRendering';
 import clsx from 'clsx';
 import { type FC, type ReactElement, type ReactNode, useRef, useState } from 'react';
-
+import { FOCUSABLE_SELECTOR, SECONDARY_ITEM_ATTRIBUTE } from './DynamicActionMenu.const';
 import styles from './DynamicActionMenu.module.scss';
-import type { ActionItem, DynamicActionMenuProps } from './DynamicActionMenu.types';
+import type { ActionItem, DynamicActionMenuProps, FocusHandoff } from './DynamicActionMenu.types';
+import {
+	getFocusHandoff,
+	getItemGap,
+	getItemWidth,
+	getSecondaryItems,
+	getSizeSignature,
+	getVisibleCount,
+	getWidth,
+} from './DynamicActionMenu.utils';
 
 const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 	className,
@@ -35,10 +43,11 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 
 	const listRef = useRef<HTMLUListElement>(null);
 	const secondaryRef = useRef<HTMLLIElement>(null);
-	const containerWidth = useElementSize(listRef)?.width;
-	// The secondary buttons (in a client-only tooltip) appear a render after mount, so their
-	// width is part of what has to trigger a re-measure
-	const secondaryWidth = useElementSize(secondaryRef)?.width;
+	const dropdownButtonRef = useRef<HTMLButtonElement>(null);
+	const sizeSignatureRef = useRef('');
+	const focusHandoffRef = useRef<FocusHandoff | null>(null);
+	const hiddenIdsRef = useRef<Set<MediaActions>>(new Set());
+	const dropdownId = `dynamic-action-menu--${id}`;
 
 	const windowSize = useWindowSizeContext();
 	const isMobile = isMobileSize(windowSize);
@@ -48,15 +57,50 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 
 	// As many secondary actions as fit stay visible; the rest move into the dropdown. What fits is
 	// measured on the full layout: every change that can affect it first renders that layout
-	// (isMeasuring, unshrinkable primary) and reads the result before paint, so there is no flicker
-	// and no feedback loop. The secondary buttons stay mounted (hidden) when they don't fit, so
-	// their width stays measurable.
-	const [isMeasuring, setIsMeasuring] = useState(true);
+	// (isMeasuring, unshrinkable primary) and reads the result before paint, so there is no flicker.
+	// The secondary buttons stay mounted (hidden) when they don't fit, so their width stays
+	// measurable. The dropdown stays mounted while measuring, or an open flyout would be rebuilt.
+	// Starts false: the server-rendered markup is shown before this can measure, and the unshrinkable
+	// primary would overflow its container there. The mount effect below switches it on before paint.
+	const [isMeasuring, setIsMeasuring] = useState(false);
 	const [visibleCount, setVisibleCount] = useState(secondaryActions.length);
+
+	const hiddenActions = secondaryActions.slice(visibleCount);
+
+	// `actions` gets a new identity on unrelated state (e.g. an open export dropdown); only these
+	// fields change what is measured
+	const actionsKey = actions
+		.map(({ id, isPrimary, label }) => `${id}:${isPrimary ? 'primary' : 'secondary'}:${label}`)
+		.join('|');
 
 	useIsomorphicLayoutEffect(() => {
 		setIsMeasuring(true);
-	}, [containerWidth, secondaryWidth, actions, isMobile]);
+	}, [actionsKey, isMobile]);
+
+	// Not a size hook on the list item: its width changes with the outcome of every measurement,
+	// which would trigger the next one. The signature only holds sizes that are independent of it.
+	useIsomorphicLayoutEffect(() => {
+		const list = listRef.current;
+		const secondary = secondaryRef.current;
+		if (!list || !secondary || typeof ResizeObserver === 'undefined') {
+			return;
+		}
+
+		sizeSignatureRef.current = getSizeSignature(list, secondary);
+		const observer = new ResizeObserver(() => {
+			const signature = getSizeSignature(list, secondary);
+			if (signature !== sizeSignatureRef.current) {
+				sizeSignatureRef.current = signature;
+				setIsMeasuring(true);
+			}
+		});
+		observer.observe(list);
+		getSecondaryItems(secondary).forEach((item) => {
+			observer.observe(item);
+		});
+
+		return () => observer.disconnect();
+	}, [actionsKey]);
 
 	useIsomorphicLayoutEffect(() => {
 		const list = listRef.current;
@@ -65,32 +109,59 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			return;
 		}
 
-		const items = Array.from(secondary.children) as HTMLElement[];
-		const itemWidth = items.at(-1)?.offsetWidth ?? 0;
-		// Not mounted yet; the width change once they are triggers a new measurement
-		if (items.length < 2 || !itemWidth) {
-			setVisibleCount(items.length);
-			setIsMeasuring(false);
+		const items = getSecondaryItems(secondary);
+		const available =
+			getWidth(list) -
+			Array.from(list.children).reduce(
+				(width, child) => (child === secondary ? width : width + getWidth(child)),
+				0
+			);
+		const count = getVisibleCount(items.map(getItemWidth), getItemGap(items), available);
+
+		// Read while the DOM still has the layout the user is focused in
+		focusHandoffRef.current = getFocusHandoff(
+			secondary,
+			dropdownButtonRef.current,
+			visibleCount,
+			count
+		);
+		setVisibleCount(count);
+		setIsMeasuring(false);
+	}, [isMeasuring, visibleCount]);
+
+	// After the commit, so the dropdown button the focus moves to is mounted
+	useIsomorphicLayoutEffect(() => {
+		const handoff = focusHandoffRef.current;
+		const secondary = secondaryRef.current;
+		if (isMeasuring || handoff === null || !secondary) {
 			return;
 		}
 
-		const gap = Number.parseFloat(getComputedStyle(items[0]).paddingRight);
-		const primaryWidth = Array.from(list.children).reduce(
-			(width, child) => (child === secondary ? width : width + (child as HTMLElement).offsetWidth),
-			0
-		);
-		const fitsAll =
-			primaryWidth + items.length * itemWidth + (items.length - 1) * gap <= list.clientWidth;
-
-		// Otherwise the last visible button is followed by the dropdown button, which is as wide
-		const fittingCount = Math.floor(
-			(list.clientWidth - primaryWidth - itemWidth) / (itemWidth + gap)
-		);
-		setVisibleCount(fitsAll ? items.length : Math.max(0, Math.min(items.length - 1, fittingCount)));
-		setIsMeasuring(false);
+		focusHandoffRef.current = null;
+		const target =
+			handoff === 'dropdown'
+				? dropdownButtonRef.current
+				: getSecondaryItems(secondary)[handoff]?.querySelector<HTMLElement>(FOCUSABLE_SELECTOR);
+		target?.focus();
 	}, [isMeasuring]);
 
-	const hiddenActions = isMeasuring ? [] : secondaryActions.slice(visibleCount);
+	useIsomorphicLayoutEffect(() => {
+		if (isMeasuring) {
+			return;
+		}
+
+		for (const action of hiddenActions) {
+			if (!hiddenIdsRef.current.has(action.id)) {
+				action.onHide?.();
+			}
+		}
+		hiddenIdsRef.current = new Set(hiddenActions.map(({ id }) => id));
+
+		// The dropdown unmounts without hidden actions; it must not come back already open
+		if (!hiddenActions.length) {
+			setIsDropdownOpen(false);
+		}
+	}, [isMeasuring, visibleCount]);
 
 	const renderInTooltip = (trigger: ReactNode, tooltip: string): ReactElement => {
 		return (
@@ -102,6 +173,27 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			</NoServerSideRendering>
 		);
 	};
+	// The link is the only tab stop and carries the name and click; the button inside it is not
+	// interactive on its own, so there is no nested interactive content.
+	const renderWithLink = (
+		action: ActionItem,
+		content: ReactNode,
+		onClick: (id: MediaActions) => void
+	): ReactNode =>
+		action.url ? (
+			<a
+				href={action.url}
+				target="_blank"
+				referrerPolicy="no-referrer"
+				rel="noreferrer"
+				aria-label={action.customElement ? undefined : action.ariaLabel}
+				onClick={() => onClick(action.id)}
+			>
+				{content}
+			</a>
+		) : (
+			content
+		);
 
 	const renderPrimaryButton = (action: ActionItem) => {
 		const $element = action.customElement ? (
@@ -110,65 +202,56 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			<Button
 				variants={primaryButtonVariants}
 				iconStart={action.icon}
-				onClick={() => onClickAction(action.id)}
+				onClick={action.url ? undefined : () => onClickAction(action.id)}
+				tabIndex={action.url ? -1 : undefined}
+				aria-hidden={action.url ? true : undefined}
 				ariaLabel={action.ariaLabel}
-				title={action.tooltip}
+				// The label is cut off when there is little room, so the full text is available on hover
+				title={action.tooltip ?? action.label}
 			>
 				<span className="u-text-ellipsis">{action.label}</span>
 			</Button>
 		);
-		if (action.url) {
-			return (
-				<li
-					className={styles['c-dynamic-action-menu__primary-item']}
-					key={`media-action-${action.id}`}
-				>
-					<a href={action.url} target="_blank" referrerPolicy="no-referrer" rel="noreferrer">
-						{$element}
-					</a>
-				</li>
-			);
-		}
 		return (
 			<li
 				className={styles['c-dynamic-action-menu__primary-item']}
 				key={`media-action-${action.id}`}
 			>
-				{$element}
+				{renderWithLink(action, $element, onClickAction)}
 			</li>
 		);
 	};
 
 	const renderSecondaryButton = (action: ActionItem, index: number) => {
-		const itemClassName = clsx(styles['c-dynamic-action-menu__secondary-item'], {
-			[styles['c-dynamic-action-menu__secondary-item--hidden']]:
-				index >= visibleCount && !isMeasuring,
-		});
+		const tooltip = isMobile ? undefined : action.tooltip;
 
 		const $element = action.customElement ? (
 			action.customElement
 		) : (
 			<Button
-				onClick={() => onClickAction(action.id)}
+				onClick={action.url ? undefined : () => onClickAction(action.id)}
+				tabIndex={action.url ? -1 : undefined}
+				aria-hidden={action.url ? true : undefined}
 				icon={action.icon}
 				variants={secondaryButtonVariants}
 				ariaLabel={action.ariaLabel}
-				title={action.tooltip}
+				// The tooltip shows the same text; a title as well would announce and show it twice
+				title={tooltip ? undefined : action.tooltip}
 			/>
 		);
+		// The tooltip wraps the link, as that is what takes the focus
+		const $item = renderWithLink(action, $element, onClickAction);
 
-		if (action.url) {
-			return (
-				<div className={itemClassName} key={`media-action-${action.id}`}>
-					<a href={action.url} target="_blank" referrerPolicy="no-referrer" rel="noreferrer">
-						{action.tooltip && !isMobile ? renderInTooltip($element, action.tooltip) : $element}
-					</a>
-				</div>
-			);
-		}
 		return (
-			<div className={itemClassName} key={`media-action-${action.id}`}>
-				{action.tooltip && !isMobile ? renderInTooltip($element, action.tooltip) : $element}
+			<div
+				key={`media-action-${action.id}`}
+				{...{ [SECONDARY_ITEM_ATTRIBUTE]: '' }}
+				className={clsx(styles['c-dynamic-action-menu__secondary-item'], {
+					[styles['c-dynamic-action-menu__secondary-item--hidden']]:
+						index >= visibleCount && !isMeasuring,
+				})}
+			>
+				{tooltip ? renderInTooltip($item, tooltip) : $item}
 			</div>
 		);
 	};
@@ -187,12 +270,15 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				onOpen={() => setIsDropdownOpen(true)}
 				onClose={() => setIsDropdownOpen(false)}
 				flyoutClassName={styles['c-dynamic-action-menu__flyout']}
-				id={`dynamic-action-menu--${id}`}
+				id={dropdownId}
 				placement="bottom-end"
 			>
 				<DropdownButton>
 					<Button
-						className={styles['c-dynamic-action-menu__dropdown-button']}
+						ref={dropdownButtonRef}
+						// No aria-haspopup: the flyout is a list of buttons, not a role="menu"
+						aria-expanded={isDropdownOpen}
+						aria-controls={dropdownId}
 						icon={<Icon name={IconNamesLight.DotsHorizontal} aria-hidden />}
 						ariaLabel={tText(
 							'modules/ie-objects/components/dynamic-action-menu/dynamic-action-menu___meer-acties'
