@@ -200,14 +200,7 @@ export const SubtitlesTeaser: FC<SubtitlesTeaserProps> = ({ playerRoot: candidat
 					'modules/shared/components/subtitles-teaser/subtitles-teaser___probeer-onze-nieuwe-ai-gegenereerde-ondertiteling'
 				)}
 			</span>
-			<svg
-				className={styles['c-subtitles-teaser__arrow']}
-				viewBox="0 0 34 13"
-				fill="currentColor"
-				aria-hidden="true"
-			>
-				<path d="M30 0C32.2091 0 34 1.79086 34 4C34 6.20914 32.2091 8 30 8H23.1407C21.8033 8 20.5544 8.6684 19.8125 9.7812L18.6641 11.5038C17.8725 12.6913 16.1275 12.6913 15.3359 11.5038L14.1875 9.7812C13.4456 8.6684 12.1967 8 10.8593 8H4C1.79086 8 0 6.20914 0 4C0 1.79086 1.79086 0 4 0H30Z" />
-			</svg>
+			<span className={styles['c-subtitles-teaser__arrow']} aria-hidden="true" />
 		</button>,
 		playerRoot
 	);

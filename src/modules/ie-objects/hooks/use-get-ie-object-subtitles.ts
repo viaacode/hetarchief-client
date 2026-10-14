@@ -3,6 +3,8 @@ import { QUERY_KEYS } from '@shared/const/query-keys';
 import { useQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
+const SUBTITLES_CACHE_MS = 24 * 60 * 60 * 1000; // 24 hours
+
 interface UseGetIeObjectSubtitles {
 	subtitlesUrl: string | undefined;
 	isLoading: boolean;
@@ -22,7 +24,10 @@ export const useGetIeObjectSubtitles = (
 		queryFn: () => IeObjectsService.getSubtitles(fileId as string, schemaIdentifier as string),
 		enabled: !!fileId && !!schemaIdentifier,
 		retry: false,
-		staleTime: 30 * 60 * 1000, // 30 minutes
+		// Subtitle files rarely change. The gcTime matches, otherwise the cache is dropped after the
+		// default 5 minutes without an observer and the staleTime never comes into play.
+		staleTime: SUBTITLES_CACHE_MS,
+		gcTime: SUBTITLES_CACHE_MS,
 	});
 
 	const [subtitlesUrl, setSubtitlesUrl] = useState<string | undefined>(undefined);

@@ -1,4 +1,5 @@
 import { SUBTITLE_FORMATS } from '@ie-objects/ie-objects.consts';
+import { SubtitleFormat } from '@ie-objects/ie-objects.types';
 import type { FlowPlayerProps } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
@@ -7,13 +8,11 @@ import type { HetArchiefIeObjectFile } from '@viaa/avo2-types';
 
 export type SubtitleTrack = NonNullable<FlowPlayerProps['subtitles']>[number];
 
-const VTT_FORMAT = 'text/vtt';
-
 // A transcript often comes as both VTT and SRT: prefer the VTT, the proxy has to convert the SRT
 export const getSubtitleFile = (
 	files: HetArchiefIeObjectFile[] | undefined
 ): HetArchiefIeObjectFile | undefined =>
-	files?.find((file) => file.mimeType === VTT_FORMAT) ??
+	files?.find((file) => file.mimeType === SubtitleFormat.VTT) ??
 	files?.find((file) => SUBTITLE_FORMATS.includes(file.mimeType));
 
 interface GetSubtitleTracksOptions {

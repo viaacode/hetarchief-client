@@ -6,10 +6,13 @@ $teaser-padding-x: abstracts.$spacer-sm;
 $teaser-gap: abstracts.$spacer-xs + abstracts.$spacer-xxs;
 $edge-margin: abstracts.$spacer-xs;
 $button-gap: abstracts.$spacer-xs + abstracts.$spacer-xxs;
-$arrow-width: 3.4rem;
-$arrow-height: 1.3rem;
+
+// A square rotated 45deg, centered on the bottom edge: only its lower half sticks out as the arrow
+$arrow-size: 0.66rem;
 $arrow-offset-from-right: 4.9rem;
-$arrow-overlap: abstracts.$spacer-xs;
+
+// Keeps the arrow clear of the rounded ends of the pill
+$arrow-edge-inset: $teaser-padding-x + 1.7rem;
 
 // Nested under .flowplayer on purpose: the player resets every descendant with `.flowplayer *`
 // (transparent background, white text), which would win against a single class.
@@ -79,21 +82,17 @@ $arrow-overlap: abstracts.$spacer-xs;
 
 	&__arrow {
 		position: absolute;
-		top: calc(100% - #{$arrow-overlap});
+		top: calc(100% - #{$arrow-size * 0.5});
 		left: clamp(
-			#{$teaser-padding-x},
-			calc(var(--subtitles-teaser-anchor-x) - var(--subtitles-teaser-left) - #{$arrow-width * 0.5}),
-			calc(var(--subtitles-teaser-width) - #{$teaser-padding-x} - #{$arrow-width})
+			#{$arrow-edge-inset - $arrow-size * 0.5},
+			calc(var(--subtitles-teaser-anchor-x) - var(--subtitles-teaser-left) - #{$arrow-size * 0.5}),
+			calc(var(--subtitles-teaser-width) - #{$arrow-edge-inset + $arrow-size * 0.5})
 		);
-		width: $arrow-width;
-		height: $arrow-height;
-		background-color: transparent;
-		color: abstracts.$teal;
+		width: $arrow-size;
+		height: $arrow-size;
+		border-radius: 0 0 0.2rem;
+		background-color: abstracts.$teal;
 		pointer-events: none;
-
-		// currentColor would resolve on the path, which the player's reset turned white
-		path {
-			fill: abstracts.$teal;
-		}
+		transform: rotate(45deg);
 	}
 }
