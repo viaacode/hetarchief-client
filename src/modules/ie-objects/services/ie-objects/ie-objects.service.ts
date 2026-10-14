@@ -31,6 +31,8 @@ import {
 	IE_OBJECTS_SERVICE_DEBUG,
 	IE_OBJECTS_SERVICE_MENTIONS,
 	IE_OBJECTS_SERVICE_SIMILAR,
+	IE_OBJECTS_SERVICE_SUBTITLES,
+	IE_OBJECTS_SERVICE_SUBTITLES_TIMEOUT_MS,
 	IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON,
 	IO_OBJECTS_SERVICE_RELATED,
 } from './ie-objects.service.const';
@@ -198,6 +200,19 @@ export class IeObjectsService {
 				)
 			)
 			.text();
+	}
+
+	/** The proxy checks the session before streaming the vtt, so this needs the api client's cookies */
+	public static async getSubtitles(fileId: string, schemaIdentifier: string): Promise<Blob> {
+		return await ApiService.getApi()
+			.get(
+				stringifyUrl({
+					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECTS_SERVICE_SUBTITLES}`,
+					query: { schemaIdentifier, fileId },
+				}),
+				{ timeout: IE_OBJECTS_SERVICE_SUBTITLES_TIMEOUT_MS }
+			)
+			.blob();
 	}
 
 	public static async getTicketServiceTokens(

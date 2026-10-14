@@ -82,6 +82,7 @@ const setup = (initialProps: Partial<Parameters<typeof useAiIntervalSelection>[0
 
 describe('Hook: useAiIntervalSelection', () => {
 	beforeEach(() => {
+		vi.mocked(seekPlayerVideo).mockResolvedValue(undefined);
 		state.video = createVideo();
 		window.history.replaceState({}, '', '/');
 	});
@@ -189,7 +190,8 @@ describe('Hook: useAiIntervalSelection', () => {
 			video.dispatchEvent(new Event('loadedmetadata'));
 
 			expect(seekPlayerVideo).toHaveBeenCalledTimes(2);
-			expect(seekPlayerVideo).toHaveBeenLastCalledWith(video, 10);
+			// Flowplayer has dropped is-starting by then, so the seek asks for the frame reveal itself
+			expect(seekPlayerVideo).toHaveBeenLastCalledWith(video, 10, true);
 		});
 
 		it('only the latest selection is seeked to', () => {

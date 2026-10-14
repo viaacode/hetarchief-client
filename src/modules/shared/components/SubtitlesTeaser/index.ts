@@ -1,0 +1,1 @@
+export { SubtitlesTeaser } from './SubtitlesTeaser';

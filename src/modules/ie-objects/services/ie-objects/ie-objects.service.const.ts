@@ -9,3 +9,6 @@ export const IO_OBJECTS_SERVICE_RELATED = 'related';
 export const IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON = 'alto-json';
 export const IE_OBJECTS_SERVICE_DEBUG = 'debug';
 export const IE_OBJECTS_SERVICE_MENTIONS = 'mentions';
+export const IE_OBJECTS_SERVICE_SUBTITLES = 'subtitles';
+// Playback waits for the subtitles, so well below the default 30s
+export const IE_OBJECTS_SERVICE_SUBTITLES_TIMEOUT_MS = 5_000;
