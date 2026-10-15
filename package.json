@@ -31,6 +31,7 @@
     "test:cov": "vitest run --coverage",
     "test:watch": "vitest",
     "type-check": "tsc --noEmit",
+    "check-mocks-translations": "node scripts/check-no-translations-in-mocks.js",
     "check-circular-depedencies": "npx madge --circular --extensions ts ./",
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
