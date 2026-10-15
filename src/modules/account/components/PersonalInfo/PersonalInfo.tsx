@@ -25,7 +25,7 @@ import { CampaignMonitorService } from '@shared/services/campaign-monitor-servic
 import { toastService } from '@shared/services/toast-service';
 import { getLocalisedOptions } from '@shared/utils/dates';
 import { isTabletPortraitSize } from '@shared/utils/is-mobile';
-import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse-flow';
+import { canUserAccessComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { format } from 'date-fns';
 import { noop } from 'es-toolkit/compat';
@@ -38,7 +38,7 @@ const PersonalInfo: FC<PersonalInfoProps> = ({ materialRequests, onCancel, onSuc
 	const commonUser = useSelector(selectCommonUser);
 	const user = useSelector(selectUser);
 	const locale = useLocale();
-	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
+	const isComplexReuseFlow = canUserAccessComplexReuseFlow(commonUser);
 
 	// We need different functionalities for different viewport sizes
 	const windowSize = useWindowSizeContext();

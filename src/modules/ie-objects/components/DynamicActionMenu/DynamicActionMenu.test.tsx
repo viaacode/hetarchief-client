@@ -246,63 +246,6 @@ describe('Components', () => {
 			observer.disconnect();
 		});
 
-		describe('actions with a url', () => {
-			const url = 'https://example.com/form';
-			const [primary, ...secondary] = dynamicActionMenuMock.actions;
-			const actions = [{ ...primary, url }, { ...secondary[0], url }, ...secondary.slice(1)];
-
-			it('Should wrap the buttons in a link that has the name, without a second tab stop', async () => {
-				const { container } = await renderMenu({ actions });
-
-				const links = container.querySelectorAll(`a[href="${url}"]`);
-				expect(links).toHaveLength(2);
-				expect(links[0]).toHaveAttribute('aria-label', primary.ariaLabel);
-				expect(links[1]).toHaveAttribute('aria-label', secondary[0].ariaLabel);
-				for (const link of links) {
-					const button = link.querySelector('button');
-					expect(button).toHaveAttribute('tabindex', '-1');
-					expect(button).toHaveAttribute('aria-hidden', 'true');
-				}
-			});
-
-			it('Should call the onClickAction callback once when the link is clicked', async () => {
-				const onClickAction = vi.fn();
-				const { container } = await renderMenu({ actions, onClickAction });
-				const link = container.querySelector(`a[href="${url}"]`) as HTMLAnchorElement;
-				link.addEventListener('click', (event) => event.preventDefault());
-
-				await act(async () => {
-					link.querySelector('button')?.click();
-				});
-
-				expect(onClickAction).toHaveBeenCalledTimes(1);
-				expect(onClickAction).toHaveBeenCalledWith(primary.id);
-			});
-
-			it('Should show the tooltip of a secondary action when its link gets focus', async () => {
-				const { container } = await renderMenu({ actions });
-				const link = getItems(container)[0].querySelector('a') as HTMLElement;
-				expect(link.closest('.c-tooltip-component-trigger')).toBeInTheDocument();
-
-				await focus(link);
-
-				expect(container).toHaveTextContent(secondary[0].tooltip as string);
-			});
-
-			it('Should hand focus to the link of the first button that became visible', async () => {
-				layout.containerWidth = TWO_VISIBLE_WIDTH;
-				const withLinkOnThird = secondary.map((action, index) =>
-					index === 2 ? { ...action, url } : action
-				);
-				const { container } = await renderMenu({ actions: [primary, ...withLinkOnThird] });
-				await focus(getDropdownButton(container));
-
-				await resize(700);
-
-				expect(document.activeElement).toBe(getItems(container)[2].querySelector('a'));
-			});
-		});
-
 		it('Should call the onClickAction callback when a button is clicked', async () => {
 			const onClickAction = vi.fn();
 			const { container } = await renderMenu({ onClickAction });

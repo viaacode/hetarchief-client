@@ -173,27 +173,6 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			</NoServerSideRendering>
 		);
 	};
-	// The link is the only tab stop and carries the name and click; the button inside it is not
-	// interactive on its own, so there is no nested interactive content.
-	const renderWithLink = (
-		action: ActionItem,
-		content: ReactNode,
-		onClick: (id: MediaActions) => void
-	): ReactNode =>
-		action.url ? (
-			<a
-				href={action.url}
-				target="_blank"
-				referrerPolicy="no-referrer"
-				rel="noreferrer"
-				aria-label={action.customElement ? undefined : action.ariaLabel}
-				onClick={() => onClick(action.id)}
-			>
-				{content}
-			</a>
-		) : (
-			content
-		);
 
 	const renderPrimaryButton = (action: ActionItem) => {
 		const $element = action.customElement ? (
@@ -202,9 +181,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			<Button
 				variants={primaryButtonVariants}
 				iconStart={action.icon}
-				onClick={action.url ? undefined : () => onClickAction(action.id)}
-				tabIndex={action.url ? -1 : undefined}
-				aria-hidden={action.url ? true : undefined}
+				onClick={() => onClickAction(action.id)}
 				ariaLabel={action.ariaLabel}
 				// The label is cut off when there is little room, so the full text is available on hover
 				title={action.tooltip ?? action.label}
@@ -217,7 +194,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				className={styles['c-dynamic-action-menu__primary-item']}
 				key={`media-action-${action.id}`}
 			>
-				{renderWithLink(action, $element, onClickAction)}
+				{$element}
 			</li>
 		);
 	};
@@ -229,9 +206,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 			action.customElement
 		) : (
 			<Button
-				onClick={action.url ? undefined : () => onClickAction(action.id)}
-				tabIndex={action.url ? -1 : undefined}
-				aria-hidden={action.url ? true : undefined}
+				onClick={() => onClickAction(action.id)}
 				icon={action.icon}
 				variants={secondaryButtonVariants}
 				ariaLabel={action.ariaLabel}
@@ -239,8 +214,6 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 				title={tooltip ? undefined : action.tooltip}
 			/>
 		);
-		// The tooltip wraps the link, as that is what takes the focus
-		const $item = renderWithLink(action, $element, onClickAction);
 
 		return (
 			<div
@@ -251,7 +224,7 @@ const DynamicActionMenu: FC<DynamicActionMenuProps> = ({
 						index >= visibleCount && !isMeasuring,
 				})}
 			>
-				{tooltip ? renderInTooltip($item, tooltip) : $item}
+				{tooltip ? renderInTooltip($element, tooltip) : $element}
 			</div>
 		);
 	};
