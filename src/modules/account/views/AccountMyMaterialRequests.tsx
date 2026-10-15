@@ -52,7 +52,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { isLessThanXlSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { VisitorLayout } from '@visitor-layout/index';
-import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse-flow';
+import { canUserAccessComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'es-toolkit/compat';
 import Link from 'next/link';
@@ -94,7 +94,7 @@ export const AccountMyMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUr
 	);
 	const locale = useLocale();
 	const commonUser = useSelector(selectCommonUser);
-	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
+	const isComplexReuseFlow = canUserAccessComplexReuseFlow(commonUser);
 	const isMeemooAdmin = useHasAnyGroup(GroupName.MEEMOO_ADMIN);
 
 	const {

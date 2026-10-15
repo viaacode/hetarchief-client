@@ -60,16 +60,6 @@ PrimaryActionOnly.args = {
 	actions: dynamicActionMenuMock.actions.slice(0, 1),
 };
 
-export const ActionsWithUrl = renderInWidth(
-	'700px',
-	'Acties met een url: de link is de enige tab-stop, de knop erin niet.'
-).bind({});
-ActionsWithUrl.args = {
-	actions: dynamicActionMenuMock.actions.map((action, index) =>
-		index < 2 ? { ...action, url: 'https://example.com/formulier' } : action
-	),
-};
-
 export const Resizable: StoryFn<typeof DynamicActionMenu> = (args) => (
 	<div
 		style={{
