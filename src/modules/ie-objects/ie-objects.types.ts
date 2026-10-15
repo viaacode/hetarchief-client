@@ -107,6 +107,14 @@ export enum MetadataExportFormats {
 	csv = 'csv',
 }
 
+// The proxy converts SRT to VTT, so the player always receives VTT
+export enum SubtitleFormat {
+	VTT = 'text/vtt',
+	SUBRIP = 'application/x-subrip',
+	SRT = 'text/srt',
+	X_SRT = 'application/x-srt',
+}
+
 export interface ButtonsSortOrder {
 	id: MediaActions;
 	isPrimary?: boolean;

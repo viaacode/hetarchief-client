@@ -99,7 +99,7 @@ export const useAiIntervalSelection = ({
 			() => {
 				const requestedSeconds = requestedSeekSecondsRef.current;
 				if (requestedSeconds !== null) {
-					seekPlayerVideo(video, requestedSeconds).then(noop);
+					seekPlayerVideo(video, requestedSeconds, true).then(noop);
 				}
 			},
 			{ once: true }

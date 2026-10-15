@@ -13,6 +13,7 @@ export enum QUERY_KEYS {
 	getNavigationItems = 'getNavigationItems',
 	getNotifications = 'getNotifications',
 	getPeakFile = 'getPeakFile',
+	getIeObjectSubtitles = 'getIeObjectSubtitles',
 	getVisitorSpaceInfo = 'getVisitorSpaceInfo',
 	getVisitorSpaces = 'getVisitorSpaces',
 	getVisitAccessStatus = 'getVisitAccessStatus',

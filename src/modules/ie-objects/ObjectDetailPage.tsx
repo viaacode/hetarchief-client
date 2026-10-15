@@ -35,7 +35,6 @@ import {
 	useResetUnavailableTab,
 } from '@ie-objects/hooks/use-object-detail-active-tab';
 import { usePlayAfterSeek } from '@ie-objects/hooks/use-play-after-seek';
-import { usePlayerControlsVisible } from '@ie-objects/hooks/use-player-controls-visible';
 import {
 	FLOWPLAYER_FORMATS,
 	getNoLicensePlaceholderLabels,
@@ -213,6 +212,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		setIiifViewerInitializedPromise(promise);
 	}, []);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
+	const [playerRoot, setPlayerRoot] = useState<HTMLElement | null>(null);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
 	const [hasAppliedUrlSearchTerms, setHasAppliedUrlSearchTerms] = useState<boolean>(false);
@@ -551,14 +551,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			updateActiveTab,
 			updateQueryParams,
 		});
-
-	// Not when the media turned out unavailable: no player will mount to wait for
-	const areAiNavigationControlsVisible = usePlayerControlsVisible(
-		isMobile &&
-			activeTab === ObjectDetailTabs.Media &&
-			!!activeAiInterval &&
-			isFlowPlayerMediaAvailable !== false
-	);
 
 	const hasAccessToVisitorSpaceOfObject =
 		intersection(mediaInfo?.accessThrough, [
@@ -1157,7 +1149,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	// to play (see usePlayAfterSeek)
 	const { handlePlay: handleOnPlay, listenToVideo } = usePlayAfterSeek(handleUserPlay);
 
-	const handlePlayerReady = (video: HTMLVideoElement) => {
+	const handlePlayerReady = (video: HTMLVideoElement, root: HTMLElement | null) => {
+		setPlayerRoot(root);
 		onPlayerReady(video);
 		listenToVideo(video);
 	};
@@ -1494,13 +1487,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 		return (
 			<AiEntityNavigationOverlay
+				playerRoot={playerRoot}
 				entity={activeAiInterval.entity}
 				intervalIndex={activeAiInterval.intervalIndex}
 				onSelectInterval={(intervalIndex) =>
 					selectAiInterval(activeAiInterval.entity, intervalIndex)
 				}
 				onClose={clearAiInterval}
-				isRaised={areAiNavigationControlsVisible}
 			/>
 		);
 	};
