@@ -1,5 +1,5 @@
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import { keepPreviousData, type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 import { type GetMaterialRequestsProps, MaterialRequestsService } from '../services';

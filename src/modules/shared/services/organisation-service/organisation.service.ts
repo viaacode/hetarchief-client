@@ -1,3 +1,4 @@
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { ApiService } from '@shared/services/api-service';
 import type {
 	GetOrganisationsProps,
@@ -5,7 +6,6 @@ import type {
 	OrganisationListItem,
 	UpdateOrganisationProps,
 } from '@shared/services/organisation-service/organisation.types';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
 const ORGANISATIONS_SERVICE_BASE_URL = 'organisations';

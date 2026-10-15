@@ -1,6 +1,6 @@
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { QUERY_KEYS } from '@shared/const';
 import { ApiService } from '@shared/services/api-service';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import type { QueryClient } from '@tanstack/react-query';
 import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { sortBy } from 'es-toolkit/compat';

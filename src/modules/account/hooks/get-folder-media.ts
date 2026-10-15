@@ -1,7 +1,7 @@
 import { FoldersService } from '@account/services/folders';
 import type { FolderIeObject } from '@account/types';
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 export function useGetFolderMedia(

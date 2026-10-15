@@ -12,8 +12,8 @@ import {
 	type MaterialRequestUnreadSummary,
 	type MaterialRequestUpdate,
 } from '@material-requests/types';
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { ApiService } from '@shared/services/api-service';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import { isNil } from 'es-toolkit/compat';
 import { stringifyUrl } from 'query-string';
 import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';

@@ -1,6 +1,5 @@
 import { IeObjectsSearchOperator } from '@shared/types/ie-objects';
 import type { QueryParamConfig } from 'use-query-params';
-import { v4 as uuidV4 } from 'uuid';
 import { type AdvancedFilter, SearchFilterId } from '../types';
 
 export const TEMP_FILTER_KEY_PREFIX = 'TEMP_FILTER_ID__';
@@ -35,7 +34,7 @@ export const AdvancedFilterArrayParam: QueryParamConfig<AdvancedFilter[] | undef
 						prop: filterProperty,
 						op: filterOperator,
 						val,
-						renderKey: TEMP_FILTER_KEY_PREFIX + uuidV4(),
+						renderKey: TEMP_FILTER_KEY_PREFIX + crypto.randomUUID(),
 					};
 				})
 			: undefined;

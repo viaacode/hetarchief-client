@@ -1,6 +1,6 @@
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import type { VisitRequest } from '@shared/types/visit-request';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import {
 	keepPreviousData,
 	type QueryClient,

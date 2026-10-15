@@ -1,6 +1,6 @@
 import type { Folder, FolderIeObject, SharedFolderResponse } from '@account/types';
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { ApiService } from '@shared/services/api-service';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import { stringifyUrl } from 'query-string';
 
 import { FOLDERS_SERVICE_BASE_URL, FOLDERS_SERVICE_OBJECTS_URL } from './folders.const';

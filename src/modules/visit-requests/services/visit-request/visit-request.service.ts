@@ -1,10 +1,10 @@
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { ApiService } from '@shared/services/api-service';
 import {
 	type VisitAccessStatus,
 	type VisitRequest,
 	VisitStatus,
 } from '@shared/types/visit-request';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import type {
 	GetAllActiveVisitsProps,
