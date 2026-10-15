@@ -2,7 +2,6 @@ import { Badge, Button, type Column, type TableData } from '@meemoo/react-compon
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { formatDateTime } from '@shared/components/VisitorSpaceCard/VisitorSpaceCard.utils';
-import { tText } from '@shared/helpers/translate';
 import React, { type ReactElement } from 'react';
 
 export const mockNames = [
@@ -80,7 +79,7 @@ export const mockColumns: Column<TableData>[] = [
 		cell: () => (
 			<Button
 				icon={<Icon name={IconNamesLight.DotsVertical} aria-hidden />}
-				ariaLabel={tText('modules/shared/components/table/mocks/table___meer-acties')}
+				ariaLabel={'Meer acties'}
 				variants={['xxs', 'text']}
 			/>
 		),

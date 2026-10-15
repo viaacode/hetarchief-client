@@ -15,3 +15,6 @@ pre-commit:
         glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx}"
         run: npx tsc --noEmit --skipLibCheck --pretty --jsx preserve --project ./tsconfig.json
 
+      - name: no-translations-in-mocks
+        glob: "*.{ts,tsx}"
+        run: node scripts/check-no-translations-in-mocks.js {staged_files}
