@@ -1035,6 +1035,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		mapIeObjectToEventData,
 	]);
 
+	// biome-ignore lint/correctness/useExhaustiveDependencies: a new object gets a new player, which must not inherit the play state of the previous one
+	useEffect(() => {
+		setIsMediaPaused(true);
+	}, [ieObjectId]);
+
 	/**
 	 * Pause media if any tab other than the media tab is shown on mobile
 	 */

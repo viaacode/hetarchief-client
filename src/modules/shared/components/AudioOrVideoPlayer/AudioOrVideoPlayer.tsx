@@ -222,7 +222,8 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	) => (
 		<>
 			<FlowPlayer
-				key={`${flowPlayerKey}__${currentPlayableFile.id}`}
+				// A fragment shares its file with its parent, but has its own (cut) url: the player only reads src on mount
+				key={`${flowPlayerKey}__${currentPlayableFile.id}__${schemaIdentifier}`}
 				{...shared}
 				{...typeProps}
 				customControlsConfig={{
