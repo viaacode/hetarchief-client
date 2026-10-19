@@ -42,7 +42,12 @@ describe('getSubtitleFile', () => {
 });
 
 describe('getSubtitleTracks', () => {
-	const options = { src: 'blob:subtitles', label: 'Nederlands', disclaimer: 'AI-gegenereerd' };
+	const options = {
+		src: 'blob:subtitles',
+		label: 'Nederlands',
+		disclaimer: 'AI-gegenereerd',
+		isDefault: false,
+	};
 
 	it('returns undefined without a subtitle file', () => {
 		expect(getSubtitleTracks(undefined, options)).toBeUndefined();
@@ -67,6 +72,13 @@ describe('getSubtitleTracks', () => {
 				icon: expect.anything(),
 			},
 		]);
+	});
+
+	it('turns the track on by itself when asked to', () => {
+		const [track] =
+			getSubtitleTracks(buildFile('subtitle', 'text/vtt'), { ...options, isDefault: true }) ?? [];
+
+		expect(track.default).toBe(true);
 	});
 
 	it('never sets crossorigin: the player would apply it to the video element', () => {

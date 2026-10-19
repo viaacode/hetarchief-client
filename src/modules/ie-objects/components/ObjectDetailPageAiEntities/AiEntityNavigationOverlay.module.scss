@@ -1,6 +1,10 @@
 @use "src/styles/abstracts" as abstracts;
 
 $control-height: 2.8rem;
+$overlay-height: $control-height + abstracts.$spacer-xs;
+
+// Over the player's controls: their 36px, the 8px gap and the 8px margin to the screen
+$raised-bottom: 3.6rem + abstracts.$spacer-xs + abstracts.$spacer-xs;
 
 // Nested under .flowplayer on purpose: the player resets every descendant with `.flowplayer *`
 // (transparent background, white text), which would win against a single class.
@@ -16,9 +20,8 @@ $control-height: 2.8rem;
 	background-color: abstracts.$black;
 	transition: bottom 0.2s ease;
 
-	// Over the player's controls: their 36px, the 8px gap and the 8px margin to the screen
 	&--raised {
-		bottom: 5.2rem;
+		bottom: $raised-bottom;
 	}
 
 	&__bar {
@@ -70,4 +73,17 @@ $control-height: 2.8rem;
 		height: $control-height !important;
 		width: $control-height !important;
 	}
+}
+
+// The captions would run under the bar: they stay above it, in both of its positions.
+// The extra classes outrank the captions' own rule for the controls' visibility (_flowplayer.scss).
+:global(.flowplayer.c-video-player-inner.c-video-player-inner--custom-controls):has(.c-ai-entity-navigation-overlay) :global(.fp-captions) {
+	bottom: abstracts.$spacer-sm + $overlay-height + abstracts.$spacer-xs;
+
+	// Same as the bar's own: they move together instead of the captions running over it meanwhile
+	transition: bottom 0.2s ease;
+}
+
+:global(.flowplayer.c-video-player-inner.c-video-player-inner--custom-controls):has(.c-ai-entity-navigation-overlay--raised) :global(.fp-captions) {
+	bottom: $raised-bottom + $overlay-height + abstracts.$spacer-xs;
 }

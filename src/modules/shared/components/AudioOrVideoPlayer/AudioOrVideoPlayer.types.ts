@@ -19,6 +19,8 @@ export type AudioOrVideoPlayerProps = {
 	/** The video element of the flowplayer and its root (.c-video-player-inner), as soon as the player is mounted (not when the media has loaded) */
 	onPlayerReady?: (video: HTMLVideoElement, playerRoot: HTMLElement | null) => void;
 	onMediaDurationLoaded?: (duration: number) => void;
+	isSubtitlesEnabled?: boolean;
+	onSubtitlesEnabledChange?: (isEnabled: boolean) => void;
 	dctermsFormat: HetArchiefIeObjectType | null;
 	schemaIdentifier: string | undefined;
 	representation: HetArchiefIeObjectRepresentation | null | undefined;

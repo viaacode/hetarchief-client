@@ -1,19 +1,17 @@
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { tText } from '@shared/helpers/translate';
+import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { usePlayerControlsVisible } from '@shared/hooks/use-player-controls-visible';
 import clsx from 'clsx';
 import { type CSSProperties, type FC, useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import {
 	SUBTITLES_BUTTON_SELECTOR,
-	SUBTITLES_TEASER_COOKIE,
-	SUBTITLES_TEASER_COOKIE_MAX_AGE_SECONDS,
 	SUBTITLES_TEASER_DURATION_MS,
+	SUBTITLES_TEASER_STORAGE_KEY,
 } from './SubtitlesTeaser.const';
 import styles from './SubtitlesTeaser.module.scss';
-
-type CookiebotWindow = Window & { Cookiebot?: { consent?: { preferences?: boolean } } };
 
 interface SubtitlesTeaserProps {
 	/** .c-video-player-inner */
@@ -48,8 +46,7 @@ const getPosition = (playerRoot: HTMLElement): TeaserPosition | null => {
  * video plays. Playing counts too: selecting an AI entity seeks with a muted play (see
  * seekPlayerVideo), which leaves the controls hidden.
  * Clicking it, pressing Escape on it or opening the subtitles menu dismisses it for good, stored in
- * a cookie when the preferences cookies were accepted. Expiring is not stored: it comes back on the
- * next visit. The countdown waits while it is hovered or focused (WCAG 2.2.1).
+ * localStorage. Expiring is not stored: it comes back on the next visit. The countdown waits while it is hovered or focused (WCAG 2.2.1).
  */
 export const SubtitlesTeaser: FC<SubtitlesTeaserProps> = ({ playerRoot: candidateRoot }) => {
 	// The parent keeps the root of a replaced player until the new one is ready: nothing to point at
@@ -57,26 +54,18 @@ export const SubtitlesTeaser: FC<SubtitlesTeaserProps> = ({ playerRoot: candidat
 	const playerRoot = candidateRoot?.isConnected ? candidateRoot : null;
 	const [teaser, setTeaser] = useState<HTMLButtonElement | null>(null);
 
-	// Dismissed until the cookie is read, so it never flashes up for someone who dismissed it
-	const [isDismissed, setIsDismissed] = useState(true);
+	const [storedDismissal, setStoredDismissal] = useLocalStorage(
+		SUBTITLES_TEASER_STORAGE_KEY,
+		'false'
+	);
+	const isDismissed = storedDismissal === 'true';
 	const [isExpired, setIsExpired] = useState(false);
 	const [isTriggered, setIsTriggered] = useState(false);
 	const [isHeld, setIsHeld] = useState(false);
 	const [position, setPosition] = useState<TeaserPosition | null>(null);
 	const areControlsVisible = usePlayerControlsVisible(playerRoot);
 
-	useEffect(() => {
-		setIsDismissed(document.cookie.split('; ').includes(`${SUBTITLES_TEASER_COOKIE}=true`));
-	}, []);
-
-	const dismiss = useCallback(() => {
-		// Cookiebot's auto blocking holds back scripts, not cookie writes, so check the consent here
-		if ((window as CookiebotWindow).Cookiebot?.consent?.preferences) {
-			// biome-ignore lint/suspicious/noDocumentCookie: the Cookie Store API is not supported in all browsers
-			document.cookie = `${SUBTITLES_TEASER_COOKIE}=true; max-age=${SUBTITLES_TEASER_COOKIE_MAX_AGE_SECONDS}; path=/; SameSite=Lax`;
-		}
-		setIsDismissed(true);
-	}, []);
+	const dismiss = useCallback(() => setStoredDismissal('true'), [setStoredDismissal]);
 
 	useEffect(() => {
 		if (areControlsVisible) {
