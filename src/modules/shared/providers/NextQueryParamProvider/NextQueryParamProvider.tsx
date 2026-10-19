@@ -17,6 +17,11 @@ import {
 
 const pathnameRegex = /[^?#]+/u;
 
+// Search string of the shallow route change in progress. window.location only changes once a route
+// change finishes, so updates in the meantime would start from a stale url and drop the params of
+// the pending update (eg: setting the ocr tab and the text overlay at the same moment)
+let pendingSearch: string | null = null;
+
 // Keep serializing the url with query-string, like use-query-params v1 did
 const queryParamOptions: QueryParamOptions = {
 	searchStringToObject: queryString.parse,
@@ -49,18 +54,29 @@ const NextAdapter: QueryParamAdapterComponent = ({ children }) => {
 		function createUpdater(routeFn: typeof router.push) {
 			return function updater({ search }: PartialLocation) {
 				const hash = isBrowser() ? window.location.hash : '';
+				pendingSearch = search;
 				routeFn(
 					{ pathname: router.pathname, search, hash },
 					{ pathname, search, hash },
 					{ shallow: true, scroll: false }
-				);
+				)
+					.catch(() => {
+						// A newer navigation cancelled this route change, which carries these params too
+					})
+					.finally(() => {
+						if (pendingSearch === search) {
+							pendingSearch = null;
+						}
+					});
 			};
 		}
 
 		return {
 			push: createUpdater(router.push),
 			replace: createUpdater(router.replace),
-			location,
+			get location() {
+				return pendingSearch === null ? location : { search: pendingSearch };
+			},
 		};
 	}, [location, pathname, router]);
 

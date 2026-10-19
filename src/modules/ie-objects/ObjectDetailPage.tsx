@@ -55,7 +55,6 @@ import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
 import { isSeekingPlayerVideo } from '@ie-objects/utils/seek-player-video';
-import { updateQueryParamsShallow } from '@ie-objects/utils/update-query-params-shallow';
 import {
 	iiifGoToHome,
 	iiifGoToPage,
@@ -657,7 +656,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			}
 			if (switchToOcrTab) {
 				if (updateUrl) {
-					await updateActiveTab(ObjectDetailTabs.Ocr);
+					updateActiveTab(ObjectDetailTabs.Ocr);
 				} else {
 					setActiveTabWithoutUrlUpdate(ObjectDetailTabs.Ocr);
 				}
@@ -670,20 +669,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		(isVisible: boolean): void => {
 			setIsTextOverlayVisible(isVisible);
 
-			// Also update the query param (not via useQueryParam, see updateQueryParamsShallow)
-			updateQueryParamsShallow(router, {
-				[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED]: isVisible,
-			}).then(noop);
+			// Also update the query param
+			updateQueryParams({
+				[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED]: String(isVisible),
+			});
 		},
-		[router]
+		[updateQueryParams]
 	);
 
-	// Link isOverLayVisible and cue points from the query params to the internal state
-	// We cannot use the useQueryParam hook here because
-	// There seems to be a disconnect between React/NextJS router and the useQueryParam hook
-	// Probably because of the hacky way we had to get the use query param hook to work with NextJS
-	// See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
-	// Since use-query-params v2 this workaround might no longer be needed, but that hasn't been verified yet
+	// Link isOverLayVisible and cue points from the query params to the internal state, once on page load
 	useEffect(() => {
 		const parsedUrl = queryString.parseUrl(window.location.href);
 		const isTextOverlayVisibleFromUrl =
@@ -1056,13 +1050,11 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 */
 	const handleExpandButtonClicked = () => {
 		const newExpandSidebar = !expandSidebar;
-		// Not via a useQueryParam setter: it builds the url from a stale location and drops params that
-		// are being set at the same moment (eg: the ocr tab)
-		updateQueryParamsShallow(router, {
+		updateQueryParams({
 			// Omitted from the url when equal to the default
 			[QUERY_PARAM_KEY.EXPAND_SIDEBAR]:
 				newExpandSidebar === isSidebarExpandedByDefault ? undefined : newExpandSidebar ? '1' : '0',
-		}).then(noop);
+		});
 	};
 
 	const onCloseBlade = () => {
@@ -1399,11 +1391,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 */
 	const handleOnPageChanged = (newPageIndex: number): void => {
 		if (currentPageIndex !== newPageIndex) {
-			// Needing to parse the current url because the router keeps the first route in memory
-			// https://meemoo.atlassian.net/browse/ARC-3587
-			updateQueryParamsShallow(router, {
-				[QUERY_PARAM_KEY.ACTIVE_PAGE]: newPageIndex,
-			}).then(noop);
+			updateQueryParams({
+				[QUERY_PARAM_KEY.ACTIVE_PAGE]: String(newPageIndex),
+			});
 		}
 	};
 
@@ -1678,7 +1668,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							mediaInfo={mediaInfo}
 							goToPage={(page) => {
 								if (isMobile) {
-									updateActiveTab(ObjectDetailTabs.Media).then(noop);
+									updateActiveTab(ObjectDetailTabs.Media);
 								}
 								handleSetCurrentPage(page);
 							}}

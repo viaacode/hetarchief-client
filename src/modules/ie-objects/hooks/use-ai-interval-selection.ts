@@ -29,8 +29,8 @@ interface UseAiIntervalSelectionProps {
 	updateActiveTab: (
 		tab: ObjectDetailTabs | null,
 		extraQuery?: Record<string, string | undefined>
-	) => Promise<void>;
-	updateQueryParams: (patch: Record<string, string | undefined>) => Promise<void>;
+	) => void;
+	updateQueryParams: (patch: Record<string, string | undefined>) => void;
 }
 
 /**
@@ -67,7 +67,7 @@ export const useAiIntervalSelection = ({
 		if (previousFileId && previousFileId !== currentPlayableFileId) {
 			const { query } = queryString.parseUrl(window.location.href);
 			if (query[QUERY_PARAM_KEY.ACTIVE_AI_ENTITY] || query[QUERY_PARAM_KEY.ACTIVE_AI_INTERVAL]) {
-				updateQueryParams(NO_AI_INTERVAL_QUERY).then(noop);
+				updateQueryParams(NO_AI_INTERVAL_QUERY);
 			}
 		}
 	}, [currentPlayableFileId]);
@@ -140,9 +140,9 @@ export const useAiIntervalSelection = ({
 			};
 			if (isMobile && activeTab !== ObjectDetailTabs.Media) {
 				// On mobile the player is on the Media tab, so show it
-				updateActiveTab(ObjectDetailTabs.Media, aiIntervalQuery).then(noop);
+				updateActiveTab(ObjectDetailTabs.Media, aiIntervalQuery);
 			} else {
-				updateQueryParams(aiIntervalQuery).then(noop);
+				updateQueryParams(aiIntervalQuery);
 			}
 		},
 		[seekPlayer, isMobile, activeTab, updateActiveTab, updateQueryParams]
@@ -152,7 +152,7 @@ export const useAiIntervalSelection = ({
 		setActiveAiInterval(null);
 		pendingSeekSecondsRef.current = null;
 		requestedSeekSecondsRef.current = null;
-		updateQueryParams(NO_AI_INTERVAL_QUERY).then(noop);
+		updateQueryParams(NO_AI_INTERVAL_QUERY);
 	}, [updateQueryParams]);
 
 	return { activeAiInterval, selectAiInterval, clearAiInterval, onPlayerReady };
