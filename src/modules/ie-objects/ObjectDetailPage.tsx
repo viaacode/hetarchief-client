@@ -217,6 +217,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		setIiifViewerInitializedPromise(promise);
 	}, []);
 	const [isMediaPaused, setIsMediaPaused] = useState(true);
+	// Kept here: on mobile the player is gone while another tab shows, and comes back with its subtitles off
+	const [isSubtitlesEnabled, setIsSubtitlesEnabled] = useState(false);
 	const [playerRoot, setPlayerRoot] = useState<HTMLElement | null>(null);
 	const [hasMediaPlayed, setHasMediaPlayed] = useState(false);
 	const [hasNewsPaperBeenRendered, setHasNewsPaperBeenRendered] = useState(false);
@@ -1491,6 +1493,8 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 					onPlay={handleOnPlay}
 					onPause={handleOnPause}
 					onPlayerReady={handlePlayerReady}
+					isSubtitlesEnabled={isSubtitlesEnabled}
+					onSubtitlesEnabledChange={setIsSubtitlesEnabled}
 					onMediaReady={setIsFlowPlayerMediaAvailable}
 				/>
 				{isMobile && renderAiEntityNavigationOverlay()}
