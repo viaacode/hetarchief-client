@@ -4,7 +4,10 @@ import '@testing-library/jest-dom';
 import { CONTROLS_HIDDEN_CLASS } from '@shared/hooks/use-player-controls-visible';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { SubtitlesTeaser } from './SubtitlesTeaser';
-import { SUBTITLES_TEASER_COOKIE, SUBTITLES_TEASER_DURATION_MS } from './SubtitlesTeaser.const';
+import {
+	SUBTITLES_TEASER_DURATION_MS,
+	SUBTITLES_TEASER_STORAGE_KEY,
+} from './SubtitlesTeaser.const';
 
 vi.mock('@shared/helpers/translate', () => ({
 	tText: (key: string) => key.split('___')[1] ?? key,
@@ -18,18 +21,12 @@ class ResizeObserverStub {
 	unobserve = vi.fn();
 }
 
-const setPreferencesConsent = (preferences: boolean | undefined) => {
-	(window as unknown as { Cookiebot?: unknown }).Cookiebot =
-		preferences === undefined ? undefined : { consent: { preferences } };
-};
+// useLocalStorage keeps its values as JSON
+const storeDismissal = (isDismissed: boolean) =>
+	window.localStorage.setItem(SUBTITLES_TEASER_STORAGE_KEY, JSON.stringify(String(isDismissed)));
 
-const writeRawCookie = (cookie: string) => {
-	// biome-ignore lint/suspicious/noDocumentCookie: the component writes the same way, the test sets up state
-	document.cookie = cookie;
-};
-
-const hasDismissCookie = () =>
-	document.cookie.split('; ').includes(`${SUBTITLES_TEASER_COOKIE}=true`);
+const hasStoredDismissal = () =>
+	window.localStorage.getItem(SUBTITLES_TEASER_STORAGE_KEY) === JSON.stringify('true');
 
 const createPlayerRoot = ({
 	withSubtitlesButton = true,
@@ -62,14 +59,13 @@ const getTeaser = () => screen.queryByRole('button', { name: new RegExp(TEASER_N
 describe('SubtitlesTeaser', () => {
 	beforeEach(() => {
 		vi.stubGlobal('ResizeObserver', ResizeObserverStub);
-		setPreferencesConsent(true);
 	});
 
 	afterEach(() => {
+		vi.restoreAllMocks();
 		vi.unstubAllGlobals();
 		vi.useRealTimers();
-		setPreferencesConsent(undefined);
-		writeRawCookie(`${SUBTITLES_TEASER_COOKIE}=; max-age=0; path=/`);
+		window.localStorage.removeItem(SUBTITLES_TEASER_STORAGE_KEY);
 		document.body.innerHTML = '';
 	});
 
@@ -123,7 +119,7 @@ describe('SubtitlesTeaser', () => {
 		});
 
 		it('does not show for a visitor who dismissed it before', async () => {
-			writeRawCookie(`${SUBTITLES_TEASER_COOKIE}=true; path=/`);
+			storeDismissal(true);
 			const { root } = createPlayerRoot({ controlsHidden: false });
 
 			renderTeaser(root);
@@ -159,7 +155,7 @@ describe('SubtitlesTeaser', () => {
 			});
 			expect(getTeaser()).not.toBeInTheDocument();
 			// Expiring is not dismissing: it comes back on the next visit
-			expect(hasDismissCookie()).toBe(false);
+			expect(hasStoredDismissal()).toBe(false);
 		});
 	});
 
@@ -294,11 +290,10 @@ describe('SubtitlesTeaser', () => {
 
 			expect(getTeaser()).not.toBeInTheDocument();
 			expect(buttonClick).toHaveBeenCalledTimes(1);
-			expect(hasDismissCookie()).toBe(true);
+			expect(hasStoredDismissal()).toBe(true);
 		});
 
-		it('stores the dismissal in a cookie when the preferences were accepted', async () => {
-			setPreferencesConsent(true);
+		it('stores the dismissal', async () => {
 			const { root } = createPlayerRoot({ controlsHidden: false });
 			renderTeaser(root);
 			await waitFor(() => expect(getTeaser()).toBeInTheDocument());
@@ -307,28 +302,34 @@ describe('SubtitlesTeaser', () => {
 				(getTeaser() as HTMLElement).click();
 			});
 
-			expect(hasDismissCookie()).toBe(true);
+			expect(hasStoredDismissal()).toBe(true);
 		});
 
-		it.each([
-			['declined', false],
-			['not answered yet', undefined],
-		])(
-			'stores no cookie when the preferences were %s, but still hides it for this visit',
-			async (_label, consent) => {
-				setPreferencesConsent(consent);
-				const { root } = createPlayerRoot({ controlsHidden: false });
-				renderTeaser(root);
-				await waitFor(() => expect(getTeaser()).toBeInTheDocument());
+		it('shows it when the storage cannot be read', async () => {
+			vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+				throw new Error('blocked');
+			});
+			const { root } = createPlayerRoot({ controlsHidden: false });
 
-				await act(async () => {
-					(getTeaser() as HTMLElement).click();
-				});
+			renderTeaser(root);
 
-				expect(getTeaser()).not.toBeInTheDocument();
-				expect(hasDismissCookie()).toBe(false);
-			}
-		);
+			await waitFor(() => expect(getTeaser()).toBeInTheDocument());
+		});
+
+		it('still hides it for this visit when the storage cannot be written', async () => {
+			vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+				throw new Error('blocked');
+			});
+			const { root } = createPlayerRoot({ controlsHidden: false });
+			renderTeaser(root);
+			await waitFor(() => expect(getTeaser()).toBeInTheDocument());
+
+			await act(async () => {
+				(getTeaser() as HTMLElement).click();
+			});
+
+			expect(getTeaser()).not.toBeInTheDocument();
+		});
 	});
 
 	describe('keyboard', () => {
@@ -342,7 +343,7 @@ describe('SubtitlesTeaser', () => {
 			});
 
 			expect(getTeaser()).not.toBeInTheDocument();
-			expect(hasDismissCookie()).toBe(true);
+			expect(hasStoredDismissal()).toBe(true);
 		});
 
 		it.each([

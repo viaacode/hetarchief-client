@@ -19,6 +19,8 @@ interface GetSubtitleTracksOptions {
 	src: string | undefined;
 	label: string;
 	disclaimer: string;
+	/** Whether the player turns the track on by itself */
+	isDefault: boolean;
 }
 
 /**
@@ -30,7 +32,7 @@ interface GetSubtitleTracksOptions {
  */
 export const getSubtitleTracks = (
 	subtitleFile: HetArchiefIeObjectFile | undefined,
-	{ src, label, disclaimer }: GetSubtitleTracksOptions
+	{ src, label, disclaimer, isDefault }: GetSubtitleTracksOptions
 ): SubtitleTrack[] | undefined => {
 	if (!subtitleFile || !src) {
 		return undefined;
@@ -41,7 +43,7 @@ export const getSubtitleTracks = (
 			id: subtitleFile.id,
 			kind: 'subtitles',
 			lang: Locale.nl,
-			default: false,
+			default: isDefault,
 			label,
 			subLabel: disclaimer,
 			src,

@@ -34,6 +34,7 @@ import React, {
 	useCallback,
 	useEffect,
 	useMemo,
+	useRef,
 	useState,
 } from 'react';
 import type { AudioOrVideoPlayerProps } from './AudioOrVideoPlayer.types';
@@ -49,6 +50,8 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 	onMediaReady,
 	onPlayerReady,
 	onMediaDurationLoaded,
+	isSubtitlesEnabled = false,
+	onSubtitlesEnabledChange,
 	representation,
 	dctermsFormat,
 	schemaIdentifier,
@@ -127,6 +130,10 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		subtitleFile?.id,
 		schemaIdentifier
 	);
+	// Not a dependency of the tracks: toggling the subtitles must not re-initialise the player
+	const isSubtitlesEnabledRef = useRef(isSubtitlesEnabled);
+	isSubtitlesEnabledRef.current = isSubtitlesEnabled;
+
 	// The player re-initialises whenever the subtitles prop changes identity
 	const subtitleTracks = useMemo(
 		() =>
@@ -138,6 +145,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 				disclaimer: tText(
 					'modules/shared/components/audio-or-video-player/audio-or-video-player___ondertitels-zijn-ai-gegenereerd-door-meemoo-er-werd-geen-menselijke-controle-op-uitgevoerd'
 				),
+				isDefault: isSubtitlesEnabledRef.current,
 			}),
 		[subtitleFile, subtitlesUrl]
 	);
@@ -201,6 +209,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		onPlay,
 		onPause,
 		onReady: handlePlayerReady,
+		onSubtitleTrackChange: (trackKey) => onSubtitlesEnabledChange?.(trackKey !== null),
 		token: publicRuntimeConfig.FLOW_PLAYER_TOKEN,
 		dataPlayerId: publicRuntimeConfig.FLOW_PLAYER_ID,
 		ui: allowFullScreen ? undefined : 1, // 1 = NO_FULLSCREEN

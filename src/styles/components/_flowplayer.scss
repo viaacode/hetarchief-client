@@ -58,6 +58,28 @@
 		}
 	}
 
+	// The player lifts the captions on its own hover/pause state, which ends before the custom
+	// controls hide: they follow the controls' visibility instead
+	&.c-video-player-inner--custom-controls {
+		&:not(.c-video-player-inner--controls-hidden) .fp-captions {
+			bottom: 3.2em;
+
+			@media (width >= 700px) {
+				bottom: 2.4em;
+			}
+		}
+
+		&.c-video-player-inner--controls-hidden .fp-captions {
+			bottom: abstracts.$spacer-xs;
+		}
+	}
+
+	// The player's `.flowplayer *` sets the color on every descendant, so the content and the icon of
+	// a disabled button would not follow its disabled color by inheriting
+	.c-button:disabled * {
+		color: inherit;
+	}
+
 	.c-video-player-inner {
 		background-color: abstracts.$silver !important;
 	}

@@ -185,6 +185,33 @@ describe('AudioOrVideoPlayer subtitles', () => {
 		expect(onPlayerReady).toHaveBeenCalledWith(video, playerRoot);
 	});
 
+	it('turns the subtitles on from the start when they were on before', () => {
+		render(<AudioOrVideoPlayer {...buildProps({ isSubtitlesEnabled: true })} />);
+
+		expect(lastFlowPlayerProps().subtitles[0].default).toBe(true);
+	});
+
+	it('does not re-initialise the player when the subtitles are switched', () => {
+		const props = buildProps();
+		const { rerender } = render(<AudioOrVideoPlayer {...props} />);
+		const first = lastFlowPlayerProps().subtitles;
+
+		rerender(<AudioOrVideoPlayer {...props} isSubtitlesEnabled />);
+
+		expect(lastFlowPlayerProps().subtitles).toBe(first);
+	});
+
+	it('reports the subtitles as on when the player has a track on, and off when it has none', () => {
+		const onSubtitlesEnabledChange = vi.fn();
+		render(<AudioOrVideoPlayer {...buildProps({ onSubtitlesEnabledChange })} />);
+
+		lastFlowPlayerProps().onSubtitleTrackChange('nl');
+		expect(onSubtitlesEnabledChange).toHaveBeenLastCalledWith(true);
+
+		lastFlowPlayerProps().onSubtitleTrackChange(null);
+		expect(onSubtitlesEnabledChange).toHaveBeenLastCalledWith(false);
+	});
+
 	it('also offers the subtitles on an audio player, without a fullscreen button', () => {
 		render(
 			<AudioOrVideoPlayer
