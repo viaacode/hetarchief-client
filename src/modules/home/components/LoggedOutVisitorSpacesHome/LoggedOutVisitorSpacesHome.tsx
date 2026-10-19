@@ -8,7 +8,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import { type FC, useEffect } from 'react';
 import { BooleanParam, StringParam, useQueryParams } from 'use-query-params';
 
@@ -29,7 +29,7 @@ const LoggedOutVisitorSpacesHome: FC = () => {
 
 	const onRequestAccess = (visitorSpaceSlug: string) => {
 		return router.push(
-			`${ROUTES_BY_LOCALE[locale].visit}?${stringify({
+			`${ROUTES_BY_LOCALE[locale].visit}?${queryString.stringify({
 				[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
 				[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug,
 			})}`
@@ -42,7 +42,7 @@ const LoggedOutVisitorSpacesHome: FC = () => {
 			!query[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]
 		) {
 			router.push(
-				`${ROUTES_BY_LOCALE[locale].visit}?${stringify({
+				`${ROUTES_BY_LOCALE[locale].visit}?${queryString.stringify({
 					[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
 					[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]:
 						query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY],

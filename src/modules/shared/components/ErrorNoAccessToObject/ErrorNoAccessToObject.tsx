@@ -16,7 +16,7 @@ import { toastService } from '@shared/services/toast-service';
 import { setShowAuthModal } from '@shared/store/ui';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import { type FC, type ReactNode, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { StringParam, useQueryParams } from 'use-query-params';
@@ -89,11 +89,11 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 			return '#';
 		}
 		if (isAnonymous) {
-			const redirectAfterLoginUrl = stringifyUrl({
+			const redirectAfterLoginUrl = queryString.stringifyUrl({
 				url: ROUTES_BY_LOCALE[locale].visit,
 				query: { [QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug.toLowerCase() },
 			});
-			return stringifyUrl({
+			return queryString.stringifyUrl({
 				url: router.asPath,
 				query: {
 					[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: 'true',
@@ -101,7 +101,7 @@ const ErrorNoAccessToObject: FC<ErrorNoAccessToObjectProps> = ({
 				},
 			});
 		}
-		return stringifyUrl({
+		return queryString.stringifyUrl({
 			url: ROUTES_BY_LOCALE[locale].visit,
 			query: {
 				[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY]: visitorSpaceSlug.toLowerCase(),

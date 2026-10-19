@@ -43,7 +43,7 @@ import { getThemeSearchPath } from '@visitor-space/utils/theme-search-path';
 import { noop } from 'es-toolkit/compat';
 import Link from 'next/link';
 import type { NextRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import type { FunctionComponent } from 'react';
 
 const { publicRuntimeConfig } = getConfig();
@@ -63,7 +63,7 @@ const InternalLink = (linkInfo: LinkInfo) => {
 // When a content page is saved, for clear the Next.js cache
 const onSaveContentPage = async (contentPageInfo: ContentPageInfo) => {
 	await ApiService.getApi(false).post(
-		stringifyUrl({
+		queryString.stringifyUrl({
 			url: 'client-cache/clear-cache',
 			query: { language: contentPageInfo.language, path: contentPageInfo.path },
 		})

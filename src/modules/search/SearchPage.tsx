@@ -113,7 +113,7 @@ import { intersection, isEmpty, isNil, sortBy, sum } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { MultiValue } from 'react-select';
@@ -624,7 +624,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				? JSON.stringify(searchResults?.searchTerms)
 				: '';
 
-			const link: string | undefined = stringifyUrl({
+			const link: string | undefined = queryString.stringifyUrl({
 				url: getIeObjectDetailPath(locale, item.maintainerSlug, item.schemaIdentifier, item.name),
 				query: {
 					[QUERY_PARAM_KEY.HIGHLIGHTED_SEARCH_TERMS]: plainTextSearchTerms,

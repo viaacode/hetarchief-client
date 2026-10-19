@@ -14,7 +14,7 @@ import type { HetArchiefIeObject } from '@viaa/avo2-types';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
 import type { GetServerSidePropsResult } from 'next';
 import type { GetServerSidePropsContext } from 'next/types';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 
 export async function getMaintainerSearchPageServerSideProps(
 	context: GetServerSidePropsContext
@@ -38,7 +38,7 @@ export async function getMaintainerSearchPageServerSideProps(
 	if (organisation) {
 		return {
 			redirect: {
-				destination: stringifyUrl({
+				destination: queryString.stringifyUrl({
 					// Next.js uses the destination verbatim, so the locale prefix has to be included
 					url: `${getLocalePathPrefix(locale)}/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 					query: {
@@ -76,7 +76,7 @@ export async function getMaintainerSearchPageServerSideProps(
 	if (ieObject) {
 		return {
 			redirect: {
-				destination: stringifyUrl({
+				destination: queryString.stringifyUrl({
 					url: getIeObjectDetailRedirectDestination(
 						locale,
 						ieObject.maintainerSlug,

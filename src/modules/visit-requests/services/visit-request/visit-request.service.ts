@@ -12,7 +12,7 @@ import type {
 } from '@visit-requests/services/visit-request/visit-request.service.types';
 import type { PatchVisit } from '@visit-requests/types';
 import type { CreateVisitRequest } from '@visitor-space/services/visitor-space/visitor-space.service.types';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import {
 	VISITS_SERVICE_ACCESS_STATUS_URL,
 	VISITS_SERVICE_ACTIVE_SPACE_URL,
@@ -35,7 +35,7 @@ export class VisitRequestService {
 		personal,
 		ignoreAuthError = false,
 	}: GetVisitRequestsProps): Promise<IPagination<VisitRequest>> {
-		const url = stringifyUrl({
+		const url = queryString.stringifyUrl({
 			url: personal ? `${VISITS_SERVICE_BASE_URL}/personal` : VISITS_SERVICE_BASE_URL,
 			query: {
 				...(searchInput?.trim() ? { query: `%${searchInput}%` } : {}),
@@ -123,7 +123,7 @@ export class VisitRequestService {
 	}: GetAllActiveVisitsProps): Promise<IPagination<VisitRequest>> {
 		const parsed = await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${VISITS_SERVICE_BASE_URL}/personal`,
 					query: {
 						status: VisitStatus.APPROVED,

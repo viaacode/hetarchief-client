@@ -4,7 +4,7 @@ import { ApiService } from '@shared/services/api-service';
 import type { QueryClient } from '@tanstack/react-query';
 import type { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import { sortBy } from 'es-toolkit/compat';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import {
 	type VisitorSpaceInfo,
 	type VisitorSpaceOrderProps,
@@ -40,7 +40,7 @@ export class VisitorSpaceService {
 	): Promise<IPagination<VisitorSpaceInfo>> {
 		const parsed = await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: VISITOR_SPACE_SERVICE_BASE_URL,
 					query: {
 						query: searchInput ? `%${searchInput}%` : undefined,
@@ -64,7 +64,7 @@ export class VisitorSpaceService {
 	): Promise<VisitorSpaceInfo[]> {
 		const parsed = (await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: VISITOR_SPACE_SERVICE_BASE_URL,
 					query: {
 						accessType: canViewAllSpaces ? undefined : AccessType.ACTIVE,

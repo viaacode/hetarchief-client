@@ -9,7 +9,7 @@ import { keepPreviousData } from '@tanstack/react-query';
 import { useGetOrganisationBySlug } from '@visitor-space/hooks/get-organisation-by-slug';
 import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/types';
 import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import { type FC, useEffect } from 'react';
 
 type MaintainerSearchPageProps = DefaultSeoInfo;
@@ -41,7 +41,7 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 	// If url is: /zoeken/slug/:object-id => redirect to /zoeken/:slug/:object-id/:object-name
 	useEffect(() => {
 		if (organisation) {
-			const searchUrl = stringifyUrl({
+			const searchUrl = queryString.stringifyUrl({
 				url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 				query: {
 					[SearchFilterId.Maintainers]: `${organisation.schemaIdentifier}${FILTER_LABEL_VALUE_DELIMITER}${organisation.schemaName}`,
@@ -54,7 +54,7 @@ export const MaintainerSearchPage: FC<MaintainerSearchPageProps> = () => {
 	// If the url is: /zoeken/:object-id => redirect to /zoeken/:slug/:object-id/:object-name
 	useEffect(() => {
 		if (ieObjectInfo) {
-			const searchUrl = stringifyUrl({
+			const searchUrl = queryString.stringifyUrl({
 				url: getIeObjectDetailPath(
 					locale,
 					ieObjectInfo.maintainerSlug,

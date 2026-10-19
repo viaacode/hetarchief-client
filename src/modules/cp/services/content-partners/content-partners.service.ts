@@ -1,6 +1,6 @@
 import type { ContentPartnerResponse } from '@admin/types';
 import { ApiService } from '@shared/services/api-service';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 
 import { CONTENT_PARTNERS_SERVICE_BASE_URL } from './content-partners.const';
 
@@ -16,7 +16,7 @@ export class ContentPartnersService {
 	}: ContentPartnerParams): Promise<ContentPartnerResponse> {
 		return await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: CONTENT_PARTNERS_SERVICE_BASE_URL,
 					query: {
 						hasSpace,

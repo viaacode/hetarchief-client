@@ -1,6 +1,6 @@
 import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { ApiService } from '@shared/services/api-service';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 
 import type { Alert } from '../../types';
 
@@ -15,7 +15,7 @@ export class MaintenanceAlertsService {
 	): Promise<IPagination<Alert>> {
 		const parsed = await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${MAINTENANCE_ALERTS_SERVICE_BASE_URL}/personal`,
 					query: {
 						orderProp,
@@ -30,7 +30,7 @@ export class MaintenanceAlertsService {
 
 	public static async dismissMaintenanceAlert(maintenanceAlertId: string): Promise<void> {
 		await ApiService.getApi().post(
-			stringifyUrl({
+			queryString.stringifyUrl({
 				url: 'notifications/create-from-maintenance-alert',
 				query: {
 					id: maintenanceAlertId,

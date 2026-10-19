@@ -3,7 +3,7 @@ import { updateQueryParamsShallow } from '@ie-objects/utils/update-query-params-
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SearchFilterId } from '@visitor-space/types';
 import { useRouter } from 'next/router';
-import { parseUrl } from 'query-string';
+import queryString from 'query-string';
 import { useCallback, useEffect, useState } from 'react';
 
 interface UseObjectDetailActiveTabProps {
@@ -64,7 +64,7 @@ export const useObjectDetailActiveTab = ({
 			return;
 		}
 		// Read from window.location, not useQueryParam (see updateActiveTab), on every object change.
-		const { query } = parseUrl(window.location.href);
+		const { query } = queryString.parseUrl(window.location.href);
 		// An explicit tab in the URL (deep link / bookmark / link to another object) wins
 		const activeTabFromUrl = parseObjectDetailTab(query[QUERY_PARAM_KEY.ACTIVE_TAB]);
 		if (activeTabFromUrl) {

@@ -1,7 +1,7 @@
 import type { Folder, FolderIeObject, SharedFolderResponse } from '@account/types';
 import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { ApiService } from '@shared/services/api-service';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 
 import { FOLDERS_SERVICE_BASE_URL, FOLDERS_SERVICE_OBJECTS_URL } from './folders.const';
 
@@ -19,7 +19,7 @@ export abstract class FoldersService {
 	): Promise<IPagination<FolderIeObject>> {
 		return await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${FOLDERS_SERVICE_BASE_URL}/${folderUuid}`,
 					query: {
 						...(searchInput ? { query: `%${searchInput}%` } : {}),
