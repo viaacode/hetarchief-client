@@ -1,6 +1,6 @@
 import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { ApiService } from '@shared/services/api-service';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 
 import { THEMES_SERVICE_BASE_URL } from './themes.consts';
 import type {
@@ -22,7 +22,7 @@ export abstract class ThemesService {
 	}: GetThemesProps): Promise<IPagination<Theme>> {
 		const result = await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: THEMES_SERVICE_BASE_URL,
 					query: {
 						// Matches slug, nameNl and nameEn on the proxy side
@@ -56,7 +56,7 @@ export abstract class ThemesService {
 	}: GetThemeIeObjectsProps): Promise<ThemeWithIeObjects> {
 		const result = await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${THEMES_SERVICE_BASE_URL}/${themeId}/ie-objects`,
 					query: {
 						...(page && { page }),

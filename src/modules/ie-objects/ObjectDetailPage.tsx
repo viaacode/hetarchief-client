@@ -55,7 +55,6 @@ import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
 import { isSeekingPlayerVideo } from '@ie-objects/utils/seek-player-video';
-import { updateQueryParamsShallow } from '@ie-objects/utils/update-query-params-shallow';
 import {
 	iiifGoToHome,
 	iiifGoToPage,
@@ -134,7 +133,7 @@ import clsx from 'clsx';
 import { capitalize, compact, intersection, isNil, lowerCase, noop } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
 import { useRouter } from 'next/router';
-import { parseUrl, stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import { type FC, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -142,6 +141,7 @@ import {
 	NumberParam,
 	StringParam,
 	useQueryParam,
+	useQueryParams,
 	withDefault,
 } from 'use-query-params';
 import styles from './ObjectDetailPage.module.scss';
@@ -482,11 +482,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, [relatedIeObjects]);
 	const relatedCount = mappedRelatedIeObjects.length;
 
-	const { activeTab, updateActiveTab, setActiveTabWithoutUrlUpdate, updateQueryParams } =
-		useObjectDetailActiveTab({
-			objectId: mediaInfo?.schemaIdentifier,
-			isNewspaper,
-		});
+	// Query params to change in one url update; undefined removes one
+	const [, setQueryParams] = useQueryParams({});
+	const { activeTab, updateActiveTab, setActiveTabWithoutUrlUpdate } = useObjectDetailActiveTab({
+		objectId: mediaInfo?.schemaIdentifier,
+		isNewspaper,
+	});
 
 	// visit info
 	const { data: visitRequest, error: visitRequestError } = useGetActiveVisitRequestForUserAndSpace(
@@ -549,7 +550,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			isMobile,
 			activeTab,
 			updateActiveTab,
-			updateQueryParams,
 		});
 
 	const hasAccessToVisitorSpaceOfObject =
@@ -657,7 +657,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			}
 			if (switchToOcrTab) {
 				if (updateUrl) {
-					await updateActiveTab(ObjectDetailTabs.Ocr);
+					updateActiveTab(ObjectDetailTabs.Ocr);
 				} else {
 					setActiveTabWithoutUrlUpdate(ObjectDetailTabs.Ocr);
 				}
@@ -670,23 +670,20 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		(isVisible: boolean): void => {
 			setIsTextOverlayVisible(isVisible);
 
-			// Also update the query param (not via useQueryParam, see updateQueryParamsShallow)
-			updateQueryParamsShallow(router, {
-				[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED]: isVisible,
-			}).then(noop);
+			// Also update the query param
+			setQueryParams(
+				{
+					[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED]: String(isVisible),
+				},
+				'replaceIn'
+			);
 		},
-		[router]
+		[setQueryParams]
 	);
 
-	// Link isOverLayVisible and cue points from the query params to the internal state
-	// We cannot use the useQueryParam hook here because
-	// There seems to be a disconnect between React/NextJS router and the useQueryParam hook
-	// Probably because of the hacky way we had to get the use query param hook to work with NextJS
-	// See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
-	// This could probably be solved by using the latest version of use-query-params and the next-query-params package
-	// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
+	// Link isOverLayVisible and cue points from the query params to the internal state, once on page load
 	useEffect(() => {
-		const parsedUrl = parseUrl(window.location.href);
+		const parsedUrl = queryString.parseUrl(window.location.href);
 		const isTextOverlayVisibleFromUrl =
 			parsedUrl.query[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED];
 		if (isTextOverlayVisibleFromUrl) {
@@ -1057,13 +1054,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 */
 	const handleExpandButtonClicked = () => {
 		const newExpandSidebar = !expandSidebar;
-		// Not via a useQueryParam setter: it builds the url from a stale location and drops params that
-		// are being set at the same moment (eg: the ocr tab)
-		updateQueryParamsShallow(router, {
-			// Omitted from the url when equal to the default
-			[QUERY_PARAM_KEY.EXPAND_SIDEBAR]:
-				newExpandSidebar === isSidebarExpandedByDefault ? undefined : newExpandSidebar ? '1' : '0',
-		}).then(noop);
+		setQueryParams(
+			{
+				// Omitted from the url when equal to the default
+				[QUERY_PARAM_KEY.EXPAND_SIDEBAR]:
+					newExpandSidebar === isSidebarExpandedByDefault
+						? undefined
+						: newExpandSidebar
+							? '1'
+							: '0',
+			},
+			'replaceIn'
+		);
 	};
 
 	const onCloseBlade = () => {
@@ -1355,7 +1357,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 	const handleIiifViewerSelection = useCallback(
 		(rect: Rect, pageIndex: number) => {
-			const downloadUrl = stringifyUrl({
+			const downloadUrl = queryString.stringifyUrl({
 				url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
 				query: {
 					page: pageIndex,
@@ -1400,11 +1402,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 */
 	const handleOnPageChanged = (newPageIndex: number): void => {
 		if (currentPageIndex !== newPageIndex) {
-			// Needing to parse the current url because the router keeps the first route in memory
-			// https://meemoo.atlassian.net/browse/ARC-3587
-			updateQueryParamsShallow(router, {
-				[QUERY_PARAM_KEY.ACTIVE_PAGE]: newPageIndex,
-			}).then(noop);
+			setQueryParams(
+				{
+					[QUERY_PARAM_KEY.ACTIVE_PAGE]: String(newPageIndex),
+				},
+				'replaceIn'
+			);
 		}
 	};
 
@@ -1679,7 +1682,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 							mediaInfo={mediaInfo}
 							goToPage={(page) => {
 								if (isMobile) {
-									updateActiveTab(ObjectDetailTabs.Media).then(noop);
+									updateActiveTab(ObjectDetailTabs.Media);
 								}
 								handleSetCurrentPage(page);
 							}}

@@ -6,7 +6,7 @@ import type {
 	OrganisationListItem,
 	UpdateOrganisationProps,
 } from '@shared/services/organisation-service/organisation.types';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 
 const ORGANISATIONS_SERVICE_BASE_URL = 'organisations';
 
@@ -20,7 +20,7 @@ export class OrganisationService {
 	}: GetOrganisationsProps): Promise<IPagination<OrganisationListItem>> {
 		const result = await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${ORGANISATIONS_SERVICE_BASE_URL}/slugs`,
 					query: {
 						...(query?.trim() ? { query: `%${query}%` } : {}),

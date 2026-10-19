@@ -8,7 +8,7 @@ import type { QueryClient } from '@tanstack/react-query';
 import { omit, trimEnd } from 'es-toolkit/compat';
 import type { Options } from 'ky/distribution/types/options';
 import type { NextRouter } from 'next/router';
-import { parseUrl, type StringifiableRecord, stringifyUrl } from 'query-string';
+import queryString, { type StringifiableRecord } from 'query-string';
 
 import type { CheckLoginResponse } from './auth.service.types';
 
@@ -59,8 +59,8 @@ export class AuthService {
 
 		// Make sure we don't show the auth modal after the idp login redirect
 		if (originalPath.includes(QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY)) {
-			const parsedUrl = parseUrl(originalPath);
-			originalPath = stringifyUrl({
+			const parsedUrl = queryString.parseUrl(originalPath);
+			originalPath = queryString.stringifyUrl({
 				url: parsedUrl.url,
 				query: omit(parsedUrl.query, QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY),
 			});
@@ -70,8 +70,8 @@ export class AuthService {
 			`${publicRuntimeConfig.CLIENT_URL}/${router.locale}${originalPath}`,
 			'/'
 		);
-		const parsedRedirectUrl = parseUrl(returnToUrl);
-		returnToUrl = stringifyUrl({
+		const parsedRedirectUrl = queryString.parseUrl(returnToUrl);
+		returnToUrl = queryString.stringifyUrl({
 			url: parsedRedirectUrl.url,
 			query: {
 				...parsedRedirectUrl.query,
@@ -80,7 +80,7 @@ export class AuthService {
 		});
 
 		await router.replace(
-			stringifyUrl({
+			queryString.stringifyUrl({
 				url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/login`,
 				query: {
 					returnToUrl,
@@ -95,13 +95,13 @@ export class AuthService {
 		router: NextRouter
 	): Promise<void> {
 		const { redirectTo, ...otherQueryParams } = query;
-		const returnToUrl = stringifyUrl({
+		const returnToUrl = queryString.stringifyUrl({
 			url: `${publicRuntimeConfig.CLIENT_URL}/${router.locale}/${redirectTo ?? ''}`,
 			query: otherQueryParams,
 		});
 
 		await router.replace(
-			stringifyUrl({
+			queryString.stringifyUrl({
 				url: `${publicRuntimeConfig.PROXY_URL}/auth/hetarchief/register`,
 				query: {
 					returnToUrl,
@@ -129,7 +129,7 @@ export class AuthService {
 			if (originalPathIsLogoutPath) {
 				originalPath = '/';
 			}
-			returnToUrl = stringifyUrl({
+			returnToUrl = queryString.stringifyUrl({
 				url: `${publicRuntimeConfig.CLIENT_URL}/${locale}`,
 				query: {
 					redirectTo: `/${locale}${originalPath}`,
@@ -145,7 +145,7 @@ export class AuthService {
 		// redirect below was never reached and the refetches looped at ~100 req/s.
 		AuthService.queryClient?.clear();
 
-		window.location.href = stringifyUrl({
+		window.location.href = queryString.stringifyUrl({
 			url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,
 			query: {
 				returnToUrl,

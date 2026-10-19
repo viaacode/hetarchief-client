@@ -10,6 +10,11 @@ import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 const state = vi.hoisted(() => ({ video: null as HTMLVideoElement | null }));
+const setQueryParams = vi.hoisted(() => vi.fn());
+
+vi.mock('use-query-params', () => ({
+	useQueryParams: () => [{}, setQueryParams],
+}));
 
 vi.mock('@ie-objects/utils/seek-player-video', () => ({
 	getPlayerVideoElement: () => state.video,
@@ -64,20 +69,18 @@ const createVideo = (readyState = 4): HTMLVideoElement => {
 
 const setup = (initialProps: Partial<Parameters<typeof useAiIntervalSelection>[0]> = {}) => {
 	const updateActiveTab = vi.fn().mockResolvedValue(undefined);
-	const updateQueryParams = vi.fn().mockResolvedValue(undefined);
 	const props = {
 		fileMentions: undefined,
 		currentPlayableFileId: 'file-1',
 		isMobile: false,
 		activeTab: ObjectDetailTabs.Overview,
 		updateActiveTab,
-		updateQueryParams,
 		...initialProps,
 	};
 	const hook = renderHook((hookProps: typeof props) => useAiIntervalSelection(hookProps), {
 		initialProps: props,
 	});
-	return { ...hook, props, updateActiveTab, updateQueryParams };
+	return { ...hook, props, updateActiveTab };
 };
 
 describe('Hook: useAiIntervalSelection', () => {
@@ -95,18 +98,21 @@ describe('Hook: useAiIntervalSelection', () => {
 
 	describe('selectAiInterval', () => {
 		it('highlights the interval, seeks the player and puts the interval in the url', () => {
-			const { result, updateQueryParams, updateActiveTab } = setup();
+			const { result, updateActiveTab } = setup();
 
 			act(() => result.current.selectAiInterval(entity, 1));
 
 			expect(result.current.activeAiInterval).toEqual({ entity, intervalIndex: 1 });
 			expect(seekPlayerVideo).toHaveBeenCalledWith(state.video, 60);
-			expect(updateQueryParams).toHaveBeenCalledWith({ aiEntity: 'jane', aiInterval: '1' });
+			expect(setQueryParams).toHaveBeenCalledWith(
+				{ aiEntity: 'jane', aiInterval: '1' },
+				'replaceIn'
+			);
 			expect(updateActiveTab).not.toHaveBeenCalled();
 		});
 
 		it('brings the player into view on mobile when another tab is open, in one url update', () => {
-			const { result, updateQueryParams, updateActiveTab } = setup({
+			const { result, updateActiveTab } = setup({
 				isMobile: true,
 				activeTab: ObjectDetailTabs.Overview,
 			});
@@ -117,18 +123,21 @@ describe('Hook: useAiIntervalSelection', () => {
 				aiEntity: 'jane',
 				aiInterval: '0',
 			});
-			expect(updateQueryParams).not.toHaveBeenCalled();
+			expect(setQueryParams).not.toHaveBeenCalled();
 		});
 
 		it('stays on the media tab on mobile', () => {
-			const { result, updateQueryParams, updateActiveTab } = setup({
+			const { result, updateActiveTab } = setup({
 				isMobile: true,
 				activeTab: ObjectDetailTabs.Media,
 			});
 
 			act(() => result.current.selectAiInterval(entity, 0));
 
-			expect(updateQueryParams).toHaveBeenCalledWith({ aiEntity: 'jane', aiInterval: '0' });
+			expect(setQueryParams).toHaveBeenCalledWith(
+				{ aiEntity: 'jane', aiInterval: '0' },
+				'replaceIn'
+			);
 			expect(updateActiveTab).not.toHaveBeenCalled();
 		});
 	});
@@ -300,45 +309,45 @@ describe('Hook: useAiIntervalSelection', () => {
 
 	describe('url when another file is played', () => {
 		it('removes the interval of the previous file from the url', () => {
-			const { rerender, props, updateQueryParams } = setup();
+			const { rerender, props } = setup();
 			window.history.replaceState({}, '', '/object?aiEntity=jane&aiInterval=1');
 
 			rerender({ ...props, currentPlayableFileId: 'file-2' });
 
-			expect(updateQueryParams).toHaveBeenCalledWith({
-				aiEntity: undefined,
-				aiInterval: undefined,
-			});
+			expect(setQueryParams).toHaveBeenCalledWith(
+				{ aiEntity: undefined, aiInterval: undefined },
+				'replaceIn'
+			);
 		});
 
 		it('leaves the url alone while the first file is still being determined', () => {
 			window.history.replaceState({}, '', '/object?aiEntity=jane&aiInterval=1');
-			const { rerender, props, updateQueryParams } = setup({ currentPlayableFileId: null });
+			const { rerender, props } = setup({ currentPlayableFileId: null });
 
 			rerender({ ...props, currentPlayableFileId: 'file-1' });
 
-			expect(updateQueryParams).not.toHaveBeenCalled();
+			expect(setQueryParams).not.toHaveBeenCalled();
 		});
 
 		it('does not touch the url when it holds no interval', () => {
-			const { rerender, props, updateQueryParams } = setup();
+			const { rerender, props } = setup();
 
 			rerender({ ...props, currentPlayableFileId: 'file-2' });
 
-			expect(updateQueryParams).not.toHaveBeenCalled();
+			expect(setQueryParams).not.toHaveBeenCalled();
 		});
 	});
 
 	it('clears the highlighted interval and removes it from the url', () => {
-		const { result, updateQueryParams } = setup();
+		const { result } = setup();
 		act(() => result.current.selectAiInterval(entity, 0));
 
 		act(() => result.current.clearAiInterval());
 
 		expect(result.current.activeAiInterval).toBeNull();
-		expect(updateQueryParams).toHaveBeenLastCalledWith({
-			aiEntity: undefined,
-			aiInterval: undefined,
-		});
+		expect(setQueryParams).toHaveBeenLastCalledWith(
+			{ aiEntity: undefined, aiInterval: undefined },
+			'replaceIn'
+		);
 	});
 });

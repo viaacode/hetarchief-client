@@ -2,7 +2,7 @@ import getConfig from '@shared/config/public-runtime-config';
 import type { LanguageInfo } from '@shared/services/translation-service/translation.types';
 import { Locale } from '@shared/utils/i18n';
 import { isServerSideRendering } from '@shared/utils/is-browser';
-import { parseUrl } from 'query-string';
+import queryString from 'query-string';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -33,7 +33,7 @@ export class TranslationService {
 		if (isServerSideRendering()) {
 			return Locale.nl; // Window not available in server side rendering
 		}
-		const pageUrl = parseUrl(window.location.href).url;
+		const pageUrl = queryString.parseUrl(window.location.href).url;
 		return (
 			Object.values(Locale).find((languageCode) => {
 				return (

@@ -9,7 +9,7 @@ import { asDate } from '@shared/utils/dates';
 import { isMobileSize } from '@shared/utils/is-mobile';
 import type { QueryClient } from '@tanstack/react-query';
 import type { NextRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 
 import {
 	GET_DESCRIPTION_FROM_NOTIFICATION,
@@ -194,7 +194,7 @@ export abstract class NotificationsService {
 		size: number
 	): Promise<IPagination<Notification>> {
 		return await ApiService.getApi()
-			.get(stringifyUrl({ url: 'notifications', query: { page, size } }))
+			.get(queryString.stringifyUrl({ url: 'notifications', query: { page, size } }))
 			.json();
 	}
 

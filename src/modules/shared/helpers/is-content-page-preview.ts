@@ -1,7 +1,7 @@
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { ROUTE_PREFIXES_BY_LOCALE } from '@shared/const/routes';
 import { isServerSideRendering } from '@shared/utils/is-browser/is-browser';
-import { parse } from 'query-string';
+import queryString from 'query-string';
 
 /**
  * Whether the content page in the browser is being previewed rather than visited: either through
@@ -17,7 +17,7 @@ export function isContentPagePreview(): boolean {
 		return false;
 	}
 
-	if (parse(window.location.search)[QUERY_PARAM_KEY.CONTENT_PAGE_PREVIEW]) {
+	if (queryString.parse(window.location.search)[QUERY_PARAM_KEY.CONTENT_PAGE_PREVIEW]) {
 		return true;
 	}
 
