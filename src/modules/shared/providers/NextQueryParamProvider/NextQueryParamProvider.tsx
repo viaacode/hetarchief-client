@@ -22,10 +22,11 @@ const pathnameRegex = /[^?#]+/u;
 // the pending update (eg: setting the ocr tab and the text overlay at the same moment)
 let pendingSearch: string | null = null;
 
-// Keep serializing the url with query-string, like use-query-params v1 did
+// Keep serializing the url with query-string, like use-query-params v1 did.
+// skipNull: a param set to null (eg: closing a blade) is removed, instead of left behind as `?blade`
 const queryParamOptions: QueryParamOptions = {
 	searchStringToObject: queryString.parse,
-	objectToSearchString: queryString.stringify,
+	objectToSearchString: (query) => queryString.stringify(query, { skipNull: true }),
 };
 
 const NextAdapter: QueryParamAdapterComponent = ({ children }) => {

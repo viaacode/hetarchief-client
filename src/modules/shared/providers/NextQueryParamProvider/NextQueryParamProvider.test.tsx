@@ -38,6 +38,14 @@ describe('NextQueryParamProvider', () => {
 		expect(replace.mock.calls[0][2]).toEqual({ shallow: true, scroll: false });
 	});
 
+	it('removes a param that is set to null', async () => {
+		setUrl('?foo=bar&blade=report');
+		const setQuery = renderSetter();
+		await act(async () => setQuery({ blade: null }, 'replaceIn'));
+
+		expect(queryOf(replacedSearch(0))).toEqual({ foo: 'bar' });
+	});
+
 	it('does not lose params of updates that are still pending', async () => {
 		// window.location only changes when a route change finishes, so it stays stale here
 		const setQuery = renderSetter();
