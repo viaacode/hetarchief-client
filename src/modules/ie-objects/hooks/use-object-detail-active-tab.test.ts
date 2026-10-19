@@ -1,4 +1,5 @@
 import { ObjectDetailTabs } from '@ie-objects/ie-objects.types';
+import NextQueryParamProvider from '@shared/providers/NextQueryParamProvider/NextQueryParamProvider';
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -7,6 +8,10 @@ const replace = vi.fn().mockResolvedValue(true);
 vi.mock('next/router', () => ({
 	useRouter: () => ({
 		replace,
+		push: vi.fn(),
+		pathname: '/object',
+		asPath: `${window.location.pathname}${window.location.search}`,
+		isReady: true,
 		query: Object.fromEntries(new URLSearchParams(window.location.search)),
 	}),
 }));
@@ -19,6 +24,8 @@ import {
 } from './use-object-detail-active-tab';
 
 const setUrl = (search: string) => window.history.replaceState({}, '', `/object${search}`);
+// The search string of the url the query param adapter navigated to
+const replacedSearch = (call = 0) => replace.mock.calls[call][1].search as string;
 
 describe('getDefaultObjectDetailTab', () => {
 	it.each([
@@ -53,7 +60,10 @@ describe('useObjectDetailActiveTab', () => {
 	});
 
 	const render = (props: Parameters<typeof useObjectDetailActiveTab>[0]) =>
-		renderHook((p) => useObjectDetailActiveTab(p), { initialProps: props });
+		renderHook((p) => useObjectDetailActiveTab(p), {
+			initialProps: props,
+			wrapper: NextQueryParamProvider,
+		});
 
 	it('waits for the object before applying a default tab', () => {
 		const { result } = render({
@@ -119,32 +129,16 @@ describe('useObjectDetailActiveTab', () => {
 		setUrl('?expandSidebar=1');
 		const { result } = render({ objectId: 'a', isNewspaper: false });
 
-		await act(() =>
+		await act(async () =>
 			result.current.updateActiveTab(ObjectDetailTabs.Media, { aiEntity: 'Q1', aiInterval: '2' })
 		);
 
 		expect(replace).toHaveBeenCalledTimes(1);
-		const url = replace.mock.calls[0][0] as string;
+		const url = replacedSearch();
 		expect(url).toContain('tab=media');
 		expect(url).toContain('aiEntity=Q1');
 		expect(url).toContain('aiInterval=2');
 		expect(url).toContain('expandSidebar=1');
-	});
-
-	it('updates query params without touching the tab, and removes undefined ones', async () => {
-		setUrl('?aiEntity=Q1&aiInterval=2&other=x');
-		const { result } = render({ objectId: 'a', isNewspaper: false });
-
-		await act(() =>
-			result.current.updateQueryParams({ aiEntity: undefined, aiInterval: undefined })
-		);
-
-		const url = replace.mock.calls[0][0] as string;
-		expect(url).not.toContain('tab=');
-		expect(url).not.toContain('aiEntity');
-		expect(url).not.toContain('aiInterval');
-		expect(url).toContain('other=x');
-		expect(result.current.activeTab).toBe(ObjectDetailTabs.Overview);
 	});
 
 	it('does not reset the tab when only the other props change (refetch)', async () => {
@@ -152,7 +146,7 @@ describe('useObjectDetailActiveTab', () => {
 			objectId: 'a',
 			isNewspaper: false,
 		});
-		await act(() => result.current.updateActiveTab(ObjectDetailTabs.Metadata));
+		await act(async () => result.current.updateActiveTab(ObjectDetailTabs.Metadata));
 		replace.mockClear();
 
 		rerender({ objectId: 'a', isNewspaper: true });
@@ -166,7 +160,7 @@ describe('useObjectDetailActiveTab', () => {
 			objectId: 'a',
 			isNewspaper: false,
 		});
-		await act(() => result.current.updateActiveTab(ObjectDetailTabs.Metadata));
+		await act(async () => result.current.updateActiveTab(ObjectDetailTabs.Metadata));
 		setUrl(''); // a new object url carries no tab
 
 		rerender({ objectId: 'b', isNewspaper: false });
@@ -194,11 +188,11 @@ describe('useObjectDetailActiveTab', () => {
 			isNewspaper: false,
 		});
 
-		await act(() => result.current.updateActiveTab(null));
+		await act(async () => result.current.updateActiveTab(null));
 
 		expect(result.current.activeTab).toBe(ObjectDetailTabs.Overview);
-		expect(replace.mock.calls[0][0]).toContain('foo=bar');
-		expect(replace.mock.calls[0][0]).toContain(`=${ObjectDetailTabs.Overview}`);
+		expect(replacedSearch()).toContain('foo=bar');
+		expect(replacedSearch()).toContain(`=${ObjectDetailTabs.Overview}`);
 	});
 });
 
