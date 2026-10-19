@@ -7,7 +7,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { TosService } from '@shared/services/tos-service';
 import { isCurrentTosAccepted } from '@shared/utils/tos';
 import { useRouter } from 'next/router';
-import { stringify } from 'query-string';
+import queryString from 'query-string';
 import { type ComponentType, useCallback, useEffect, useState } from 'react';
 
 /**
@@ -45,12 +45,14 @@ export const withAuth = (
 			};
 
 			const toTermsOfService = async () => {
-				return router.replace(`${ROUTES_BY_LOCALE[locale].userPolicy}?${stringify(params)}`);
+				return router.replace(
+					`${ROUTES_BY_LOCALE[locale].userPolicy}?${queryString.stringify(params)}`
+				);
 			};
 
 			const toHome = async () => {
 				return router.replace(
-					`${ROUTES_BY_LOCALE[locale].home}?${stringify({
+					`${ROUTES_BY_LOCALE[locale].home}?${queryString.stringify({
 						...params,
 						[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',
 					})}`

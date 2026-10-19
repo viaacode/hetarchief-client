@@ -134,7 +134,7 @@ import clsx from 'clsx';
 import { capitalize, compact, intersection, isNil, lowerCase, noop } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
 import { useRouter } from 'next/router';
-import { parseUrl, stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import { type FC, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -683,10 +683,9 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	// There seems to be a disconnect between React/NextJS router and the useQueryParam hook
 	// Probably because of the hacky way we had to get the use query param hook to work with NextJS
 	// See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
-	// This could probably be solved by using the latest version of use-query-params and the next-query-params package
-	// But that causes build issues with commonJS vs ES modules, so we should update to ESM first
+	// Since use-query-params v2 this workaround might no longer be needed, but that hasn't been verified yet
 	useEffect(() => {
-		const parsedUrl = parseUrl(window.location.href);
+		const parsedUrl = queryString.parseUrl(window.location.href);
 		const isTextOverlayVisibleFromUrl =
 			parsedUrl.query[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED];
 		if (isTextOverlayVisibleFromUrl) {
@@ -1355,7 +1354,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 	const handleIiifViewerSelection = useCallback(
 		(rect: Rect, pageIndex: number) => {
-			const downloadUrl = stringifyUrl({
+			const downloadUrl = queryString.stringifyUrl({
 				url: `${publicRuntimeConfig.PROXY_URL}/${NEWSPAPERS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_EXPORT}/jpg/selection`,
 				query: {
 					page: pageIndex,

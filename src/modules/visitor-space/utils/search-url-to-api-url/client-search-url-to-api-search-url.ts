@@ -1,5 +1,5 @@
 import type { IeObjectsSearchFilter } from '@shared/types/ie-objects';
-import { parse as parseQueryString } from 'query-string';
+import queryString from 'query-string';
 import { decodeQueryParams } from 'use-query-params';
 
 import { SEARCH_PAGE_QUERY_PARAM_CONFIG, type SearchPageQueryParams } from '../../const';
@@ -21,7 +21,7 @@ export interface IeObjectsSearchBody {
 export const clientSearchUrlToApiSearchUrl = (searchQuery: string): IeObjectsSearchBody => {
 	try {
 		const url = new URL(searchQuery);
-		const encodedQuery = parseQueryString(url.search);
+		const encodedQuery = queryString.parse(url.search);
 		const query: SearchPageQueryParams = decodeQueryParams(
 			SEARCH_PAGE_QUERY_PARAM_CONFIG,
 			encodedQuery

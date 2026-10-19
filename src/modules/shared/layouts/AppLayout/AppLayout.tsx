@@ -71,7 +71,7 @@ import { VisitorSpaceService } from '@visitor-space/services';
 import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { parse, stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import React, { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { Slide, ToastContainer } from 'react-toastify';
@@ -189,7 +189,7 @@ const AppLayout: FC<any> = ({ children }) => {
 		// If the preview query param is set, we don't want to change the language, since this is used for previewing content pages in the admin dashboard (admin-core-ui)
 		if (
 			user?.language &&
-			parse(window.location.search)[QUERY_PARAM_KEY.CONTENT_PAGE_PREVIEW] !== 'true'
+			queryString.parse(window.location.search)[QUERY_PARAM_KEY.CONTENT_PAGE_PREVIEW] !== 'true'
 		) {
 			changeApplicationLocale(locale, user?.language as Locale, router, queryClient, null);
 		}
@@ -264,7 +264,7 @@ const AppLayout: FC<any> = ({ children }) => {
 
 	const onLoginRegisterClick = useCallback(async () => {
 		return router.replace(
-			stringifyUrl({
+			queryString.stringifyUrl({
 				url: router.asPath,
 				query: {
 					[QUERY_PARAM_KEY.SHOW_AUTH_QUERY_KEY]: '1',

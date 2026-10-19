@@ -1,7 +1,7 @@
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { isString } from 'es-toolkit/compat';
-import { parseUrl } from 'query-string';
+import queryString from 'query-string';
 
 export const useGetFileDuration = (playableUrl: string | undefined | null) => {
 	return useQuery<number>({
@@ -14,7 +14,7 @@ export const useGetFileDuration = (playableUrl: string | undefined | null) => {
 
 				// Url contains t=x,y then the video has been dynamically cut by the media service
 				// So we can determine the duration from that instantly
-				const parsedUrl = parseUrl(playableUrl);
+				const parsedUrl = queryString.parseUrl(playableUrl);
 				if (parsedUrl.query.t && isString(parsedUrl.query.t)) {
 					const [start, end] = parsedUrl.query.t.split(',');
 					if (/[0-9]+/.test(start) && /[0-9]+/.test(end)) {

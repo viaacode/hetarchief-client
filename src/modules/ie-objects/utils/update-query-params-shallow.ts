@@ -1,5 +1,5 @@
 import type { NextRouter } from 'next/router';
-import { parseUrl, type StringifiableRecord, stringifyUrl } from 'query-string';
+import queryString, { type StringifiableRecord } from 'query-string';
 
 type QueryParamValue = string | number | boolean | undefined;
 
@@ -12,7 +12,7 @@ let pendingQuery: StringifiableRecord | null = null;
  * Use this instead of useQueryParam on the object detail page: there is a disconnect between the
  * NextJS router and the useQueryParam hook, because of the hacky way it is wired up.
  * See: src/modules/shared/providers/NextQueryParamProvider/NextQueryParamProvider.tsx
- * (a proper fix needs the latest use-query-params + next-query-params, which needs ESM first)
+ * (since use-query-params v2 this workaround might no longer be needed, but that hasn't been verified yet)
  *
  * window.location only changes once the route change finishes, so several updates in the same tick
  * would each start from the same stale url and the last one to finish would drop the params of the
@@ -23,7 +23,7 @@ export const updateQueryParamsShallow = async (
 	router: Pick<NextRouter, 'replace'>,
 	params: Record<string, QueryParamValue>
 ): Promise<void> => {
-	const parsedUrl = parseUrl(window.location.href);
+	const parsedUrl = queryString.parseUrl(window.location.href);
 	const query = { ...(pendingQuery ?? parsedUrl.query), ...params };
 	for (const key of Object.keys(params)) {
 		if (params[key] === undefined) {
@@ -33,7 +33,7 @@ export const updateQueryParamsShallow = async (
 	pendingQuery = query;
 
 	try {
-		await router.replace(stringifyUrl({ url: parsedUrl.url, query }), undefined, {
+		await router.replace(queryString.stringifyUrl({ url: parsedUrl.url, query }), undefined, {
 			shallow: true,
 		});
 	} catch {

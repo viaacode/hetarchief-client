@@ -1,7 +1,7 @@
 import { ConfirmationModal } from '@shared/components/ConfirmationModal';
 import { tText } from '@shared/helpers/translate';
 import { useRouter } from 'next/router';
-import { parseUrl, stringify } from 'query-string';
+import queryString from 'query-string';
 import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 
 interface ConfirmModalBeforeUnloadProps {
@@ -137,14 +137,14 @@ export const ConfirmModalBeforeUnload: FC<ConfirmModalBeforeUnloadProps> = ({ wh
 			// In case of the localized homepage we need to navigate to it without the localization set as url
 			// Otherwise this would cause the entire application to release
 			if (nextRoute.startsWith(`/${router.locale}?`)) {
-				const parsed = parseUrl(nextRoute);
-				router.push({ pathname: '/', query: stringify(parsed.query) }, undefined, {
+				const parsed = queryString.parseUrl(nextRoute);
+				router.push({ pathname: '/', query: queryString.stringify(parsed.query) }, undefined, {
 					locale: router.locale,
 				});
 			} else {
 				// A query-only change (eg: closing a blade) was shallow before we intercepted it.
 				// Replaying it non-shallow would re-run getServerSideProps and reset the page props.
-				const isSamePath = parseUrl(nextRoute).url === window.location.pathname;
+				const isSamePath = queryString.parseUrl(nextRoute).url === window.location.pathname;
 				void router.push(nextRoute, undefined, { shallow: isSamePath, scroll: !isSamePath });
 			}
 		}

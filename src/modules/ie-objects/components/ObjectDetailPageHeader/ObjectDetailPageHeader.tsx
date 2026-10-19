@@ -69,7 +69,7 @@ import clsx from 'clsx';
 import { compact, indexOf, isEmpty, isNil, noop, sortBy } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import React, {
 	type ReactNode,
 	useCallback,
@@ -253,7 +253,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 					setCopyrightModalOpen(true);
 					setOnConfirmCopyright(() => () => {
 						window.open(
-							stringifyUrl({
+							queryString.stringifyUrl({
 								url: newspaperExportEndpoint,
 								query: {
 									ieObjectId: mediaInfo.iri,
@@ -268,7 +268,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 					setCopyrightModalOpen(true);
 					setOnConfirmCopyright(() => () => {
 						window.open(
-							stringifyUrl({
+							queryString.stringifyUrl({
 								url: newspaperExportEndpoint,
 								query: {
 									ieObjectId: mediaInfo.iri,
@@ -284,7 +284,7 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 						publicRuntimeConfig.PROXY_URL
 					}/${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECTS_SERVICE_EXPORT}/${format}`;
 					window.open(
-						stringifyUrl({
+						queryString.stringifyUrl({
 							url: objectExportEndpoint,
 							query: {
 								ieObjectId: mediaInfo.iri,

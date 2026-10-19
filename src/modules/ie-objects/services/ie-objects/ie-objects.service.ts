@@ -21,7 +21,7 @@ import type { HetArchiefIeObject, HetArchiefRelatedIeObjects } from '@viaa/avo2-
 import type { AutocompleteField } from '@visitor-space/components/FilterMenu/FilterMenu.types';
 import { SearchSortProp } from '@visitor-space/types';
 import { isEmpty } from 'es-toolkit/compat';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 
 import {
 	IE_OBJECT_SERVICE_SEO_URL,
@@ -95,7 +95,7 @@ export class IeObjectsService {
 		schemaIdentifiers: string[],
 		resolveThumbnailUrl: boolean
 	): Promise<(HetArchiefIeObject | null)[]> {
-		const url = stringifyUrl({
+		const url = queryString.stringifyUrl({
 			url: IE_OBJECTS_SERVICE_BASE_URL,
 			query: {
 				schemaIdentifiers: schemaIdentifiers,
@@ -114,7 +114,7 @@ export class IeObjectsService {
 		ieObjectIds: string[],
 		resolveThumbnailUrl: boolean
 	): Promise<(HetArchiefIeObject | null)[]> {
-		const url = stringifyUrl({
+		const url = queryString.stringifyUrl({
 			url: IE_OBJECTS_SERVICE_BASE_URL,
 			query: {
 				ieObjectIds: ieObjectIds,
@@ -131,7 +131,7 @@ export class IeObjectsService {
 	public static async getThumbnailBySchemaIdentifier(
 		schemaIdentifier: string
 	): Promise<string | null> {
-		const url = stringifyUrl({
+		const url = queryString.stringifyUrl({
 			url: `${IE_OBJECTS_SERVICE_BASE_URL}/thumbnails`,
 			query: {
 				ids: [schemaIdentifier],
@@ -186,7 +186,7 @@ export class IeObjectsService {
 
 		return await ApiService.getApi()
 			.get(
-				stringifyUrl(
+				queryString.stringifyUrl(
 					{
 						url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_SERVICE_TICKET_URL}`,
 						query: {
@@ -206,7 +206,7 @@ export class IeObjectsService {
 	public static async getSubtitles(fileId: string, schemaIdentifier: string): Promise<Blob> {
 		return await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECTS_SERVICE_SUBTITLES}`,
 					query: { schemaIdentifier, fileId },
 				}),
@@ -221,7 +221,7 @@ export class IeObjectsService {
 	): Promise<string[]> {
 		const tokens = await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECT_TICKET_SERVICE_URL}`,
 					query: {
 						schemaIdentifier,
@@ -240,7 +240,7 @@ export class IeObjectsService {
 	): Promise<FileMentionsResponse> {
 		return await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IE_OBJECTS_SERVICE_MENTIONS}`,
 					query: { schemaIdentifier, fileId },
 				})
@@ -255,7 +255,7 @@ export class IeObjectsService {
 	): Promise<IeObjectSimilar> {
 		return await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${ieObjectId}/${IE_OBJECTS_SERVICE_SIMILAR}`,
 					query: {
 						...(!isEmpty(maintainerId) && { maintainerId }),
@@ -272,7 +272,7 @@ export class IeObjectsService {
 	): Promise<HetArchiefRelatedIeObjects> {
 		return await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IO_OBJECTS_SERVICE_RELATED}`,
 					query: { ieObjectIri, parentIeObjectIri },
 				})
@@ -283,7 +283,7 @@ export class IeObjectsService {
 	public static async getAltoJsonFile(altoJsonUrl: string): Promise<SimplifiedAlto> {
 		return await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/${IO_OBJECTS_SERVICE_DOWNLOAD_ALTO_JSON}`,
 					query: { altoJsonUrl },
 				})
@@ -321,7 +321,7 @@ export class IeObjectsService {
 	): Promise<IeObjectPreviousNextIds> {
 		return ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${IE_OBJECTS_SERVICE_BASE_URL}/previous-next-ids`,
 					query: {
 						collectionId,

@@ -2,7 +2,7 @@ import type { ContentPageInfo } from '@meemoo/admin-core-ui/client';
 import getConfig from '@shared/config/public-runtime-config';
 import type { Locale } from '@shared/utils/i18n';
 import { startsWith } from 'es-toolkit/compat';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 
 const { publicRuntimeConfig } = getConfig();
 
@@ -19,7 +19,7 @@ export class ContentPageClientService {
 			throw new Error(`Given path doesn't start with a slash. Received path: ${path}`);
 		}
 
-		const url = stringifyUrl({
+		const url = queryString.stringifyUrl({
 			url: `${publicRuntimeConfig.PROXY_URL}/admin/content-pages/by-language-and-path`,
 			query: {
 				language,
