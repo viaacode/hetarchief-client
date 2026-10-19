@@ -40,12 +40,6 @@ export const useObjectDetailActiveTab = ({
 
 	const [, setQueryParams] = useQueryParams({});
 
-	// Query params to change; undefined removes one
-	const replaceQuery = useCallback(
-		(patch: Record<string, string | undefined>) => setQueryParams(patch, 'replaceIn'),
-		[setQueryParams]
-	);
-
 	// Changes the tab and, in the same URL update, other query params
 	const updateActiveTab = useCallback(
 		(
@@ -54,9 +48,9 @@ export const useObjectDetailActiveTab = ({
 		) => {
 			const tab = newActiveTab || ObjectDetailTabs.Overview;
 			setActiveTab(tab);
-			replaceQuery({ ...extraQuery, [QUERY_PARAM_KEY.ACTIVE_TAB]: tab });
+			setQueryParams({ ...extraQuery, [QUERY_PARAM_KEY.ACTIVE_TAB]: tab }, 'replaceIn');
 		},
-		[replaceQuery]
+		[setQueryParams]
 	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: only reset the tab when the object changes, not on every refetch
@@ -87,7 +81,6 @@ export const useObjectDetailActiveTab = ({
 		// State only, for tab changes that follow from the url itself (eg: search terms on page load):
 		// writing those back would change the url right after loading, a client side redirect for search engines
 		setActiveTabWithoutUrlUpdate: setActiveTab,
-		updateQueryParams: replaceQuery,
 	};
 };
 

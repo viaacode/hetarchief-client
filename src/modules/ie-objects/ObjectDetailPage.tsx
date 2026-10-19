@@ -141,6 +141,7 @@ import {
 	NumberParam,
 	StringParam,
 	useQueryParam,
+	useQueryParams,
 	withDefault,
 } from 'use-query-params';
 import styles from './ObjectDetailPage.module.scss';
@@ -481,11 +482,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	}, [relatedIeObjects]);
 	const relatedCount = mappedRelatedIeObjects.length;
 
-	const { activeTab, updateActiveTab, setActiveTabWithoutUrlUpdate, updateQueryParams } =
-		useObjectDetailActiveTab({
-			objectId: mediaInfo?.schemaIdentifier,
-			isNewspaper,
-		});
+	// Query params to change in one url update; undefined removes one
+	const [, setQueryParams] = useQueryParams({});
+	const { activeTab, updateActiveTab, setActiveTabWithoutUrlUpdate } = useObjectDetailActiveTab({
+		objectId: mediaInfo?.schemaIdentifier,
+		isNewspaper,
+	});
 
 	// visit info
 	const { data: visitRequest, error: visitRequestError } = useGetActiveVisitRequestForUserAndSpace(
@@ -548,7 +550,6 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			isMobile,
 			activeTab,
 			updateActiveTab,
-			updateQueryParams,
 		});
 
 	const hasAccessToVisitorSpaceOfObject =
@@ -670,11 +671,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			setIsTextOverlayVisible(isVisible);
 
 			// Also update the query param
-			updateQueryParams({
-				[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED]: String(isVisible),
-			});
+			setQueryParams(
+				{
+					[QUERY_PARAM_KEY.IIIF_VIEWER_TEXT_OVERLAY_ENABLED]: String(isVisible),
+				},
+				'replaceIn'
+			);
 		},
-		[updateQueryParams]
+		[setQueryParams]
 	);
 
 	// Link isOverLayVisible and cue points from the query params to the internal state, once on page load
@@ -1050,11 +1054,18 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 */
 	const handleExpandButtonClicked = () => {
 		const newExpandSidebar = !expandSidebar;
-		updateQueryParams({
-			// Omitted from the url when equal to the default
-			[QUERY_PARAM_KEY.EXPAND_SIDEBAR]:
-				newExpandSidebar === isSidebarExpandedByDefault ? undefined : newExpandSidebar ? '1' : '0',
-		});
+		setQueryParams(
+			{
+				// Omitted from the url when equal to the default
+				[QUERY_PARAM_KEY.EXPAND_SIDEBAR]:
+					newExpandSidebar === isSidebarExpandedByDefault
+						? undefined
+						: newExpandSidebar
+							? '1'
+							: '0',
+			},
+			'replaceIn'
+		);
 	};
 
 	const onCloseBlade = () => {
@@ -1391,9 +1402,12 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 	 */
 	const handleOnPageChanged = (newPageIndex: number): void => {
 		if (currentPageIndex !== newPageIndex) {
-			updateQueryParams({
-				[QUERY_PARAM_KEY.ACTIVE_PAGE]: String(newPageIndex),
-			});
+			setQueryParams(
+				{
+					[QUERY_PARAM_KEY.ACTIVE_PAGE]: String(newPageIndex),
+				},
+				'replaceIn'
+			);
 		}
 	};
 

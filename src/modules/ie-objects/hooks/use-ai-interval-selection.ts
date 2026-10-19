@@ -13,6 +13,7 @@ import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { noop } from 'es-toolkit/compat';
 import queryString from 'query-string';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useQueryParams } from 'use-query-params';
 
 // undefined removes a query param
 const NO_AI_INTERVAL_QUERY = {
@@ -30,7 +31,6 @@ interface UseAiIntervalSelectionProps {
 		tab: ObjectDetailTabs | null,
 		extraQuery?: Record<string, string | undefined>
 	) => void;
-	updateQueryParams: (patch: Record<string, string | undefined>) => void;
 }
 
 /**
@@ -43,8 +43,9 @@ export const useAiIntervalSelection = ({
 	isMobile,
 	activeTab,
 	updateActiveTab,
-	updateQueryParams,
 }: UseAiIntervalSelectionProps) => {
+	const [, setQueryParams] = useQueryParams({});
+
 	// A seek asked for while the player isn't rendered yet (mobile, on another tab; or a restore
 	// on load) waits here until the player reports it is ready
 	const pendingSeekSecondsRef = useRef<number | null>(null);
@@ -67,7 +68,7 @@ export const useAiIntervalSelection = ({
 		if (previousFileId && previousFileId !== currentPlayableFileId) {
 			const { query } = queryString.parseUrl(window.location.href);
 			if (query[QUERY_PARAM_KEY.ACTIVE_AI_ENTITY] || query[QUERY_PARAM_KEY.ACTIVE_AI_INTERVAL]) {
-				updateQueryParams(NO_AI_INTERVAL_QUERY);
+				setQueryParams(NO_AI_INTERVAL_QUERY, 'replaceIn');
 			}
 		}
 	}, [currentPlayableFileId]);
@@ -142,18 +143,18 @@ export const useAiIntervalSelection = ({
 				// On mobile the player is on the Media tab, so show it
 				updateActiveTab(ObjectDetailTabs.Media, aiIntervalQuery);
 			} else {
-				updateQueryParams(aiIntervalQuery);
+				setQueryParams(aiIntervalQuery, 'replaceIn');
 			}
 		},
-		[seekPlayer, isMobile, activeTab, updateActiveTab, updateQueryParams]
+		[seekPlayer, isMobile, activeTab, updateActiveTab, setQueryParams]
 	);
 
 	const clearAiInterval = useCallback(() => {
 		setActiveAiInterval(null);
 		pendingSeekSecondsRef.current = null;
 		requestedSeekSecondsRef.current = null;
-		updateQueryParams(NO_AI_INTERVAL_QUERY);
-	}, [updateQueryParams]);
+		setQueryParams(NO_AI_INTERVAL_QUERY, 'replaceIn');
+	}, [setQueryParams]);
 
 	return { activeAiInterval, selectAiInterval, clearAiInterval, onPlayerReady };
 };

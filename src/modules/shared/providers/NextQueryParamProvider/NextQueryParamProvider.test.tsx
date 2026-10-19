@@ -1,7 +1,7 @@
 import { act, renderHook } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const replace = vi.fn();
+const replace = vi.fn().mockResolvedValue(true);
 vi.mock('next/router', () => ({
 	useRouter: () => ({
 		replace,
@@ -26,7 +26,7 @@ const renderSetter = () =>
 
 describe('NextQueryParamProvider', () => {
 	beforeEach(() => {
-		replace.mockReset().mockResolvedValue(true);
+		replace.mockClear();
 		setUrl('?foo=bar');
 	});
 
@@ -63,13 +63,16 @@ describe('NextQueryParamProvider', () => {
 		expect(queryOf(replacedSearch(1))).toEqual({ foo: 'bar', textOverlay: 'true' });
 	});
 
-	it('swallows a route change that was cancelled by a newer one', async () => {
-		replace.mockRejectedValue(Object.assign(new Error('cancelled'), { cancelled: true }));
+	it.each([
+		['cancelled by a newer one', Object.assign(new Error('cancelled'), { cancelled: true })],
+		// ConfirmModalBeforeUnload throws in beforeHistoryChange to block the navigation
+		['blocked by ConfirmModalBeforeUnload', 'navigation aborted'],
+	])('swallows a route change that was %s', async (_, error) => {
+		replace.mockRejectedValueOnce(error);
 		const setQuery = renderSetter();
 		await act(async () => setQuery({ tab: 'ocr' }, 'replaceIn'));
 
-		// The cancelled update is no longer pending
-		replace.mockResolvedValue(true);
+		// The failed update is no longer pending
 		await act(async () => setQuery({ textOverlay: true }, 'replaceIn'));
 		expect(queryOf(replacedSearch(1))).toEqual({ foo: 'bar', textOverlay: 'true' });
 	});

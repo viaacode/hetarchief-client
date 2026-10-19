@@ -141,22 +141,6 @@ describe('useObjectDetailActiveTab', () => {
 		expect(url).toContain('expandSidebar=1');
 	});
 
-	it('updates query params without touching the tab, and removes undefined ones', async () => {
-		setUrl('?aiEntity=Q1&aiInterval=2&other=x');
-		const { result } = render({ objectId: 'a', isNewspaper: false });
-
-		await act(async () =>
-			result.current.updateQueryParams({ aiEntity: undefined, aiInterval: undefined })
-		);
-
-		const url = replacedSearch();
-		expect(url).not.toContain('tab=');
-		expect(url).not.toContain('aiEntity');
-		expect(url).not.toContain('aiInterval');
-		expect(url).toContain('other=x');
-		expect(result.current.activeTab).toBe(ObjectDetailTabs.Overview);
-	});
-
 	it('does not reset the tab when only the other props change (refetch)', async () => {
 		const { result, rerender } = render({
 			objectId: 'a',

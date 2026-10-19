@@ -61,7 +61,8 @@ const NextAdapter: QueryParamAdapterComponent = ({ children }) => {
 					{ shallow: true, scroll: false }
 				)
 					.catch(() => {
-						// A newer navigation cancelled this route change, which carries these params too
+						// A newer navigation cancelled this route change (it carries these params too),
+						// or ConfirmModalBeforeUnload blocked it: either way the update is no longer pending
 					})
 					.finally(() => {
 						if (pendingSearch === search) {
