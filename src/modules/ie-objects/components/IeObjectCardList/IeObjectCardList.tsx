@@ -26,8 +26,8 @@ export const IeObjectCardList: FC<IeObjectCardListProps> = ({ type, items, class
 				className
 			)}
 		>
-			{items.map((item, index) => (
-				<li key={`${type}-object-${item.id}-${index}`}>
+			{items.map((item) => (
+				<li key={`${type}-object-${item.id}`}>
 					<Link
 						passHref
 						href={`${ROUTES_BY_LOCALE[locale].search}/${router.query.slug}/${item.id}`}

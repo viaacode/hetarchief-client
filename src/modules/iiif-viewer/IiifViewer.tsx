@@ -586,7 +586,7 @@ export const IiifViewer = ({
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: Do not rerun this function when the queryParams change, since we only want apply the zoom and pan from the query params once to the iiif viewer
 	const initIiifViewer = useCallback(async () => {
-		if (!!iiifViewerId && isBrowser()) {
+		if (iiifViewerId && isBrowser()) {
 			const iiifContainer = document.getElementById(iiifViewerId);
 			if (!iiifContainer) {
 				return;

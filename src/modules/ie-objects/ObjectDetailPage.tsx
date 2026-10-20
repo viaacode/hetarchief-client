@@ -1433,7 +1433,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		}
 
 		// IIIF viewer
-		if (isNewspaper && !!mediaInfo && mediaInfo.pages?.length) {
+		if (isNewspaper && mediaInfo?.pages?.length) {
 			if (!hasNewsPaperBeenRendered) {
 				handleOnPlay();
 				setHasNewsPaperBeenRendered(true);

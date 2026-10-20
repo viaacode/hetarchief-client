@@ -27,15 +27,18 @@ export interface ActiveAiInterval {
 	intervalIndex: number;
 }
 
+// Unique by TC-in and TC-out: the same span can be reported by several annotation types
 const mapOccurrencesToIntervals = (mention: FileMention): AiEntityInterval[] => {
-	return mention.occurrences
-		.filter((occurrence) => typeof occurrence.startTime === 'number')
-		.map((occurrence) => {
-			const start = occurrence.startTime as number;
-			const end = occurrence.endTime ?? start;
-			return { start, end: Math.max(start, end) };
-		})
-		.sort((a, b) => a.start - b.start || a.end - b.end);
+	const intervalsByKey = new Map<string, AiEntityInterval>();
+	for (const occurrence of mention.occurrences) {
+		if (typeof occurrence.startTime !== 'number') {
+			continue;
+		}
+		const start = occurrence.startTime;
+		const end = Math.max(start, occurrence.endTime ?? start);
+		intervalsByKey.set(`${start}-${end}`, { start, end });
+	}
+	return [...intervalsByKey.values()].sort((a, b) => a.start - b.start || a.end - b.end);
 };
 
 /**
