@@ -19,7 +19,7 @@ $checkbox-size: $spacer-sm;
 // Variants
 .c-checkbox--light {
 	&.c-checkbox {
-		&:focus-within {
+		&:has(.c-checkbox__input:focus-visible) {
 			.c-checkbox__check-icon {
 				&::before {
 					background-color: color.adjust($white, $alpha: -0.71);

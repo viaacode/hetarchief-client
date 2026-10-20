@@ -124,7 +124,7 @@
 		font-size: variables.$font-size-base;
 		cursor: pointer;
 
-		&:focus-within {
+		&:has(.c-#{$type}__input:focus-visible) {
 			.c-#{$type}__check-icon {
 				&::before {
 					background-color: color.adjust(variables.$black, $alpha: -0.71);
