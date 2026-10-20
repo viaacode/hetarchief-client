@@ -1,5 +1,6 @@
 import { GroupName, Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
+import { FoldersService } from '@account/services/folders';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
 import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/use-get-ie-object-format-counts';
 import { useGetIeObjects } from '@ie-objects/hooks/use-get-ie-objects';
@@ -16,7 +17,7 @@ import {
 import { Callout } from '@shared/components/Callout';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Icon } from '@shared/components/Icon';
-import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import {
 	getIconFromObjectType,
@@ -56,6 +57,7 @@ import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { toastService } from '@shared/services/toast-service';
 import {
 	selectLastScrollPosition,
 	setBreadcrumbs,
@@ -109,15 +111,29 @@ import { getQueryForRemainingTags, mapFiltersToTags } from '@visitor-space/utils
 import { migrateLegacyAdvancedFilters } from '@visitor-space/utils/migrate-legacy-advanced-filters';
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
-import { intersection, isEmpty, isNil, sortBy, sum } from 'es-toolkit/compat';
+import { compact, intersection, isEmpty, isNil, sortBy, sum } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import queryString from 'query-string';
-import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+	type FC,
+	type ReactNode,
+	type RefObject,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
+import { MultiselectActionBar } from './components/MultiselectActionBar';
+import { MultiselectErrorBanner } from './components/MultiselectErrorBanner';
+import { ResultCardBookmarkSlot } from './components/ResultCardBookmarkSlot';
+import { SelectableMediaCard } from './components/SelectableMediaCard';
+import { useMultiselect } from './hooks/use-multiselect';
 import { omitEmptyFilters } from './omit-empty-filters';
 import styles from './SearchPage.module.scss';
 
@@ -139,7 +155,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const dispatch = useDispatch();
 	const locale = useLocale();
 
-	const { data: folders } = useGetFolders();
+	const { data: folders, refetch: refetchFolders } = useGetFolders();
 	// Theme slugs are what live in the url, the names shown in the pills come from this lookup
 	const { labelsBySlug: themeLabelsBySlug } = useGetThemeFilterOptions();
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
@@ -169,6 +185,20 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 	const [searchBarInputValue, setSearchBarInputValue] = useState<string>();
 	const [query, setQuery] = useQueryParams(SEARCH_PAGE_QUERY_PARAM_CONFIG);
+
+	// Select multiple search results to add them to folders at once
+	// Changing the search, filters, tab, sort or page silently ends the multiselect mode
+	// Only opening a filter panel ("filter" query param) does not change the results
+	const { filter: _openFilterPanel, ...searchQueryWithoutOpenFilterPanel } = query;
+	const multiselect = useMultiselect(JSON.stringify(searchQueryWithoutOpenFilterPanel));
+	// Folders that could not be saved, so the user can retry
+	const [failedMultiselectFolderIds, setFailedMultiselectFolderIds] = useState<string[] | null>(
+		null
+	);
+	const [isSavingMultiselect, setIsSavingMultiselect] = useState(false);
+	// The card that started the multiselect mode, to move the focus to its checkbox and back again
+	const [multiselectStartId, setMultiselectStartId] = useState<string | null>(null);
+	const multiselectSaveButtonRef = useRef<HTMLButtonElement>(null) as RefObject<HTMLButtonElement>;
 
 	// Keep defaults only in code, not in the query params in the url
 	const page = query.page || VISITOR_SPACE_QUERY_PARAM_INIT.page;
@@ -326,6 +356,12 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useEffect(() => {
 		dispatch(setLastSearchParams(searchParams.toString()));
 	}, [searchParams, dispatch]);
+
+	useEffect(() => {
+		if (!multiselect.isActive) {
+			setFailedMultiselectFolderIds(null);
+		}
+	}, [multiselect.isActive]);
 
 	/**
 	 * Display
@@ -676,6 +712,140 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		mentionOrganisationFilter,
 	]);
 
+	// Selecting multiple objects only makes sense when there is more than one result
+	// Kiosk users and anonymous users cannot manage folders, so they never get the multiselect
+	const isMultiselectAvailable = !!canManageFolders && searchResultCardData.length >= 2;
+
+	const selectedMultiselectCards = useMemo(
+		() =>
+			compact(
+				multiselect.selectedIds.map((schemaIdentifier) =>
+					searchResultCardData.find((card) => card.schemaIdentifier === schemaIdentifier)
+				)
+			),
+		[multiselect.selectedIds, searchResultCardData]
+	);
+
+	const objectsToAddToFolder = useMemo(() => {
+		if (multiselect.isActive) {
+			return selectedMultiselectCards.map((card) => ({
+				schemaIdentifier: card.schemaIdentifier,
+				title: card.name,
+			}));
+		}
+		if (selectedCard) {
+			return [{ schemaIdentifier: selectedCard.schemaIdentifier, title: selectedCard.name }];
+		}
+		return [];
+	}, [multiselect.isActive, selectedMultiselectCards, selectedCard]);
+
+	const focusMultiselectStartCard = () => {
+		const startId = multiselectStartId;
+		if (!startId) {
+			return;
+		}
+		// Wait for the bookmark button to be rendered again
+		setTimeout(() => {
+			document
+				.querySelector<HTMLElement>(
+					`[data-selectable-id="${CSS.escape(startId)}"] [data-bookmark-slot] button`
+				)
+				?.focus();
+		}, 0);
+	};
+
+	const startMultiselect = (card: IdentifiableMediaCard) => {
+		setMultiselectStartId(card.schemaIdentifier);
+		multiselect.open([card.schemaIdentifier]);
+	};
+
+	const closeMultiselect = () => {
+		multiselect.close();
+		focusMultiselectStartCard();
+	};
+
+	const onCloseAddToFolderBlade = () => {
+		setShowAddToFolderBlade(false);
+		setSelectedCard(null);
+		if (multiselect.isActive) {
+			multiselectSaveButtonRef.current?.focus();
+		}
+	};
+
+	const saveMultiselectToFolders = async (folderIds: string[]) => {
+		const objectSchemaIdentifiers = [...multiselect.selectedIds];
+		if (!folderIds.length || !objectSchemaIdentifiers.length) {
+			return;
+		}
+		setIsSavingMultiselect(true);
+		setFailedMultiselectFolderIds(null);
+		try {
+			const response = await FoldersService.addManyToFolders(folderIds, objectSchemaIdentifiers);
+			const savedCount = response.objectSchemaIdentifiers.length;
+			const notFoundCount = response.notFoundSchemaIdentifiers?.length || 0;
+
+			const folderNames = compact(
+				folderIds.map((folderId) => folders?.find((folder) => folder.id === folderId)?.name)
+			).join(', ');
+			const getSavedDescription = () => {
+				const variables = { count: savedCount, folders: folderNames };
+				if (savedCount === 1) {
+					return folderIds.length === 1
+						? tHtml(
+								'modules/search/search-page___1-object-is-toegevoegd-aan-de-map-folders',
+								variables
+							)
+						: tHtml(
+								'modules/search/search-page___1-object-is-toegevoegd-aan-de-mappen-folders',
+								variables
+							);
+				}
+				return folderIds.length === 1
+					? tHtml(
+							'modules/search/search-page___count-objecten-zijn-toegevoegd-aan-de-map-folders',
+							variables
+						)
+					: tHtml(
+							'modules/search/search-page___count-objecten-zijn-toegevoegd-aan-de-mappen-folders',
+							variables
+						);
+			};
+			toastService.notify({
+				maxLines: 3,
+				title: tHtml('modules/search/search-page___objecten-bewaard'),
+				description: getSavedDescription(),
+			});
+			if (notFoundCount > 0) {
+				// Objects that no longer exist in the database are skipped by the server
+				toastService.notify({
+					maxLines: 3,
+					title: tHtml('modules/search/search-page___niet-alle-objecten-werden-bewaard'),
+					description:
+						notFoundCount === 1
+							? tHtml(
+									'modules/search/search-page___1-object-bestaat-niet-meer-of-is-niet-meer-beschikbaar-en-werd-overgeslagen'
+								)
+							: tHtml(
+									'modules/search/search-page___count-objecten-bestaan-niet-meer-of-zijn-niet-meer-beschikbaar-en-werden-overgeslagen',
+									{ count: notFoundCount }
+								),
+				});
+			}
+
+			closeMultiselect();
+			// Fill the bookmark icons of the saved objects
+			await refetchFolders();
+		} catch (err) {
+			console.error('Failed to add the selected objects to the folders', err, {
+				folderIds,
+				objectSchemaIdentifiers,
+			});
+			// Keep the selection, so the user can retry
+			setFailedMultiselectFolderIds(folderIds);
+		}
+		setIsSavingMultiselect(false);
+	};
+
 	const openAndScrollToAdvancedFilters = () => {
 		setFilterMenuOpen(true);
 		setMobileFilterMenuOpen(true);
@@ -784,25 +954,80 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			return null;
 		}
 
-		const itemIsInAFolder = isInAFolder(folders, (item as IdentifiableMediaCard).schemaIdentifier);
+		const card = item as IdentifiableMediaCard;
+		const itemIsInAFolder = isInAFolder(folders, card.schemaIdentifier);
 
 		return (
-			<Button
-				onClick={() => {
-					setSelectedCard(item as IdentifiableMediaCard);
-					setShowAddToFolderBlade(true);
-				}}
-				icon={
-					<Icon
-						name={itemIsInAFolder ? IconNamesSolid.Bookmark : IconNamesLight.Bookmark}
-						aria-hidden
+			<span data-bookmark-slot>
+				<ResultCardBookmarkSlot
+					title={card.name || card.schemaIdentifier}
+					isInFolder={itemIsInAFolder}
+					isMultiselectActive={multiselect.isActive}
+					isSelected={multiselect.isSelected(card.schemaIdentifier)}
+					autoFocus={multiselectStartId === card.schemaIdentifier}
+					onBookmarkClick={() => {
+						if (isMultiselectAvailable) {
+							startMultiselect(card);
+							return;
+						}
+						setSelectedCard(card);
+						setShowAddToFolderBlade(true);
+					}}
+					onToggleSelected={() => multiselect.toggle(card.schemaIdentifier)}
+				/>
+			</span>
+		);
+	};
+
+	const renderSelectableCard = (cardNode: ReactNode, item: MediaCardProps): ReactNode => {
+		const card = item as IdentifiableMediaCard;
+		return (
+			<div
+				key={`selectable-media-card--${card.schemaIdentifier}`}
+				data-selectable-id={card.schemaIdentifier}
+			>
+				<SelectableMediaCard
+					isMultiselectActive={multiselect.isActive}
+					isSelected={multiselect.isSelected(card.schemaIdentifier)}
+					isInFolder={isInAFolder(folders, card.schemaIdentifier)}
+					view={viewMode === 'grid' ? 'grid' : 'list'}
+					onToggleSelected={() => multiselect.toggle(card.schemaIdentifier)}
+				>
+					{cardNode}
+				</SelectableMediaCard>
+			</div>
+		);
+	};
+
+	const renderMultiselect = () => {
+		if (!multiselect.isActive) {
+			return null;
+		}
+		return (
+			<>
+				<MultiselectActionBar
+					selectedCount={multiselect.selectedIds.length}
+					pageCount={searchResultCardData.length}
+					isSaving={isSavingMultiselect}
+					saveButtonRef={multiselectSaveButtonRef}
+					onSelectAllOnPage={() =>
+						multiselect.selectMany(searchResultCardData.map((card) => card.schemaIdentifier))
+					}
+					onDeselectAll={multiselect.deselectAll}
+					onSave={() => {
+						setSelectedCard(null);
+						setShowAddToFolderBlade(true);
+					}}
+					onClose={closeMultiselect}
+				/>
+				{failedMultiselectFolderIds && (
+					<MultiselectErrorBanner
+						objectCount={multiselect.selectedIds.length}
+						isRetrying={isSavingMultiselect}
+						onRetry={() => saveMultiselectToFolders(failedMultiselectFolderIds)}
 					/>
-				}
-				variants={['text', 'xxs']}
-				title={tText(
-					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
 				)}
-			/>
+			</>
 		);
 	};
 
@@ -878,12 +1103,14 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderResults = () => {
 		return (
 			<>
+				{renderMultiselect()}
 				<MediaCardList
 					items={searchResultCardData}
 					keywords={searchResults?.searchTerms}
 					sidebar={renderFilterMenu()}
 					view={viewMode === 'grid' ? 'grid' : 'list'}
 					renderButtons={renderCardButtons}
+					renderWrapper={canManageFolders ? renderSelectableCard : undefined}
 					className="p-media-card-list"
 					showManyResultsTile={showManyResultsTile}
 				/>
@@ -1018,21 +1245,17 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				{!searchResultsLoading && (
 					<AddToFolderBlade
 						isOpen={isAddToFolderBladeOpen}
-						objectToAdd={
-							selectedCard
-								? {
-										schemaIdentifier: selectedCard.schemaIdentifier,
-										title: selectedCard.name,
-									}
-								: undefined
-						}
-						onClose={() => {
-							setShowAddToFolderBlade(false);
-							setSelectedCard(null);
-						}}
+						objectsToAdd={objectsToAddToFolder}
+						onRemoveObject={multiselect.isActive ? multiselect.deselect : undefined}
+						onAddMultipleObjects={saveMultiselectToFolders}
+						onClose={onCloseAddToFolderBlade}
 						onSubmit={async () => {
+							// Only called when one object was added, multiple objects are saved by saveMultiselectToFolders
 							setShowAddToFolderBlade(false);
 							setSelectedCard(null);
+							if (multiselect.isActive) {
+								closeMultiselect();
+							}
 						}}
 						id="search-page__add-to-folder-blade"
 						ariaLabel={tText(

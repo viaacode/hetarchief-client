@@ -1,0 +1,93 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-multiselect-action-bar";
+
+.#{$component} {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: $spacer-sm;
+	margin-bottom: $spacer-md;
+	padding: $spacer-sm $spacer-md;
+	background-color: $black;
+	color: $white;
+
+	&__count {
+		margin: 0;
+		font-size: $font-size-md;
+		font-weight: $font-weight-bold;
+		white-space: nowrap;
+	}
+
+	&__actions {
+		display: flex;
+		flex-grow: 1;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: $spacer-sm;
+	}
+
+	&__selection-actions,
+	&__save-actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: $spacer-sm;
+	}
+
+	&__button {
+		min-height: 4.4rem; // Large enough tap target on touch devices
+
+		&:global(.c-button--outline) {
+			border-color: $white;
+			border-radius: 0;
+			background-color: transparent;
+			color: $white;
+
+			&:hover:not(:disabled) {
+				background-color: $shade;
+			}
+		}
+
+		&:global(.c-button--disabled),
+		&:disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+		}
+
+		&:focus-visible {
+			outline: 2px solid $white;
+			outline-offset: 2px;
+		}
+
+		&--save {
+			border-radius: 0;
+		}
+
+		&--close {
+			color: $white;
+
+			&:hover {
+				color: $teal;
+			}
+		}
+	}
+
+	@media (max-width: $breakpoint-md) {
+		flex-direction: column;
+		align-items: stretch;
+
+		&__actions,
+		&__selection-actions,
+		&__save-actions {
+			flex-direction: column;
+			align-items: stretch;
+		}
+
+		&__button {
+			width: 100%;
+		}
+	}
+}

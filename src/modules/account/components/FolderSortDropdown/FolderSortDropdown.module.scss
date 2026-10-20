@@ -1,0 +1,20 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-folder-sort-dropdown";
+
+.#{$component} {
+	display: inline-flex;
+	flex-shrink: 0;
+
+	&__button {
+		color: $black;
+		font-size: $font-size-lg;
+	}
+
+	&__flyout {
+		min-width: 24rem;
+		background-color: $white;
+		box-shadow: $shadow-24-black-12;
+		z-index: get-z-layer("dropdown");
+	}
+}

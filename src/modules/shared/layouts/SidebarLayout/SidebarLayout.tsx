@@ -13,6 +13,8 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
 	className,
 	sidebarLinks = [],
 	sidebarTitle,
+	sidebarTitleActions,
+	sidebarSubtitle,
 	color = 'white',
 	responsiveTo = undefined,
 }) => {
@@ -27,12 +29,27 @@ const SidebarLayout: FC<SidebarLayoutProps> = ({
 			})}
 		>
 			<div
-				{...(isResponsive ? { onClick: () => setExpanded(false) } : {})}
+				{...(isResponsive
+					? {
+							onClick: (evt) => {
+								// Only collapse the sidebar when navigating, not when using controls in the sidebar, eg: sort or create folder
+								if ((evt.target as HTMLElement).closest('a')) {
+									setExpanded(false);
+								}
+							},
+						}
+					: {})}
 				className={clsx(styles['l-sidebar__navigation'], {
 					[`u-bg-${color}`]: !!color,
 				})}
 			>
-				<Sidebar color={color} className={styles['l-sidebar__sidebar']} title={sidebarTitle}>
+				<Sidebar
+					color={color}
+					className={styles['l-sidebar__sidebar']}
+					title={sidebarTitle}
+					titleActions={sidebarTitleActions}
+					subtitle={sidebarSubtitle}
+				>
 					<ListNavigation
 						className={styles['l-sidebar__sidebar--top']}
 						color={color}

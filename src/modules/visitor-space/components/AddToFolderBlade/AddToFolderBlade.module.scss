@@ -75,4 +75,73 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			}
 		}
 	}
+
+	&__list-empty {
+		padding: $spacer-sm 0;
+		color: $shade;
+	}
+
+	&__section {
+		margin-bottom: $spacer-sm;
+	}
+
+	&__section-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		padding: $spacer-sm $spacer-md;
+		border: 1px solid $black;
+		background-color: $white;
+		color: $black;
+		font-family: $font-family-primary;
+		font-size: $font-size-base;
+		font-weight: $font-weight-bold;
+		text-align: left;
+		cursor: pointer;
+
+		:global(.c-icon) {
+			font-size: $font-size-lg;
+		}
+
+		&:focus-visible {
+			outline: 2px solid $teal-dark;
+			outline-offset: 2px;
+		}
+	}
+
+	&__selected-objects {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: $spacer-xs;
+		margin-top: $spacer-sm;
+
+		:global(.c-tag-list) {
+			display: flex;
+			flex-wrap: wrap;
+			gap: $spacer-xs;
+			max-width: 100%;
+		}
+
+		// The blade limits the width of all its children, this needs to be more specific
+		.#{$component} & :global(.c-tag),
+		.#{$component} & :global(.c-tag__label) {
+			max-width: 100%;
+			min-width: 0;
+		}
+
+		.#{$component} & &__label {
+			display: inline-block;
+			max-width: 20rem;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			vertical-align: bottom;
+		}
+
+		&__more {
+			padding: 0;
+		}
+	}
 }

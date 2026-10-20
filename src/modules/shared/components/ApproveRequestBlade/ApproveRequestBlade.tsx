@@ -1,5 +1,6 @@
 import { Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
+import { getOrganisationFolders, getPersonalFolders } from '@account/utils/folders';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormControl, TextArea } from '@meemoo/react-components';
 import { APPROVE_REQUEST_FORM_SCHEMA } from '@shared/components/ApproveRequestBlade/ApproveRequestBlade.const';
@@ -163,12 +164,24 @@ const ApproveRequestBlade: FC<ApproveRequestBladeProps> = (props) => {
 					info: tText(
 						'modules/cp/components/approve-request-blade/approve-request-blade___mappen-dienen-op-voorhand-gemaakt-te-worden'
 					),
-					options: (folders || []).map(
-						({ id, name }): RefinableRadioButtonOption => ({
-							id,
-							label: name,
-						})
-					),
+					// Organisation folders are shared between the CP admins of the organisation, show them first
+					options: [
+						...getOrganisationFolders(folders).map(
+							({ id, name }): RefinableRadioButtonOption => ({
+								id,
+								label: tText(
+									'modules/shared/components/approve-request-blade/approve-request-blade___name-organisatiemap',
+									{ name }
+								),
+							})
+						),
+						...getPersonalFolders(folders).map(
+							({ id, name }): RefinableRadioButtonOption => ({
+								id,
+								label: name,
+							})
+						),
+					],
 					label: getAccessTypeLabel(accessType),
 				},
 			},

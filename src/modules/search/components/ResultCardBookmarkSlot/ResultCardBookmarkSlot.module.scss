@@ -1,0 +1,34 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-result-card-bookmark-slot";
+
+.#{$component} {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	// Large enough tap target on touch devices, without changing the size of the card
+	min-width: 4.4rem;
+	min-height: 4.4rem;
+	margin: -1rem -1rem 0 0;
+
+	&__checkbox {
+		:global(.c-checkbox__check-icon) {
+			width: 2.4rem;
+			height: 2.4rem;
+			border: 2px solid $black;
+			background-color: $white;
+		}
+
+		&:global(.c-checkbox--checked .c-checkbox__check-icon) {
+			border-color: $teal-dark;
+			background-color: $teal-dark;
+			color: $white;
+		}
+
+		:global(.c-checkbox__input:focus-visible + .c-checkbox__check-icon) {
+			outline: 2px solid $teal-dark;
+			outline-offset: 2px;
+		}
+	}
+}
