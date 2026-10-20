@@ -47,7 +47,7 @@ import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse
 import { isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
@@ -239,10 +239,10 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				{/* Redirect to SSUM edit profile page => After SSUM redirect to the logout url => after logout redirect to client profile page */}
 				{/* Which will redirect to the client homepage => after user logs in, redirect to client profile page */}
 				<Link
-					href={stringifyUrl({
+					href={queryString.stringifyUrl({
 						url: editUrl,
 						query: {
-							redirect_to: stringifyUrl({
+							redirect_to: queryString.stringifyUrl({
 								url: `${publicRuntimeConfig.PROXY_URL}/auth/global-logout`,
 								query: {
 									returnToUrl: window.location.href,

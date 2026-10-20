@@ -16,7 +16,7 @@ import { useGetVisitorSpace } from '@visitor-space/hooks/get-visitor-space';
 import { SearchFilterId } from '@visitor-space/types';
 import type { HTTPError } from 'ky';
 import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import type { FC } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -107,7 +107,7 @@ export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url, canonic
 				<>
 					{renderLoading()}
 					<NextRedirect
-						to={stringifyUrl({
+						to={queryString.stringifyUrl({
 							url: ROUTES_BY_LOCALE[locale].search,
 							query: { [SearchFilterId.Maintainer]: slug },
 						})}
@@ -123,7 +123,7 @@ export const VisitPage: FC<DefaultSeoInfo> = ({ title, description, url, canonic
 				<>
 					{renderLoading()}
 					<NextRedirect
-						to={stringifyUrl({
+						to={queryString.stringifyUrl({
 							url: ROUTES_BY_LOCALE[locale].search,
 							query: {
 								[SearchFilterId.Maintainers]: `${organisation?.schemaIdentifier}---${organisation?.schemaName}`,

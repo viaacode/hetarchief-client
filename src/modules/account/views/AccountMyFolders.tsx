@@ -44,7 +44,7 @@ import clsx from 'clsx';
 import { isEmpty, isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
 import Highlighter from 'react-highlight-words';
 import { useDispatch, useSelector } from 'react-redux';
@@ -513,7 +513,7 @@ export const AccountMyFolders: FC<DefaultSeoInfo & AccountMyFolders> = ({
 				<MediaCardList
 					keywords={mappedKeywords}
 					items={folderMedia?.data?.items.map((media) => {
-						let link: string | undefined = stringifyUrl({
+						let link: string | undefined = queryString.stringifyUrl({
 							url: getIeObjectDetailPath(
 								locale,
 								media.maintainerSlug,

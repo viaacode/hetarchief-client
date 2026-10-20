@@ -1,7 +1,7 @@
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { NotificationsService } from '@shared/services/notifications-service/notifications.service';
 import type { Notification } from '@shared/services/notifications-service/notifications.types';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import {
 	type InfiniteData,
 	keepPreviousData,

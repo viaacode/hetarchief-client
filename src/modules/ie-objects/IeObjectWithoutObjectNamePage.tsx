@@ -5,7 +5,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { keepPreviousData } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { parseUrl, stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import { type FC, useEffect } from 'react';
 
 type MaintainerSearchPageProps = DefaultSeoInfo;
@@ -32,8 +32,8 @@ export const IeObjectWithoutObjectNamePage: FC<MaintainerSearchPageProps> = () =
 	// We should, however, not forget the query params like cuepoints etc.
 	useEffect(() => {
 		if (ieObjectInfo || isError) {
-			const parsedUrl = parseUrl(window.location.href);
-			const searchUrl = stringifyUrl({
+			const parsedUrl = queryString.parseUrl(window.location.href);
+			const searchUrl = queryString.stringifyUrl({
 				url: getIeObjectDetailPath(
 					locale,
 					(ieObjectInfo?.maintainerSlug || slug) as string,

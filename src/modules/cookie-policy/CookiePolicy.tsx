@@ -4,7 +4,7 @@ import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import clsx from 'clsx';
 import { format } from 'date-fns';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import React, { type FC, useEffect, useState } from 'react';
 
 import styles from './CookiePolicy.module.scss';
@@ -43,7 +43,7 @@ export const CookiePolicy: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		// script.onload = moveCookieDeclaration;
 		script.id = 'CookieDeclaration';
 		script.setAttribute('data-culture', locale);
-		script.src = stringifyUrl({
+		script.src = queryString.stringifyUrl({
 			url: 'https://consent.cookiebot.com/e17bca33-78a0-484e-a204-e05274a65598/cdreport.js',
 			query: {
 				referer: 'hetarchief.be',

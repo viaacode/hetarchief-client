@@ -28,7 +28,7 @@ import { asDate, formatLongDate, formatMediumDateWithTime } from '@shared/utils/
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { noop } from 'es-toolkit/compat';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import React, { type FC, type ReactNode, useState } from 'react';
 import styles from './MaterialRequestContentInfo.module.scss';
 
@@ -431,7 +431,7 @@ const MaterialRequestContentInfo: FC<MaterialRequestContentInfoProps> = ({
 
 		// Generate detail page url with cuepoints if only a partial video was requested
 		// https://meemoo.atlassian.net/browse/ARC-3724
-		const detailPageLink = stringifyUrl({
+		const detailPageLink = queryString.stringifyUrl({
 			url: getIeObjectDetailPath(
 				locale,
 				currentMaterialRequestDetail.maintainerSlug,

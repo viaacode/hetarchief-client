@@ -1,9 +1,9 @@
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import type {
 	MarkAllAsReadResult,
 	Notification,
 } from '@shared/services/notifications-service/notifications.types';
 import type { DefaultComponentProps } from '@shared/types';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import type {
 	InfiniteData,
 	UseInfiniteQueryResult,

@@ -1,6 +1,6 @@
 import { ApiService } from '@shared/services/api-service';
 import type { Locale } from '@shared/utils/i18n';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 
 import type { NavigationInfo, NavigationPlacement } from './navigation.types';
 
@@ -11,7 +11,7 @@ export class NavigationService {
 		language: Locale
 	): Promise<Record<NavigationPlacement, NavigationInfo[]>> {
 		const response: Record<NavigationPlacement, NavigationInfo[]> = await ApiService.getApi()
-			.get(stringifyUrl({ url: NavigationService.baseUrl, query: { language } }))
+			.get(queryString.stringifyUrl({ url: NavigationService.baseUrl, query: { language } }))
 			.json();
 
 		return response ?? {};

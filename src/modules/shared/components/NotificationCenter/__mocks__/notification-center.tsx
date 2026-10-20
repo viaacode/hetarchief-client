@@ -1,10 +1,10 @@
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import {
 	type MarkAllAsReadResult,
 	type Notification,
 	NotificationStatus,
 	NotificationType,
 } from '@shared/services/notifications-service/notifications.types';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import type {
 	InfiniteData,
 	UseInfiniteQueryResult,

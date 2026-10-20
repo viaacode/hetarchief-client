@@ -1,7 +1,7 @@
 import { MaterialRequestsService } from '@material-requests/services';
 import { MaterialRequestEventType, type MaterialRequestMessage } from '@material-requests/types';
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import {
 	type InfiniteData,
 	keepPreviousData,

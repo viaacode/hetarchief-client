@@ -54,7 +54,7 @@ import { MaterialCard } from '@visitor-space/components/MaterialCard';
 import { useIsComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { isNil, noop } from 'es-toolkit/compat';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import { type FC, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import useDetectKeyboardOpen from 'use-detect-keyboard-open';
@@ -158,7 +158,7 @@ export const MaterialRequestDetailBlade: FC<MaterialRequestDetailBladeProps> = (
 	const itemLink = useMemo(
 		() =>
 			materialRequest
-				? stringifyUrl({
+				? queryString.stringifyUrl({
 						url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}/${materialRequest.maintainerSlug}/${materialRequest.objectSchemaIdentifier}`,
 						query: isNil(materialRequest.reuseForm?.endTime)
 							? {}

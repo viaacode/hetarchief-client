@@ -12,7 +12,7 @@ module.exports = {
 					'custom-properties': false,
 					// Disable focus-visible polyfill: modern browsers support :focus-visible natively,
 					// and the polyfill generates empty :where() selectors that cause build warnings.
-					'focus-visible': false,
+					'focus-visible-pseudo-class': false,
 				},
 			},
 		],
