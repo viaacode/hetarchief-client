@@ -59,6 +59,27 @@ describe('mapFileMentionsToAiEntities', () => {
 		]);
 	});
 
+	it('keeps only one interval per TC-in and TC-out', () => {
+		const [entity] = mapFileMentionsToAiEntities(
+			[
+				mention({
+					occurrences: [
+						occurrence(5, 8),
+						{ ...occurrence(5, 8), annotationType: FileMentionAnnotationType.SPEAKER },
+						occurrence(5, null),
+						occurrence(5, 5),
+					],
+				}),
+			],
+			FileMentionEntityType.PERSON
+		);
+
+		expect(entity.intervals).toEqual([
+			{ start: 5, end: 5 },
+			{ start: 5, end: 8 },
+		]);
+	});
+
 	it('flattens occurrences of all annotation types sorted by TC-in', () => {
 		const [entity] = mapFileMentionsToAiEntities(
 			[

@@ -122,14 +122,14 @@ export const AiEntityIntervalPills: FC<AiEntityIntervalPillsProps> = ({
 					});
 					if (!isInteractive) {
 						return (
-							<span key={`${interval.start}-${interval.end}-${index}`} className={pillClassName}>
+							<span key={`${interval.start}-${interval.end}`} className={pillClassName}>
 								<PillContent interval={interval} />
 							</span>
 						);
 					}
 					return (
 						<button
-							key={`${interval.start}-${interval.end}-${index}`}
+							key={`${interval.start}-${interval.end}`}
 							type="button"
 							className={pillClassName}
 							aria-pressed={isActive}
