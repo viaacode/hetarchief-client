@@ -8,6 +8,7 @@
     "Robbe Bierebeeck <robbe.bierebeeck@studiohyperdrive.be>"
   ],
   "scripts": {
+    "prepare": "lefthook install || echo \"lefthook install skipped, see message above\"",
     "dev-with-env": "dotenv -e .env.local -- node ./scripts/generate-env-config.js && next dev --webpack -p 3200",
     "dev": "next dev --webpack -p 3200",
     "dev:turbo": "next dev --turbopack -p 3200",
@@ -17,7 +18,6 @@
     "start-production-locally": "dotenv -e .env.local -- node ./scripts/generate-env-config.js && cross-env NODE_ENV=production next start -p 3200",
     "docker-start": "node ./scripts/generate-env-config.js && node ./scripts/copy-robots-txt-file.js && next start",
     "update-icon-preview-page": "node ./scripts/generate-icon-font-preview.js",
-    "install-pre-commit-hook": "lefthook install",
     "lint": "npm run lint:ts && npm run lint:scss",
     "lint:ts": "biome lint --write",
     "lint:scss": "stylelint 'src/**/*.{css,scss}' --allow-empty-input --fix",
@@ -146,7 +146,6 @@
     "dotenv-cli": "5.0.0",
     "jsdom": "25.0.1",
     "knip": "6.25.0",
-    "lefthook": "1.10.10",
     "postcss-flexbugs-fixes": "5.0.2",
     "postcss-preset-env": "7.0.1",
     "sass": "1.93.3",
@@ -157,7 +156,8 @@
     "tsx": "4.21.0",
     "typescript": "5.9.3",
     "vite": "7.3.6",
-    "vitest": "4.1.10"
+    "vitest": "4.1.10",
+    "lefthook": "2.2.2"
   },
   "overrides": {
     "@types/react": "19.2.17",
