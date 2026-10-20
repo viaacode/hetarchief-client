@@ -122,3 +122,12 @@ $text-filter-form-divider: 1px solid rgb(0 0 0 / 12%);
 		}
 	}
 }
+
+// A boxed select lets its control close off the top of the menu, so the shared menu style drops
+// its top border. The operator has no box, which left the menu open at the top, so it gets its
+// border back and some room under the caret. The menu is portaled to the body, so this repeats the
+// shared selector with the operator's class added, to outweigh it whatever order the styles load in.
+:global(.c-react-select__menu-portal .c-react-select__menu).c-text-filter-form__operator-menu {
+	border-top: 1px solid abstracts.$zinc;
+	margin-top: abstracts.$spacer-xs;
+}
