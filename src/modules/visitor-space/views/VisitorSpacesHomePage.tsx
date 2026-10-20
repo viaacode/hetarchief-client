@@ -30,7 +30,7 @@ export const VisitorSpacesHomePage: FC<DefaultSeoInfo> = (props) => {
 	 */
 
 	const renderPageContent = () => {
-		if (isLoggedIn && !!user) {
+		if (isLoggedIn && user) {
 			if (showLinkedSpaceAsHomepage && linkedSpaceSlug) {
 				return <Loading fullscreen locationId="root page logged" />;
 			}

@@ -143,9 +143,9 @@ export const AiEntityIntervalPills: FC<AiEntityIntervalPillsProps> = ({
 
 			{/* Invisible copy with every pill, only there to measure where the rows wrap */}
 			<div ref={measureRef} className={styles['c-ai-entity-interval-pills__measure']} aria-hidden>
-				{intervals.map((interval, index) => (
+				{intervals.map((interval) => (
 					<span
-						key={`${interval.start}-${interval.end}-${index}`}
+						key={`${interval.start}-${interval.end}`}
 						className={styles['c-ai-entity-interval-pills__pill']}
 					>
 						<PillContent interval={interval} />

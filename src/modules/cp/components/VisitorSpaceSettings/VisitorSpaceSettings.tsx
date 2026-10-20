@@ -226,7 +226,7 @@ const VisitorSpaceSettings: FC<VisitorSpaceSettingsProps> = ({ action, visitorSp
 		try {
 			// Show errors
 			const isFormValid = await validateFormValues(formValues, true);
-			if (isFormValid && !!formValues) {
+			if (isFormValid && formValues) {
 				const response = await VisitorSpaceService.create(formValues);
 				if (response === undefined) {
 					return;

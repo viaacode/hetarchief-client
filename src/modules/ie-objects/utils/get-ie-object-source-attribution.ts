@@ -138,7 +138,7 @@ export function getIeObjectSourceAttribution(
 		? formatDateTime(preferredDate, locale, 'international', false)
 		: null;
 
-	if (isAudioVideoType(ieObject.dctermsFormat) && !!ieObject.hasAccessToEssence) {
+	if (isAudioVideoType(ieObject.dctermsFormat) && ieObject.hasAccessToEssence) {
 		return buildAttribution([
 			formatSourceAttributionNames(getCreatorNames(ieObject, locale)),
 			ieObject.name,
@@ -149,7 +149,7 @@ export function getIeObjectSourceAttribution(
 		]);
 	}
 
-	if (isNewspaperType(ieObject.dctermsFormat) && !!ieObject.hasAccessToEssence) {
+	if (isNewspaperType(ieObject.dctermsFormat) && ieObject.hasAccessToEssence) {
 		return buildAttribution([
 			ieObject.name,
 			formattedDate,

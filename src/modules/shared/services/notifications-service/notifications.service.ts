@@ -93,7 +93,7 @@ export abstract class NotificationsService {
 		const firstUnread = asDate(unreadNotifications?.[0]?.createdAt);
 
 		if (
-			!!NotificationsService.lastNotifications && // Do not show notifications if this is the first time we check since loading the site
+			NotificationsService.lastNotifications && // Do not show notifications if this is the first time we check since loading the site
 			firstUnread && // There is at least one unread notification
 			(!mostRecent || lastCheckNotificationTime < firstUnread.getTime()) // The most recent unread notification was added since the last time we checked
 		) {
