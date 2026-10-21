@@ -1,6 +1,6 @@
 {
   "name": "hetarchief-client",
-  "version": "4.4.5",
+  "version": "4.4.7",
   "private": true,
   "contributors": [
     "Bert Verhelst <bert.verhelst@studiohyperdrive.be>",
@@ -31,6 +31,7 @@
     "test:cov": "vitest run --coverage",
     "test:watch": "vitest",
     "type-check": "tsc --noEmit",
+    "check-mocks-translations": "node scripts/check-no-translations-in-mocks.js",
     "check-circular-depedencies": "npx madge --circular --extensions ts ./",
     "storybook": "storybook dev -p 6006",
     "build:storybook": "storybook build",
@@ -43,8 +44,8 @@
     "@floating-ui/react": "0.27.18",
     "@flowplayer/player": "3.32.1",
     "@hookform/resolvers": "2.9.11",
-    "@meemoo/admin-core-ui": "6.0.62",
-    "@meemoo/react-components": "6.0.28",
+    "@meemoo/admin-core-ui": "6.0.67",
+    "@meemoo/react-components": "6.0.29",
     "@popperjs/core": "2.11.6",
     "@react-hook/resize-observer": "1.2.5",
     "@reduxjs/toolkit": "2.9.0",

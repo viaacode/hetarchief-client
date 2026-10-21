@@ -8,8 +8,6 @@ import DynamicActionMenu from './DynamicActionMenu';
 import { SECONDARY_ITEM_ATTRIBUTE } from './DynamicActionMenu.const';
 import type { DynamicActionMenuProps } from './DynamicActionMenu.types';
 
-vi.mock('@shared/helpers/translate', () => ({ tText: (key: string) => key }));
-
 const PRIMARY_WIDTH = 200;
 const ITEM_WIDTH = 48;
 const GAP = 8;
