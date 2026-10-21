@@ -8,9 +8,11 @@ $text-filter-form-divider: 1px solid rgb(0 0 0 / 12%);
 .c-text-filter-form {
 	// A filter modal normally puts 2.4rem under its title, but this one follows it with a
 	// description, which the design keeps 0.8rem below the title. Doubling the class outweighs
-	// the padding c-filter-form__body sets on this same element.
+	// the padding c-filter-form__body sets on this same element. The add CTA closes the block, so
+	// the body's bottom padding would only leave a gap between it and the footer rule.
 	&.c-text-filter-form {
 		padding-top: abstracts.$spacer-xs;
+		padding-bottom: 0;
 	}
 
 	// The conditions block carries the space under the description, so this adds none of its own
@@ -121,4 +123,13 @@ $text-filter-form-divider: 1px solid rgb(0 0 0 / 12%);
 			width: 100%;
 		}
 	}
+}
+
+// A boxed select lets its control close off the top of the menu, so the shared menu style drops
+// its top border. The operator has no box, which left the menu open at the top, so it gets its
+// border back and some room under the caret. The menu is portaled to the body, so this repeats the
+// shared selector with the operator's class added, to outweigh it whatever order the styles load in.
+:global(.c-react-select__menu-portal .c-react-select__menu).c-text-filter-form__operator-menu {
+	border-top: 1px solid abstracts.$zinc;
+	margin-top: abstracts.$spacer-xs;
 }
