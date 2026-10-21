@@ -161,6 +161,8 @@ export const TextFilterForm: FC<GenericFilterFormProps> = ({
 											/>
 										),
 									}}
+									// The menu is portaled to the body, out of reach of this module's nested rules
+									classNames={{ menu: () => styles['c-text-filter-form__operator-menu'] }}
 									// The list of conditions scrolls, which would otherwise cut the menu off
 									menuPosition="fixed"
 									inputId={`text-filter-form-${filter.id}-operator-${index}`}
