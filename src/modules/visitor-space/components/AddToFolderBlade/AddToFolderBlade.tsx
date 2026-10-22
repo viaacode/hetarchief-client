@@ -516,6 +516,9 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 		if (showFolderSections) {
 			return (
 				<>
+					<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
+						{renderCreateFolderButton()}
+					</ul>
 					{renderSection(
 						FolderSection.ORGANISATION,
 						tText(
@@ -530,17 +533,14 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 						),
 						personalFolders
 					)}
-					<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
-						{renderCreateFolderButton()}
-					</ul>
 				</>
 			);
 		}
 
 		return (
 			<ul className={clsx(styles['c-add-to-folder-blade__list'])}>
-				{personalFolders.map(renderFolderCheckbox)}
 				{renderCreateFolderButton()}
+				{personalFolders.map(renderFolderCheckbox)}
 			</ul>
 		);
 	};
