@@ -4,6 +4,7 @@ import { FoldersService } from '@account/services/folders';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
 import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/use-get-ie-object-format-counts';
 import { useGetIeObjects } from '@ie-objects/hooks/use-get-ie-objects';
+import { IeObjectsService } from '@ie-objects/services';
 import { isInAFolder } from '@ie-objects/utils/folders';
 import { isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import {
@@ -129,7 +130,7 @@ import React, {
 import { useDispatch, useSelector } from 'react-redux';
 import type { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
-import { MultiselectActionBar } from './components/MultiselectActionBar';
+import { MAX_SELECT_ALL_RESULTS, MultiselectActionBar } from './components/MultiselectActionBar';
 import { MultiselectErrorBanner } from './components/MultiselectErrorBanner';
 import { ResultCardBookmarkSlot } from './components/ResultCardBookmarkSlot';
 import { SelectableMediaCard } from './components/SelectableMediaCard';
@@ -196,6 +197,9 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		null
 	);
 	const [isSavingMultiselect, setIsSavingMultiselect] = useState(false);
+	// Titles of the results of all pages, fetched when the user selects all results of the search
+	const [allResultTitles, setAllResultTitles] = useState<Record<string, string>>({});
+	const [isSelectingAllResults, setIsSelectingAllResults] = useState(false);
 	// The card that started the multiselect mode, to move the focus to its checkbox and back again
 	const [multiselectStartId, setMultiselectStartId] = useState<string | null>(null);
 	const multiselectSaveButtonRef = useRef<HTMLButtonElement>(null) as RefObject<HTMLButtonElement>;
@@ -716,28 +720,29 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	// Kiosk users and anonymous users cannot manage folders, so they never get the multiselect
 	const isMultiselectAvailable = !!canManageFolders && searchResultCardData.length >= 2;
 
-	const selectedMultiselectCards = useMemo(
+	// The selected objects can be on other pages when all results of the search were selected
+	const selectedMultiselectObjects = useMemo(
 		() =>
 			compact(
-				multiselect.selectedIds.map((schemaIdentifier) =>
-					searchResultCardData.find((card) => card.schemaIdentifier === schemaIdentifier)
-				)
+				multiselect.selectedIds.map((schemaIdentifier) => {
+					const title =
+						searchResultCardData.find((card) => card.schemaIdentifier === schemaIdentifier)?.name ??
+						allResultTitles[schemaIdentifier];
+					return isNil(title) ? null : { schemaIdentifier, title };
+				})
 			),
-		[multiselect.selectedIds, searchResultCardData]
+		[multiselect.selectedIds, searchResultCardData, allResultTitles]
 	);
 
 	const objectsToAddToFolder = useMemo(() => {
 		if (multiselect.isActive) {
-			return selectedMultiselectCards.map((card) => ({
-				schemaIdentifier: card.schemaIdentifier,
-				title: card.name,
-			}));
+			return selectedMultiselectObjects;
 		}
 		if (selectedCard) {
 			return [{ schemaIdentifier: selectedCard.schemaIdentifier, title: selectedCard.name }];
 		}
 		return [];
-	}, [multiselect.isActive, selectedMultiselectCards, selectedCard]);
+	}, [multiselect.isActive, selectedMultiselectObjects, selectedCard]);
 
 	const focusMultiselectStartCard = () => {
 		const startId = multiselectStartId;
@@ -757,6 +762,37 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const startMultiselect = (card: IdentifiableMediaCard) => {
 		setMultiselectStartId(card.schemaIdentifier);
 		multiselect.open([card.schemaIdentifier]);
+	};
+
+	const selectAllResults = async () => {
+		const totalCount = getItemCounts(format);
+		if (totalCount > MAX_SELECT_ALL_RESULTS) {
+			return;
+		}
+		setIsSelectingAllResults(true);
+		try {
+			const response = await IeObjectsService.getSearchResults(
+				searchQueryFilters,
+				1,
+				totalCount,
+				activeSort,
+				[]
+			);
+			setAllResultTitles(
+				Object.fromEntries(response.items.map((item) => [item.schemaIdentifier, item.name]))
+			);
+			multiselect.selectMany(response.items.map((item) => item.schemaIdentifier));
+		} catch (err) {
+			console.error(err);
+			toastService.notify({
+				maxLines: 3,
+				title: tText('modules/search/search-page___er-ging-iets-mis'),
+				description: tText(
+					'modules/search/search-page___het-selecteren-van-alle-resultaten-is-mislukt'
+				),
+			});
+		}
+		setIsSelectingAllResults(false);
 	};
 
 	const closeMultiselect = () => {
@@ -1007,12 +1043,19 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			<>
 				<MultiselectActionBar
 					selectedCount={multiselect.selectedIds.length}
+					isAllOnPageSelected={searchResultCardData.every((card) =>
+						multiselect.isSelected(card.schemaIdentifier)
+					)}
 					pageCount={searchResultCardData.length}
+					totalCount={getItemCounts(format)}
+					isAllResultsSelected={multiselect.selectedIds.length >= getItemCounts(format)}
+					isSelectingAllResults={isSelectingAllResults}
 					isSaving={isSavingMultiselect}
 					saveButtonRef={multiselectSaveButtonRef}
 					onSelectAllOnPage={() =>
 						multiselect.selectMany(searchResultCardData.map((card) => card.schemaIdentifier))
 					}
+					onSelectAllResults={selectAllResults}
 					onDeselectAll={multiselect.deselectAll}
 					onSave={() => {
 						setSelectedCard(null);

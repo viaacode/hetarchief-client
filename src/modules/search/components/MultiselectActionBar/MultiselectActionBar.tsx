@@ -5,17 +5,35 @@ import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import { type FC, type RefObject, useEffect, useRef } from 'react';
 
+import { MAX_SELECT_ALL_RESULTS } from './MultiselectActionBar.const';
 import styles from './MultiselectActionBar.module.scss';
 
 interface MultiselectActionBarProps {
 	className?: string;
 	selectedCount: number;
 	/**
-	 * Number of results on the current page, to disable "select all" when they are all selected
+	 * Shows "deselect all" instead of "select all" when all results on the current page are selected
+	 */
+	isAllOnPageSelected: boolean;
+	/**
+	 * Number of results on the current page
 	 */
 	pageCount: number;
+	/**
+	 * Number of results of the search over all pages
+	 */
+	totalCount: number;
+	/**
+	 * Disables "select all results" when all results of the search are already selected
+	 */
+	isAllResultsSelected: boolean;
+	/**
+	 * Whether the results of the other pages are being fetched to select them
+	 */
+	isSelectingAllResults?: boolean;
 	isSaving?: boolean;
 	onSelectAllOnPage: () => void;
+	onSelectAllResults: () => void;
 	onDeselectAll: () => void;
 	onSave: () => void;
 	onClose: () => void;
@@ -28,9 +46,14 @@ interface MultiselectActionBarProps {
 export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 	className,
 	selectedCount,
+	isAllOnPageSelected,
 	pageCount,
+	totalCount,
+	isAllResultsSelected,
+	isSelectingAllResults = false,
 	isSaving = false,
 	onSelectAllOnPage,
+	onSelectAllResults,
 	onDeselectAll,
 	onSave,
 	onClose,
@@ -58,6 +81,38 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 		return () => document.removeEventListener('keydown', handleKeyDown);
 	}, []);
 
+	const renderSelectAllResults = () => {
+		// All results are already on this page, so "select all" covers them
+		if (totalCount <= pageCount) {
+			return null;
+		}
+		if (totalCount > MAX_SELECT_ALL_RESULTS) {
+			return (
+				<p className={styles['c-multiselect-action-bar__too-many-results']}>
+					{tText(
+						'modules/search/components/multiselect-action-bar/multiselect-action-bar___te-veel-resultaten-om-alles-te-selecteren',
+						{ max: MAX_SELECT_ALL_RESULTS }
+					)}
+				</p>
+			);
+		}
+		return (
+			<Button
+				className={clsx(
+					styles['c-multiselect-action-bar__button'],
+					styles['c-multiselect-action-bar__button--link']
+				)}
+				variants={['text']}
+				label={tText(
+					'modules/search/components/multiselect-action-bar/multiselect-action-bar___selecteer-alle-count-resultaten',
+					{ count: totalCount }
+				)}
+				onClick={onSelectAllResults}
+				disabled={isAllResultsSelected || isSelectingAllResults}
+			/>
+		);
+	};
+
 	return (
 		<section
 			className={clsx(className, styles['c-multiselect-action-bar'])}
@@ -77,24 +132,26 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 			</p>
 			<div className={styles['c-multiselect-action-bar__actions']}>
 				<div className={styles['c-multiselect-action-bar__selection-actions']}>
-					<Button
-						className={styles['c-multiselect-action-bar__button']}
-						variants={['outline']}
-						label={tText(
-							'modules/search/components/multiselect-action-bar/multiselect-action-bar___selecteer-alles-op-deze-pagina'
-						)}
-						onClick={onSelectAllOnPage}
-						disabled={selectedCount >= pageCount}
-					/>
-					<Button
-						className={styles['c-multiselect-action-bar__button']}
-						variants={['outline']}
-						label={tText(
-							'modules/search/components/multiselect-action-bar/multiselect-action-bar___deselecteer-alles'
-						)}
-						onClick={onDeselectAll}
-						disabled={selectedCount === 0}
-					/>
+					{isAllOnPageSelected ? (
+						<Button
+							className={styles['c-multiselect-action-bar__button']}
+							variants={['outline']}
+							label={tText(
+								'modules/search/components/multiselect-action-bar/multiselect-action-bar___deselecteer-alles'
+							)}
+							onClick={onDeselectAll}
+						/>
+					) : (
+						<Button
+							className={styles['c-multiselect-action-bar__button']}
+							variants={['outline']}
+							label={tText(
+								'modules/search/components/multiselect-action-bar/multiselect-action-bar___selecteer-alles'
+							)}
+							onClick={onSelectAllOnPage}
+						/>
+					)}
+					{renderSelectAllResults()}
 				</div>
 				<div className={styles['c-multiselect-action-bar__save-actions']}>
 					<Button

@@ -20,6 +20,11 @@ $component: "c-multiselect-action-bar";
 		white-space: nowrap;
 	}
 
+	&__too-many-results {
+		margin: 0;
+		font-size: $font-size-sm;
+	}
+
 	&__actions {
 		display: flex;
 		flex-grow: 1;
@@ -64,6 +69,15 @@ $component: "c-multiselect-action-bar";
 
 		&--save {
 			border-radius: 0;
+		}
+
+		&--link {
+			color: $white;
+			text-decoration: underline;
+
+			&:hover:not(:disabled) {
+				color: $teal;
+			}
 		}
 
 		&--close {
