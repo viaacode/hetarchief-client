@@ -1256,6 +1256,8 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 							if (multiselect.isActive) {
 								closeMultiselect();
 							}
+							// Update the bookmark icons of the search results
+							await refetchFolders();
 						}}
 						id="search-page__add-to-folder-blade"
 						ariaLabel={tText(
