@@ -81,6 +81,11 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 		color: $shade;
 	}
 
+	&__error {
+		padding: $spacer-sm 0;
+		color: $cherry;
+	}
+
 	&__section {
 		margin-bottom: $spacer-sm;
 	}

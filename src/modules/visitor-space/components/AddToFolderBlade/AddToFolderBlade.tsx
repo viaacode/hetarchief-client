@@ -37,7 +37,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	className,
 	...bladeProps
 }) => {
-	const { data: folders, refetch: refetchFolders } = useGetFolders();
+	const { data: folders, isError: isFoldersError, refetch: refetchFolders } = useGetFolders();
 	const canManageOrganisationFolders = useHasAllPermission(Permission.MANAGE_ORGANISATION_FOLDERS);
 	const [originalSelectedFolderIds, setOriginalSelectedFolderIds] = useState<string[] | null>(null);
 	const [selectedFolderIds, setSelectedFolderIds] = useState<string[] | null>(null);
@@ -500,6 +500,15 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	};
 
 	const renderFolders = (): ReactNode => {
+		if (isFoldersError) {
+			return (
+				<p className={styles['c-add-to-folder-blade__error']}>
+					{tText(
+						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___het-ophalen-van-de-mappenlijst-is-mislukt-probeer-later-opnieuw'
+					)}
+				</p>
+			);
+		}
 		if (!folders) {
 			return null;
 		}
