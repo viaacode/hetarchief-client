@@ -112,7 +112,9 @@ describe('<AddToFolderBlade /> with multiple objects', () => {
 		expect(getVisibleHints('Map met een object')).toEqual([
 			'count-van-de-total-objecten-zitten-al-in-deze-map',
 		]);
-		expect(getVisibleHints('Map met alle objecten')).toEqual([]);
+		expect(getVisibleHints('Map met alle objecten')).toEqual([
+			'deze-map-bevat-reeds-de-count-objecten',
+		]);
 	});
 
 	it('cycles an indeterminate folder through checked, unchecked and back to indeterminate', () => {

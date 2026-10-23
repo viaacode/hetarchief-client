@@ -1200,6 +1200,7 @@
   "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-objecten-worden-aan-deze-map-toegevoegd": "{{count}} objecten worden aan deze map toegevoegd",
   "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-objecten-worden-uit-deze-map-verwijderd": "{{count}} objecten worden uit deze map verwijderd",
   "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-van-de-total-objecten-zitten-al-in-deze-map": "{{count}} van de {{total}} objecten zitten al in deze map",
+  "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___deze-map-bevat-reeds-de-count-objecten": "Deze map bevat reeds de {{count}} objecten",
   "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___er-ging-iets-mis": "<p>Er ging iets mis. Probeer het later opnieuw of contacteer <a href=\"mailto:support@meemoo.be\">support@meemoo.be</a>.</p>",
   "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___er-is-een-fout-opgetreden-tijdens-het-opslaan-probeer-opnieuw": "Er ging iets mis bij het opslaan. Probeer opnieuw.",
   "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___er-zijn-nog-geen-organisatiemappen": "Er zijn nog geen organisatiemappen.",

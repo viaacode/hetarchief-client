@@ -491,7 +491,15 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 				),
 			});
 		}
-		if (contents !== FolderContents.ALL) {
+		if (contents === FolderContents.ALL) {
+			hints.push({
+				state: FolderCheckboxState.CHECKED,
+				text: tHtml(
+					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___deze-map-bevat-reeds-de-count-objecten',
+					{ count: objectSchemaIdentifiers.length }
+				),
+			});
+		} else {
 			hints.push({
 				state: FolderCheckboxState.CHECKED,
 				text:
