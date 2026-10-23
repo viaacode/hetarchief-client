@@ -151,6 +151,7 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			flex-flow: column nowrap;
 			gap: $spacer-xs;
 			width: 100%;
+			margin: 0;
 		}
 
 		// The blade limits the width of all its children, this needs to be more specific
@@ -184,8 +185,11 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			white-space: pre;
 		}
 
+		// "+ n more" and "show less": close to the list, more space towards the folders below
 		&__more {
+			height: auto;
 			padding: 0;
+			margin-bottom: $spacer-sm;
 		}
 	}
 }

@@ -241,7 +241,7 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 				</div>
 				<div className={styles['c-multiselect-action-bar__save-actions']}>
 					<Button
-						buttonRef={saveButtonRef}
+						ref={saveButtonRef}
 						className={clsx(
 							styles['c-multiselect-action-bar__button'],
 							styles['c-multiselect-action-bar__button--save']

@@ -1230,6 +1230,7 @@
   "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___organisatiemappen": "Organisatiemappen",
   "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___persoonlijke-mappen": "Persoonlijke mappen",
   "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___toon-alle-count-geselecteerde-objecten": "Toon alle {{count}} geselecteerde objecten",
+  "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___toon-minder": "Toon minder",
   "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___verwijder-uit-selectie": "Verwijder uit selectie",
   "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-folder-toe-aan-map": "voeg materiaal toe aan map '{{folder}}'",
   "modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe": "Voeg toe",

@@ -14,7 +14,15 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
 import { compact } from 'es-toolkit/compat';
-import { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
+import {
+	type FC,
+	type ReactNode,
+	type RefObject,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 
 import styles from './AddToFolderBlade.module.scss';
 import type { AddToFolderBladeProps, FolderChanges } from './AddToFolderBlade.types';
@@ -64,6 +72,9 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [collapsedSections, setCollapsedSections] = useState<FolderSection[]>([]);
 	const [showAllObjectTags, setShowAllObjectTags] = useState(false);
+	const moreObjectsButtonRef = useRef<HTMLButtonElement>(null) as RefObject<HTMLButtonElement>;
+	// Set when the list is collapsed, so keyboard focus moves to the "+ n more" button instead of being lost
+	const shouldFocusMoreObjectsButton = useRef(false);
 
 	// A folder that contains all selected objects is checked, one that contains some of them is indeterminate
 	// Clicking cycles through the states, so the objects can be added to or removed from every folder
@@ -142,6 +153,13 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			resetForm();
 		}
 	}, [isOpen]);
+
+	useEffect(() => {
+		if (!showAllObjectTags && shouldFocusMoreObjectsButton.current) {
+			shouldFocusMoreObjectsButton.current = false;
+			moreObjectsButtonRef.current?.focus();
+		}
+	}, [showAllObjectTags]);
 
 	/**
 	 * Events
@@ -772,6 +790,20 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 							}
 						)}
 						onClick={() => setShowAllObjectTags(true)}
+						ref={moreObjectsButtonRef}
+					/>
+				)}
+				{showAllObjectTags && objectsToAdd.length > MAX_VISIBLE_OBJECT_TAGS && (
+					<Button
+						className={styles['c-add-to-folder-blade__selected-objects__more']}
+						variants={['text', 'sm']}
+						label={tText(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___toon-minder'
+						)}
+						onClick={() => {
+							shouldFocusMoreObjectsButton.current = true;
+							setShowAllObjectTags(false);
+						}}
 					/>
 				)}
 			</div>
