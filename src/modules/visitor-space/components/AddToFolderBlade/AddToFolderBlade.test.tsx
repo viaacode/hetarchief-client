@@ -148,9 +148,8 @@ describe('<AddToFolderBlade /> with multiple objects', () => {
 	it('saves the folders to add to and remove from', () => {
 		fireEvent.click(getCheckbox('Map zonder objecten'));
 		fireEvent.click(getCheckbox('Map met alle objecten'));
-		expect(getVisibleHints('Map zonder objecten')).toEqual([
-			'count-objecten-worden-aan-deze-map-toegevoegd',
-		]);
+		// Folders without any of the objects don't need an explanation
+		expect(getVisibleHints('Map zonder objecten')).toEqual([]);
 		expect(getVisibleHints('Map met alle objecten')).toEqual([
 			'count-objecten-worden-uit-deze-map-verwijderd',
 		]);

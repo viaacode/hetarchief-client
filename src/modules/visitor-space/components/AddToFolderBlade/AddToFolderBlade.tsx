@@ -475,7 +475,8 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	};
 
 	/**
-	 * Explains the indeterminate state and how many objects will be added or removed, only when multiple objects are selected
+	 * Explains the indeterminate state and how many objects will be added or removed
+	 * Only shown when multiple objects are selected and the folder already contains some of them
 	 * All hints the folder can show are rendered on top of each other and only the active one is visible,
 	 * so the tallest hint determines the height and the list does not jump when the checkbox changes
 	 */
@@ -484,7 +485,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 		contents: FolderContents,
 		selectedObjectsInFolder: number
 	): ReactNode => {
-		if (!isMultipleObjects) {
+		if (!isMultipleObjects || contents === FolderContents.NONE) {
 			return null;
 		}
 		const addedCount = objectSchemaIdentifiers.length - selectedObjectsInFolder;
@@ -512,21 +513,19 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 							),
 			});
 		}
-		if (contents !== FolderContents.NONE) {
-			hints.push({
-				state: FolderCheckboxState.UNCHECKED,
-				className: styles['c-add-to-folder-blade__list-item__hint--remove'],
-				text:
-					selectedObjectsInFolder === 1
-						? tHtml(
-								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___1-object-wordt-uit-deze-map-verwijderd'
-							)
-						: tHtml(
-								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-objecten-worden-uit-deze-map-verwijderd',
-								{ count: selectedObjectsInFolder }
-							),
-			});
-		}
+		hints.push({
+			state: FolderCheckboxState.UNCHECKED,
+			className: styles['c-add-to-folder-blade__list-item__hint--remove'],
+			text:
+				selectedObjectsInFolder === 1
+					? tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___1-object-wordt-uit-deze-map-verwijderd'
+						)
+					: tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-objecten-worden-uit-deze-map-verwijderd',
+							{ count: selectedObjectsInFolder }
+						),
+		});
 
 		return (
 			<span className={styles['c-add-to-folder-blade__list-item__hints']}>
