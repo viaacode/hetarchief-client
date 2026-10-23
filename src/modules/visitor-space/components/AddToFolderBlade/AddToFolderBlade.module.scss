@@ -185,6 +185,11 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			white-space: pre;
 		}
 
+		// Some breathing room between the end of the title and the remove button
+		.#{$component} & :global(.c-tag__close) {
+			margin-left: $spacer-xs;
+		}
+
 		// "+ n more" and "show less": close to the list, more space towards the folders below
 		&__more {
 			height: auto;
