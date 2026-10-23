@@ -502,6 +502,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 		} else {
 			hints.push({
 				state: FolderCheckboxState.CHECKED,
+				className: styles['c-add-to-folder-blade__list-item__hint--add'],
 				text:
 					addedCount === 1
 						? tHtml(
