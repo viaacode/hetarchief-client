@@ -146,7 +146,9 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 		// Every object gets its own row using the full width of the blade
 		:global(.c-tag-list) {
 			display: flex;
-			flex-direction: column;
+
+			// The global tag list wraps, a wrapping column is as wide as its longest title instead of the blade
+			flex-flow: column nowrap;
 			gap: $spacer-xs;
 			width: 100%;
 		}
