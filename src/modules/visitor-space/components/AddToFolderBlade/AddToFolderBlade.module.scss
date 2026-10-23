@@ -23,9 +23,11 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 				}
 			}
 
-			// Keep the typed name away from the focus outline
+			// Keep the typed name away from the focus outline,
+			// the negative margin keeps the text aligned with the folder names and the "new folder" label
 			:global(.c-content-input__field) {
 				padding-left: $spacer-xs;
+				margin-left: -$spacer-xs;
 			}
 
 			// break rule of 8 for visual alignment
