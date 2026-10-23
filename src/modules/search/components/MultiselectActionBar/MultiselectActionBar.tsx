@@ -98,9 +98,12 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 				);
 		return (
 			<Button
+				// A new key restarts the fade in, so "x selected" draws the attention first
+				key={canSelectAllResults ? 'select-all-results' : 'select-all-on-page'}
 				className={clsx(
 					styles['c-multiselect-action-bar__button'],
-					styles['c-multiselect-action-bar__button--link']
+					styles['c-multiselect-action-bar__button--link'],
+					canSelectAllResults && styles['c-multiselect-action-bar__button--fade-in']
 				)}
 				variants={['text']}
 				label={

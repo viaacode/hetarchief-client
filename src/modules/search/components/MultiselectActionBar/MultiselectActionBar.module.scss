@@ -98,6 +98,15 @@ $component: "c-multiselect-action-bar";
 			}
 		}
 
+		// "Select all results" appears after the page is selected, slowly so the count is noticed first
+		&--fade-in {
+			animation: multiselect-action-bar-fade-in 1.2s ease-in 0.4s backwards; // Keeps the disabled opacity afterwards
+
+			@media (prefers-reduced-motion: reduce) {
+				animation: none;
+			}
+		}
+
 		&--close,
 		&--close:global(.c-button--icon) {
 			width: auto;
@@ -140,5 +149,15 @@ $component: "c-multiselect-action-bar";
 		&__button {
 			width: 100%;
 		}
+	}
+}
+
+@keyframes multiselect-action-bar-fade-in {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
 	}
 }
