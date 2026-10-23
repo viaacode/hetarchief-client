@@ -637,6 +637,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			<CreateFolderButton
 				afterSubmit={afterCreateFolderSubmit}
 				showOrganisationOption={canManageOrganisationFolders}
+				keepIconWhenOpen
 			/>
 		</li>
 	);

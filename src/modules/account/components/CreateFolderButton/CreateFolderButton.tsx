@@ -22,6 +22,7 @@ const labelKeys: Record<'name', string> = {
 const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 	afterSubmit = () => null,
 	onOpenNode = null,
+	keepIconWhenOpen = false,
 	isOrganisation = false,
 	showOrganisationOption = false,
 }) => {
@@ -109,7 +110,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 						autoComplete="off"
 						autoCorrect="off"
 						iconStart={(handler) => {
-							return !isOpen ? (
+							return !isOpen || keepIconWhenOpen ? (
 								<Button
 									tabIndex={-1}
 									variants={['platinum', 'sm']}

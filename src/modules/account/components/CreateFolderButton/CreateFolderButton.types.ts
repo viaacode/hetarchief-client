@@ -6,6 +6,10 @@ export interface CreateFolderButtonProps {
 	afterSubmit?: (folder: Folder) => void;
 	onOpenNode?: ReactNode | null;
 	/**
+	 * Keep showing the + icon while the name is being typed, so the input does not shift to the left
+	 */
+	keepIconWhenOpen?: boolean;
+	/**
 	 * Always create an organisation folder, eg: on the organisation folders overview
 	 */
 	isOrganisation?: boolean;
