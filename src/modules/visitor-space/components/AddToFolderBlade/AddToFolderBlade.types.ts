@@ -7,10 +7,6 @@ export type AddToFolderBladeProps = FormBladeProps<string[]> & {
 	 */
 	objectsToAdd: AddToFolderSelected[];
 	/**
-	 * Remove an object from the selection, only used when adding multiple objects
-	 */
-	onRemoveObject?: (schemaIdentifier: string) => void;
-	/**
 	 * Adds multiple objects to and removes them from the chosen folders, only used with multiple objects
 	 * The caller does the save, so it can keep the selection and offer a retry when it fails
 	 */

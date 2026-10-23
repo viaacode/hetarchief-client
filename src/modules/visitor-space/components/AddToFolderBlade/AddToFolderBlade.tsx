@@ -4,7 +4,7 @@ import { useGetFolders } from '@account/hooks/get-folders';
 import { FoldersService } from '@account/services/folders';
 import type { Folder } from '@account/types';
 import { getOrganisationFolders, getPersonalFolders, sortFolders } from '@account/utils/folders';
-import { Button, Checkbox, TagList } from '@meemoo/react-components';
+import { Checkbox } from '@meemoo/react-components';
 import { Blade } from '@shared/components/Blade/Blade';
 import type { BladeFooterButtonProps } from '@shared/components/Blade/Blade.types';
 import { Icon } from '@shared/components/Icon';
@@ -14,23 +14,10 @@ import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
 import { compact } from 'es-toolkit/compat';
-import {
-	type FC,
-	type ReactNode,
-	type RefObject,
-	useEffect,
-	useMemo,
-	useRef,
-	useState,
-} from 'react';
+import { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
 
 import styles from './AddToFolderBlade.module.scss';
 import type { AddToFolderBladeProps, FolderChanges } from './AddToFolderBlade.types';
-
-// Number of selected objects that are shown as a tag, the others are summarized as "+ n more"
-const MAX_VISIBLE_OBJECT_TAGS = 4;
-// Number of characters at the end of an object title that stay visible when the title is truncated in the middle
-const MIDDLE_ELLIPSIS_END_LENGTH = 15;
 
 enum FolderSection {
 	ORGANISATION = 'ORGANISATION',
@@ -60,7 +47,6 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	objectsToAdd,
 	onSubmit,
 	onClose,
-	onRemoveObject,
 	onSaveMultipleObjects,
 	isOpen,
 	className,
@@ -71,10 +57,6 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	const [folderChanges, setFolderChanges] = useState<Record<string, FolderChange>>({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [collapsedSections, setCollapsedSections] = useState<FolderSection[]>([]);
-	const [showAllObjectTags, setShowAllObjectTags] = useState(false);
-	const moreObjectsButtonRef = useRef<HTMLButtonElement>(null) as RefObject<HTMLButtonElement>;
-	// Set when the list is collapsed, so keyboard focus moves to the "+ n more" button instead of being lost
-	const shouldFocusMoreObjectsButton = useRef(false);
 
 	// A folder that contains all selected objects is checked, one that contains some of them is indeterminate
 	// Clicking cycles through the states, so the objects can be added to or removed from every folder
@@ -153,13 +135,6 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			resetForm();
 		}
 	}, [isOpen]);
-
-	useEffect(() => {
-		if (!showAllObjectTags && shouldFocusMoreObjectsButton.current) {
-			shouldFocusMoreObjectsButton.current = false;
-			moreObjectsButtonRef.current?.focus();
-		}
-	}, [showAllObjectTags]);
 
 	/**
 	 * Events
@@ -445,7 +420,6 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	const resetForm = () => {
 		setFolderChanges({});
 		setIsSubmitting(false);
-		setShowAllObjectTags(false);
 	};
 
 	/**
@@ -725,92 +699,6 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 		);
 	};
 
-	/**
-	 * Splits the title so the end stays visible and the ellipsis appears in the middle when it does not fit
-	 */
-	const renderMiddleEllipsis = (title: string): ReactNode => {
-		const endLength = Math.min(MIDDLE_ELLIPSIS_END_LENGTH, Math.floor(title.length / 2));
-		return (
-			<>
-				<span className={styles['c-add-to-folder-blade__selected-objects__label-start']}>
-					{title.slice(0, title.length - endLength)}
-				</span>
-				<span className={styles['c-add-to-folder-blade__selected-objects__label-end']}>
-					{title.slice(title.length - endLength)}
-				</span>
-			</>
-		);
-	};
-
-	const renderSelectedObjects = (): ReactNode => {
-		if (!isMultipleObjects) {
-			return null;
-		}
-		const visibleObjects = showAllObjectTags
-			? objectsToAdd
-			: objectsToAdd.slice(0, MAX_VISIBLE_OBJECT_TAGS);
-		const hiddenCount = objectsToAdd.length - visibleObjects.length;
-
-		return (
-			<div className={styles['c-add-to-folder-blade__selected-objects']}>
-				<TagList
-					tags={visibleObjects.map((object) => ({
-						id: object.schemaIdentifier,
-						label: (
-							<span
-								className={styles['c-add-to-folder-blade__selected-objects__label']}
-								title={object.title}
-							>
-								{renderMiddleEllipsis(object.title || object.schemaIdentifier)}
-							</span>
-						),
-					}))}
-					closeIcon={
-						<Icon
-							name={IconNamesLight.Times}
-							aria-label={tText(
-								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___verwijder-uit-selectie'
-							)}
-						/>
-					}
-					onTagClosed={(schemaIdentifier) => onRemoveObject?.(String(schemaIdentifier))}
-					variants={onRemoveObject ? ['closable', 'silver'] : ['silver']}
-				/>
-				{hiddenCount > 0 && (
-					<Button
-						className={styles['c-add-to-folder-blade__selected-objects__more']}
-						variants={['text', 'sm']}
-						label={tText(
-							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-meer',
-							{ count: hiddenCount }
-						)}
-						ariaLabel={tText(
-							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___toon-alle-count-geselecteerde-objecten',
-							{
-								count: objectsToAdd.length,
-							}
-						)}
-						onClick={() => setShowAllObjectTags(true)}
-						ref={moreObjectsButtonRef}
-					/>
-				)}
-				{showAllObjectTags && objectsToAdd.length > MAX_VISIBLE_OBJECT_TAGS && (
-					<Button
-						className={styles['c-add-to-folder-blade__selected-objects__more']}
-						variants={['text', 'sm']}
-						label={tText(
-							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___toon-minder'
-						)}
-						onClick={() => {
-							shouldFocusMoreObjectsButton.current = true;
-							setShowAllObjectTags(false);
-						}}
-					/>
-				)}
-			</div>
-		);
-	};
-
 	return (
 		<Blade
 			{...bladeProps}
@@ -822,28 +710,21 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 				'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe-aan-map'
 			)}
 			stickySubtitle={
-				isMultipleObjects ? (
-					<>
-						{tHtml(
+				isMultipleObjects
+					? tHtml(
 							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-mappen-waarin-je-deze-count-objecten-wil-bewaren',
 							{
 								count: objectsToAdd.length,
 							}
-						)}
-						{/* Once expanded, the objects move into the scrollable body so a long list does not fill the blade */}
-						{!showAllObjectTags && renderSelectedObjects()}
-					</>
-				) : (
-					tHtml(
-						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
-						{
-							title: objectToAdd?.title || '',
-						}
-					)
-				)
+						)
+					: tHtml(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-map-waaraan-je-strong-title-strong-wil-toevoegen',
+							{
+								title: objectToAdd?.title || '',
+							}
+						)
 			}
 		>
-			{showAllObjectTags && renderSelectedObjects()}
 			{renderFolders()}
 		</Blade>
 	);

@@ -112,7 +112,7 @@ import { getQueryForRemainingTags, mapFiltersToTags } from '@visitor-space/utils
 import { migrateLegacyAdvancedFilters } from '@visitor-space/utils/migrate-legacy-advanced-filters';
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
-import { compact, intersection, isEmpty, isNil, range, sortBy, sum } from 'es-toolkit/compat';
+import { compact, intersection, isEmpty, isNil, sortBy, sum } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -324,8 +324,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	}, [dispatch, locale]);
 
 	useEffect(() => {
-		dispatch(setShowZendesk(!isKioskUser && !query[SearchFilterId.Maintainer]));
-	}, [dispatch, isKioskUser, query]);
+		// The feedback button would overlap the multiselect action bar at the bottom of the screen
+		dispatch(
+			setShowZendesk(!isKioskUser && !query[SearchFilterId.Maintainer] && !multiselect.isActive)
+		);
+	}, [dispatch, isKioskUser, query, multiselect.isActive]);
 
 	useEffect(() => {
 		// Ward: wait until items are rendered on the screen before scrolling
@@ -383,11 +386,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			return formatCounts?.[type] || 0;
 		},
 		[formatCounts]
-	);
-
-	const lastPage = Math.max(
-		1,
-		Math.ceil(limitToMaxResults(getItemCounts(format)) / SEARCH_RESULTS_PAGE_SIZE)
 	);
 
 	const tabs: TabProps[] = useMemo(
@@ -812,31 +810,12 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	};
 
 	const selectAllResults = async () => {
-		const totalCount = getItemCounts(format);
-		if (totalCount > MAX_SELECT_ALL_RESULTS) {
-			return;
-		}
+		// Large searches only select the first results, up to the maximum
+		const count = Math.min(getItemCounts(format), MAX_SELECT_ALL_RESULTS);
 		await selectResultsOfPages(
-			[{ page: 1, size: totalCount }],
-			tText('modules/search/search-page___het-selecteren-van-alle-resultaten-is-mislukt')
-		);
-	};
-
-	/**
-	 * Selects the results of the current page and the pages after it, replacing the current selection
-	 */
-	const selectPages = async (pageCount: number) => {
-		const currentPageIds = searchResultCardData.map((card) => card.schemaIdentifier);
-		const nextPages = range(page + 1, Math.min(page + pageCount - 1, lastPage) + 1);
-		if (!nextPages.length) {
-			multiselect.selectOnly(currentPageIds);
-			return;
-		}
-		await selectResultsOfPages(
-			nextPages.map((nextPage) => ({ page: nextPage, size: SEARCH_RESULTS_PAGE_SIZE })),
-			tText('modules/search/search-page___het-selecteren-van-de-paginas-is-mislukt'),
-			true,
-			currentPageIds
+			[{ page: 1, size: count }],
+			tText('modules/search/search-page___het-selecteren-van-alle-resultaten-is-mislukt'),
+			true
 		);
 	};
 
@@ -1111,8 +1090,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				<SelectableMediaCard
 					isMultiselectActive={multiselect.isActive}
 					isSelected={multiselect.isSelected(card.schemaIdentifier)}
-					isInFolder={isInAFolder(folders, card.schemaIdentifier)}
-					view={viewMode === 'grid' ? 'grid' : 'list'}
 					onToggleSelected={() => multiselect.toggle(card.schemaIdentifier)}
 				>
 					{cardNode}
@@ -1131,17 +1108,20 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 					selectedCount={multiselect.selectedIds.length}
 					pageCount={searchResultCardData.length}
 					totalCount={getItemCounts(format)}
-					isAllResultsSelected={multiselect.selectedIds.length >= getItemCounts(format)}
+					isAllResultsSelected={
+						multiselect.selectedIds.length >=
+						Math.min(getItemCounts(format), MAX_SELECT_ALL_RESULTS)
+					}
+					isPageSelected={searchResultCardData.every((card) =>
+						multiselect.isSelected(card.schemaIdentifier)
+					)}
 					isSelectingResults={isSelectingResults}
-					remainingPageCount={lastPage - page + 1}
 					isSaving={isSavingMultiselect}
 					saveButtonRef={multiselectSaveButtonRef}
 					onSelectAllOnPage={() =>
 						multiselect.selectOnly(searchResultCardData.map((card) => card.schemaIdentifier))
 					}
-					onSelectPages={selectPages}
 					onSelectAllResults={selectAllResults}
-					onDeselectAll={multiselect.deselectAll}
 					onSave={() => {
 						setSelectedCard(null);
 						setShowAddToFolderBlade(true);
@@ -1374,7 +1354,6 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 					<AddToFolderBlade
 						isOpen={isAddToFolderBladeOpen}
 						objectsToAdd={objectsToAddToFolder}
-						onRemoveObject={multiselect.isActive ? multiselect.deselect : undefined}
 						onSaveMultipleObjects={saveMultiselectToFolders}
 						onClose={onCloseAddToFolderBlade}
 						onSubmit={async () => {

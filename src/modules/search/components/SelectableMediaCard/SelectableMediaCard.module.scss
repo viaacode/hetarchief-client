@@ -14,24 +14,8 @@ $component: "c-selectable-media-card";
 	&--selected {
 		:global(.c-card) {
 			// Outline instead of border, so the size of the card does not change
-			outline: 2px solid $teal-dark;
+			outline: 2px solid $black;
 			outline-offset: -2px;
 		}
-	}
-
-	// Marker on the thumbnail for objects that are already saved in one of your folders
-	&__in-folder {
-		position: absolute;
-		top: $spacer-sm;
-		right: $spacer-sm;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		width: 2.4rem;
-		height: 3.2rem;
-		background-color: $white;
-		color: $teal-dark;
-		font-size: $font-size-md;
-		pointer-events: none;
 	}
 }

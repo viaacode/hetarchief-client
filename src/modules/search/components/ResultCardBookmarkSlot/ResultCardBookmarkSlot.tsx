@@ -27,9 +27,9 @@ interface ResultCardBookmarkSlotProps {
 }
 
 /**
- * The button in the top right corner of a search result:
- * - bookmark icon, filled when the object is already in one of your folders
- * - checkbox while selecting multiple objects, in the same place so the layout does not shift
+ * Rendered over the top of a search result:
+ * - bookmark icon in the top left corner, filled when the object is already in one of your folders
+ * - bar over the full width of the card with a checkbox while selecting multiple objects
  */
 export const ResultCardBookmarkSlot: FC<ResultCardBookmarkSlotProps> = ({
 	title,
@@ -49,29 +49,45 @@ export const ResultCardBookmarkSlot: FC<ResultCardBookmarkSlotProps> = ({
 	}, [isMultiselectActive, autoFocus]);
 
 	if (isMultiselectActive) {
+		// Clicking the bar outside of the checkbox toggles the selection through the card, see SelectableMediaCard
 		return (
 			<div
 				ref={slotRef}
-				className={clsx(styles['c-result-card-bookmark-slot'])}
-				{...{ [MULTISELECT_CONTROL_ATTRIBUTE]: true }}
+				className={clsx(
+					styles['c-result-card-bookmark-slot__bar'],
+					isSelected && styles['c-result-card-bookmark-slot__bar--selected']
+				)}
 			>
-				<Checkbox
-					className={styles['c-result-card-bookmark-slot__checkbox']}
-					checked={isSelected}
-					checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
-					onChange={onToggleSelected}
-					variants={['no-label']}
-					aria-label={tText(
-						'modules/search/components/result-card-bookmark-slot/result-card-bookmark-slot___selecteer-title',
-						{ title }
-					)}
-				/>
+				<div
+					className={styles['c-result-card-bookmark-slot__checkbox-wrapper']}
+					{...{ [MULTISELECT_CONTROL_ATTRIBUTE]: true }}
+				>
+					<Checkbox
+						className={styles['c-result-card-bookmark-slot__checkbox']}
+						checked={isSelected}
+						checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
+						onChange={onToggleSelected}
+						variants={['no-label']}
+						aria-label={tText(
+							'modules/search/components/result-card-bookmark-slot/result-card-bookmark-slot___selecteer-title',
+							{ title }
+						)}
+					/>
+				</div>
+				{isSelected && (
+					<span aria-hidden>
+						{tText(
+							'modules/search/components/result-card-bookmark-slot/result-card-bookmark-slot___geselecteerd'
+						)}
+					</span>
+				)}
 			</div>
 		);
 	}
 
 	return (
 		<Button
+			className={styles['c-result-card-bookmark-slot__bookmark']}
 			onClick={onBookmarkClick}
 			icon={
 				<Icon name={isInFolder ? IconNamesSolid.Bookmark : IconNamesLight.Bookmark} aria-hidden />

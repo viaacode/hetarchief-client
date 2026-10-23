@@ -1,12 +1,11 @@
-import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
+import { Button } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { ListNavigation, type ListNavigationItem } from '@shared/components/ListNavigation';
 import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
-import { type FC, type RefObject, useEffect, useRef, useState } from 'react';
+import { type FC, type RefObject, useEffect, useRef } from 'react';
 
-import { MAX_SELECT_ALL_RESULTS, SELECT_PAGES_OPTIONS } from './MultiselectActionBar.const';
+import { MAX_SELECT_ALL_RESULTS } from './MultiselectActionBar.const';
 import styles from './MultiselectActionBar.module.scss';
 
 interface MultiselectActionBarProps {
@@ -21,13 +20,13 @@ interface MultiselectActionBarProps {
 	 */
 	totalCount: number;
 	/**
-	 * Disables "select all results" when all results of the search are already selected
+	 * Disables "select all results" when all results of the search, up to the maximum, are already selected
 	 */
 	isAllResultsSelected: boolean;
 	/**
-	 * Number of pages from the current page up to the last page, including the current page
+	 * Whether all results of the current page are selected
 	 */
-	remainingPageCount: number;
+	isPageSelected: boolean;
 	/**
 	 * Whether the results of the other pages are being fetched to select them
 	 */
@@ -37,12 +36,7 @@ interface MultiselectActionBarProps {
 	 * Select only the results of the current page, replacing the current selection
 	 */
 	onSelectAllOnPage: () => void;
-	/**
-	 * Select the results of the current page and the pages after it
-	 */
-	onSelectPages: (pageCount: number) => void;
 	onSelectAllResults: () => void;
-	onDeselectAll: () => void;
 	onSave: () => void;
 	onClose: () => void;
 	saveButtonRef?: RefObject<HTMLButtonElement>;
@@ -57,18 +51,15 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 	pageCount,
 	totalCount,
 	isAllResultsSelected,
-	remainingPageCount,
+	isPageSelected,
 	isSelectingResults = false,
 	isSaving = false,
 	onSelectAllOnPage,
-	onSelectPages,
 	onSelectAllResults,
-	onDeselectAll,
 	onSave,
 	onClose,
 	saveButtonRef,
 }) => {
-	const [isSelectPagesOpen, setIsSelectPagesOpen] = useState(false);
 	const onCloseRef = useRef(onClose);
 	onCloseRef.current = onClose;
 
@@ -91,92 +82,20 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 		return () => document.removeEventListener('keydown', handleKeyDown);
 	}, []);
 
-	const renderSelectPagesDropdown = () => {
-		// Only offer the options that still leave pages unselected
-		const options = SELECT_PAGES_OPTIONS.filter((count) => count < remainingPageCount);
-		// The first option that reaches the last page is replaced by "select all"
-		const canSelectAll =
-			totalCount <= MAX_SELECT_ALL_RESULTS &&
-			SELECT_PAGES_OPTIONS.some((count) => count >= remainingPageCount);
-		const renderOption = (id: string, label: string, onClick: () => void) => ({
-			id,
-			node: ({ buttonClassName }: { buttonClassName?: string }) => (
-				<Button
-					className={buttonClassName}
-					label={label}
-					variants={['text', 'block']}
-					disabled={isSelectingResults}
-					onClick={() => {
-						onClick();
-						setIsSelectPagesOpen(false);
-					}}
-				/>
-			),
-		});
-		const listItems: ListNavigationItem[] = options.map((count) =>
-			renderOption(
-				`select-pages--${count}`,
-				tText(
-					'modules/search/components/multiselect-action-bar/multiselect-action-bar___selecteer-count-paginas',
-					{ count }
-				),
-				() => onSelectPages(count)
-			)
-		);
-		if (canSelectAll) {
-			listItems.push(
-				renderOption(
-					'select-pages--all',
-					tText(
-						'modules/search/components/multiselect-action-bar/multiselect-action-bar___selecteer-alles'
-					),
-					onSelectAllResults
+	const renderSelectAllButton = () => {
+		// Once the page is selected, the button offers to select the results of all pages,
+		// large searches only select the first results up to the maximum
+		const canSelectAllResults = isPageSelected && totalCount > pageCount;
+		const isOverMax = totalCount > MAX_SELECT_ALL_RESULTS;
+		const selectAllResultsLabel = isOverMax
+			? tText(
+					'modules/search/components/multiselect-action-bar/multiselect-action-bar___alle-count-max-resultaten-selecteren',
+					{ count: MAX_SELECT_ALL_RESULTS }
 				)
-			);
-		}
-		if (!listItems.length) {
-			return null;
-		}
-		return (
-			<Dropdown
-				id="multiselect-action-bar__select-pages"
-				className={styles['c-multiselect-action-bar__select-pages']}
-				flyoutClassName={styles['c-multiselect-action-bar__select-pages-flyout']}
-				isOpen={isSelectPagesOpen}
-				onOpen={() => setIsSelectPagesOpen(true)}
-				onClose={() => setIsSelectPagesOpen(false)}
-				placement="bottom-end"
-				keyboard="menu"
-			>
-				<DropdownButton>
-					<Button
-						className={clsx(
-							styles['c-multiselect-action-bar__button'],
-							styles['c-multiselect-action-bar__button--dropdown']
-						)}
-						variants={['outline', 'icon']}
-						icon={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
-						ariaLabel={tText(
-							'modules/search/components/multiselect-action-bar/multiselect-action-bar___meerdere-paginas-selecteren'
-						)}
-					/>
-				</DropdownButton>
-				<DropdownContent>
-					<ListNavigation listItems={listItems} />
-				</DropdownContent>
-			</Dropdown>
-		);
-	};
-
-	const renderSelectAllResults = () => {
-		// All results are already on this page, so "select all" covers them
-		if (totalCount <= pageCount) {
-			return null;
-		}
-		// Selecting all results is only offered for searches with a limited number of results
-		if (totalCount > MAX_SELECT_ALL_RESULTS) {
-			return null;
-		}
+			: tText(
+					'modules/search/components/multiselect-action-bar/multiselect-action-bar___alle-count-resultaten-selecteren',
+					{ count: totalCount }
+				);
 		return (
 			<Button
 				className={clsx(
@@ -184,12 +103,17 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 					styles['c-multiselect-action-bar__button--link']
 				)}
 				variants={['text']}
-				label={tText(
-					'modules/search/components/multiselect-action-bar/multiselect-action-bar___selecteer-alle-count-resultaten',
-					{ count: totalCount }
-				)}
-				onClick={onSelectAllResults}
-				disabled={isAllResultsSelected || isSelectingResults}
+				label={
+					canSelectAllResults
+						? selectAllResultsLabel
+						: tText(
+								'modules/search/components/multiselect-action-bar/multiselect-action-bar___alles-selecteren'
+							)
+				}
+				onClick={canSelectAllResults ? onSelectAllResults : onSelectAllOnPage}
+				disabled={
+					isAllResultsSelected || isSelectingResults || (isPageSelected && !canSelectAllResults)
+				}
 			/>
 		);
 	};
@@ -203,41 +127,13 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 		>
 			<div className={styles['c-multiselect-action-bar__actions']}>
 				<div className={styles['c-multiselect-action-bar__selection-actions']}>
-					<div className={styles['c-multiselect-action-bar__select-page']}>
-						<Button
-							className={styles['c-multiselect-action-bar__button']}
-							variants={['outline']}
-							label={tText(
-								'modules/search/components/multiselect-action-bar/multiselect-action-bar___selecteer-pagina'
-							)}
-							onClick={onSelectAllOnPage}
-						/>
-						{renderSelectPagesDropdown()}
-					</div>
 					<p className={styles['c-multiselect-action-bar__count']} aria-live="polite" role="status">
-						<span className={styles['c-multiselect-action-bar__count-badge']}>{selectedCount}</span>
-						{selectedCount === 1
-							? tText(
-									'modules/search/components/multiselect-action-bar/multiselect-action-bar___object-geselecteerd'
-								)
-							: tText(
-									'modules/search/components/multiselect-action-bar/multiselect-action-bar___objecten-geselecteerd'
-								)}
+						{tText(
+							'modules/search/components/multiselect-action-bar/multiselect-action-bar___count-geselecteerd',
+							{ count: selectedCount }
+						)}
 					</p>
-					{selectedCount > 0 && (
-						<Button
-							className={clsx(
-								styles['c-multiselect-action-bar__button'],
-								styles['c-multiselect-action-bar__button--link']
-							)}
-							variants={['text']}
-							label={tText(
-								'modules/search/components/multiselect-action-bar/multiselect-action-bar___deselecteer'
-							)}
-							onClick={onDeselectAll}
-						/>
-					)}
-					{renderSelectAllResults()}
+					{renderSelectAllButton()}
 				</div>
 				<div className={styles['c-multiselect-action-bar__save-actions']}>
 					<Button
@@ -259,6 +155,9 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 						)}
 						variants={['text', 'icon']}
 						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
+						title={tText(
+							'modules/search/components/multiselect-action-bar/multiselect-action-bar___sluit-de-multi-select-modus'
+						)}
 						ariaLabel={tText(
 							'modules/search/components/multiselect-action-bar/multiselect-action-bar___sluit-het-selecteren-van-meerdere-objecten'
 						)}

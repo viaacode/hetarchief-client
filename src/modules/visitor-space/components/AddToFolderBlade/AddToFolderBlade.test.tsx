@@ -172,38 +172,3 @@ describe('<AddToFolderBlade /> with multiple objects', () => {
 		expect(getSaveButton()).toHaveProperty('disabled', true);
 	});
 });
-
-describe('<AddToFolderBlade /> with more objects than fit in the subtitle', () => {
-	const manyObjects = Array.from({ length: 6 }, (_, index) => ({
-		schemaIdentifier: `object-${index + 1}`,
-		title: `Object ${index + 1}`,
-	}));
-
-	beforeEach(() => {
-		render(
-			<AddToFolderBlade
-				isOpen
-				objectsToAdd={manyObjects}
-				onSaveMultipleObjects={vi.fn()}
-				onClose={vi.fn()}
-				id="add-to-folder-blade-test"
-				ariaLabel="add to folder"
-			/>
-		);
-	});
-
-	it('shows all objects and collapses them again', () => {
-		expect(screen.queryByTitle('Object 6')).toBeNull();
-
-		fireEvent.click(screen.getByRole('button', { name: 'toon-alle-count-geselecteerde-objecten' }));
-		expect(screen.getByTitle('Object 6')).toBeTruthy();
-
-		fireEvent.click(screen.getByRole('button', { name: 'toon-minder' }));
-		expect(screen.queryByTitle('Object 6')).toBeNull();
-		expect(screen.queryByRole('button', { name: 'toon-minder' })).toBeNull();
-		// The "show less" button is gone, so focus moves to the button that expands the list again
-		expect(document.activeElement).toBe(
-			screen.getByRole('button', { name: 'toon-alle-count-geselecteerde-objecten' })
-		);
-	});
-});

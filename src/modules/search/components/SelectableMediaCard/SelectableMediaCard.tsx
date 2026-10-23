@@ -1,6 +1,3 @@
-import { Icon } from '@shared/components/Icon';
-import { IconNamesSolid } from '@shared/components/Icon/Icon.enums';
-import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
 import type { FC, MouseEvent, ReactNode } from 'react';
 import { MULTISELECT_CONTROL_ATTRIBUTE } from '../ResultCardBookmarkSlot';
@@ -11,8 +8,6 @@ interface SelectableMediaCardProps {
 	children: ReactNode;
 	isMultiselectActive: boolean;
 	isSelected: boolean;
-	isInFolder: boolean;
-	view: 'grid' | 'list';
 	onToggleSelected: () => void;
 }
 
@@ -23,8 +18,6 @@ export const SelectableMediaCard: FC<SelectableMediaCardProps> = ({
 	children,
 	isMultiselectActive,
 	isSelected,
-	isInFolder,
-	view,
 	onToggleSelected,
 }) => {
 	const handleClickCapture = (evt: MouseEvent<HTMLDivElement>) => {
@@ -51,16 +44,6 @@ export const SelectableMediaCard: FC<SelectableMediaCardProps> = ({
 			onClickCapture={handleClickCapture}
 		>
 			{children}
-			{isMultiselectActive && isInFolder && view === 'grid' && (
-				<span className={styles['c-selectable-media-card__in-folder']}>
-					<Icon name={IconNamesSolid.Bookmark} aria-hidden />
-					<span className="u-sr-only">
-						{tText(
-							'modules/search/components/selectable-media-card/selectable-media-card___dit-object-zit-al-in-een-map'
-						)}
-					</span>
-				</span>
-			)}
 		</div>
 	);
 };
