@@ -49,6 +49,7 @@ export enum RoutePart {
 	failed = 'failed',
 	pid = 'pid',
 	organisations = 'organisations',
+	organisationFolders = 'organisationFolders',
 }
 
 const ROUTE_PARTS_NL: Record<RoutePart, string> = {
@@ -98,6 +99,7 @@ const ROUTE_PARTS_NL: Record<RoutePart, string> = {
 	failed: 'mislukt',
 	pid: 'pid',
 	organisations: 'organisaties',
+	organisationFolders: 'organisatiemappen',
 } as const;
 
 const ROUTE_PARTS_EN: Record<RoutePart, string> = {
@@ -147,6 +149,7 @@ const ROUTE_PARTS_EN: Record<RoutePart, string> = {
 	failed: 'failed',
 	pid: 'pid',
 	organisations: 'organisations',
+	organisationFolders: 'organisation-folders',
 } as const;
 
 // Note: Also used to set 'Bezoekersruimtes' active state if url does not start with any of the following prefixes
@@ -222,6 +225,7 @@ export enum RouteKey {
 	cookiePolicy = 'cookiePolicy',
 	cpAdmin = 'cpAdmin',
 	cpAdminMaterialRequests = 'cpAdminMaterialRequests',
+	cpAdminOrganisationFolders = 'cpAdminOrganisationFolders',
 	cpAdminSettings = 'cpAdminSettings',
 	cpAdminVisitRequests = 'cpAdminVisitRequests',
 	cpAdminVisitors = 'cpAdminVisitors',
@@ -283,6 +287,7 @@ const ROUTES_NL: Record<RouteKey, string> = {
 	cookiePolicy: `/${ROUTE_PARTS_NL.cookiePolicy}`,
 	cpAdmin: `/${ROUTE_PARTS_NL.cpAdmin}`,
 	cpAdminMaterialRequests: `/${ROUTE_PARTS_NL.cpAdmin}/${ROUTE_PARTS_NL.materialRequests}`,
+	cpAdminOrganisationFolders: `/${ROUTE_PARTS_NL.cpAdmin}/${ROUTE_PARTS_NL.organisationFolders}`,
 	cpAdminSettings: `/${ROUTE_PARTS_NL.cpAdmin}/${ROUTE_PARTS_NL.settings}`,
 	cpAdminVisitRequests: `/${ROUTE_PARTS_NL.cpAdmin}/${ROUTE_PARTS_NL.visitRequests}`,
 	cpAdminVisitors: `/${ROUTE_PARTS_NL.cpAdmin}/${ROUTE_PARTS_NL.visitors}`,
@@ -344,6 +349,7 @@ const ROUTES_EN: Record<RouteKey, string> = {
 	cookiePolicy: `/${ROUTE_PARTS_EN.cookiePolicy}`,
 	cpAdmin: `/${ROUTE_PARTS_EN.cpAdmin}`,
 	cpAdminMaterialRequests: `/${ROUTE_PARTS_EN.cpAdmin}/${ROUTE_PARTS_EN.materialRequests}`,
+	cpAdminOrganisationFolders: `/${ROUTE_PARTS_EN.cpAdmin}/${ROUTE_PARTS_EN.organisationFolders}`,
 	cpAdminSettings: `/${ROUTE_PARTS_EN.cpAdmin}/${ROUTE_PARTS_EN.settings}`,
 	cpAdminVisitRequests: `/${ROUTE_PARTS_EN.cpAdmin}/${ROUTE_PARTS_EN.visitRequests}`,
 	cpAdminVisitors: `/${ROUTE_PARTS_EN.cpAdmin}/${ROUTE_PARTS_EN.visitors}`,

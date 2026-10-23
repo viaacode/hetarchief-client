@@ -3,7 +3,7 @@ import { COLLECTION_FORM_SCHEMA } from '@account/const';
 import { FoldersService } from '@account/services/folders';
 import type { CreateFolderFormState } from '@account/types';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Button, ContentInput, FormControl } from '@meemoo/react-components';
+import { Button, Checkbox, ContentInput, FormControl } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { RedFormWarning } from '@shared/components/RedFormWarning/RedFormWarning';
@@ -15,21 +15,29 @@ import { Controller, useForm } from 'react-hook-form';
 
 import styles from './CreateFolderButton.module.scss';
 
-const labelKeys: Record<keyof CreateFolderFormState, string> = {
+const labelKeys: Record<'name', string> = {
 	name: 'CreateFolderButton__name',
 };
 
 const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 	afterSubmit = () => null,
 	onOpenNode = null,
+	keepIconWhenOpen = false,
+	isOrganisation = false,
+	showOrganisationOption = false,
 }) => {
 	const [isOpen, setIsOpen] = useState(false);
+	const [isOrganisationChecked, setIsOrganisationChecked] = useState(false);
 
 	/**
 	 * Form
 	 */
 
-	const defaultName = tText('pages/account/mijn-mappen/folder-slug/index___nieuwe-map-aanmaken');
+	const defaultName = isOrganisation
+		? tText(
+				'modules/account/components/create-folder-button/create-folder-button___nieuwe-organisatiemap-aanmaken'
+			)
+		: tText('pages/account/mijn-mappen/folder-slug/index___nieuwe-map-aanmaken');
 
 	const {
 		control,
@@ -50,6 +58,7 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 
 	const resetForm = () => {
 		resetField('name');
+		setIsOrganisationChecked(false);
 		setIsOpen(false);
 	};
 
@@ -61,7 +70,10 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 	const onFormSubmit = async () => {
 		return new Promise<void>((resolve, reject) => {
 			handleSubmit(async (values) => {
-				const folder = await FoldersService.create(values);
+				const folder = await FoldersService.create({
+					name: values.name,
+					isOrganisation: isOrganisation || (showOrganisationOption && isOrganisationChecked),
+				});
 				afterSubmit(folder);
 
 				toastService.notify({
@@ -96,9 +108,14 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 						)}
 						autoCapitalize="off"
 						autoComplete="off"
+						// Password managers ignore autocomplete="off", these keep them from suggesting logins
+						data-1p-ignore
+						data-lpignore="true"
+						data-bwignore
+						data-form-type="other"
 						autoCorrect="off"
 						iconStart={(handler) => {
-							return !isOpen ? (
+							return !isOpen || keepIconWhenOpen ? (
 								<Button
 									tabIndex={-1}
 									variants={['platinum', 'sm']}
@@ -144,6 +161,17 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 					/>
 				)}
 			/>
+			{showOrganisationOption && !isOrganisation && isOpen && (
+				<Checkbox
+					className={styles['c-create-folder-button__organisation-checkbox']}
+					checked={isOrganisationChecked}
+					checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
+					onChange={(evt) => setIsOrganisationChecked(evt.target.checked)}
+					label={tText(
+						'modules/account/components/create-folder-button/create-folder-button___deze-map-is-een-organisatiemap'
+					)}
+				/>
+			)}
 		</FormControl>
 	);
 };

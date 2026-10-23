@@ -16,11 +16,20 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			}
 
 			:global(.c-content-input) {
-				padding-top: $spacer-xs;
+				padding-bottom: 0;
 
 				@media (min-width: $breakpoint-md) {
-					padding-top: $spacer-sm;
+					padding-bottom: $spacer-xs;
 				}
+			}
+
+			// Keep the typed name away from the focus outline,
+			// the negative margin keeps the text aligned with the folder names and the "new folder" label
+			// The label (before opening) and the input (after opening) get the same box, so their focus outlines do not jump
+			:global(.c-content-input__field),
+			:global(.c-content-input__value) {
+				padding-left: $spacer-xs;
+				margin-left: -$spacer-xs;
 			}
 
 			// break rule of 8 for visual alignment
@@ -63,6 +72,32 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 				}
 			}
 
+			// All hints of a folder share one grid cell, so the tallest one determines the height
+			&__hints {
+				display: grid;
+				margin-top: $spacer-xxs;
+			}
+
+			// Explains the indeterminate state or how many objects will be added or removed
+			&__hint {
+				grid-area: 1 / 1;
+				font-size: $font-size-sm;
+				color: $shade;
+
+				// Same color as the primary save button
+				&--add {
+					color: $teal-dark;
+				}
+
+				&--remove {
+					color: $cherry;
+				}
+
+				&--hidden {
+					visibility: hidden;
+				}
+			}
+
 			&__count {
 				flex-shrink: 0;
 				flex-basis: 6rem;
@@ -75,4 +110,44 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			}
 		}
 	}
+
+	&__list-empty {
+		padding: $spacer-sm 0;
+		color: $shade;
+	}
+
+	&__error {
+		padding: $spacer-sm 0;
+		color: $cherry;
+	}
+
+	&__section {
+		margin-bottom: $spacer-sm;
+	}
+
+	&__section-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		padding: $spacer-sm $spacer-md;
+		border: 1px solid $black;
+		background-color: $white;
+		color: $black;
+		font-family: $font-family-primary;
+		font-size: $font-size-base;
+		font-weight: $font-weight-bold;
+		text-align: left;
+		cursor: pointer;
+
+		:global(.c-icon) {
+			font-size: $font-size-lg;
+		}
+
+		&:focus-visible {
+			outline: 2px solid $teal-dark;
+			outline-offset: 2px;
+		}
+	}
+
 }

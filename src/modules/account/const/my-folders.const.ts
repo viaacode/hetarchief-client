@@ -2,7 +2,7 @@ import type { CreateFolderFormState } from '@account/types';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { tText } from '@shared/helpers/translate';
 import { NumberParam, StringParam, withDefault } from 'use-query-params';
-import { object, type Schema, string } from 'yup';
+import { boolean, object, type Schema, string } from 'yup';
 
 export const FolderItemListSize = 20;
 
@@ -41,5 +41,43 @@ export const COLLECTION_FORM_SCHEMA = (): Schema<CreateFolderFormState> => {
 					return (val || '').length <= nameLengthMax;
 				}
 			),
+		isOrganisation: boolean().optional(),
 	});
+};
+
+export enum FolderSortOption {
+	NEWEST_FIRST = 'NEWEST_FIRST',
+	OLDEST_FIRST = 'OLDEST_FIRST',
+	NAME_ASC = 'NAME_ASC',
+	NAME_DESC = 'NAME_DESC',
+}
+
+export const DEFAULT_FOLDER_SORT_OPTION = FolderSortOption.NEWEST_FIRST;
+
+export const GET_FOLDER_SORT_OPTIONS = (): { id: FolderSortOption; label: string }[] => [
+	{
+		id: FolderSortOption.NAME_ASC,
+		label: tText('modules/account/const/my-folders___alfabetisch-a-z'),
+	},
+	{
+		id: FolderSortOption.NAME_DESC,
+		label: tText('modules/account/const/my-folders___alfabetisch-z-a'),
+	},
+	{
+		id: FolderSortOption.NEWEST_FIRST,
+		label: tText('modules/account/const/my-folders___nieuwste-eerst'),
+	},
+	{
+		id: FolderSortOption.OLDEST_FIRST,
+		label: tText('modules/account/const/my-folders___oudste-eerst'),
+	},
+];
+
+/**
+ * Local storage keys to remember the chosen sort order of the folder overviews
+ * Personal and organisation folders are sorted independently
+ */
+export const FOLDER_SORT_STORAGE_KEYS = {
+	personal: 'HET_ARCHIEF.folders.sort.personal',
+	organisation: 'HET_ARCHIEF.folders.sort.organisation',
 };

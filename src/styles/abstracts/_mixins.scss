@@ -124,7 +124,7 @@
 		font-size: variables.$font-size-base;
 		cursor: pointer;
 
-		&:focus-within {
+		&:has(.c-#{$type}__input:focus-visible) {
 			.c-#{$type}__check-icon {
 				&::before {
 					background-color: color.adjust(variables.$black, $alpha: -0.71);
@@ -232,7 +232,8 @@
 	* Modifiers
 	*/
 
-	.c-#{$type}--checked {
+	.c-#{$type}--checked,
+	.c-#{$type}--indeterminate {
 		.c-#{$type}__check-icon {
 			background-color: variables.$black;
 
@@ -254,7 +255,8 @@
 			}
 		}
 
-		&.c-#{$type}--checked {
+		&.c-#{$type}--checked,
+		&.c-#{$type}--indeterminate {
 			.c-#{$type}__check-icon {
 				background-color: variables.$zinc;
 			}

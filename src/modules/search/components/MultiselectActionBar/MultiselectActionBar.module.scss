@@ -1,0 +1,163 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-multiselect-action-bar";
+
+.#{$component} {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: $spacer-sm;
+
+	// Stick to the bottom of the screen with the same offset as the toasts
+	position: fixed;
+	bottom: var(--toastify-toast-bottom);
+	left: 50%;
+	transform: translateX(-50%);
+	width: min(70%, 91rem); // 70% of the 130rem page container
+	z-index: get-z-layer("filter");
+	padding: $spacer-sm $spacer-md;
+	border: 0.1rem solid $white;
+	background-color: $black;
+	color: $white;
+
+	&__count {
+		display: flex;
+		align-items: center;
+		gap: $spacer-xs;
+		margin: 0;
+		font-size: $font-size-2xm;
+		font-weight: $font-weight-bold;
+		white-space: nowrap;
+
+		// Vertical line between the count and "select all"
+		padding-right: $spacer-sm;
+		border-right: 0.1rem solid $white;
+	}
+
+	&__actions {
+		display: flex;
+		flex-grow: 1;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: $spacer-sm;
+	}
+
+	&__selection-actions,
+	&__save-actions {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: $spacer-sm;
+	}
+
+	&__button {
+		min-height: 4.4rem; // Large enough tap target on touch devices
+
+		&:global(.c-button--outline) {
+			border-color: $white;
+			border-radius: 0;
+			background-color: transparent;
+			color: $white;
+
+			&:hover:not(:disabled) {
+				background-color: $shade;
+			}
+		}
+
+		&:global(.c-button--disabled),
+		&:disabled {
+			opacity: 0.6;
+			cursor: not-allowed;
+		}
+
+		&:focus-visible {
+			outline: 2px solid $white;
+			outline-offset: 2px;
+		}
+
+		&--save {
+			border-radius: 0;
+		}
+
+		// "Select all", no horizontal padding so the line after the count is centered between both
+		&--link,
+		&--link:global(.c-button--text) {
+			padding-right: 0;
+			padding-left: 0;
+			font-size: $font-size-sm;
+		}
+
+		&--link {
+			color: $white;
+			text-decoration: underline;
+
+			&:hover:not(:disabled) {
+				color: $teal;
+			}
+		}
+
+		// "Select all results" appears after the page is selected, slowly so the count is noticed first
+		&--fade-in {
+			animation: multiselect-action-bar-fade-in 1.2s ease-in 0.4s backwards; // Keeps the disabled opacity afterwards
+
+			@media (prefers-reduced-motion: reduce) {
+				animation: none;
+			}
+		}
+
+		&--close,
+		&--close:global(.c-button--icon) {
+			width: auto;
+			min-width: 0;
+			padding: 0 $spacer-xxs;
+		}
+
+		&--close {
+			color: $white;
+
+			&:hover {
+				color: $teal;
+			}
+		}
+	}
+
+	// The close button sits close to the save button
+	&__save-actions {
+		gap: $spacer-xs;
+	}
+
+	@media (max-width: $breakpoint-md) {
+		width: calc(100% - 2 * var(--toastify-toast-offset));
+		flex-direction: column;
+		align-items: stretch;
+
+		&__actions,
+		&__selection-actions,
+		&__save-actions {
+			flex-direction: column;
+			align-items: stretch;
+		}
+
+		// Stacked on small screens, so there is nothing to separate
+		&__count {
+			padding-right: 0;
+			border-right: 0;
+		}
+
+		&__button {
+			width: 100%;
+		}
+	}
+}
+
+@keyframes multiselect-action-bar-fade-in {
+	from {
+		opacity: 0;
+	}
+
+	to {
+		opacity: 1;
+	}
+}

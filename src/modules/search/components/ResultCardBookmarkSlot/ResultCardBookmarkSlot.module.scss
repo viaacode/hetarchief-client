@@ -1,0 +1,85 @@
+@use "src/styles/abstracts" as *;
+
+$component: "c-result-card-bookmark-slot";
+
+// The slot is rendered in a row over the top of the card that does not catch clicks itself,
+// so only the bookmark button and the bar set pointer-events
+.#{$component} {
+	&__bookmark,
+	&__bookmark:global(.c-button--icon) {
+		pointer-events: auto;
+
+		// Stay inside the 1px border of the card
+		margin: 1px 0 0 1px;
+
+		// Large enough tap target on touch devices, in the place of the type icon
+		min-width: 4.4rem;
+		min-height: 4.4rem;
+		border-radius: 0;
+		background-color: $white;
+		color: $teal-dark;
+		font-size: 2.2rem;
+	}
+
+	&__bar {
+		pointer-events: auto;
+		display: flex;
+		align-items: center;
+		gap: $spacer-xs;
+
+		// Same distance from the checkbox to the top, bottom and left of the bar
+		padding: $spacer-xs;
+		line-height: 2.4rem;
+		background-color: rgba($white, 0.9);
+		color: $black;
+		font-size: $font-size-md;
+		cursor: pointer;
+
+		&--selected {
+			background-color: $black;
+			color: $white;
+		}
+	}
+
+	&__checkbox-wrapper {
+		display: flex;
+	}
+
+	&__checkbox {
+		display: flex;
+
+		// The global checkbox is sized by its line height and offsets the icon by 1px,
+		// make it exactly as large as the icon so the padding of the bar is the same on all sides
+		width: 2.4rem;
+		min-width: 0;
+		height: 2.4rem;
+		min-height: 0;
+		margin: 0;
+
+		// Higher specificity than the global no-label styles that center the icon, so the icon is in the same
+		// position whether it is checked or not
+		&:global(.c-checkbox) :global(.c-checkbox__check-icon) {
+			top: 0;
+			left: 0;
+			transform: none;
+		}
+
+		:global(.c-checkbox__check-icon) {
+			width: 2.4rem;
+			height: 2.4rem;
+			border: 2px solid $black;
+			background-color: $white;
+		}
+
+		&:global(.c-checkbox--checked .c-checkbox__check-icon) {
+			border-color: $white;
+			background-color: $black;
+			color: $white;
+		}
+
+		:global(.c-checkbox__input:focus-visible + .c-checkbox__check-icon) {
+			outline: 2px solid $teal-dark;
+			outline-offset: 2px;
+		}
+	}
+}

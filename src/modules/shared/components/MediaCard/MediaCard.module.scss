@@ -210,6 +210,22 @@ $media-card-list-view-height: 13rem;
 		background-color: $white;
 	}
 
+	// Rendered on top of the card's image, in the place of the type icon
+	&__buttons {
+		position: absolute;
+		top: 0;
+		right: 0;
+		left: 0;
+		display: flex;
+
+		// Do not block clicks on the card behind this row, the buttons themselves set pointer-events: auto
+		pointer-events: none;
+
+		> * {
+			flex-grow: 1;
+		}
+	}
+
 	&__header-duration {
 		position: absolute;
 		bottom: 0;

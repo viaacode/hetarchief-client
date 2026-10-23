@@ -1,9 +1,15 @@
 @use "src/styles/abstracts" as *;
 
-.p-my-folders {
+$component: "c-folder-overview";
+
+.#{$component} {
 	&__folder-edit {
 		@media (max-width: $breakpoint-md) {
 			display: none;
 		}
+	}
+
+	&__empty {
+		max-width: 64rem;
 	}
 }

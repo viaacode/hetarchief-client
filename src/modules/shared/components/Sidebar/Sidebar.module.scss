@@ -2,6 +2,9 @@
 
 .c-sidebar {
 	display: grid;
+
+	// Never grow wider than the sidebar, so long content wraps instead of being cut off
+	grid-template-columns: minmax(0, 1fr);
 	grid-template-rows: auto;
 	grid-auto-rows: 1fr;
 	height: 100%;
@@ -13,5 +16,32 @@
 		padding-top: $spacer-2xl;
 		color: $zinc;
 		font-size: $font-size-1xl;
+
+		&--in-header {
+			min-width: 0;
+			padding: 0;
+			overflow-wrap: break-word;
+			hyphens: auto;
+		}
+	}
+
+	&__header {
+		padding: $spacer-lg;
+		padding-top: $spacer-2xl;
+	}
+
+	&__header-row {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: $spacer-xs;
+
+		> :last-child:not(h2) {
+			flex-shrink: 0;
+		}
+	}
+
+	&__subtitle {
+		margin-top: $spacer-xs;
 	}
 }

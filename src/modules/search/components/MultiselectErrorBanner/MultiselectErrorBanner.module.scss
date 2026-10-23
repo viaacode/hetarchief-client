@@ -1,0 +1,42 @@
+@use "sass:color";
+@use "src/styles/abstracts" as *;
+
+$component: "c-multiselect-error-banner";
+
+.#{$component} {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: $spacer-sm;
+	margin-bottom: $spacer-md;
+	padding: $spacer-sm $spacer-md;
+	border-left: 4px solid $cherry;
+	background-color: color.adjust($cherry, $alpha: -0.9);
+	color: $black;
+
+	&__icon {
+		align-self: flex-start;
+		color: $cherry;
+		font-size: $font-size-lg;
+	}
+
+	&__message {
+		flex: 1 1 30rem;
+
+		p {
+			margin: 0;
+		}
+	}
+
+	&__title {
+		font-weight: $font-weight-bold;
+		margin-bottom: $spacer-xxs !important;
+	}
+
+	&__retry:global(.c-button--outline) {
+		border-color: $cherry-pale;
+		border-radius: 0;
+		background-color: $white;
+		color: $cherry-pale;
+	}
+}

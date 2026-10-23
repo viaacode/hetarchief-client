@@ -474,6 +474,24 @@ const getCpAdminManagementDropdown = (
 							},
 						]
 					: []),
+				...(permissions.includes(Permission.MANAGE_ORGANISATION_FOLDERS)
+					? [
+							{
+								node: renderLink(
+									tText('modules/navigation/components/navigation/navigation___organisatiemappen'),
+									ROUTES_BY_LOCALE[locale].cpAdminOrganisationFolders,
+									{
+										className: dropdownCls(),
+									}
+								),
+								id: 'nav__beheer--organisatiemappen',
+								path: currentPath,
+								activeMobile: currentPath.startsWith(
+									ROUTES_BY_LOCALE[locale].cpAdminOrganisationFolders
+								),
+							},
+						]
+					: []),
 				...(permissions.includes(Permission.VIEW_ANY_MATERIAL_REQUESTS)
 					? [
 							{

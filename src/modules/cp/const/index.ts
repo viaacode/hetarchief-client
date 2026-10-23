@@ -42,6 +42,15 @@ export const CP_ADMIN_NAVIGATION_LINKS = (
 					},
 				]
 			: []),
+		...(permissions.includes(Permission.MANAGE_ORGANISATION_FOLDERS)
+			? [
+					{
+						id: 'organisation-folders',
+						label: tText('modules/cp/const/index___organisatiemappen'),
+						href: ROUTES_BY_LOCALE[locale].cpAdminOrganisationFolders,
+					},
+				]
+			: []),
 		...(permissions.includes(Permission.VIEW_ANY_MATERIAL_REQUESTS)
 			? [
 					{

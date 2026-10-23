@@ -8,4 +8,9 @@ $component: "c-create-folder-button";
 	:global(.c-form-control__errors) {
 		font-size: $font-size-sm;
 	}
+
+	&__organisation-checkbox {
+		margin-top: $spacer-sm;
+		font-size: $font-size-sm;
+	}
 }

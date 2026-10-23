@@ -11,7 +11,7 @@ export function useGetFolderMedia(
 	size: number
 ): UseQueryResult<IPagination<FolderIeObject> | undefined> {
 	return useQuery({
-		queryKey: [QUERY_KEYS.getCollectionMedia, searchInput, page, size],
+		queryKey: [QUERY_KEYS.getCollectionMedia, id, searchInput, page, size],
 		queryFn: () => {
 			if (id) {
 				return FoldersService.getById(id, searchInput, page, size);
