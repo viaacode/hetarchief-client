@@ -56,7 +56,8 @@ $checkbox-size: $spacer-sm;
 		}
 	}
 
-	&.c-checkbox--checked {
+	&.c-checkbox--checked,
+	&.c-checkbox--indeterminate {
 		.c-checkbox__check-icon {
 			border-color: $teal;
 			background-color: $teal;
@@ -73,7 +74,8 @@ $checkbox-size: $spacer-sm;
 			border-color: $zinc;
 		}
 
-		&.c-checkbox--checked {
+		&.c-checkbox--checked,
+		&.c-checkbox--indeterminate {
 			.c-checkbox__check-icon {
 				background-color: $zinc;
 			}

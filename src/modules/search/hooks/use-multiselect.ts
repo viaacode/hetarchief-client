@@ -14,6 +14,10 @@ export interface Multiselect {
 	open: (initialSelectedIds?: string[]) => void;
 	toggle: (id: string) => void;
 	selectMany: (ids: string[]) => void;
+	/**
+	 * Replaces the current selection with these objects
+	 */
+	selectOnly: (ids: string[]) => void;
 	deselect: (id: string) => void;
 	deselectAll: () => void;
 	/**
@@ -54,6 +58,10 @@ export function useMultiselect(resetKey: string): Multiselect {
 		setSelectedIds((currentIds) => uniq([...currentIds, ...ids]));
 	}, []);
 
+	const selectOnly = useCallback((ids: string[]) => {
+		setSelectedIds(uniq(ids));
+	}, []);
+
 	const deselect = useCallback((id: string) => {
 		setSelectedIds((ids) => ids.filter((i) => i !== id));
 	}, []);
@@ -71,6 +79,7 @@ export function useMultiselect(resetKey: string): Multiselect {
 		open,
 		toggle,
 		selectMany,
+		selectOnly,
 		deselect,
 		deselectAll,
 		close,

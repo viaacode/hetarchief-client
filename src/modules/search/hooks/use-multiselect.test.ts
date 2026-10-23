@@ -32,6 +32,13 @@ describe('useMultiselect', () => {
 		expect(result.current.isActive).toBe(true);
 	});
 
+	it('replaces the selection without duplicates', () => {
+		const { result } = renderHook(() => useMultiselect('search-1'));
+		act(() => result.current.open(['a', 'b', 'c']));
+		act(() => result.current.selectOnly(['d', 'b', 'd']));
+		expect(result.current.selectedIds).toEqual(['d', 'b']);
+	});
+
 	it('closes and clears the selection', () => {
 		const { result } = renderHook(() => useMultiselect('search-1'));
 		act(() => result.current.open(['a', 'b']));

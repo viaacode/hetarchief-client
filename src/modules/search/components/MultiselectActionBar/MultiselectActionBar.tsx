@@ -1,20 +1,17 @@
-import { Button } from '@meemoo/react-components';
+import { Button, Dropdown, DropdownButton, DropdownContent } from '@meemoo/react-components';
 import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
+import { ListNavigation, type ListNavigationItem } from '@shared/components/ListNavigation';
 import { tText } from '@shared/helpers/translate';
 import clsx from 'clsx';
-import { type FC, type RefObject, useEffect, useRef } from 'react';
+import { type FC, type RefObject, useEffect, useRef, useState } from 'react';
 
-import { MAX_SELECT_ALL_RESULTS } from './MultiselectActionBar.const';
+import { MAX_SELECT_ALL_RESULTS, SELECT_PAGES_OPTIONS } from './MultiselectActionBar.const';
 import styles from './MultiselectActionBar.module.scss';
 
 interface MultiselectActionBarProps {
 	className?: string;
 	selectedCount: number;
-	/**
-	 * Shows "deselect all" instead of "select all" when all results on the current page are selected
-	 */
-	isAllOnPageSelected: boolean;
 	/**
 	 * Number of results on the current page
 	 */
@@ -28,11 +25,22 @@ interface MultiselectActionBarProps {
 	 */
 	isAllResultsSelected: boolean;
 	/**
+	 * Number of pages from the current page up to the last page, including the current page
+	 */
+	remainingPageCount: number;
+	/**
 	 * Whether the results of the other pages are being fetched to select them
 	 */
-	isSelectingAllResults?: boolean;
+	isSelectingResults?: boolean;
 	isSaving?: boolean;
+	/**
+	 * Select only the results of the current page, replacing the current selection
+	 */
 	onSelectAllOnPage: () => void;
+	/**
+	 * Select the results of the current page and the pages after it
+	 */
+	onSelectPages: (pageCount: number) => void;
 	onSelectAllResults: () => void;
 	onDeselectAll: () => void;
 	onSave: () => void;
@@ -46,19 +54,21 @@ interface MultiselectActionBarProps {
 export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 	className,
 	selectedCount,
-	isAllOnPageSelected,
 	pageCount,
 	totalCount,
 	isAllResultsSelected,
-	isSelectingAllResults = false,
+	remainingPageCount,
+	isSelectingResults = false,
 	isSaving = false,
 	onSelectAllOnPage,
+	onSelectPages,
 	onSelectAllResults,
 	onDeselectAll,
 	onSave,
 	onClose,
 	saveButtonRef,
 }) => {
+	const [isSelectPagesOpen, setIsSelectPagesOpen] = useState(false);
 	const onCloseRef = useRef(onClose);
 	onCloseRef.current = onClose;
 
@@ -81,20 +91,91 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 		return () => document.removeEventListener('keydown', handleKeyDown);
 	}, []);
 
+	const renderSelectPagesDropdown = () => {
+		// Only offer the options that still leave pages unselected
+		const options = SELECT_PAGES_OPTIONS.filter((count) => count < remainingPageCount);
+		// The first option that reaches the last page is replaced by "select all"
+		const canSelectAll =
+			totalCount <= MAX_SELECT_ALL_RESULTS &&
+			SELECT_PAGES_OPTIONS.some((count) => count >= remainingPageCount);
+		const renderOption = (id: string, label: string, onClick: () => void) => ({
+			id,
+			node: ({ buttonClassName }: { buttonClassName?: string }) => (
+				<Button
+					className={buttonClassName}
+					label={label}
+					variants={['text', 'block']}
+					disabled={isSelectingResults}
+					onClick={() => {
+						onClick();
+						setIsSelectPagesOpen(false);
+					}}
+				/>
+			),
+		});
+		const listItems: ListNavigationItem[] = options.map((count) =>
+			renderOption(
+				`select-pages--${count}`,
+				tText(
+					'modules/search/components/multiselect-action-bar/multiselect-action-bar___selecteer-count-paginas',
+					{ count }
+				),
+				() => onSelectPages(count)
+			)
+		);
+		if (canSelectAll) {
+			listItems.push(
+				renderOption(
+					'select-pages--all',
+					tText(
+						'modules/search/components/multiselect-action-bar/multiselect-action-bar___selecteer-alles'
+					),
+					onSelectAllResults
+				)
+			);
+		}
+		if (!listItems.length) {
+			return null;
+		}
+		return (
+			<Dropdown
+				id="multiselect-action-bar__select-pages"
+				className={styles['c-multiselect-action-bar__select-pages']}
+				flyoutClassName={styles['c-multiselect-action-bar__select-pages-flyout']}
+				isOpen={isSelectPagesOpen}
+				onOpen={() => setIsSelectPagesOpen(true)}
+				onClose={() => setIsSelectPagesOpen(false)}
+				placement="bottom-end"
+				keyboard="menu"
+			>
+				<DropdownButton>
+					<Button
+						className={clsx(
+							styles['c-multiselect-action-bar__button'],
+							styles['c-multiselect-action-bar__button--dropdown']
+						)}
+						variants={['outline', 'icon']}
+						icon={<Icon name={IconNamesLight.AngleDown} aria-hidden />}
+						ariaLabel={tText(
+							'modules/search/components/multiselect-action-bar/multiselect-action-bar___meerdere-paginas-selecteren'
+						)}
+					/>
+				</DropdownButton>
+				<DropdownContent>
+					<ListNavigation listItems={listItems} />
+				</DropdownContent>
+			</Dropdown>
+		);
+	};
+
 	const renderSelectAllResults = () => {
 		// All results are already on this page, so "select all" covers them
 		if (totalCount <= pageCount) {
 			return null;
 		}
+		// Selecting all results is only offered for searches with a limited number of results
 		if (totalCount > MAX_SELECT_ALL_RESULTS) {
-			return (
-				<p className={styles['c-multiselect-action-bar__too-many-results']}>
-					{tText(
-						'modules/search/components/multiselect-action-bar/multiselect-action-bar___te-veel-resultaten-om-alles-te-selecteren',
-						{ max: MAX_SELECT_ALL_RESULTS }
-					)}
-				</p>
-			);
+			return null;
 		}
 		return (
 			<Button
@@ -108,7 +189,7 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 					{ count: totalCount }
 				)}
 				onClick={onSelectAllResults}
-				disabled={isAllResultsSelected || isSelectingAllResults}
+				disabled={isAllResultsSelected || isSelectingResults}
 			/>
 		);
 	};
@@ -120,35 +201,40 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 				'modules/search/components/multiselect-action-bar/multiselect-action-bar___meerdere-objecten-selecteren'
 			)}
 		>
-			<p className={styles['c-multiselect-action-bar__count']} aria-live="polite" role="status">
-				{selectedCount === 1
-					? tText(
-							'modules/search/components/multiselect-action-bar/multiselect-action-bar___1-object-geselecteerd'
-						)
-					: tText(
-							'modules/search/components/multiselect-action-bar/multiselect-action-bar___count-objecten-geselecteerd',
-							{ count: selectedCount }
-						)}
-			</p>
 			<div className={styles['c-multiselect-action-bar__actions']}>
 				<div className={styles['c-multiselect-action-bar__selection-actions']}>
-					{isAllOnPageSelected ? (
+					<div className={styles['c-multiselect-action-bar__select-page']}>
 						<Button
 							className={styles['c-multiselect-action-bar__button']}
 							variants={['outline']}
 							label={tText(
-								'modules/search/components/multiselect-action-bar/multiselect-action-bar___deselecteer-alles'
-							)}
-							onClick={onDeselectAll}
-						/>
-					) : (
-						<Button
-							className={styles['c-multiselect-action-bar__button']}
-							variants={['outline']}
-							label={tText(
-								'modules/search/components/multiselect-action-bar/multiselect-action-bar___selecteer-alles'
+								'modules/search/components/multiselect-action-bar/multiselect-action-bar___selecteer-pagina'
 							)}
 							onClick={onSelectAllOnPage}
+						/>
+						{renderSelectPagesDropdown()}
+					</div>
+					<p className={styles['c-multiselect-action-bar__count']} aria-live="polite" role="status">
+						<span className={styles['c-multiselect-action-bar__count-badge']}>{selectedCount}</span>
+						{selectedCount === 1
+							? tText(
+									'modules/search/components/multiselect-action-bar/multiselect-action-bar___object-geselecteerd'
+								)
+							: tText(
+									'modules/search/components/multiselect-action-bar/multiselect-action-bar___objecten-geselecteerd'
+								)}
+					</p>
+					{selectedCount > 0 && (
+						<Button
+							className={clsx(
+								styles['c-multiselect-action-bar__button'],
+								styles['c-multiselect-action-bar__button--link']
+							)}
+							variants={['text']}
+							label={tText(
+								'modules/search/components/multiselect-action-bar/multiselect-action-bar___deselecteer'
+							)}
+							onClick={onDeselectAll}
 						/>
 					)}
 					{renderSelectAllResults()}
@@ -161,7 +247,7 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 							styles['c-multiselect-action-bar__button--save']
 						)}
 						label={tText(
-							'modules/search/components/multiselect-action-bar/multiselect-action-bar___bewaren-in-map-pen'
+							'modules/search/components/multiselect-action-bar/multiselect-action-bar___bewaar-in-mappen'
 						)}
 						onClick={onSave}
 						disabled={selectedCount === 0 || isSaving}
@@ -171,11 +257,8 @@ export const MultiselectActionBar: FC<MultiselectActionBarProps> = ({
 							styles['c-multiselect-action-bar__button'],
 							styles['c-multiselect-action-bar__button--close']
 						)}
-						variants={['text']}
-						iconStart={<Icon name={IconNamesLight.Times} aria-hidden />}
-						label={tText(
-							'modules/search/components/multiselect-action-bar/multiselect-action-bar___sluiten'
-						)}
+						variants={['text', 'icon']}
+						icon={<Icon name={IconNamesLight.Times} aria-hidden />}
 						ariaLabel={tText(
 							'modules/search/components/multiselect-action-bar/multiselect-action-bar___sluit-het-selecteren-van-meerdere-objecten'
 						)}

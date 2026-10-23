@@ -14,15 +14,53 @@ $component: "c-multiselect-action-bar";
 	color: $white;
 
 	&__count {
+		display: flex;
+		align-items: center;
+		gap: $spacer-xs;
 		margin: 0;
 		font-size: $font-size-md;
 		font-weight: $font-weight-bold;
 		white-space: nowrap;
 	}
 
-	&__too-many-results {
-		margin: 0;
-		font-size: $font-size-sm;
+	// "Select page" button with a dropdown toggle attached to its right side
+	&__select-page {
+		display: flex;
+		align-items: stretch;
+		border: 0.1rem solid $white;
+
+		// The wrapper draws the outer border, the dropdown toggle only draws the divider
+		.#{$component}__button,
+		.#{$component}__button:global(.c-button--outline),
+		.#{$component}__button:global(.c-button--icon) {
+			border: 0;
+		}
+
+		.#{$component}__button--dropdown,
+		.#{$component}__button--dropdown:global(.c-button--icon) {
+			border-left: 0.1rem solid $white;
+		}
+	}
+
+	&__select-pages {
+		display: flex;
+	}
+
+	&__select-pages-flyout {
+		min-width: 24rem;
+		background-color: $white;
+		color: $black;
+		box-shadow: $shadow-24-black-12;
+		z-index: get-z-layer("dropdown");
+	}
+
+	&__count-badge {
+		min-width: 2.4rem;
+		padding: 0.2rem $spacer-xs;
+		border-radius: 1.2rem;
+		background-color: $teal;
+		color: $white;
+		text-align: center;
 	}
 
 	&__actions {
@@ -71,6 +109,14 @@ $component: "c-multiselect-action-bar";
 			border-radius: 0;
 		}
 
+		&--dropdown,
+		&--dropdown:global(.c-button--icon) {
+			width: 3.2rem;
+			min-width: 0;
+			padding: 0;
+			border-radius: 0;
+		}
+
 		&--link {
 			color: $white;
 			text-decoration: underline;
@@ -80,6 +126,13 @@ $component: "c-multiselect-action-bar";
 			}
 		}
 
+		&--close,
+		&--close:global(.c-button--icon) {
+			width: auto;
+			min-width: 0;
+			padding: 0 $spacer-xxs;
+		}
+
 		&--close {
 			color: $white;
 
@@ -87,6 +140,11 @@ $component: "c-multiselect-action-bar";
 				color: $teal;
 			}
 		}
+	}
+
+	// The close button sits close to the save button
+	&__save-actions {
+		gap: $spacer-xs;
 	}
 
 	@media (max-width: $breakpoint-md) {

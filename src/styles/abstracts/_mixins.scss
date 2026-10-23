@@ -232,7 +232,8 @@
 	* Modifiers
 	*/
 
-	.c-#{$type}--checked {
+	.c-#{$type}--checked,
+	.c-#{$type}--indeterminate {
 		.c-#{$type}__check-icon {
 			background-color: variables.$black;
 
@@ -254,7 +255,8 @@
 			}
 		}
 
-		&.c-#{$type}--checked {
+		&.c-#{$type}--checked,
+		&.c-#{$type}--indeterminate {
 			.c-#{$type}__check-icon {
 				background-color: variables.$zinc;
 			}

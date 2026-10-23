@@ -13,18 +13,39 @@ import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAllPermission } from '@shared/hooks/has-permission';
 import { toastService } from '@shared/services/toast-service';
 import clsx from 'clsx';
-import { compact, isNil } from 'es-toolkit/compat';
+import { compact } from 'es-toolkit/compat';
 import { type FC, type ReactNode, useEffect, useMemo, useState } from 'react';
 
 import styles from './AddToFolderBlade.module.scss';
-import type { AddToFolderBladeProps } from './AddToFolderBlade.types';
+import type { AddToFolderBladeProps, FolderChanges } from './AddToFolderBlade.types';
 
 // Number of selected objects that are shown as a tag, the others are summarized as "+ n more"
 const MAX_VISIBLE_OBJECT_TAGS = 4;
+// Number of characters at the end of an object title that stay visible when the title is truncated in the middle
+const MIDDLE_ELLIPSIS_END_LENGTH = 15;
 
 enum FolderSection {
 	ORGANISATION = 'ORGANISATION',
 	PERSONAL = 'PERSONAL',
+}
+
+// How many of the selected objects a folder contains
+enum FolderContents {
+	NONE = 'NONE',
+	SOME = 'SOME',
+	ALL = 'ALL',
+}
+
+// Change the user made to a folder in the blade, folders without a change keep their contents
+enum FolderChange {
+	ADD = 'ADD',
+	REMOVE = 'REMOVE',
+}
+
+enum FolderCheckboxState {
+	CHECKED = 'CHECKED',
+	INDETERMINATE = 'INDETERMINATE',
+	UNCHECKED = 'UNCHECKED',
 }
 
 const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
@@ -32,21 +53,20 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	onSubmit,
 	onClose,
 	onRemoveObject,
-	onAddMultipleObjects,
+	onSaveMultipleObjects,
 	isOpen,
 	className,
 	...bladeProps
 }) => {
 	const { data: folders, isError: isFoldersError, refetch: refetchFolders } = useGetFolders();
 	const canManageOrganisationFolders = useHasAllPermission(Permission.MANAGE_ORGANISATION_FOLDERS);
-	const [originalSelectedFolderIds, setOriginalSelectedFolderIds] = useState<string[] | null>(null);
-	const [selectedFolderIds, setSelectedFolderIds] = useState<string[] | null>(null);
+	const [folderChanges, setFolderChanges] = useState<Record<string, FolderChange>>({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [collapsedSections, setCollapsedSections] = useState<FolderSection[]>([]);
 	const [showAllObjectTags, setShowAllObjectTags] = useState(false);
 
-	// With one object, the folders can be checked and unchecked to add or remove the object
-	// With multiple objects, the objects can only be added
+	// A folder that contains all selected objects is checked, one that contains some of them is indeterminate
+	// Clicking cycles through the states, so the objects can be added to or removed from every folder
 	const objectToAdd = objectsToAdd.length === 1 ? objectsToAdd[0] : undefined;
 	const isMultipleObjects = objectsToAdd.length > 1;
 	const objectSchemaIdentifiers = useMemo(
@@ -66,27 +86,54 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	);
 	const showFolderSections = canManageOrganisationFolders;
 
+	const getFolderContents = (folder: Folder): FolderContents => {
+		const selectedObjectsInFolder = (folder.objects || []).filter((object) =>
+			objectSchemaIdentifiers.includes(object.schemaIdentifier)
+		).length;
+		if (selectedObjectsInFolder === 0) {
+			return FolderContents.NONE;
+		}
+		return selectedObjectsInFolder >= objectSchemaIdentifiers.length
+			? FolderContents.ALL
+			: FolderContents.SOME;
+	};
+
+	const getFolderCheckboxState = (folder: Folder): FolderCheckboxState => {
+		const change = folderChanges[folder.id];
+		if (change === FolderChange.ADD) {
+			return FolderCheckboxState.CHECKED;
+		}
+		if (change === FolderChange.REMOVE) {
+			return FolderCheckboxState.UNCHECKED;
+		}
+		return {
+			[FolderContents.NONE]: FolderCheckboxState.UNCHECKED,
+			[FolderContents.SOME]: FolderCheckboxState.INDETERMINATE,
+			[FolderContents.ALL]: FolderCheckboxState.CHECKED,
+		}[getFolderContents(folder)];
+	};
+
+	/**
+	 * The folders the objects need to be added to or removed from
+	 * Changes that would not change the folder contents are left out, eg: adding objects that are already in the folder
+	 */
+	const getChanges = (): FolderChanges => {
+		const changes: FolderChanges = { addToFolderIds: [], removeFromFolderIds: [] };
+		for (const folder of folders || []) {
+			const change = folderChanges[folder.id];
+			const contents = getFolderContents(folder);
+			if (change === FolderChange.ADD && contents !== FolderContents.ALL) {
+				changes.addToFolderIds.push(folder.id);
+			} else if (change === FolderChange.REMOVE && contents !== FolderContents.NONE) {
+				changes.removeFromFolderIds.push(folder.id);
+			}
+		}
+		return changes;
+	};
+
 	/**
 	 * Effects
 	 */
-
-	useEffect(() => {
-		// Only reset the selected folder ids the first time
-		if (isNil(selectedFolderIds) && folders && objectsToAdd.length) {
-			// Multiple objects can only be added, so no folders are preselected
-			const tempOriginalSelectedFolderIds = objectToAdd
-				? folders
-						.filter((folder) =>
-							(folder.objects || []).find(
-								(obj) => obj.schemaIdentifier === objectToAdd.schemaIdentifier
-							)
-						)
-						.map((folder) => folder.id)
-				: [];
-			setSelectedFolderIds(tempOriginalSelectedFolderIds);
-			setOriginalSelectedFolderIds([...tempOriginalSelectedFolderIds]);
-		}
-	}, [folders, objectToAdd, objectsToAdd.length, selectedFolderIds]);
 
 	// Start fresh every time the blade is opened, also when it was closed without saving
 	// biome-ignore lint/correctness/useExhaustiveDependencies: only react to the blade opening or closing
@@ -258,14 +305,17 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	};
 
 	const handleSubmitMultipleObjects = async () => {
-		if (!selectedFolderIds?.length || !onAddMultipleObjects) {
+		const changes = getChanges();
+		if (
+			(!changes.addToFolderIds.length && !changes.removeFromFolderIds.length) ||
+			!onSaveMultipleObjects
+		) {
 			return;
 		}
 		setIsSubmitting(true);
-		const folderIds = [...selectedFolderIds];
 		// The caller shows the result and keeps the selection when saving fails, so the blade can always close
 		onClose?.();
-		await onAddMultipleObjects(folderIds);
+		await onSaveMultipleObjects(changes);
 		setIsSubmitting(false);
 	};
 
@@ -279,12 +329,14 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 		}
 		setIsSubmitting(true);
 		try {
-			const objectAddedToFolderIds = (selectedFolderIds || []).filter(
-				(folderId) => !(originalSelectedFolderIds || []).includes(folderId)
-			);
-			const objectRemovedFromFolderIds = (originalSelectedFolderIds || []).filter(
-				(folderId) => !(selectedFolderIds || []).includes(folderId)
-			);
+			const {
+				addToFolderIds: objectAddedToFolderIds,
+				removeFromFolderIds: objectRemovedFromFolderIds,
+			} = getChanges();
+			// The folders that contain the object after saving
+			const checkedFolderIds = (folders || [])
+				.filter((folder) => getFolderCheckboxState(folder) === FolderCheckboxState.CHECKED)
+				.map((folder) => folder.id);
 
 			const addedToFolderIds: string[] = [];
 			const removedFromFolderIds: string[] = [];
@@ -316,7 +368,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			// https://meemoo.atlassian.net/browse/ARC-2048
 			await refetchFolders();
 
-			onSubmit?.(selectedFolderIds || []);
+			onSubmit?.(checkedFolderIds);
 			resetForm();
 			onClose?.();
 		} catch (_err) {
@@ -333,18 +385,34 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 		setIsSubmitting(false);
 	};
 
-	const onCheckboxClick = (changedFolderId: string) => {
-		if ((selectedFolderIds || []).includes(changedFolderId)) {
-			setSelectedFolderIds(
-				(selectedFolderIds || []).filter((folderId) => folderId !== changedFolderId)
-			);
-		} else {
-			setSelectedFolderIds([...(selectedFolderIds || []), changedFolderId]);
+	/**
+	 * Cycles through the states the folder can have:
+	 * - folder without the objects: unchecked <-> checked
+	 * - folder with all objects: checked <-> unchecked
+	 * - folder with some of the objects: indeterminate -> checked -> unchecked -> indeterminate
+	 */
+	const onCheckboxClick = (folder: Folder) => {
+		const contents = getFolderContents(folder);
+		let newChange: FolderChange | undefined;
+		switch (getFolderCheckboxState(folder)) {
+			case FolderCheckboxState.INDETERMINATE:
+				newChange = FolderChange.ADD;
+				break;
+			case FolderCheckboxState.CHECKED:
+				newChange = contents === FolderContents.NONE ? undefined : FolderChange.REMOVE;
+				break;
+			case FolderCheckboxState.UNCHECKED:
+				newChange = contents === FolderContents.NONE ? FolderChange.ADD : undefined;
+				break;
 		}
+		setFolderChanges((changes) => {
+			const { [folder.id]: _oldChange, ...otherChanges } = changes;
+			return newChange ? { ...otherChanges, [folder.id]: newChange } : otherChanges;
+		});
 	};
 
 	const afterCreateFolderSubmit = async (folder: Folder) => {
-		setSelectedFolderIds([...(selectedFolderIds || []), folder.id]);
+		setFolderChanges((changes) => ({ ...changes, [folder.id]: FolderChange.ADD }));
 		// Make sure the new folder is visible
 		setCollapsedSections([]);
 		await refetchFolders();
@@ -357,8 +425,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	};
 
 	const resetForm = () => {
-		setOriginalSelectedFolderIds(null);
-		setSelectedFolderIds(null);
+		setFolderChanges({});
 		setIsSubmitting(false);
 		setShowAllObjectTags(false);
 	};
@@ -368,18 +435,31 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	 */
 
 	const getFooterButtons = (): BladeFooterButtonProps => {
+		const { addToFolderIds, removeFromFolderIds } = getChanges();
+		// "Add" would be misleading when objects are removed from folders
+		const hasRemovals = removeFromFolderIds.length > 0;
 		return [
 			{
-				label: tText(
-					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe'
-				),
-				mobileLabel: tText(
-					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe-mobiel'
-				),
+				label: hasRemovals
+					? tText(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___opslaan'
+						)
+					: tText(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe'
+						),
+				mobileLabel: hasRemovals
+					? tText(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___opslaan-mobiel'
+						)
+					: tText(
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-toe-mobiel'
+						),
 				type: 'primary',
 				onClick: handleSubmit,
 				disabled:
-					isSubmitting || !objectsToAdd.length || (isMultipleObjects && !selectedFolderIds?.length),
+					isSubmitting ||
+					!objectsToAdd.length ||
+					(isMultipleObjects && !addToFolderIds.length && !hasRemovals),
 			},
 			{
 				label: tText(
@@ -394,9 +474,53 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 		];
 	};
 
+	/**
+	 * Explains the indeterminate state and warns that objects will be removed, only when multiple objects are selected
+	 */
+	const renderFolderHint = (
+		checkboxState: FolderCheckboxState,
+		contents: FolderContents,
+		selectedObjectsInFolder: number
+	): ReactNode => {
+		if (!isMultipleObjects) {
+			return null;
+		}
+		if (checkboxState === FolderCheckboxState.INDETERMINATE) {
+			return (
+				<span className={styles['c-add-to-folder-blade__list-item__hint']}>
+					{tHtml(
+						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-van-de-total-objecten-zitten-al-in-deze-map',
+						{ count: selectedObjectsInFolder, total: objectSchemaIdentifiers.length }
+					)}
+				</span>
+			);
+		}
+		if (checkboxState === FolderCheckboxState.UNCHECKED && contents !== FolderContents.NONE) {
+			return (
+				<span
+					className={clsx(
+						styles['c-add-to-folder-blade__list-item__hint'],
+						styles['c-add-to-folder-blade__list-item__hint--remove']
+					)}
+				>
+					{selectedObjectsInFolder === 1
+						? tHtml(
+								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___1-object-wordt-uit-deze-map-verwijderd'
+							)
+						: tHtml(
+								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-objecten-worden-uit-deze-map-verwijderd',
+								{ count: selectedObjectsInFolder }
+							)}
+				</span>
+			);
+		}
+		return null;
+	};
+
 	const renderFolderCheckbox = (folder: Folder) => {
-		const isFolderSelected = (selectedFolderIds || []).includes(folder.id);
-		// Count the objects in the folder as if the selection was already saved
+		const checkboxState = getFolderCheckboxState(folder);
+		const contents = getFolderContents(folder);
+		// Count the objects in the folder as if the changes were already saved
 		const objectsInFolder = (folder?.objects || []).map((object) => object.schemaIdentifier);
 		const others = objectsInFolder.filter(
 			(schemaIdentifier) => !objectSchemaIdentifiers.includes(schemaIdentifier)
@@ -404,11 +528,11 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 		const selectedObjectsInFolder = objectsInFolder.length - others.length;
 		const count =
 			others.length +
-			(isFolderSelected
-				? objectSchemaIdentifiers.length
-				: isMultipleObjects
-					? selectedObjectsInFolder
-					: 0);
+			{
+				[FolderCheckboxState.CHECKED]: objectSchemaIdentifiers.length,
+				[FolderCheckboxState.INDETERMINATE]: selectedObjectsInFolder,
+				[FolderCheckboxState.UNCHECKED]: 0,
+			}[checkboxState];
 
 		return (
 			// biome-ignore lint/a11y/useKeyWithClickEvents: the checkbox in the list item handles the keyboard interaction
@@ -418,16 +542,18 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 				onClick={(evt) => {
 					// Clicks on the checkbox itself are handled by its change event
 					if (!(evt.target as HTMLElement).closest('label')) {
-						onCheckboxClick(folder.id);
+						onCheckboxClick(folder);
 					}
 				}}
 			>
 				<Checkbox
 					value={`add-to--${folder.id}`}
 					className={styles['c-add-to-folder-blade__list-item__checkbox']}
-					checked={isFolderSelected}
+					checked={checkboxState === FolderCheckboxState.CHECKED}
+					indeterminate={checkboxState === FolderCheckboxState.INDETERMINATE}
 					checkIcon={<Icon name={IconNamesLight.Check} aria-hidden />}
-					onChange={() => onCheckboxClick(folder.id)}
+					indeterminateIcon={<Icon name={IconNamesLight.Minus} aria-hidden />}
+					onChange={() => onCheckboxClick(folder)}
 					variants={['no-label']}
 					aria-label={tText(
 						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___voeg-folder-toe-aan-map',
@@ -437,7 +563,10 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 					)}
 				/>
 
-				<span className={styles['c-add-to-folder-blade__list-item__label']}>{folder?.name}</span>
+				<span className={styles['c-add-to-folder-blade__list-item__label']}>
+					{folder?.name}
+					{renderFolderHint(checkboxState, contents, selectedObjectsInFolder)}
+				</span>
 
 				<span className={styles['c-add-to-folder-blade__list-item__count']}>
 					{count === 1
@@ -545,6 +674,23 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 		);
 	};
 
+	/**
+	 * Splits the title so the end stays visible and the ellipsis appears in the middle when it does not fit
+	 */
+	const renderMiddleEllipsis = (title: string): ReactNode => {
+		const endLength = Math.min(MIDDLE_ELLIPSIS_END_LENGTH, Math.floor(title.length / 2));
+		return (
+			<>
+				<span className={styles['c-add-to-folder-blade__selected-objects__label-start']}>
+					{title.slice(0, title.length - endLength)}
+				</span>
+				<span className={styles['c-add-to-folder-blade__selected-objects__label-end']}>
+					{title.slice(title.length - endLength)}
+				</span>
+			</>
+		);
+	};
+
 	const renderSelectedObjects = (): ReactNode => {
 		if (!isMultipleObjects) {
 			return null;
@@ -564,7 +710,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 								className={styles['c-add-to-folder-blade__selected-objects__label']}
 								title={object.title}
 							>
-								{object.title || object.schemaIdentifier}
+								{renderMiddleEllipsis(object.title || object.schemaIdentifier)}
 							</span>
 						),
 					}))}
@@ -614,12 +760,13 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 				isMultipleObjects ? (
 					<>
 						{tHtml(
-							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-map-pen-waarin-je-deze-count-objecten-wil-bewaren',
+							'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___kies-de-mappen-waarin-je-deze-count-objecten-wil-bewaren',
 							{
 								count: objectsToAdd.length,
 							}
 						)}
-						{renderSelectedObjects()}
+						{/* Once expanded, the objects move into the scrollable body so a long list does not fill the blade */}
+						{!showAllObjectTags && renderSelectedObjects()}
 					</>
 				) : (
 					tHtml(
@@ -631,6 +778,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 				)
 			}
 		>
+			{showAllObjectTags && renderSelectedObjects()}
 			{renderFolders()}
 		</Blade>
 	);

@@ -63,6 +63,18 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 				}
 			}
 
+			// Explains the indeterminate state or warns that objects will be removed
+			&__hint {
+				display: block;
+				margin-top: $spacer-xxs;
+				font-size: $font-size-sm;
+				color: $shade;
+
+				&--remove {
+					color: $cherry;
+				}
+			}
+
 			&__count {
 				flex-shrink: 0;
 				flex-basis: 6rem;
@@ -122,27 +134,43 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 		gap: $spacer-xs;
 		margin-top: $spacer-sm;
 
+		// Every object gets its own row using the full width of the blade
 		:global(.c-tag-list) {
 			display: flex;
-			flex-wrap: wrap;
+			flex-direction: column;
 			gap: $spacer-xs;
-			max-width: 100%;
+			width: 100%;
 		}
 
 		// The blade limits the width of all its children, this needs to be more specific
-		.#{$component} & :global(.c-tag),
-		.#{$component} & :global(.c-tag__label) {
+		.#{$component} & :global(.c-tag) {
+			display: flex;
+			width: 100%;
 			max-width: 100%;
 			min-width: 0;
 		}
 
+		.#{$component} & :global(.c-tag__label) {
+			flex-grow: 1;
+			max-width: 100%;
+			min-width: 0;
+		}
+
+		// Ellipsis in the middle of the title: the start shrinks, the end is always visible
 		.#{$component} & &__label {
-			display: inline-block;
-			max-width: 20rem;
+			display: flex;
+			min-width: 0;
+			white-space: nowrap;
+		}
+
+		.#{$component} & &__label-start {
 			overflow: hidden;
 			text-overflow: ellipsis;
-			white-space: nowrap;
-			vertical-align: bottom;
+		}
+
+		.#{$component} & &__label-end {
+			flex-shrink: 0;
+			white-space: pre;
 		}
 
 		&__more {

@@ -55,11 +55,13 @@ export interface CreateFolderFormState {
 	isOrganisation?: boolean;
 }
 
-export interface AddObjectsToFoldersResponse {
-	folderIds: string[];
+export interface UpdateObjectsInFoldersResponse {
+	addToFolderIds: string[];
+	removeFromFolderIds: string[];
 	objectSchemaIdentifiers: string[];
 	notFoundSchemaIdentifiers: string[];
 	addedCount: number;
+	removedCount: number;
 }
 
 export enum SharedFolderStatus {

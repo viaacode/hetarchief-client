@@ -2,8 +2,8 @@ import type { FormBladeProps } from '@shared/types/blade';
 
 export type AddToFolderBladeProps = FormBladeProps<string[]> & {
 	/**
-	 * One object: the folders that already contain the object are preselected and can be unchecked to remove it
-	 * Multiple objects: the objects can only be added to the selected folders
+	 * Folders that contain all objects are checked, folders that contain some of them are indeterminate
+	 * Checking a folder adds the objects to it, unchecking it removes them
 	 */
 	objectsToAdd: AddToFolderSelected[];
 	/**
@@ -11,11 +11,16 @@ export type AddToFolderBladeProps = FormBladeProps<string[]> & {
 	 */
 	onRemoveObject?: (schemaIdentifier: string) => void;
 	/**
-	 * Saves multiple objects to the chosen folders, only used when adding multiple objects
+	 * Adds multiple objects to and removes them from the chosen folders, only used with multiple objects
 	 * The caller does the save, so it can keep the selection and offer a retry when it fails
 	 */
-	onAddMultipleObjects?: (folderIds: string[]) => Promise<void>;
+	onSaveMultipleObjects?: (changes: FolderChanges) => Promise<void>;
 };
+
+export interface FolderChanges {
+	addToFolderIds: string[];
+	removeFromFolderIds: string[];
+}
 
 export interface AddToFolderSelected {
 	schemaIdentifier: string;

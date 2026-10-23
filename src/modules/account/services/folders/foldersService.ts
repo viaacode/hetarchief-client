@@ -1,8 +1,8 @@
 import type {
-	AddObjectsToFoldersResponse,
 	Folder,
 	FolderIeObject,
 	SharedFolderResponse,
+	UpdateObjectsInFoldersResponse,
 } from '@account/types';
 import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { ApiService } from '@shared/services/api-service';
@@ -71,16 +71,21 @@ export abstract class FoldersService {
 	}
 
 	/**
-	 * Add multiple objects to multiple folders in one request
+	 * Add multiple objects to some folders and remove them from other folders in one request
 	 * Objects that are already in a folder are skipped, so a failed request can safely be retried
 	 */
-	public static async addManyToFolders(
-		folderUuids: string[],
+	public static async updateManyInFolders(
+		addToFolderUuids: string[],
+		removeFromFolderUuids: string[],
 		objectSchemaIdentifiers: string[]
-	): Promise<AddObjectsToFoldersResponse> {
+	): Promise<UpdateObjectsInFoldersResponse> {
 		return await ApiService.getApi()
-			.post(`${FOLDERS_SERVICE_BASE_URL}/${FOLDERS_SERVICE_OBJECTS_URL}`, {
-				json: { folderIds: folderUuids, objectSchemaIdentifiers },
+			.patch(`${FOLDERS_SERVICE_BASE_URL}/${FOLDERS_SERVICE_OBJECTS_URL}`, {
+				json: {
+					addToFolderIds: addToFolderUuids,
+					removeFromFolderIds: removeFromFolderUuids,
+					objectSchemaIdentifiers,
+				},
 			})
 			.json();
 	}

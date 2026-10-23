@@ -81,7 +81,7 @@ import {
 import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
-import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
+import { AddToFolderBlade, type FolderChanges } from '@visitor-space/components/AddToFolderBlade';
 import type { ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
 import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
@@ -112,7 +112,7 @@ import { getQueryForRemainingTags, mapFiltersToTags } from '@visitor-space/utils
 import { migrateLegacyAdvancedFilters } from '@visitor-space/utils/migrate-legacy-advanced-filters';
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
-import { compact, intersection, isEmpty, isNil, sortBy, sum } from 'es-toolkit/compat';
+import { compact, intersection, isEmpty, isNil, range, sortBy, sum } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -192,14 +192,14 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	// Only opening a filter panel ("filter" query param) does not change the results
 	const { filter: _openFilterPanel, ...searchQueryWithoutOpenFilterPanel } = query;
 	const multiselect = useMultiselect(JSON.stringify(searchQueryWithoutOpenFilterPanel));
-	// Folders that could not be saved, so the user can retry
-	const [failedMultiselectFolderIds, setFailedMultiselectFolderIds] = useState<string[] | null>(
+	// Folder changes that could not be saved, so the user can retry
+	const [failedMultiselectChanges, setFailedMultiselectChanges] = useState<FolderChanges | null>(
 		null
 	);
 	const [isSavingMultiselect, setIsSavingMultiselect] = useState(false);
 	// Titles of the results of all pages, fetched when the user selects all results of the search
 	const [allResultTitles, setAllResultTitles] = useState<Record<string, string>>({});
-	const [isSelectingAllResults, setIsSelectingAllResults] = useState(false);
+	const [isSelectingResults, setIsSelectingResults] = useState(false);
 	// The card that started the multiselect mode, to move the focus to its checkbox and back again
 	const [multiselectStartId, setMultiselectStartId] = useState<string | null>(null);
 	const multiselectSaveButtonRef = useRef<HTMLButtonElement>(null) as RefObject<HTMLButtonElement>;
@@ -363,7 +363,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 	useEffect(() => {
 		if (!multiselect.isActive) {
-			setFailedMultiselectFolderIds(null);
+			setFailedMultiselectChanges(null);
 		}
 	}, [multiselect.isActive]);
 
@@ -383,6 +383,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			return formatCounts?.[type] || 0;
 		},
 		[formatCounts]
+	);
+
+	const lastPage = Math.max(
+		1,
+		Math.ceil(limitToMaxResults(getItemCounts(format)) / SEARCH_RESULTS_PAGE_SIZE)
 	);
 
 	const tabs: TabProps[] = useMemo(
@@ -764,35 +769,75 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		multiselect.open([card.schemaIdentifier]);
 	};
 
-	const selectAllResults = async () => {
-		const totalCount = getItemCounts(format);
-		if (totalCount > MAX_SELECT_ALL_RESULTS) {
-			return;
-		}
-		setIsSelectingAllResults(true);
+	/**
+	 * Fetches search results that are not on the current page and adds them to the selection
+	 * @param pages the pages of search results to fetch, eg: [{ page: 1, size: 70 }] for all results
+	 * @param errorDescription shown in a toast when fetching the results fails
+	 * @param replaceSelection replace the current selection instead of adding to it
+	 * @param currentPageIds results of the current page that are selected together with the fetched results
+	 */
+	const selectResultsOfPages = async (
+		pages: { page: number; size: number }[],
+		errorDescription: string,
+		replaceSelection = false,
+		currentPageIds: string[] = []
+	) => {
+		setIsSelectingResults(true);
 		try {
-			const response = await IeObjectsService.getSearchResults(
-				searchQueryFilters,
-				1,
-				totalCount,
-				activeSort,
-				[]
+			const responses = await Promise.all(
+				pages.map(({ page, size }) =>
+					IeObjectsService.getSearchResults(searchQueryFilters, page, size, activeSort, [])
+				)
 			);
-			setAllResultTitles(
-				Object.fromEntries(response.items.map((item) => [item.schemaIdentifier, item.name]))
-			);
-			multiselect.selectMany(response.items.map((item) => item.schemaIdentifier));
+			const items = responses.flatMap((response) => response.items);
+			setAllResultTitles((titles) => ({
+				...titles,
+				...Object.fromEntries(items.map((item) => [item.schemaIdentifier, item.name])),
+			}));
+			const ids = [...currentPageIds, ...items.map((item) => item.schemaIdentifier)];
+			if (replaceSelection) {
+				multiselect.selectOnly(ids);
+			} else {
+				multiselect.selectMany(ids);
+			}
 		} catch (err) {
 			console.error(err);
 			toastService.notify({
 				maxLines: 3,
 				title: tText('modules/search/search-page___er-ging-iets-mis'),
-				description: tText(
-					'modules/search/search-page___het-selecteren-van-alle-resultaten-is-mislukt'
-				),
+				description: errorDescription,
 			});
 		}
-		setIsSelectingAllResults(false);
+		setIsSelectingResults(false);
+	};
+
+	const selectAllResults = async () => {
+		const totalCount = getItemCounts(format);
+		if (totalCount > MAX_SELECT_ALL_RESULTS) {
+			return;
+		}
+		await selectResultsOfPages(
+			[{ page: 1, size: totalCount }],
+			tText('modules/search/search-page___het-selecteren-van-alle-resultaten-is-mislukt')
+		);
+	};
+
+	/**
+	 * Selects the results of the current page and the pages after it, replacing the current selection
+	 */
+	const selectPages = async (pageCount: number) => {
+		const currentPageIds = searchResultCardData.map((card) => card.schemaIdentifier);
+		const nextPages = range(page + 1, Math.min(page + pageCount - 1, lastPage) + 1);
+		if (!nextPages.length) {
+			multiselect.selectOnly(currentPageIds);
+			return;
+		}
+		await selectResultsOfPages(
+			nextPages.map((nextPage) => ({ page: nextPage, size: SEARCH_RESULTS_PAGE_SIZE })),
+			tText('modules/search/search-page___het-selecteren-van-de-paginas-is-mislukt'),
+			true,
+			currentPageIds
+		);
 	};
 
 	const closeMultiselect = () => {
@@ -808,25 +853,34 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		}
 	};
 
-	const saveMultiselectToFolders = async (folderIds: string[]) => {
+	const saveMultiselectToFolders = async (changes: FolderChanges) => {
+		const { addToFolderIds, removeFromFolderIds } = changes;
 		const objectSchemaIdentifiers = [...multiselect.selectedIds];
-		if (!folderIds.length || !objectSchemaIdentifiers.length) {
+		if (
+			(!addToFolderIds.length && !removeFromFolderIds.length) ||
+			!objectSchemaIdentifiers.length
+		) {
 			return;
 		}
 		setIsSavingMultiselect(true);
-		setFailedMultiselectFolderIds(null);
+		setFailedMultiselectChanges(null);
 		try {
-			const response = await FoldersService.addManyToFolders(folderIds, objectSchemaIdentifiers);
+			const response = await FoldersService.updateManyInFolders(
+				addToFolderIds,
+				removeFromFolderIds,
+				objectSchemaIdentifiers
+			);
 			const savedCount = response.objectSchemaIdentifiers.length;
 			const notFoundCount = response.notFoundSchemaIdentifiers?.length || 0;
 
-			const folderNames = compact(
-				folderIds.map((folderId) => folders?.find((folder) => folder.id === folderId)?.name)
-			).join(', ');
-			const getSavedDescription = () => {
-				const variables = { count: savedCount, folders: folderNames };
+			const getFolderNames = (folderIds: string[]) =>
+				compact(
+					folderIds.map((folderId) => folders?.find((folder) => folder.id === folderId)?.name)
+				).join(', ');
+			const getAddedDescription = () => {
+				const variables = { count: savedCount, folders: getFolderNames(addToFolderIds) };
 				if (savedCount === 1) {
-					return folderIds.length === 1
+					return addToFolderIds.length === 1
 						? tHtml(
 								'modules/search/search-page___1-object-is-toegevoegd-aan-de-map-folders',
 								variables
@@ -836,7 +890,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 								variables
 							);
 				}
-				return folderIds.length === 1
+				return addToFolderIds.length === 1
 					? tHtml(
 							'modules/search/search-page___count-objecten-zijn-toegevoegd-aan-de-map-folders',
 							variables
@@ -846,10 +900,41 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 							variables
 						);
 			};
+			const getRemovedDescription = () => {
+				const variables = { count: savedCount, folders: getFolderNames(removeFromFolderIds) };
+				if (savedCount === 1) {
+					return removeFromFolderIds.length === 1
+						? tHtml(
+								'modules/search/search-page___1-object-is-verwijderd-uit-de-map-folders',
+								variables
+							)
+						: tHtml(
+								'modules/search/search-page___1-object-is-verwijderd-uit-de-mappen-folders',
+								variables
+							);
+				}
+				return removeFromFolderIds.length === 1
+					? tHtml(
+							'modules/search/search-page___count-objecten-zijn-verwijderd-uit-de-map-folders',
+							variables
+						)
+					: tHtml(
+							'modules/search/search-page___count-objecten-zijn-verwijderd-uit-de-mappen-folders',
+							variables
+						);
+			};
 			toastService.notify({
-				maxLines: 3,
-				title: tHtml('modules/search/search-page___objecten-bewaard'),
-				description: getSavedDescription(),
+				maxLines: addToFolderIds.length && removeFromFolderIds.length ? 5 : 3,
+				title: removeFromFolderIds.length
+					? tHtml('modules/search/search-page___mappen-aangepast')
+					: tHtml('modules/search/search-page___objecten-bewaard'),
+				description: (
+					<>
+						{addToFolderIds.length > 0 && getAddedDescription()}
+						{addToFolderIds.length > 0 && removeFromFolderIds.length > 0 && ' '}
+						{removeFromFolderIds.length > 0 && getRemovedDescription()}
+					</>
+				),
 			});
 			if (notFoundCount > 0) {
 				// Objects that no longer exist in the database are skipped by the server
@@ -872,12 +957,13 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			// Fill the bookmark icons of the saved objects
 			await refetchFolders();
 		} catch (err) {
-			console.error('Failed to add the selected objects to the folders', err, {
-				folderIds,
+			console.error('Failed to save the selected objects to the folders', err, {
+				addToFolderIds,
+				removeFromFolderIds,
 				objectSchemaIdentifiers,
 			});
 			// Keep the selection, so the user can retry
-			setFailedMultiselectFolderIds(folderIds);
+			setFailedMultiselectChanges(changes);
 		}
 		setIsSavingMultiselect(false);
 	};
@@ -1043,18 +1129,17 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			<>
 				<MultiselectActionBar
 					selectedCount={multiselect.selectedIds.length}
-					isAllOnPageSelected={searchResultCardData.every((card) =>
-						multiselect.isSelected(card.schemaIdentifier)
-					)}
 					pageCount={searchResultCardData.length}
 					totalCount={getItemCounts(format)}
 					isAllResultsSelected={multiselect.selectedIds.length >= getItemCounts(format)}
-					isSelectingAllResults={isSelectingAllResults}
+					isSelectingResults={isSelectingResults}
+					remainingPageCount={lastPage - page + 1}
 					isSaving={isSavingMultiselect}
 					saveButtonRef={multiselectSaveButtonRef}
 					onSelectAllOnPage={() =>
-						multiselect.selectMany(searchResultCardData.map((card) => card.schemaIdentifier))
+						multiselect.selectOnly(searchResultCardData.map((card) => card.schemaIdentifier))
 					}
+					onSelectPages={selectPages}
 					onSelectAllResults={selectAllResults}
 					onDeselectAll={multiselect.deselectAll}
 					onSave={() => {
@@ -1063,11 +1148,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 					}}
 					onClose={closeMultiselect}
 				/>
-				{failedMultiselectFolderIds && (
+				{failedMultiselectChanges && (
 					<MultiselectErrorBanner
 						objectCount={multiselect.selectedIds.length}
 						isRetrying={isSavingMultiselect}
-						onRetry={() => saveMultiselectToFolders(failedMultiselectFolderIds)}
+						onRetry={() => saveMultiselectToFolders(failedMultiselectChanges)}
 					/>
 				)}
 			</>
@@ -1290,7 +1375,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 						isOpen={isAddToFolderBladeOpen}
 						objectsToAdd={objectsToAddToFolder}
 						onRemoveObject={multiselect.isActive ? multiselect.deselect : undefined}
-						onAddMultipleObjects={saveMultiselectToFolders}
+						onSaveMultipleObjects={saveMultiselectToFolders}
 						onClose={onCloseAddToFolderBlade}
 						onSubmit={async () => {
 							// Only called when one object was added, multiple objects are saved by saveMultiselectToFolders
