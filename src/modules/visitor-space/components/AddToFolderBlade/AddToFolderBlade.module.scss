@@ -63,15 +63,24 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 				}
 			}
 
-			// Explains the indeterminate state or warns that objects will be removed
-			&__hint {
-				display: block;
+			// All hints of a folder share one grid cell, so the tallest one determines the height
+			&__hints {
+				display: grid;
 				margin-top: $spacer-xxs;
+			}
+
+			// Explains the indeterminate state or how many objects will be added or removed
+			&__hint {
+				grid-area: 1 / 1;
 				font-size: $font-size-sm;
 				color: $shade;
 
 				&--remove {
 					color: $cherry;
+				}
+
+				&--hidden {
+					visibility: hidden;
 				}
 			}
 

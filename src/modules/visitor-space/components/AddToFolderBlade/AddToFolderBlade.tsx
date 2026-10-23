@@ -475,9 +475,11 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 	};
 
 	/**
-	 * Explains the indeterminate state and warns that objects will be removed, only when multiple objects are selected
+	 * Explains the indeterminate state and how many objects will be added or removed, only when multiple objects are selected
+	 * All hints the folder can show are rendered on top of each other and only the active one is visible,
+	 * so the tallest hint determines the height and the list does not jump when the checkbox changes
 	 */
-	const renderFolderHint = (
+	const renderFolderHints = (
 		checkboxState: FolderCheckboxState,
 		contents: FolderContents,
 		selectedObjectsInFolder: number
@@ -485,36 +487,67 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 		if (!isMultipleObjects) {
 			return null;
 		}
-		if (checkboxState === FolderCheckboxState.INDETERMINATE) {
-			return (
-				<span className={styles['c-add-to-folder-blade__list-item__hint']}>
-					{tHtml(
-						'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-van-de-total-objecten-zitten-al-in-deze-map',
-						{ count: selectedObjectsInFolder, total: objectSchemaIdentifiers.length }
-					)}
-				</span>
-			);
+		const addedCount = objectSchemaIdentifiers.length - selectedObjectsInFolder;
+		const hints: { state: FolderCheckboxState; className?: string; text: ReactNode }[] = [];
+		if (contents === FolderContents.SOME) {
+			hints.push({
+				state: FolderCheckboxState.INDETERMINATE,
+				text: tHtml(
+					'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-van-de-total-objecten-zitten-al-in-deze-map',
+					{ count: selectedObjectsInFolder, total: objectSchemaIdentifiers.length }
+				),
+			});
 		}
-		if (checkboxState === FolderCheckboxState.UNCHECKED && contents !== FolderContents.NONE) {
-			return (
-				<span
-					className={clsx(
-						styles['c-add-to-folder-blade__list-item__hint'],
-						styles['c-add-to-folder-blade__list-item__hint--remove']
-					)}
-				>
-					{selectedObjectsInFolder === 1
+		if (contents !== FolderContents.ALL) {
+			hints.push({
+				state: FolderCheckboxState.CHECKED,
+				text:
+					addedCount === 1
+						? tHtml(
+								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___1-object-wordt-aan-deze-map-toegevoegd'
+							)
+						: tHtml(
+								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-objecten-worden-aan-deze-map-toegevoegd',
+								{ count: addedCount }
+							),
+			});
+		}
+		if (contents !== FolderContents.NONE) {
+			hints.push({
+				state: FolderCheckboxState.UNCHECKED,
+				className: styles['c-add-to-folder-blade__list-item__hint--remove'],
+				text:
+					selectedObjectsInFolder === 1
 						? tHtml(
 								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___1-object-wordt-uit-deze-map-verwijderd'
 							)
 						: tHtml(
 								'modules/visitor-space/components/add-to-folder-blade/add-to-folder-blade___count-objecten-worden-uit-deze-map-verwijderd',
 								{ count: selectedObjectsInFolder }
-							)}
-				</span>
-			);
+							),
+			});
 		}
-		return null;
+
+		return (
+			<span className={styles['c-add-to-folder-blade__list-item__hints']}>
+				{hints.map((hint) => {
+					const isActive = hint.state === checkboxState;
+					return (
+						<span
+							key={hint.state}
+							className={clsx(
+								styles['c-add-to-folder-blade__list-item__hint'],
+								hint.className,
+								!isActive && styles['c-add-to-folder-blade__list-item__hint--hidden']
+							)}
+							aria-hidden={!isActive}
+						>
+							{hint.text}
+						</span>
+					);
+				})}
+			</span>
+		);
 	};
 
 	const renderFolderCheckbox = (folder: Folder) => {
@@ -565,7 +598,7 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 
 				<span className={styles['c-add-to-folder-blade__list-item__label']}>
 					{folder?.name}
-					{renderFolderHint(checkboxState, contents, selectedObjectsInFolder)}
+					{renderFolderHints(checkboxState, contents, selectedObjectsInFolder)}
 				</span>
 
 				<span className={styles['c-add-to-folder-blade__list-item__count']}>
