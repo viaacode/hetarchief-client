@@ -108,6 +108,11 @@ const CreateFolderButton: FC<CreateFolderButtonProps> = ({
 						)}
 						autoCapitalize="off"
 						autoComplete="off"
+						// Password managers ignore autocomplete="off", these keep them from suggesting logins
+						data-1p-ignore
+						data-lpignore="true"
+						data-bwignore
+						data-form-type="other"
 						autoCorrect="off"
 						iconStart={(handler) => {
 							return !isOpen || keepIconWhenOpen ? (
