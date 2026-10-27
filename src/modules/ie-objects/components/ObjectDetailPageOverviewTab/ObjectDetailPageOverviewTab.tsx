@@ -498,7 +498,7 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 					<Metadata
 						title={tHtml('pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden')}
 						key="metadata-keywords"
-						className="u-pb-0"
+						className={`u-pb-0 ${styles['p-object-detail-overview-tab__keywords']}`}
 					>
 						{renderKeywordsAsTags(
 							mediaInfo.keywords,

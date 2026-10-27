@@ -57,3 +57,9 @@
 		font-size: abstracts.$font-size-lg;
 	}
 }
+
+.p-object-detail-overview-tab__keywords {
+	:global(.c-tag--medium) {
+		font-size: abstracts.$font-size-sm;
+	}
+}
