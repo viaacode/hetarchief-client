@@ -272,54 +272,60 @@ const DateFilterForm: FC<DateFilterFormProps> = ({ children, className, disabled
 
 	return (
 		<>
-			<div className={clsx(className, 'u-px-32 u-px-20-md')}>
-				<FormControl
-					className={clsx('u-mb-8 c-form-control--label-hidden')}
-					errors={[<RedFormWarning error={errors.operator?.message} key="form-error--operator" />]}
-					id={labelKeys.operator}
-					label={tHtml(
-						'modules/visitor-space/components/releaseDate-filter-form/releaseDate-filter-form___operator'
-					)}
-				>
-					<Controller
-						control={control}
-						name="operator"
-						render={({ field }) => {
-							// biome-ignore lint/correctness/noUnusedVariables: No need for the ref
-							const { ref, ...rest } = field;
-							return (
-								<ReactSelect
-									{...rest}
-									isDisabled={disabled}
-									components={{ IndicatorSeparator: () => null }}
-									inputId={labelKeys.operator}
-									onChange={(newValue) => {
-										onChangeOperatorSelect(newValue);
-									}}
-									options={operators}
-									value={getSelectValue(operators, field.value)}
-								/>
-							);
-						}}
-					/>
-				</FormControl>
-			</div>
-			<div className={clsx(styles.dateFilterForm__fields, 'u-px-32 u-px-20-md')}>
-				<FormControl
-					className="u-mb-24 c-form-control--label-hidden"
-					errors={[<RedFormWarning error={errors.date?.message} key="form-error--date" />]}
-					id={labelKeys.date}
-					label={tHtml(
-						'modules/visitor-space/components/releaseDate-filter-form/releaseDate-filter-form___waarde'
-					)}
-				>
-					<SelectDateOrYear
-						yearsSelected={yearsSelected}
-						setYearsSelected={setYearsSelected}
-						showPluralLabel={showRange}
-					/>
-					<Controller control={control} name="date" render={renderInputField} />
-				</FormControl>
+			{/* The operator and the fields share the body, so on mobile the space left above the footer
+			    falls under the fields instead of between them */}
+			<div className={clsx(className, styles.dateFilterForm)}>
+				<div className={clsx(styles.dateFilterForm__operator, 'u-px-32 u-px-20-md')}>
+					<FormControl
+						className={clsx('u-mb-8 c-form-control--label-hidden')}
+						errors={[
+							<RedFormWarning error={errors.operator?.message} key="form-error--operator" />,
+						]}
+						id={labelKeys.operator}
+						label={tHtml(
+							'modules/visitor-space/components/releaseDate-filter-form/releaseDate-filter-form___operator'
+						)}
+					>
+						<Controller
+							control={control}
+							name="operator"
+							render={({ field }) => {
+								// biome-ignore lint/correctness/noUnusedVariables: No need for the ref
+								const { ref, ...rest } = field;
+								return (
+									<ReactSelect
+										{...rest}
+										isDisabled={disabled}
+										components={{ IndicatorSeparator: () => null }}
+										inputId={labelKeys.operator}
+										onChange={(newValue) => {
+											onChangeOperatorSelect(newValue);
+										}}
+										options={operators}
+										value={getSelectValue(operators, field.value)}
+									/>
+								);
+							}}
+						/>
+					</FormControl>
+				</div>
+				<div className={clsx(styles.dateFilterForm__fields, 'u-px-32 u-px-20-md')}>
+					<FormControl
+						className="u-mb-24 c-form-control--label-hidden"
+						errors={[<RedFormWarning error={errors.date?.message} key="form-error--date" />]}
+						id={labelKeys.date}
+						label={tHtml(
+							'modules/visitor-space/components/releaseDate-filter-form/releaseDate-filter-form___waarde'
+						)}
+					>
+						<SelectDateOrYear
+							yearsSelected={yearsSelected}
+							setYearsSelected={setYearsSelected}
+							showPluralLabel={showRange}
+						/>
+						<Controller control={control} name="date" render={renderInputField} />
+					</FormControl>
+				</div>
 			</div>
 
 			{children({

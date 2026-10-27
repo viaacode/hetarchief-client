@@ -3,6 +3,22 @@
 $component: "dateFilterForm";
 
 .#{$component} {
+	// The fields run to the footer rule, so the body keeps no padding under them. The body also caps
+	// its height for a scrolling list, which this form does not have: doubling the class outweighs
+	// both rules c-filter-form__body sets on this same element.
+	&.#{$component} {
+		max-height: none;
+		padding-bottom: 0;
+	}
+
+	// Lays the operator out as the flex body did before it shared the body with the fields, so the
+	// select keeps its margins and the space the body left under it
+	&__operator {
+		display: flex;
+		flex-direction: column;
+		padding-bottom: $spacer-xs;
+	}
+
 	&__operatorSelect {
 		overflow: visible !important;
 	}
