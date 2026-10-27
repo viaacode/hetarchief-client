@@ -180,24 +180,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			grid-column: 1 / 2;
 			width: 100vw;
 		}
-
-		&::after {
-			content: "";
-			position: absolute;
-			z-index: abstracts.get-z-layer("foreground");
-			visibility: visible;
-			bottom: 0;
-			left: 2rem;
-			right: 2rem;
-			height: 1px;
-			background-color: abstracts.$shade;
-			opacity: 0.64;
-			width: 100vw;
-
-			@media (min-width: abstracts.$breakpoint-lg) {
-				visibility: hidden;
-			}
-		}
 	}
 
 	&__visitor-space-navigation-bar--visible {

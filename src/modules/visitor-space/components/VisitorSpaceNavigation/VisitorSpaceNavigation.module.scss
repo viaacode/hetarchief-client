@@ -5,6 +5,13 @@ $component: "c-visitor-space-navigation";
 $c-visitor-space-navigation-transform-amount: math.div($spacer-md, 2); // Equal to u-px-12
 
 .#{$component} {
+	// A whole-pixel line-height keeps this (often two-line) date, and so the whole bar, at an
+	// integer height. The default 1.2 line-height gives e.g. 54.375px, which pushes the divider
+	// below the bar onto a half pixel where it renders blurred, unlike the crisp one above it.
+	&__access-end-date {
+		line-height: 2rem;
+	}
+
 	&__contact {
 		&-button {
 			transform: translateX($c-visitor-space-navigation-transform-amount);
