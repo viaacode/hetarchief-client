@@ -1,14 +1,12 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-folder-level-disclaimer";
-
-.#{$component} {
-	color: $shade;
-	font-size: $font-size-sm;
+.c-folder-level-disclaimer {
+	color: abstracts.$shade;
+	font-size: abstracts.$font-size-sm;
 	line-height: 1.4;
 
 	a {
-		color: $black;
+		color: abstracts.$black;
 		text-decoration: underline;
 	}
 }

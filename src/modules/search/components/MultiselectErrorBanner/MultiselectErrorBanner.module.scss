@@ -1,23 +1,21 @@
 @use "sass:color";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-multiselect-error-banner";
-
-.#{$component} {
+.c-multiselect-error-banner {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: $spacer-sm;
-	margin-bottom: $spacer-md;
-	padding: $spacer-sm $spacer-md;
-	border-left: 4px solid $cherry;
-	background-color: color.adjust($cherry, $alpha: -0.9);
-	color: $black;
+	gap: abstracts.$spacer-sm;
+	margin-bottom: abstracts.$spacer-md;
+	padding: abstracts.$spacer-sm abstracts.$spacer-md;
+	border-left: 4px solid abstracts.$cherry;
+	background-color: color.adjust(abstracts.$cherry, $alpha: -0.9);
+	color: abstracts.$black;
 
 	&__icon {
 		align-self: flex-start;
-		color: $cherry;
-		font-size: $font-size-lg;
+		color: abstracts.$cherry;
+		font-size: abstracts.$font-size-lg;
 	}
 
 	&__message {
@@ -29,14 +27,14 @@ $component: "c-multiselect-error-banner";
 	}
 
 	&__title {
-		font-weight: $font-weight-bold;
-		margin-bottom: $spacer-xxs !important;
+		font-weight: abstracts.$font-weight-bold;
+		margin-bottom: abstracts.$spacer-xxs !important;
 	}
 
 	&__retry:global(.c-button--outline) {
-		border-color: $cherry-pale;
+		border-color: abstracts.$cherry-pale;
 		border-radius: 0;
-		background-color: $white;
-		color: $cherry-pale;
+		background-color: abstracts.$white;
+		color: abstracts.$cherry-pale;
 	}
 }

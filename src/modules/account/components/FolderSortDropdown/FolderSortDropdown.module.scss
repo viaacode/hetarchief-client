@@ -1,20 +1,18 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-folder-sort-dropdown";
-
-.#{$component} {
+.c-folder-sort-dropdown {
 	display: inline-flex;
 	flex-shrink: 0;
 
 	&__button {
-		color: $black;
-		font-size: $font-size-lg;
+		color: abstracts.$black;
+		font-size: abstracts.$font-size-lg;
 	}
 
 	&__flyout {
 		min-width: 24rem;
-		background-color: $white;
-		box-shadow: $shadow-24-black-12;
-		z-index: get-z-layer("dropdown");
+		background-color: abstracts.$white;
+		box-shadow: abstracts.$shadow-24-black-12;
+		z-index: abstracts.get-z-layer("dropdown");
 	}
 }

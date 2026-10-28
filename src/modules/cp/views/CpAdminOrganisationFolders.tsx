@@ -18,9 +18,7 @@ export const CpAdminOrganisationFolders: FC<DefaultSeoInfo & CpAdminOrganisation
 	folderSlug,
 }) => {
 	return (
-		<PermissionsCheck
-			allPermissions={[Permission.MANAGE_FOLDERS, Permission.MANAGE_ORGANISATION_FOLDERS]}
-		>
+		<PermissionsCheck allPermissions={[Permission.MANAGE_ORGANISATION_FOLDERS]}>
 			<CPAdminLayout className="p-account-my-folders">
 				<FolderOverview
 					level="organisation"

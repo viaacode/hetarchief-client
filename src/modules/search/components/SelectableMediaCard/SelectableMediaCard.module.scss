@@ -1,8 +1,6 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-selectable-media-card";
-
-.#{$component} {
+.c-selectable-media-card {
 	position: relative;
 
 	&--active {
@@ -14,7 +12,7 @@ $component: "c-selectable-media-card";
 	&--selected {
 		:global(.c-card) {
 			// Outline instead of border, so the size of the card does not change
-			outline: 2px solid $black;
+			outline: 2px solid abstracts.$black;
 			outline-offset: -2px;
 		}
 	}

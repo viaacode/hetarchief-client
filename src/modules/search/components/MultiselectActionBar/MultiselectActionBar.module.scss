@@ -1,13 +1,11 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-multiselect-action-bar";
-
-.#{$component} {
+.c-multiselect-action-bar {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	justify-content: space-between;
-	gap: $spacer-sm;
+	gap: abstracts.$spacer-sm;
 
 	// Stick to the bottom of the screen with the same offset as the toasts
 	position: fixed;
@@ -15,24 +13,24 @@ $component: "c-multiselect-action-bar";
 	left: 50%;
 	transform: translateX(-50%);
 	width: min(70%, 91rem); // 70% of the 130rem page container
-	z-index: get-z-layer("filter");
-	padding: $spacer-sm $spacer-md;
-	border: 0.1rem solid $white;
-	background-color: $black;
-	color: $white;
+	z-index: abstracts.get-z-layer("filter");
+	padding: abstracts.$spacer-sm abstracts.$spacer-md;
+	border: 0.1rem solid abstracts.$white;
+	background-color: abstracts.$black;
+	color: abstracts.$white;
 
 	&__count {
 		display: flex;
 		align-items: center;
-		gap: $spacer-xs;
+		gap: abstracts.$spacer-xs;
 		margin: 0;
-		font-size: $font-size-2xm;
-		font-weight: $font-weight-bold;
+		font-size: abstracts.$font-size-2xm;
+		font-weight: abstracts.$font-weight-bold;
 		white-space: nowrap;
 
 		// Vertical line between the count and "select all"
-		padding-right: $spacer-sm;
-		border-right: 0.1rem solid $white;
+		padding-right: abstracts.$spacer-sm;
+		border-right: 0.1rem solid abstracts.$white;
 	}
 
 	&__actions {
@@ -41,7 +39,7 @@ $component: "c-multiselect-action-bar";
 		flex-wrap: wrap;
 		align-items: center;
 		justify-content: space-between;
-		gap: $spacer-sm;
+		gap: abstracts.$spacer-sm;
 	}
 
 	&__selection-actions,
@@ -49,20 +47,20 @@ $component: "c-multiselect-action-bar";
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: $spacer-sm;
+		gap: abstracts.$spacer-sm;
 	}
 
 	&__button {
 		min-height: 4.4rem; // Large enough tap target on touch devices
 
 		&:global(.c-button--outline) {
-			border-color: $white;
+			border-color: abstracts.$white;
 			border-radius: 0;
 			background-color: transparent;
-			color: $white;
+			color: abstracts.$white;
 
 			&:hover:not(:disabled) {
-				background-color: $shade;
+				background-color: abstracts.$shade;
 			}
 		}
 
@@ -73,7 +71,7 @@ $component: "c-multiselect-action-bar";
 		}
 
 		&:focus-visible {
-			outline: 2px solid $white;
+			outline: 2px solid abstracts.$white;
 			outline-offset: 2px;
 		}
 
@@ -86,15 +84,15 @@ $component: "c-multiselect-action-bar";
 		&--link:global(.c-button--text) {
 			padding-right: 0;
 			padding-left: 0;
-			font-size: $font-size-sm;
+			font-size: abstracts.$font-size-sm;
 		}
 
 		&--link {
-			color: $white;
+			color: abstracts.$white;
 			text-decoration: underline;
 
 			&:hover:not(:disabled) {
-				color: $teal;
+				color: abstracts.$teal;
 			}
 		}
 
@@ -111,24 +109,24 @@ $component: "c-multiselect-action-bar";
 		&--close:global(.c-button--icon) {
 			width: auto;
 			min-width: 0;
-			padding: 0 $spacer-xxs;
+			padding: 0 abstracts.$spacer-xxs;
 		}
 
 		&--close {
-			color: $white;
+			color: abstracts.$white;
 
 			&:hover {
-				color: $teal;
+				color: abstracts.$teal;
 			}
 		}
 	}
 
 	// The close button sits close to the save button
 	&__save-actions {
-		gap: $spacer-xs;
+		gap: abstracts.$spacer-xs;
 	}
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		width: calc(100% - 2 * var(--toastify-toast-offset));
 		flex-direction: column;
 		align-items: stretch;

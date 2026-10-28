@@ -1,10 +1,8 @@
-@use "src/styles/abstracts" as *;
-
-$component: "c-result-card-bookmark-slot";
+@use "src/styles/abstracts" as abstracts;
 
 // The slot is rendered in a row over the top of the card that does not catch clicks itself,
 // so only the bookmark button and the bar set pointer-events
-.#{$component} {
+.c-result-card-bookmark-slot {
 	&__bookmark,
 	&__bookmark:global(.c-button--icon) {
 		pointer-events: auto;
@@ -16,8 +14,8 @@ $component: "c-result-card-bookmark-slot";
 		min-width: 4.4rem;
 		min-height: 4.4rem;
 		border-radius: 0;
-		background-color: $white;
-		color: $teal-dark;
+		background-color: abstracts.$white;
+		color: abstracts.$teal-dark;
 		font-size: 2.2rem;
 	}
 
@@ -25,19 +23,19 @@ $component: "c-result-card-bookmark-slot";
 		pointer-events: auto;
 		display: flex;
 		align-items: center;
-		gap: $spacer-xs;
+		gap: abstracts.$spacer-xs;
 
 		// Same distance from the checkbox to the top, bottom and left of the bar
-		padding: $spacer-xs;
+		padding: abstracts.$spacer-xs;
 		line-height: 2.4rem;
-		background-color: rgba($white, 0.9);
-		color: $black;
-		font-size: $font-size-md;
+		background-color: rgba(abstracts.$white, 0.9);
+		color: abstracts.$black;
+		font-size: abstracts.$font-size-md;
 		cursor: pointer;
 
 		&--selected {
-			background-color: $black;
-			color: $white;
+			background-color: abstracts.$black;
+			color: abstracts.$white;
 		}
 	}
 
@@ -67,18 +65,18 @@ $component: "c-result-card-bookmark-slot";
 		:global(.c-checkbox__check-icon) {
 			width: 2.4rem;
 			height: 2.4rem;
-			border: 2px solid $black;
-			background-color: $white;
+			border: 2px solid abstracts.$black;
+			background-color: abstracts.$white;
 		}
 
 		&:global(.c-checkbox--checked .c-checkbox__check-icon) {
-			border-color: $white;
-			background-color: $black;
-			color: $white;
+			border-color: abstracts.$white;
+			background-color: abstracts.$black;
+			color: abstracts.$white;
 		}
 
 		:global(.c-checkbox__input:focus-visible + .c-checkbox__check-icon) {
-			outline: 2px solid $teal-dark;
+			outline: 2px solid abstracts.$teal-dark;
 			outline-offset: 2px;
 		}
 	}
