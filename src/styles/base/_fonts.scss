@@ -1,4 +1,4 @@
-@use "../abstracts/variables" as *;
+@use "../abstracts/variables" as variables;
 
 $base-font-path: "" !default;
 
@@ -7,16 +7,16 @@ $base-font-path: "" !default;
  */
 
 @font-face {
-	font-family: $font-family-icons-light;
+	font-family: variables.$font-family-icons-light;
 	src: url("#{$base-font-path}/fonts/meemoocons-light/meemoocons-light.woff") format("woff");
-	font-weight: $font-weight-normal;
+	font-weight: variables.$font-weight-normal;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: $font-family-icons-solid;
+	font-family: variables.$font-family-icons-solid;
 	src: url("#{$base-font-path}/fonts/meemoocons-solid/meemoocons-solid.woff") format("woff");
-	font-weight: $font-weight-normal;
+	font-weight: variables.$font-weight-normal;
 	font-style: normal;
 }
 
@@ -25,28 +25,28 @@ $base-font-path: "" !default;
  */
 
 @font-face {
-	font-family: $font-family-primary;
+	font-family: variables.$font-family-primary;
 	src: url("#{$base-font-path}/fonts/sofia-pro/sofia-pro-regular.woff") format("woff");
 	font-display: swap;
 	font-style: normal;
-	font-weight: $font-weight-normal;
+	font-weight: variables.$font-weight-normal;
 	text-rendering: optimizelegibility;
 }
 
 @font-face {
-	font-family: $font-family-primary;
+	font-family: variables.$font-family-primary;
 	src: url("#{$base-font-path}/fonts/sofia-pro/sofia-pro-regular-italic.woff") format("woff");
 	font-display: swap;
 	font-style: italic;
-	font-weight: $font-weight-normal;
+	font-weight: variables.$font-weight-normal;
 	text-rendering: optimizelegibility;
 }
 
 @font-face {
-	font-family: $font-family-primary;
+	font-family: variables.$font-family-primary;
 	src: url("#{$base-font-path}/fonts/sofia-pro/sofia-pro-bold.woff") format("woff");
 	font-display: swap;
 	font-style: normal;
-	font-weight: $font-weight-bold;
+	font-weight: variables.$font-weight-bold;
 	text-rendering: optimizelegibility;
 }

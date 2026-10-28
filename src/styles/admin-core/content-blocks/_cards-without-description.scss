@@ -1,21 +1,20 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-block-cards-without-description";
 $img-size: 15.2rem;
 $img-size-mobile: 10.2rem;
 
-.#{$component} {
+.c-block-cards-without-description {
 	width: 100%;
 	container-type: inline-size;
 
 	&__elements-wrapper {
 		display: grid;
-		grid-gap: $spacer-lg;
+		grid-gap: abstracts.$spacer-lg;
 		grid-template-columns: 1fr 1fr 1fr;
 
-		@media (max-width: $breakpoint-md) {
-			grid-gap: $spacer-sm;
+		@media (max-width: abstracts.$breakpoint-md) {
+			grid-gap: abstracts.$spacer-sm;
 		}
 	}
 
@@ -34,11 +33,11 @@ $img-size-mobile: 10.2rem;
 	&__card {
 		height: $img-size;
 		width: 100%;
-		color: $white;
+		color: abstracts.$white;
 		display: grid;
 		grid-template-columns: repeat(2, 7.6rem) 1fr;
 
-		@media (max-width: $breakpoint-sm) {
+		@media (max-width: abstracts.$breakpoint-sm) {
 			height: $img-size-mobile;
 		}
 	}
@@ -52,11 +51,11 @@ $img-size-mobile: 10.2rem;
 		grid-row: 1;
 		display: flex;
 		align-items: center;
-		padding: 0 $spacer-md 0 (math.div($img-size, 2) + $spacer-md);
-		font-weight: $font-weight-bold;
+		padding: 0 abstracts.$spacer-md 0 (math.div($img-size, 2) + abstracts.$spacer-md);
+		font-weight: abstracts.$font-weight-bold;
 		font-size: 2rem;
 
-		@media (max-width: $breakpoint-sm) {
+		@media (max-width: abstracts.$breakpoint-sm) {
 			grid-column: 1/4;
 			margin-left: 5rem;
 		}
@@ -79,7 +78,7 @@ $img-size-mobile: 10.2rem;
 			border-radius: $img-size;
 		}
 
-		@media (max-width: $breakpoint-sm) {
+		@media (max-width: abstracts.$breakpoint-sm) {
 			width: $img-size-mobile;
 			height: $img-size-mobile;
 		}

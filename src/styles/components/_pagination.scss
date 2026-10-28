@@ -1,34 +1,34 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-pagination-bar {
 	flex-direction: row;
 	align-content: center;
 	align-items: center;
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		justify-content: center !important;
 	}
 
-	@media (min-width: $breakpoint-sm) {
+	@media (min-width: abstracts.$breakpoint-sm) {
 		justify-content: space-between !important;
 	}
 
 	.c-pagination-bar__progress {
 		.c-pagination-progress {
-			color: $neutral;
+			color: abstracts.$neutral;
 		}
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: abstracts.$breakpoint-md) {
 			display: none;
 		}
 	}
 
 	.c-pagination {
-		gap: $spacer-xs;
+		gap: abstracts.$spacer-xs;
 		align-items: center;
 
 		.c-pagination__pages {
-			gap: $spacer-xs;
+			gap: abstracts.$spacer-xs;
 		}
 
 		.c-button {
@@ -36,23 +36,23 @@
 			height: 3.2rem;
 			padding: 0;
 			background-color: transparent;
-			color: $neutral;
+			color: abstracts.$neutral;
 			font-weight: normal;
 			border: 0;
 
 			&.c-pagination__page-button--active {
-				background-color: $teal-dark;
-				color: $white;
+				background-color: abstracts.$teal-dark;
+				color: abstracts.$white;
 			}
 
 			&.c-pagination-bar__back-to-top {
-				color: $neutral;
+				color: abstracts.$neutral;
 			}
 		}
 	}
 
 	.c-pagination-bar__back-to-top-wrapper {
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: abstracts.$breakpoint-md) {
 			display: none;
 		}
 	}

@@ -1,11 +1,11 @@
 @use "sass:color";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $language-switcher-dropdown-width: 13rem;
 
 .c-language-switcher {
 	z-index: 3;
-	width: $button-height * 1.5;
+	width: abstracts.$button-height * 1.5;
 
 	.c-language-switcher__select {
 		background: none;
@@ -18,7 +18,7 @@ $language-switcher-dropdown-width: 13rem;
 
 		&:global([class*="c-navigation__dropdown--open"]) {
 			> :global(.c-button) {
-				color: $teal;
+				color: abstracts.$teal;
 			}
 		}
 	}
@@ -38,7 +38,7 @@ $language-switcher-dropdown-width: 13rem;
 			text-align: left;
 
 			&:global(:hover) {
-				background-color: $silver;
+				background-color: abstracts.$silver;
 				color: black;
 			}
 		}

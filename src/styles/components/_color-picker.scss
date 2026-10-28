@@ -1,7 +1,7 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-color-picker {
-	height: $button-height;
+	height: abstracts.$button-height;
 	width: 100%;
 
 	.c-color-picker--controls {
@@ -9,23 +9,23 @@
 	}
 
 	.c-color-picker--trigger {
-		width: $button-height;
-		height: $button-height;
-		border: 1px solid $zinc;
+		width: abstracts.$button-height;
+		height: abstracts.$button-height;
+		border: 1px solid abstracts.$zinc;
 	}
 
 	.c-color-picker--input {
-		width: calc(100% - $button-height);
-		height: $button-height;
-		border: 1px solid $zinc;
+		width: calc(100% - abstracts.$button-height);
+		height: abstracts.$button-height;
+		border: 1px solid abstracts.$zinc;
 		border-left: 0;
 		padding-left: 1.7rem;
-		font-family: $font-family-primary;
-		font-size: $font-size-base;
-		line-height: $line-height-lg;
+		font-family: abstracts.$font-family-primary;
+		font-size: abstracts.$font-size-base;
+		line-height: abstracts.$line-height-lg;
 
 		:focus {
-			border-color: $seagreen;
+			border-color: abstracts.$seagreen;
 		}
 	}
 }

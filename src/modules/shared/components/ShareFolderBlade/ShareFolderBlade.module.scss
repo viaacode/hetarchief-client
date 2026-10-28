@@ -1,11 +1,11 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
 .c-share-folder-blade {
 	&__alert {
-		margin-bottom: $spacer-1xl;
+		margin-bottom: abstracts.$spacer-1xl;
 
-		@media (max-width: $breakpoint-md) {
-			margin-bottom: $spacer-md;
+		@media (max-width: abstracts.$breakpoint-md) {
+			margin-bottom: abstracts.$spacer-md;
 		}
 	}
 

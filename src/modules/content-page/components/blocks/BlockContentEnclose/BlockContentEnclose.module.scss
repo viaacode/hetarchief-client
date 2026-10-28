@@ -1,21 +1,19 @@
 @use "sass:map";
 @use "sass:math";
 @use "sass:color";
-@use "../../../../../styles/abstracts" as *;
+@use "../../../../../styles/abstracts" as abstracts;
 
-$component: "c-block-enclosed-content";
-
-.#{$component} {
+.c-block-enclosed-content {
 	&__header {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: $spacer-sm;
+		margin-bottom: abstracts.$spacer-sm;
 
 		p {
-			margin-top: $spacer-xs;
+			margin-top: abstracts.$spacer-xs;
 			padding: 0 !important;
-			color: $neutral;
+			color: abstracts.$neutral;
 		}
 	}
 
@@ -24,30 +22,30 @@ $component: "c-block-enclosed-content";
 		flex-flow: row wrap;
 		list-style: none;
 		padding: 0;
-		row-gap: $spacer-md;
-		margin: $spacer-md 0 0;
+		row-gap: abstracts.$spacer-md;
+		margin: abstracts.$spacer-md 0 0;
 
-		@media (min-width: $breakpoint-sm) {
-			gap: $spacer-lg;
+		@media (min-width: abstracts.$breakpoint-sm) {
+			gap: abstracts.$spacer-lg;
 		}
 
-		@media (min-width: $breakpoint-xl) {
+		@media (min-width: abstracts.$breakpoint-xl) {
 			grid-template-columns: repeat(4, 1fr);
 		}
 
 		> * {
 			width: 100%;
 
-			@media (min-width: $breakpoint-sm) {
-				width: calc(50% - #{$spacer-md});
+			@media (min-width: abstracts.$breakpoint-sm) {
+				width: calc(50% - abstracts.$spacer-md);
 			}
 
-			@media (min-width: $breakpoint-md) {
-				width: calc(33.3% - #{$spacer-md});
+			@media (min-width: abstracts.$breakpoint-md) {
+				width: calc(33.3% - abstracts.$spacer-md);
 			}
 
-			@media (min-width: $breakpoint-lg) {
-				width: calc(25% - #{$spacer-md});
+			@media (min-width: abstracts.$breakpoint-lg) {
+				width: calc(25% - abstracts.$spacer-md);
 			}
 		}
 	}

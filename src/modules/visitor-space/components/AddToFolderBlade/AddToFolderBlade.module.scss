@@ -1,10 +1,9 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-add-to-folder-blade";
-$add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
+$add-to-collection-checkbox-padding: abstracts.$spacer-xs + abstracts.$spacer-xxs;
 
-.#{$component} {
+.c-add-to-folder-blade {
 	&__list {
 		@extend %reset-list;
 
@@ -16,10 +15,10 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			}
 
 			:global(.c-content-input) {
-				padding-top: $spacer-xs;
+				padding-top: abstracts.$spacer-xs;
 
-				@media (min-width: $breakpoint-md) {
-					padding-top: $spacer-sm;
+				@media (min-width: abstracts.$breakpoint-md) {
+					padding-top: abstracts.$spacer-sm;
 				}
 			}
 
@@ -55,11 +54,11 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			&__label {
 				flex-grow: 1;
 				flex-shrink: 1;
-				padding: $spacer-sm;
+				padding: abstracts.$spacer-sm;
 
-				@media (min-width: $breakpoint-md) {
-					padding-top: $spacer-md;
-					padding-bottom: $spacer-md;
+				@media (min-width: abstracts.$breakpoint-md) {
+					padding-top: abstracts.$spacer-md;
+					padding-bottom: abstracts.$spacer-md;
 				}
 			}
 
@@ -71,7 +70,7 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			}
 
 			&:not(:last-child) {
-				border-bottom: 1px solid $black-20;
+				border-bottom: 1px solid abstracts.$black-20;
 			}
 		}
 	}

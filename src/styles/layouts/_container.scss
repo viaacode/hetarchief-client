@@ -1,22 +1,22 @@
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
-$l-container-padding: $spacer-sm;
+$l-container-padding: abstracts.$spacer-sm;
 $l-container-padding-xs: 2rem;
 
 .l-container {
-	max-width: $max-page-width;
+	max-width: abstracts.$max-page-width;
 	width: 100%;
 	padding: 0 $l-container-padding;
 	margin: 0 auto;
 
-	@media (min-width: $breakpoint-xs) {
-		max-width: $max-page-width;
+	@media (min-width: abstracts.$breakpoint-xs) {
+		max-width: abstracts.$max-page-width;
 		padding: 0 $l-container-padding-xs;
 	}
 
 	&--edgeless {
 		&-to-lg {
-			@media (max-width: $breakpoint-lg) {
+			@media (max-width: abstracts.$breakpoint-lg) {
 				padding-left: 0;
 				padding-right: 0;
 			}

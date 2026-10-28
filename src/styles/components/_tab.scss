@@ -1,26 +1,24 @@
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
-$component: "c-tab";
-
-.#{$component} {
+.c-tab {
 	align-items: center;
 	background-color: inherit;
 	cursor: pointer;
 	display: inline-flex;
-	min-height: $tab-min-height;
-	padding: $tab-vertical-padding 1.2rem;
+	min-height: abstracts.$tab-min-height;
+	padding: abstracts.$tab-vertical-padding 1.2rem;
 	transition:
-		background-color $animate-default,
-		color $animate-default;
+		background-color abstracts.$animate-default,
+		color abstracts.$animate-default;
 
-	@media (max-width: $breakpoint-md) {
-		font-size: $font-size-sm;
+	@media (max-width: abstracts.$breakpoint-md) {
+		font-size: abstracts.$font-size-sm;
 	}
 
 	&:focus,
 	&:focus-within,
 	&:focus-visible {
-		outline: 0.1rem solid $teal;
+		outline: 0.1rem solid abstracts.$teal;
 		outline-offset: -0.1rem;
 	}
 
@@ -30,11 +28,11 @@ $component: "c-tab";
 
 	&__icon {
 		display: inline-flex;
-		font-size: $font-size-base;
-		margin-right: $spacer-xs;
+		font-size: abstracts.$font-size-base;
+		margin-right: abstracts.$spacer-xs;
 
-		@media (min-width: $breakpoint-md) {
-			font-size: $font-size-lg;
+		@media (min-width: abstracts.$breakpoint-md) {
+			font-size: abstracts.$font-size-lg;
 		}
 	}
 
@@ -42,36 +40,36 @@ $component: "c-tab";
      * Modifiers
      */
 
-	&.#{$component}--dark {
-		background-color: $black;
-		color: $white;
+	&.c-tab--dark {
+		background-color: abstracts.$black;
+		color: abstracts.$white;
 
-		@media (min-width: $breakpoint-md) {
-			min-height: $tab-min-height-md;
-			padding: $tab-vertical-padding-md $spacer-md;
+		@media (min-width: abstracts.$breakpoint-md) {
+			min-height: abstracts.$tab-min-height-md;
+			padding: abstracts.$tab-vertical-padding-md abstracts.$spacer-md;
 		}
 
-		&.#{$component} {
+		&.c-tab {
 			&--active {
-				background-color: $platinum;
-				color: $black;
+				background-color: abstracts.$platinum;
+				color: abstracts.$black;
 			}
 		}
 	}
 
-	&.#{$component}--light {
+	&.c-tab--light {
 		position: relative;
-		color: $neutral;
+		color: abstracts.$neutral;
 
-		@media (min-width: $breakpoint-md) {
-			min-height: $tab-min-height-md;
-			padding: $tab-vertical-padding-md $spacer-sm;
+		@media (min-width: abstracts.$breakpoint-md) {
+			min-height: abstracts.$tab-min-height-md;
+			padding: abstracts.$tab-vertical-padding-md abstracts.$spacer-sm;
 		}
 
-		&.#{$component} {
+		&.c-tab {
 			&--active {
-				color: $black;
-				font-weight: $font-weight-bold;
+				color: abstracts.$black;
+				font-weight: abstracts.$font-weight-bold;
 
 				&::after {
 					content: "";
@@ -80,7 +78,7 @@ $component: "c-tab";
 					inset: 0;
 					top: auto;
 					height: 2px;
-					background: $teal;
+					background: abstracts.$teal;
 					transform: translateY(-2px);
 				}
 			}
@@ -88,10 +86,10 @@ $component: "c-tab";
 	}
 
 	&--medium {
-		min-height: $tab-min-height-medium;
+		min-height: abstracts.$tab-min-height-medium;
 
 		&:focus {
-			outline: $teal solid;
+			outline: abstracts.$teal solid;
 			outline-offset: -6px;
 		}
 	}

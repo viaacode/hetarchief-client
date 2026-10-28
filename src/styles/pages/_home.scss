@@ -1,21 +1,21 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .p-home__subtitle {
-	@media (max-width: $breakpoint-md) {
-		font-size: $font-size-1xl;
+	@media (max-width: abstracts.$breakpoint-md) {
+		font-size: abstracts.$font-size-1xl;
 	}
 }
 
 .p-home__search {
 	width: 100%;
 
-	@media (max-width: $breakpoint-md) {
-		margin-top: $spacer-sm;
+	@media (max-width: abstracts.$breakpoint-md) {
+		margin-top: abstracts.$spacer-sm;
 	}
 
-	@media (min-width: $breakpoint-md) {
+	@media (min-width: abstracts.$breakpoint-md) {
 		align-self: start;
 		width: 48%;
-		margin-left: $spacer-sm;
+		margin-left: abstracts.$spacer-sm;
 	}
 }

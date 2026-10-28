@@ -1,9 +1,9 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .p-admin-themes {
 	&__header {
 		display: flex;
-		margin-bottom: $spacer-md;
+		margin-bottom: abstracts.$spacer-md;
 	}
 
 	&__search {
@@ -11,7 +11,7 @@
 		// falling back to the intrinsic width of the input
 		flex-grow: 1;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			// Same search width as every other admin and cp overview, see p-admin-visitors
 			flex-grow: 0;
 			flex-basis: 34.1rem;

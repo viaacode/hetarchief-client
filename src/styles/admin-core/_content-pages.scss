@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $content-top-bar-and-tabs-height: 113px;
 $content-page-header-height: 16.2rem;
@@ -23,22 +23,22 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 		.c-filter-table tbody td {
 			// Keep the columns narrow, so they fit on a 1440px wide screen
 			// https://meemoo.atlassian.net/browse/ARC-1889
-			padding: $spacer-md 0.5rem;
-			line-height: $line-height-lg;
+			padding: abstracts.$spacer-md 0.5rem;
+			line-height: abstracts.$line-height-lg;
 
 			// Second child since we have the focus row enabled
 			&:nth-child(2) {
-				padding-left: $spacer-md;
+				padding-left: abstracts.$spacer-md;
 			}
 
 			&:last-child {
-				padding-right: $spacer-md;
+				padding-right: abstracts.$spacer-md;
 			}
 		}
 
 		.c-button-toolbar button[class*="c-button"] {
 			padding: 0;
-			border: 1px solid $silver;
+			border: 1px solid abstracts.$silver;
 		}
 	}
 
@@ -46,7 +46,7 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 	.p-admin-content-page-labels__edit {
 		[class*="c-box"] {
 			background-color: transparent;
-			padding: $spacer-md;
+			padding: abstracts.$spacer-md;
 		}
 	}
 
@@ -54,36 +54,36 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 		.c-table_detail-page__translated-pages__link {
 			&:hover {
 				> * {
-					background-color: $zinc;
+					background-color: abstracts.$zinc;
 				}
 			}
 
 			.c-table_detail-page__translated-pages__language,
 			.c-table_detail-page__translated-pages__title,
 			.c-table_detail-page__translations__path {
-				padding: $spacer-sm $spacer-sm;
+				padding: abstracts.$spacer-sm abstracts.$spacer-sm;
 				display: inline-flex;
 				text-decoration: none;
-				background-color: $silver;
-				color: $black;
+				background-color: abstracts.$silver;
+				color: abstracts.$black;
 				border: none;
-				border-right: 1px solid $zinc;
-				font-size: $font-size-sm;
+				border-right: 1px solid abstracts.$zinc;
+				font-size: abstracts.$font-size-sm;
 			}
 
 			> .c-table_detail-page__translated-pages__language {
-				border-radius: $button-radius 0 0 $button-radius;
-				padding: 0.8rem $spacer-xs 0.8rem $spacer-sm;
+				border-radius: abstracts.$button-radius 0 0 abstracts.$button-radius;
+				padding: 0.8rem abstracts.$spacer-xs 0.8rem abstracts.$spacer-sm;
 			}
 
 			> .c-table_detail-page__translated-pages__title {
-				padding: 0.8rem $spacer-xs;
+				padding: 0.8rem abstracts.$spacer-xs;
 			}
 
 			> .c-table_detail-page__translations__path {
-				border-radius: 0 $button-radius $button-radius 0;
-				padding: 0.8rem $spacer-sm 0.8rem $spacer-xs;
-				color: $shade;
+				border-radius: 0 abstracts.$button-radius abstracts.$button-radius 0;
+				padding: 0.8rem abstracts.$spacer-sm 0.8rem abstracts.$spacer-xs;
+				color: abstracts.$shade;
 				border: none;
 				margin-left: -0.4rem;
 			}
@@ -92,11 +92,11 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 
 	.p-admin-content-page-labels__detail .c-admin__content .c-table_detail-page {
 		th:first-child {
-			padding-left: $spacer-md;
+			padding-left: abstracts.$spacer-md;
 		}
 
 		.c-button--tertiary {
-			background-color: $silver;
+			background-color: abstracts.$silver;
 			border-radius: 2rem;
 			border: 0;
 		}
@@ -109,20 +109,20 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 	.p-admin-content__edit {
 		.c-table thead th,
 		.c-table tbody td {
-			padding: $spacer-md;
-			line-height: $line-height-lg;
+			padding: abstracts.$spacer-md;
+			line-height: abstracts.$line-height-lg;
 		}
 
 		.o-container--medium {
 			max-width: 100%;
-			padding: $spacer-md;
+			padding: abstracts.$spacer-md;
 		}
 
 		.m-resizable-panels.m-edit-content-blocks {
 			margin-top: 2.9rem;
 
 			.resizable-fragment:last-of-type {
-				box-shadow: $shadow-24-black-08;
+				box-shadow: abstracts.$shadow-24-black-08;
 			}
 		}
 	}
@@ -131,11 +131,11 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 	.c-content-edit-view__preview {
 		height: max-content;
 		background-color: white;
-		box-shadow: $shadow-24-black-08;
+		box-shadow: abstracts.$shadow-24-black-08;
 	}
 
 	.c-content-edit-view__preview {
-		height: calc($view-height - $top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin);
+		height: calc(abstracts.$view-height - abstracts.$top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin);
 	}
 
 	.c-content-page-preview {
@@ -148,25 +148,25 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 			width: 100%;
 			overflow: hidden auto;
 			box-sizing: border-box;
-			height: calc($view-height - $top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin - $content-page-sidebar-blok-dropdown-height);
-			padding: 0 $spacer-sm;
+			height: calc(abstracts.$view-height - abstracts.$top-navigation-bar-height - $content-page-header-height - $content-page-tabs-height - $content-page-sidebar-margin - $content-page-sidebar-blok-dropdown-height);
+			padding: 0 abstracts.$spacer-sm;
 		}
 	}
 
 	.c-user-group-select {
 		.c-checkbox-group {
 			border: 1px solid grey;
-			border-radius: $input-border-radius;
-			background-color: $white;
+			border-radius: abstracts.$input-border-radius;
+			background-color: abstracts.$white;
 			padding: 1px;
 
 			.c-checkbox {
 				display: block;
-				padding: $spacer-sm;
-				border-radius: $input-border-radius;
+				padding: abstracts.$spacer-sm;
+				border-radius: abstracts.$input-border-radius;
 
 				&:hover {
-					background-color: $platinum;
+					background-color: abstracts.$platinum;
 				}
 
 				.c-checkbox__check-icon {
@@ -184,7 +184,7 @@ $content-page-sidebar-blok-dropdown-height: 7rem;
 /* Avoid bottom padding on the content page edit/create pages */
 .p-admin-content-page-create,
 .p-admin-content-page-edit {
-	@include module-class-selector("SidebarLayout", "l-sidebar__main") {
+	@include abstracts.module-class-selector("SidebarLayout", "l-sidebar__main") {
 		padding-bottom: 0 !important;
 	}
 }

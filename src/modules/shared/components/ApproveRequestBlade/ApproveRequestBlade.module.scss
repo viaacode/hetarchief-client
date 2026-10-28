@@ -1,11 +1,9 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-approve-request-blade";
-
-.#{$component} {
+.c-approve-request-blade {
 	&__date-time {
 		:global(.c-form-control__input) {
-			@media (min-width: $breakpoint-lg) {
+			@media (min-width: abstracts.$breakpoint-lg) {
 				display: flex;
 				flex-flow: row nowrap;
 			}
@@ -13,19 +11,19 @@ $component: "c-approve-request-blade";
 
 		:global(.react-datepicker-wrapper.c-datepicker) {
 			&:not(:global(.react-datepicker-wrapper.c-datepicker--time)) {
-				@media (max-width: $breakpoint-lg) {
-					margin-bottom: $spacer-sm;
+				@media (max-width: abstracts.$breakpoint-lg) {
+					margin-bottom: abstracts.$spacer-sm;
 				}
 
-				@media (min-width: $breakpoint-lg) {
-					margin-right: $spacer-md;
+				@media (min-width: abstracts.$breakpoint-lg) {
+					margin-right: abstracts.$spacer-md;
 					flex-grow: 1;
 				}
 			}
 		}
 
 		:global(.react-datepicker-wrapper.c-datepicker--time) {
-			@media (min-width: $breakpoint-lg) {
+			@media (min-width: abstracts.$breakpoint-lg) {
 				flex: 0 0 14rem;
 			}
 		}
@@ -33,6 +31,6 @@ $component: "c-approve-request-blade";
 }
 
 .c-form-control__errors {
-	margin-top: -$spacer-sm !important;
-	margin-bottom: $spacer-lg !important;
+	margin-top: (-1 * abstracts.$spacer-sm) !important;
+	margin-bottom: abstracts.$spacer-lg !important;
 }

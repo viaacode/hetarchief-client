@@ -1,15 +1,15 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-auth-modal {
 	&__heading {
 		width: 100%;
-		margin-top: $spacer-lg + $spacer-md;
-		font-size: $font-size-lg;
-		line-height: $line-height-1xl;
+		margin-top: abstracts.$spacer-lg + abstracts.$spacer-md;
+		font-size: abstracts.$font-size-lg;
+		line-height: abstracts.$line-height-1xl;
 
-		@media (min-width: $breakpoint-md) {
-			font-size: $font-size-2xl;
-			line-height: $line-height-lg;
+		@media (min-width: abstracts.$breakpoint-md) {
+			font-size: abstracts.$font-size-2xl;
+			line-height: abstracts.$line-height-lg;
 			margin-left: auto;
 			margin-right: auto;
 			max-width: 41.8rem;
@@ -17,21 +17,21 @@
 	}
 
 	&__content {
-		padding-top: $spacer-md;
+		padding-top: abstracts.$spacer-md;
 
-		@media (max-width: $breakpoint-sm) {
+		@media (max-width: abstracts.$breakpoint-sm) {
 			br {
 				display: none;
 			}
 		}
 
-		@media (max-width: $breakpoint-md) {
-			padding-left: $spacer-sm;
-			padding-right: $spacer-sm;
+		@media (max-width: abstracts.$breakpoint-md) {
+			padding-left: abstracts.$spacer-sm;
+			padding-right: abstracts.$spacer-sm;
 		}
 
-		@media (min-width: $breakpoint-md) {
-			padding-top: $spacer-1xl;
+		@media (min-width: abstracts.$breakpoint-md) {
+			padding-top: abstracts.$spacer-1xl;
 
 			button {
 				min-width: 32.8rem;
@@ -44,10 +44,10 @@
 		}
 
 		p {
-			font-size: $font-size-sm;
-			line-height: $line-height-3xl;
+			font-size: abstracts.$font-size-sm;
+			line-height: abstracts.$line-height-3xl;
 
-			@media (min-width: $breakpoint-md) {
+			@media (min-width: abstracts.$breakpoint-md) {
 				max-width: 38rem;
 				margin-left: auto;
 				margin-right: auto;
@@ -56,7 +56,7 @@
 
 		b,
 		strong {
-			color: $black;
+			color: abstracts.$black;
 		}
 	}
 
@@ -66,7 +66,7 @@
 			display: inline-flex;
 
 			span {
-				line-height: $line-height-sm;
+				line-height: abstracts.$line-height-sm;
 			}
 		}
 	}

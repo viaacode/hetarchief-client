@@ -1,5 +1,5 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .p-pid__c-loading--fullscreen {
-	height: calc($view-height - $top-navigation-bar-height - $footer-height);
+	height: calc(abstracts.$view-height - abstracts.$top-navigation-bar-height - abstracts.$footer-height);
 }

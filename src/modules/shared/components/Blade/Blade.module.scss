@@ -51,7 +51,7 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 		border-left: 1px solid abstracts.$silver;
 
 		@media (min-width: abstracts.$breakpoint-md) {
-			max-height: calc(#{abstracts.$view-height} - #{abstracts.$c-navigation-height});
+			max-height: calc(abstracts.$view-height - abstracts.$c-navigation-height);
 		}
 	}
 
@@ -202,7 +202,7 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 				:global(.c-button), a {
 					display: inline-block;
 					width: unset;
-					max-width: calc(50% - #{abstracts.$spacer-xxs});
+					max-width: calc(50% - abstracts.$spacer-xxs);
 
 					:global(.c-button__content) {
 						width: 100%;
@@ -248,7 +248,7 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 
 					@media (max-width: abstracts.$breakpoint-md) {
 						display: inline-block;
-						width: calc(50% - #{abstracts.$spacer-xxs});
+						width: calc(50% - abstracts.$spacer-xxs);
 						margin-bottom: 0 !important;
 
 						&:only-child {
@@ -301,7 +301,7 @@ $padding-horizontal-mobile: abstracts.$spacer-sm;
 			transition:
 				opacity abstracts.$timing-default linear,
 				transform abstracts.$animate-default;
-			width: calc(#{abstracts.$blade-max-width} + 5.6rem);
+			width: calc(abstracts.$blade-max-width + 5.6rem);
 		}
 
 		&--managed-wide-below {

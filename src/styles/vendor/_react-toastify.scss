@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 @import "react-toastify/dist/ReactToastify.css";
 
 // Resets
@@ -15,7 +15,7 @@
 	// The mobile media query redefines this variable on .Toastify__toast, so full-width on mobile still wins.
 	--toastify-toast-width: fit-content;
 
-	max-width: min(#{$toast-max-width}, 100%);
+	max-width: min(#{abstracts.$toast-max-width}, 100%);
 }
 
 .c-toast-container__toast {

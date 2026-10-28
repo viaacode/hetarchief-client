@@ -1,23 +1,21 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-block-maintainers-grid";
-
-.#{$component} {
+.c-block-maintainers-grid {
 	&__header {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: $spacer-lg;
+		margin-bottom: abstracts.$spacer-lg;
 
 		p {
-			margin-top: $spacer-xs;
+			margin-top: abstracts.$spacer-xs;
 			padding: 0 !important;
-			color: $neutral;
+			color: abstracts.$neutral;
 		}
 
 		a {
-			color: $neutral;
+			color: abstracts.$neutral;
 		}
 	}
 
@@ -32,13 +30,13 @@ $component: "c-block-maintainers-grid";
 		}
 	}
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		&__header {
 			display: block;
 
 			a {
 				display: block;
-				margin-top: $spacer-xs;
+				margin-top: abstracts.$spacer-xs;
 			}
 		}
 	}

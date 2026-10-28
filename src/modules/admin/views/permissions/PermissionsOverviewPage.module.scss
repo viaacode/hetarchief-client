@@ -1,12 +1,12 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
 .p-action-buttons {
-	margin-bottom: 2 * $spacer-lg;
+	margin-bottom: 2 * abstracts.$spacer-lg;
 	display: flex;
 	justify-content: flex-end;
 
 	> button:last-child {
-		margin-left: $spacer-xs;
+		margin-left: abstracts.$spacer-xs;
 	}
 }
 

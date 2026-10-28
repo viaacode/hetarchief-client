@@ -1,10 +1,9 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-visitor-space-navigation";
-$c-visitor-space-navigation-transform-amount: math.div($spacer-md, 2); // Equal to u-px-12
+$c-visitor-space-navigation-transform-amount: math.div(abstracts.$spacer-md, 2); // Equal to u-px-12
 
-.#{$component} {
+.c-visitor-space-navigation {
 	// A whole-pixel line-height keeps this (often two-line) date, and so the whole bar, at an
 	// integer height. The default 1.2 line-height gives e.g. 54.375px, which pushes the divider
 	// below the bar onto a half pixel where it renders blurred, unlike the crisp one above it.
@@ -16,7 +15,7 @@ $c-visitor-space-navigation-transform-amount: math.div($spacer-md, 2); // Equal 
 		&-button {
 			transform: translateX($c-visitor-space-navigation-transform-amount);
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: abstracts.$breakpoint-md) {
 				:global(.c-button__icon) {
 					margin: 0;
 				}
@@ -34,13 +33,13 @@ $c-visitor-space-navigation-transform-amount: math.div($spacer-md, 2); // Equal 
 
 		&-item {
 			display: flex;
-			padding-left: $spacer-sm;
-			padding-right: $spacer-sm;
+			padding-left: abstracts.$spacer-sm;
+			padding-right: abstracts.$spacer-sm;
 
 			button {
 				&:not(:global(.c-button--icon)) {
-					padding-left: $spacer-xs;
-					padding-right: $spacer-xs;
+					padding-left: abstracts.$spacer-xs;
+					padding-right: abstracts.$spacer-xs;
 				}
 
 				&:global(.c-button--icon) {

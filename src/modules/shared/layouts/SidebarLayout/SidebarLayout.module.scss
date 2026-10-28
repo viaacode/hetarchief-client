@@ -1,5 +1,5 @@
 @use "sass:map";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $l-sidebar-width: 25.4rem;
 $l-sub-sidebar-width: 27.5rem;
@@ -9,14 +9,14 @@ $l-sub-sidebar-width: 27.5rem;
 	flex-flow: row nowrap;
 	flex-grow: 1;
 	height: 100%;
-	min-height: calc($view-height - $top-navigation-bar-height);
+	min-height: calc(abstracts.$view-height - abstracts.$top-navigation-bar-height);
 
 	&__navigation {
 		display: none;
 		width: $l-sidebar-width;
-		border-right: $divider-grey;
+		border-right: abstracts.$divider-grey;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			display: initial;
 		}
 	}
@@ -27,14 +27,14 @@ $l-sub-sidebar-width: 27.5rem;
 		&--bottom {
 			display: grid;
 			place-items: end center;
-			padding-bottom: $spacer-lg;
+			padding-bottom: abstracts.$spacer-lg;
 			justify-items: stretch;
 		}
 	}
 
 	&__main {
 		width: 70%;
-		padding-bottom: $c-feedback-button-height;
+		padding-bottom: abstracts.$c-feedback-button-height;
 		flex-grow: 1;
 
 		// sidebar layout in another sidebar layout
@@ -48,9 +48,9 @@ $l-sub-sidebar-width: 27.5rem;
 				display: initial;
 			}
 
-			@media (min-width: $breakpoint-md) {
+			@media (min-width: abstracts.$breakpoint-md) {
 				:global(.l-container) {
-					padding: 0 $spacer-lg * 2;
+					padding: 0 abstracts.$spacer-lg * 2;
 				}
 			}
 		}
@@ -64,13 +64,13 @@ $l-sub-sidebar-width: 27.5rem;
 
 		// Icon
 		& > span {
-			font-size: $font-size-md;
-			margin-right: $spacer-xxs;
+			font-size: abstracts.$font-size-md;
+			margin-right: abstracts.$spacer-xxs;
 		}
 	}
 
-	&--collapse-to-#{$breakpoint-md} {
-		@media (max-width: $breakpoint-md) {
+	&--collapse-to-#{abstracts.$breakpoint-md} {
+		@media (max-width: abstracts.$breakpoint-md) {
 			position: relative;
 
 			.l-sidebar {
@@ -83,12 +83,12 @@ $l-sub-sidebar-width: 27.5rem;
 				&__navigation,
 				&__main {
 					transition:
-						transform $animate-default,
-						visibility $animate-default;
+						transform abstracts.$animate-default,
+						visibility abstracts.$animate-default;
 				}
 
 				&__navigation {
-					z-index: get-z-layer("foreground");
+					z-index: abstracts.get-z-layer("foreground");
 					position: absolute;
 					border-right: none;
 				}
@@ -112,7 +112,7 @@ $l-sub-sidebar-width: 27.5rem;
 			}
 		}
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			.l-sidebar {
 				&__content-header {
 					display: none;

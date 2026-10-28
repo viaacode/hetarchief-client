@@ -1,8 +1,20 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "dateFilterForm";
+.dateFilterForm {
+	// The fields run to the footer rule, so the body keeps no padding under them. The body also caps
+	// its height for a scrolling list, which this form does not have. Both rules are set on this same
+	// element by c-filter-form__body, so they are overridden here with !important.
+	max-height: none !important;
+	padding-bottom: 0 !important;
 
-.#{$component} {
+	// Lays the operator out as the flex body did before it shared the body with the fields, so the
+	// select keeps its margins and the space the body left under it
+	&__operator {
+		display: flex;
+		flex-direction: column;
+		padding-bottom: abstracts.$spacer-xs;
+	}
+
 	&__operatorSelect {
 		overflow: visible !important;
 	}

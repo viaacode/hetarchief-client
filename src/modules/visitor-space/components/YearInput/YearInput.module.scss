@@ -1,8 +1,6 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-year-input";
-
-.#{$component} {
+.c-year-input {
 	width: 100%;
 
 	&__label {
@@ -11,13 +9,13 @@ $component: "c-year-input";
 
 	&__placeholder {
 		position: absolute;
-		color: $zinc;
+		color: abstracts.$zinc;
 		margin: -3.4rem 0;
 		right: 10%;
 
 		&-wide {
 			position: absolute;
-			color: $zinc;
+			color: abstracts.$zinc;
 			margin: -3.4rem 0;
 			right: 55%;
 		}

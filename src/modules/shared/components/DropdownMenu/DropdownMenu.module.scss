@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-dropdown-menu--menu-content > div {
 	padding: 0;
@@ -7,7 +7,7 @@
 .c-dropdown-menu--menu-content-wrapper {
 	display: flex;
 	flex-direction: column;
-	box-shadow: $shadow-24-black-08;
+	box-shadow: abstracts.$shadow-24-black-08;
 }
 
 .c-dropdown-menu--menu-button {

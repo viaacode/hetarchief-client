@@ -1,15 +1,15 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-checkbox-accordion {
-	margin-top: $spacer-md;
+	margin-top: abstracts.$spacer-md;
 
 	&__item {
 		&-body {
 			display: block;
-			margin-left: $spacer-lg;
-			font-size: $font-size-sm;
-			line-height: $line-height-4xl;
-			padding: $spacer-xs $spacer-sm $spacer-xs 0;
+			margin-left: abstracts.$spacer-lg;
+			font-size: abstracts.$font-size-sm;
+			line-height: abstracts.$line-height-4xl;
+			padding: abstracts.$spacer-xs abstracts.$spacer-sm abstracts.$spacer-xs 0;
 		}
 
 		&-header {
@@ -19,13 +19,13 @@
 		}
 
 		&-header-title {
-			padding: $spacer-xs $spacer-xs $spacer-xs 0;
+			padding: abstracts.$spacer-xs abstracts.$spacer-xs abstracts.$spacer-xs 0;
 		}
 
 		&-description {
-			margin-bottom: $spacer-sm;
+			margin-bottom: abstracts.$spacer-sm;
 			font-style: italic;
-			color: $shade;
+			color: abstracts.$shade;
 		}
 
 		&-textarea {
@@ -35,14 +35,14 @@
 		}
 
 		&-char-count {
-			margin-top: $spacer-xxs;
-			font-size: $font-size-sm;
-			color: $grey;
+			margin-top: abstracts.$spacer-xxs;
+			font-size: abstracts.$font-size-sm;
+			color: abstracts.$grey;
 			text-align: right;
 		}
 
 		&-error {
-			margin-left: $spacer-lg;
+			margin-left: abstracts.$spacer-lg;
 		}
 	}
 }

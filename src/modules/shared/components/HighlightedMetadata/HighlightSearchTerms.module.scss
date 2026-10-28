@@ -1,9 +1,9 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-highlight-search-terms {
 	&__full-height {
 		mark {
-			background-color: $teal-66;
+			background-color: abstracts.$teal-66;
 			background-image: none;
 			background-size:
 				0,
@@ -13,9 +13,9 @@
 }
 
 mark.c-highlight-search-terms__active {
-	background-color: $black;
+	background-color: abstracts.$black;
 	background-image: none;
-	color: $white;
+	color: abstracts.$white;
 	background-size:
 		0,
 		100% 100%;

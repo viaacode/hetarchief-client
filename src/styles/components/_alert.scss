@@ -1,11 +1,9 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-Alert";
-
-.#{$component} {
-	background-color: $silver;
+.c-Alert {
+	background-color: abstracts.$silver;
 	display: flex;
-	padding: $spacer-sm;
+	padding: abstracts.$spacer-sm;
 
 	.c-Alert__icon {
 		font-size: 2rem;
@@ -24,15 +22,15 @@ $component: "c-Alert";
 	}
 
 	.c-Alert__title {
-		font-weight: $font-weight-bold;
+		font-weight: abstracts.$font-weight-bold;
 		margin-bottom: 0.4rem;
 	}
 
 	&__margin-bottom {
-		margin-bottom: $spacer-lg;
+		margin-bottom: abstracts.$spacer-lg;
 	}
 
 	&--blue {
-		background-color: $light-blue;
+		background-color: abstracts.$light-blue;
 	}
 }

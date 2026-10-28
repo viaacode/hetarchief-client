@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 /* Make the launcher iframe as wide as the button inside it (measured in ZendeskWrapper), to avoid too much overlay on the page */
 #launcher {

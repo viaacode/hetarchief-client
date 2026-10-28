@@ -1,8 +1,8 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .p-my-folders {
 	&__folder-edit {
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: abstracts.$breakpoint-md) {
 			display: none;
 		}
 	}

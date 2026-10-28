@@ -1,13 +1,13 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
 .c-material-request-information {
 	display: flex;
-	font-size: $font-size-sm;
-	color: $zinc;
+	font-size: abstracts.$font-size-sm;
+	color: abstracts.$zinc;
 	align-items: center;
 
 	:global([class*="c-icon"]) {
-		margin-right: $spacer-xxs;
-		font-size: $font-size-base;
+		margin-right: abstracts.$spacer-xxs;
+		font-size: abstracts.$font-size-base;
 	}
 }

@@ -1,14 +1,12 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-metadata__field__blade";
-
-.#{$component} {
+.c-metadata__field__blade {
 	&__read-more {
 		cursor: pointer;
-		font-size: $font-size-sm;
-		color: $neutral;
-		transition: opacity $animate-default;
-		margin-top: $spacer-xs;
+		font-size: abstracts.$font-size-sm;
+		color: abstracts.$neutral;
+		transition: opacity abstracts.$animate-default;
+		margin-top: abstracts.$spacer-xs;
 		padding: 0;
 		height: 2.4rem;
 		border-radius: 0;
@@ -28,10 +26,10 @@ $component: "c-metadata__field__blade";
 	// of equal specificity on the same element fighting over color/font-weight/margin-top.
 	&__read-more--on-header {
 		cursor: pointer;
-		font-size: $font-size-sm;
-		color: $black;
-		font-weight: $font-weight-bold;
-		transition: opacity $animate-default;
+		font-size: abstracts.$font-size-sm;
+		color: abstracts.$black;
+		font-weight: abstracts.$font-weight-bold;
+		transition: opacity abstracts.$animate-default;
 		padding: 0;
 		height: 2.4rem;
 		border-radius: 0;

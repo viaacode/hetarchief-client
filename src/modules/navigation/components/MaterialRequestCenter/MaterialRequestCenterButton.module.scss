@@ -1,5 +1,5 @@
 @use "sass:color";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $badge-font-size: 1rem;
 $pill-animation: 0.5s ease-in 7 alternate flash-pill;
@@ -12,7 +12,7 @@ $pill-color: color.adjust(red, $lightness: 10%);
 		outline: 0;
 
 		&:focus {
-			color: $teal;
+			color: abstracts.$teal;
 		}
 	}
 
@@ -22,8 +22,8 @@ $pill-color: color.adjust(red, $lightness: 10%);
 			display: flex;
 			justify-content: center;
 			align-items: center;
-			color: $white;
-			font-weight: $font-weight-bold;
+			color: abstracts.$white;
+			font-weight: abstracts.$font-weight-bold;
 			font-size: $badge-font-size;
 			border-radius: 0.8rem;
 			top: 0.5rem;

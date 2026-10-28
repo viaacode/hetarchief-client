@@ -1,14 +1,12 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "radiobuttons-container";
-
-.#{$component} {
+.radiobuttons-container {
 	display: flex;
 	flex-direction: column;
 	margin: 3rem 0;
 
 	&__radiobutton {
 		margin: 1rem 0;
-		z-index: get-z-layer("base");
+		z-index: abstracts.get-z-layer("base");
 	}
 }

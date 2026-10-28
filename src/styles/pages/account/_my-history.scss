@@ -1,10 +1,8 @@
-@use "../../abstracts" as *;
+@use "../../abstracts" as abstracts;
 
-$component: "p-account-my-history";
-
-.#{$component} {
+.p-account-my-history {
 	tr {
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			td,
 			th {
 				&:nth-child(2),
@@ -15,7 +13,7 @@ $component: "p-account-my-history";
 			}
 		}
 
-		@media (min-width: $breakpoint-lg) {
+		@media (min-width: abstracts.$breakpoint-lg) {
 			td,
 			th {
 				&:nth-child(4) {
@@ -27,7 +25,7 @@ $component: "p-account-my-history";
 		// Action
 		td:nth-last-child(1) {
 			padding: 0;
-			border-left: 1px solid $silver;
+			border-left: 1px solid abstracts.$silver;
 		}
 	}
 }

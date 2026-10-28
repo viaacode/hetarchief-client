@@ -1,16 +1,16 @@
 @use "sass:map";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $overlay-opacity-dark: 0.64;
 $overlay-opacity-light: 0.4;
 
 .c-overlay {
-	z-index: get-z-layer("foreground");
+	z-index: abstracts.get-z-layer("foreground");
 	pointer-events: none;
 	opacity: 0;
 	position: fixed;
 	inset: 0 0 -200px;
-	background-color: $black;
+	background-color: abstracts.$black;
 
 	@keyframes fade {
 		from {
@@ -38,30 +38,30 @@ $overlay-opacity-light: 0.4;
 
 	// animation types
 	&--animate-default {
-		transition: opacity $timing-default linear;
+		transition: opacity abstracts.$timing-default linear;
 	}
 
 	&--animate-sm-in {
-		transition: opacity $timing-sm linear;
+		transition: opacity abstracts.$timing-sm linear;
 	}
 
 	&--animate-sm-out {
-		transition: opacity $timing-sm linear;
+		transition: opacity abstracts.$timing-sm linear;
 	}
 
 	&--animate-md-in {
-		transition: opacity $timing-md-in linear;
+		transition: opacity abstracts.$timing-md-in linear;
 	}
 
 	&--animate-md-out {
-		transition: opacity $timing-md-out linear;
+		transition: opacity abstracts.$timing-md-out linear;
 	}
 
 	&--animate-lg-in {
-		transition: opacity $timing-lg-in linear;
+		transition: opacity abstracts.$timing-lg-in linear;
 	}
 
 	&--animate-lg-out {
-		transition: opacity $timing-lg-out linear;
+		transition: opacity abstracts.$timing-lg-out linear;
 	}
 }

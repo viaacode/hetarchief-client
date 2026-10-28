@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .p-admin-material-requests {
 	&__header {
@@ -6,33 +6,33 @@
 		justify-content: space-between;
 		flex-direction: row;
 
-		@media (max-width: $breakpoint-xl) {
+		@media (max-width: abstracts.$breakpoint-xl) {
 			flex-direction: column;
-			gap: $spacer-xs;
-			padding: 0 $spacer-sm;
+			gap: abstracts.$spacer-xs;
+			padding: 0 abstracts.$spacer-sm;
 		}
 
 		&-dropdowns {
 			display: flex;
 			flex-direction: row;
-			gap: $spacer-sm;
+			gap: abstracts.$spacer-sm;
 
-			@media (max-width: $breakpoint-xl) {
+			@media (max-width: abstracts.$breakpoint-xl) {
 				flex-direction: column;
-				gap: $spacer-xs;
+				gap: abstracts.$spacer-xs;
 			}
 		}
 	}
 
 	&__searchbar {
-		@media (max-width: $breakpoint-xl) {
-			margin-bottom: $spacer-xs;
+		@media (max-width: abstracts.$breakpoint-xl) {
+			margin-bottom: abstracts.$spacer-xs;
 		}
 	}
 
 	&__dropdown {
 		&--open {
-			box-shadow: $shadow-24-black-08;
+			box-shadow: abstracts.$shadow-24-black-08;
 		}
 
 		&--disabled {

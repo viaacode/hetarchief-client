@@ -6,11 +6,11 @@
 @mixin ocr-tab-inset {
 	margin-left: abstracts.$spacer-lg;
 	margin-right: abstracts.$spacer-lg;
-	width: calc(100% - #{abstracts.$spacer-lg} * 2);
+	width: calc(100% - abstracts.$spacer-lg * 2);
 
 	@media (max-width: abstracts.$breakpoint-lg) {
 		margin: abstracts.$spacer-sm;
-		width: calc(100% - #{abstracts.$spacer-sm} * 2);
+		width: calc(100% - abstracts.$spacer-sm * 2);
 	}
 }
 
@@ -69,11 +69,11 @@ $sticky-overlap-search: 3px;
 		// exactly when &__search reaches its sticky offset and becomes stuck, not merely when
 		// scrolling starts (see ObjectDetailPageOcrTab.tsx's own IntersectionObserver comment).
 		position: relative;
-		top: calc(#{$sticky-overlap-search} - #{$header-collapsed-height + $tabs-height-desktop});
+		top: calc($sticky-overlap-search - #{$header-collapsed-height + $tabs-height-desktop});
 		height: 1px;
 
 		@media (max-width: abstracts.$breakpoint-lg) {
-			top: calc(#{$sticky-overlap-search} - #{$header-collapsed-height});
+			top: calc($sticky-overlap-search - $header-collapsed-height);
 		}
 	}
 
@@ -83,14 +83,14 @@ $sticky-overlap-search: 3px;
 		// comment). Deliberately its own sticky element rather than riding inside that page-level
 		// unit, so the disclaimer can scroll away independently while this stays pinned.
 		position: sticky;
-		top: calc(#{$header-collapsed-height + $tabs-height-desktop} - #{$sticky-overlap-search});
+		top: calc(#{$header-collapsed-height + $tabs-height-desktop} - $sticky-overlap-search);
 		background-color: abstracts.$white;
 
 		@media (max-width: abstracts.$breakpoint-lg) {
 			// Tabs render in their own separate, always-visible grid row on mobile (not stacked
 			// inside the sidebar's sticky unit) - only the collapsed header sits above this here.
 			// The $sticky-overlap-search tucks it under the header, hiding any seam of scrolling OCR text.
-			top: calc(#{$header-collapsed-height} - #{$sticky-overlap-search});
+			top: calc($header-collapsed-height - $sticky-overlap-search);
 
 			// Bleed out of the tab's own ocr-tab-inset margins to span the full width, so the
 			// sidebar's drop shadow only shows below this element, not along its sides.
@@ -98,7 +98,7 @@ $sticky-overlap-search: 3px;
 			margin-right: -(abstracts.$spacer-sm);
 			padding-left: abstracts.$spacer-sm;
 			padding-right: abstracts.$spacer-sm;
-			width: calc(100% + #{abstracts.$spacer-sm} * 2);
+			width: calc(100% + abstracts.$spacer-sm * 2);
 		}
 	}
 
@@ -148,10 +148,10 @@ $sticky-overlap-search: 3px;
 		bottom: -$sticky-overlap;
 		width: 100%;
 		background-color: abstracts.$white;
-		padding: abstracts.$spacer-lg 0 calc(#{abstracts.$spacer-lg} + #{$sticky-overlap});
+		padding: abstracts.$spacer-lg 0 calc(abstracts.$spacer-lg + $sticky-overlap);
 
 		@media (max-width: abstracts.$breakpoint-lg) {
-			padding: abstracts.$spacer-md 0 calc(#{abstracts.$spacer-md} + #{$sticky-overlap});
+			padding: abstracts.$spacer-md 0 calc(abstracts.$spacer-md + $sticky-overlap);
 		}
 	}
 
