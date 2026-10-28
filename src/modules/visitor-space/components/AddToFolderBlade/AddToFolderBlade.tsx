@@ -306,7 +306,8 @@ const AddToFolderBlade: FC<AddToFolderBladeProps> = ({
 			return;
 		}
 		setIsSubmitting(true);
-		// The caller shows the result and keeps the selection when saving fails, so the blade can always close
+		// Close the blade right away: the caller shows a toast on success, and on failure keeps the selection
+		// and shows an error banner with a retry button on the search page, so the blade never needs to reopen
 		onClose?.();
 		await onSaveMultipleObjects(changes);
 		setIsSubmitting(false);
