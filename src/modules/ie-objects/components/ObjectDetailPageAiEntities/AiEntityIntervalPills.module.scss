@@ -67,14 +67,7 @@ $pill-height: 2.4rem;
 			}
 		}
 
-		&:focus {
-			outline: 0;
-		}
-
-		&:focus-visible {
-			outline: 0.2rem solid abstracts.$teal;
-			outline-offset: 0.2rem;
-		}
+		@include abstracts.focus-outline;
 
 		&--active,
 		&--active:hover {

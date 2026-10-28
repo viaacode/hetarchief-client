@@ -23,7 +23,7 @@
 			border: none;
 			margin-left: 0;
 
-			@include abstracts.focus-outline;
+			@include abstracts.focus-outline("inside");
 
 			height: 3.6rem;
 			padding: 0 9px;

@@ -326,10 +326,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			// keyboard focus needs one. Inset so the row's overflow clipping can't cut it off.
 			outline: none;
 
-			&:focus-visible {
-				outline: 0.2rem solid abstracts.$teal;
-				outline-offset: -0.2rem;
-			}
+			@include abstracts.focus-outline("inside");
 
 			:global(.c-tab__icon) {
 				font-size: abstracts.$font-size-lg;

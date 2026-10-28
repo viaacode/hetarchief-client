@@ -18,7 +18,7 @@
 	list-style: none;
 
 	&__filter {
-		@include abstracts.focus-outline;
+		@include abstracts.focus-outline("inside");
 
 		display: flex;
 		align-items: center;

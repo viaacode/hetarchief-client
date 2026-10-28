@@ -32,7 +32,7 @@
 				border-bottom: 3px solid transparent;
 				white-space: nowrap;
 
-				@include abstracts.focus-outline;
+				@include abstracts.focus-outline("inside");
 
 				&:global(.c-tab--active) {
 					color: abstracts.$black;
@@ -58,7 +58,7 @@
 			}
 
 			:global(.c-tab){
-				@include abstracts.focus-outline;
+				@include abstracts.focus-outline("inside");
 
 				display: flex;
 				justify-content: center;

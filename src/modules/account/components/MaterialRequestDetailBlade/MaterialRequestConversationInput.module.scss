@@ -73,7 +73,7 @@
 		padding: 1rem;
 		z-index: 3;
 
-		@include abstracts.focus-outline;
+		@include abstracts.focus-outline("inside");
 
 		// Mobile
 		@media (max-width: abstracts.$breakpoint-md) {

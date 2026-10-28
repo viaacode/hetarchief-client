@@ -9,7 +9,7 @@ $context-disclaimer-offset: abstracts.$spacer-sm;
 	z-index: abstracts.get-z-layer("foreground");
 	color: abstracts.$white;
 
-	@include abstracts.focus-outline;
+	@include abstracts.focus-outline("inside");
 
 	&--active {
 		display: flex;
@@ -55,7 +55,7 @@ $context-disclaimer-offset: abstracts.$spacer-sm;
 		flex-shrink: 0;
 		cursor: pointer;
 
-		@include abstracts.focus-outline;
+		@include abstracts.focus-outline("inside");
 
 		// The button centers its icon in its own tap-target box by default, which
 		// leaves it sitting lower than the flush-top icon on the left of the label.

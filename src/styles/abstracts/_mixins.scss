@@ -78,14 +78,23 @@
 	}
 }
 
-@mixin focus-outline() {
+/**
+ * Hides the outline on mouse focus and shows a 2px teal outline on keyboard focus.
+ * $position: "outside" draws it around the element, "inside" draws it within the element's edge
+ * (use inside when a parent's overflow clipping would cut the outline off).
+ * eg: @include focus-outline;
+ * eg: @include focus-outline("inside");
+ */
+@mixin focus-outline($position: "outside", $color: variables.$teal) {
+	$width: 2px;
+
 	&:focus {
 		outline: 0;
 	}
 
 	&:focus-visible {
-		outline: 2px solid variables.$teal;
-		outline-offset: -2px;
+		outline: $width solid $color;
+		outline-offset: if($position == "inside", -$width, 0);
 	}
 }
 

@@ -6,7 +6,7 @@
 		border-radius: 0 !important;
 		height: 100% !important;
 
-		@include focus-outline;
+		@include focus-outline("inside");
 	}
 
 	&__input {
