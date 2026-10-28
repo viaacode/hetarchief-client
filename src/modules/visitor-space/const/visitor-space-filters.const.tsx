@@ -253,8 +253,6 @@ export const SEARCH_PAGE_FILTERS = (
 			field: IeObjectsSearchFilterField.RIGHTS,
 			inMainPanelByDefault: false,
 			tabs: ALL_TABS,
-			// Available to every user, independent of ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY:
-			// https://meemoo.atlassian.net/browse/ARC-3759
 		},
 		{
 			id: SearchFilterId.Theme,
