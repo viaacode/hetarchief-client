@@ -679,7 +679,7 @@
   "modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-avatar-row___toon-minder": "Toon minder",
   "modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-card___wikidata": "Wikidata",
   "modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-card___zoek-alle-objecten-met-deze-entiteit": "Zoek alle objecten met deze entiteit",
-  "modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-interval-pills___page-van-pageCount": "{{page}} van {{{{pageCount}}",
+  "modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-interval-pills___page-van-pageCount": "{{page}} van {{pageCount}}",
   "modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-interval-pills___paginering-van-de-tijdsintervallen": "Paginering van de tijdsintervallen",
   "modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-interval-pills___volgende": "Volgende",
   "modules/ie-objects/components/object-detail-page-ai-entities/ai-entity-interval-pills___vorige": "Vorige",
