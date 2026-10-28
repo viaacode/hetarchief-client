@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .p-admin-content__create,
 .p-admin-content__edit {
@@ -16,7 +16,7 @@
 	label,
 	.c-accordion__header-title,
 	.o-form-group__controls {
-		color: $black;
+		color: abstracts.$black;
 	}
 
 	.c-checkbox {
@@ -26,26 +26,26 @@
 		}
 
 		input {
-			margin-right: $spacer-xs;
-			accent-color: $teal-dark;
+			margin-right: abstracts.$spacer-xs;
+			accent-color: abstracts.$teal-dark;
 		}
 	}
 
 	.c-button__icon.o-svg-icon svg {
-		height: $button-icon-size;
-		width: $button-icon-size;
+		height: abstracts.$button-icon-size;
+		width: abstracts.$button-icon-size;
 	}
 
 	.c-content-block-form-group button[class*="c-button"],
 	.c-accordion__item > .u-spacer-bottom button[class*="c-button"] {
 		height: 3.8rem;
-		padding: 0 $spacer-md;
+		padding: 0 abstracts.$spacer-md;
 		border-radius: 1.9rem;
 	}
 
 	.c-content-block-form-group button[class*="c-button--active"] {
 		background-color: white;
-		color: $black;
+		color: abstracts.$black;
 	}
 
 	.o-form-group {
@@ -72,58 +72,58 @@
 		button[class*="c-button--icon"] {
 			width: 3.6rem;
 			height: 3.6rem;
-			border-radius: $button-radius-size;
-			background-color: $silver;
-			color: $black;
+			border-radius: abstracts.$button-radius-size;
+			background-color: abstracts.$silver;
+			color: abstracts.$black;
 			border: none;
 
 			path {
-				fill: $black;
+				fill: abstracts.$black;
 			}
 
 			&:hover {
-				background-color: $shade;
-				border-color: $shade;
-				color: $white;
+				background-color: abstracts.$shade;
+				border-color: abstracts.$shade;
+				color: abstracts.$white;
 
 				path {
-					fill: $white;
+					fill: abstracts.$white;
 				}
 			}
 
 			&:active {
-				background-color: $teal-dark;
-				border-color: $teal-dark;
-				color: $white;
+				background-color: abstracts.$teal-dark;
+				border-color: abstracts.$teal-dark;
+				color: abstracts.$white;
 
 				path {
-					fill: $white;
+					fill: abstracts.$white;
 				}
 			}
 
 			&:focus,
 			.focus-visible:focus:not(:focus-visible) {
-				outline: 2px solid $teal;
+				outline: 2px solid abstracts.$teal;
 			}
 
 			&:disabled {
 				border: none;
-				background-color: $silver;
-				color: $zinc;
+				background-color: abstracts.$silver;
+				color: abstracts.$zinc;
 
 				path {
-					fill: $zinc;
+					fill: abstracts.$zinc;
 				}
 			}
 		}
 
 		.c-button-group button[class*="c-button--icon"] {
 			&:first-child {
-				border-radius: $button-radius-size 0 0 $button-radius-size;
+				border-radius: abstracts.$button-radius-size 0 0 abstracts.$button-radius-size;
 			}
 
 			&:last-child {
-				border-radius: 0 $button-radius-size $button-radius-size 0;
+				border-radius: 0 abstracts.$button-radius-size abstracts.$button-radius-size 0;
 			}
 		}
 	}
@@ -132,7 +132,7 @@
 	.avo__c-datepicker {
 		.react-datepicker,
 		.react-datepicker__current-month {
-			font-size: $font-size-sm;
+			font-size: abstracts.$font-size-sm;
 		}
 
 		.c-input-with-icon-right {

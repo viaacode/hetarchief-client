@@ -1,4 +1,4 @@
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
 .p-visitor-space {
 	display: flex;
@@ -9,13 +9,13 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		background-color: $lila;
-		padding: $spacer-xs;
-		margin: $spacer-sm 0;
+		background-color: abstracts.$lila;
+		padding: abstracts.$spacer-xs;
+		margin: abstracts.$spacer-sm 0;
 	}
 
 	&__temp-access-label {
-		margin-left: $spacer-xs;
+		margin-left: abstracts.$spacer-xs;
 	}
 }
 
@@ -23,14 +23,14 @@
 	display: flex;
 	flex-direction: column;
 	flex: 1 1 auto;
-	padding-bottom: $c-feedback-button-height;
+	padding-bottom: abstracts.$c-feedback-button-height;
 
 	&--placeholder {
 		.l-container {
 			display: flex;
 			flex: 1 1 auto;
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: abstracts.$breakpoint-md) {
 				flex-direction: column;
 			}
 		}
@@ -38,28 +38,28 @@
 }
 
 .p-visitor-space__placeholder {
-	margin: $spacer-lg * 2 0 $spacer-lg * 4;
+	margin: abstracts.$spacer-lg * 2 0 abstracts.$spacer-lg * 4;
 	width: 100%;
 
-	@media (min-width: $breakpoint-md) {
-		margin: $spacer-lg * 2 0 0;
-		margin-left: $spacer-md;
+	@media (min-width: abstracts.$breakpoint-md) {
+		margin: abstracts.$spacer-lg * 2 0 0;
+		margin-left: abstracts.$spacer-md;
 		width: calc(100% / 3 * 2);
 	}
 
-	@media (min-width: $breakpoint-lg) {
-		margin: $spacer-lg * 2 0 0;
-		margin-left: $spacer-md;
+	@media (min-width: abstracts.$breakpoint-lg) {
+		margin: abstracts.$spacer-lg * 2 0 0;
+		margin-left: abstracts.$spacer-md;
 		width: calc(75%);
 	}
 }
 
 .p-visitor-space__filter-menu {
-	@media (min-width: $breakpoint-md) {
+	@media (min-width: abstracts.$breakpoint-md) {
 		width: calc(100% / 3 - 2rem);
 	}
 
-	@media (min-width: $breakpoint-lg) {
+	@media (min-width: abstracts.$breakpoint-lg) {
 		width: calc(25% - 2.4rem);
 	}
 }
@@ -73,12 +73,12 @@
 
 .p-visitor-space__searchbar {
 	width: 100%;
-	margin-top: $spacer-lg;
+	margin-top: abstracts.$spacer-lg;
 
 	&--has-dropdown {
 		display: block;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			display: grid;
 			grid-template-columns: 26.5rem auto;
 		}

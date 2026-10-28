@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 // TODO: make styles reusable (see visitors)
 
@@ -8,20 +8,20 @@
 		justify-content: space-between;
 		flex-direction: row;
 
-		@media (max-width: $breakpoint-xl) {
+		@media (max-width: abstracts.$breakpoint-xl) {
 			flex-direction: column;
-			gap: $spacer-xs;
-			padding: 0 $spacer-sm;
+			gap: abstracts.$spacer-xs;
+			padding: 0 abstracts.$spacer-sm;
 		}
 
 		&-dropdowns {
 			display: flex;
 			flex-flow: row wrap;
-			gap: $spacer-sm;
+			gap: abstracts.$spacer-sm;
 
-			@media (max-width: $breakpoint-xl) {
+			@media (max-width: abstracts.$breakpoint-xl) {
 				flex-direction: column;
-				gap: $spacer-xs;
+				gap: abstracts.$spacer-xs;
 			}
 		}
 	}
@@ -29,14 +29,14 @@
 	&__searchbar {
 		height: fit-content;
 
-		@media (max-width: $breakpoint-xl) {
+		@media (max-width: abstracts.$breakpoint-xl) {
 			width: 100%;
 		}
 	}
 
 	&__dropdown {
 		&--open {
-			box-shadow: $shadow-24-black-08;
+			box-shadow: abstracts.$shadow-24-black-08;
 		}
 
 		&--disabled {
@@ -81,15 +81,15 @@
 			flex-direction: column;
 
 			&__name,&__requester{
-				color: $black;
-				font-size: $font-size-base;
-				line-height: $font-size-md;
+				color: abstracts.$black;
+				font-size: abstracts.$font-size-base;
+				line-height: abstracts.$font-size-md;
 			}
 
 			&__provider,&__mail{
-				color: $neutral;
-				font-size: $font-size-sm;
-				line-height: $font-size-base;
+				color: abstracts.$neutral;
+				font-size: abstracts.$font-size-sm;
+				line-height: abstracts.$font-size-base;
 				text-align: left;
 				border-radius: 0;
 

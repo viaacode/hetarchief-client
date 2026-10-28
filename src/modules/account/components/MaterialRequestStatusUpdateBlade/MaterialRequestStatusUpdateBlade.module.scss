@@ -1,4 +1,4 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
 $minimum-rich-text-editor-height: 21rem;
 
@@ -13,7 +13,7 @@ $minimum-rich-text-editor-height: 21rem;
 		}
 
 		&-label {
-			margin-bottom: $spacer-sm;
+			margin-bottom: abstracts.$spacer-sm;
 		}
 
 		&-value {
@@ -21,9 +21,9 @@ $minimum-rich-text-editor-height: 21rem;
 		}
 
 		:global(.c-form-control__label) {
-			font-weight: $font-weight-normal;
-			font-size: $font-size-base;
-			line-height: $font-size-lg;
+			font-weight: abstracts.$font-weight-normal;
+			font-size: abstracts.$font-size-base;
+			line-height: abstracts.$font-size-lg;
 			margin-bottom: 0;
 		}
 	}

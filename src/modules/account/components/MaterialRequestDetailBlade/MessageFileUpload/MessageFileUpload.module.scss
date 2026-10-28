@@ -1,4 +1,4 @@
-@use 'src/styles/abstracts' as *;
+@use 'src/styles/abstracts' as abstracts;
 
 .c-message-file-upload {
 	&__button {
@@ -6,7 +6,7 @@
 		border-radius: 0 !important;
 		height: 100% !important;
 
-		@include focus-outline;
+		@include abstracts.focus-outline;
 	}
 
 	&__input {
@@ -14,7 +14,7 @@
 	}
 
 	&__icon {
-		font-size: $font-size-md !important;
+		font-size: abstracts.$font-size-md !important;
 		height: 1.8rem !important;
 	}
 }

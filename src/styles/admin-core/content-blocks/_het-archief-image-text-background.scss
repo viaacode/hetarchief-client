@@ -1,14 +1,14 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-block-het-archief-image-text-background {
 	max-width: 100vw;
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		width: 100% !important;
 	}
 
 	p {
-		font-size: $font-size-md;
+		font-size: abstracts.$font-size-md;
 		line-height: 2.8rem;
 	}
 }

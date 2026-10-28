@@ -1,11 +1,11 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-block-homepage-banner {
 	 > .o-container {
-		padding: 0 ($spacer-1xl + $spacer-xs);
+		padding: 0 (abstracts.$spacer-1xl + abstracts.$spacer-xs);
 
-		@media (max-width: $breakpoint-md) {
-			padding: 0 $spacer-1xl;
+		@media (max-width: abstracts.$breakpoint-md) {
+			padding: 0 abstracts.$spacer-1xl;
 		}
 	}
 }

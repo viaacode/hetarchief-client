@@ -1,11 +1,11 @@
-@use "../../abstracts" as *;
+@use "../../abstracts" as abstracts;
 
 .p-account-my-profile__general-info {
-	background-color: $white;
+	background-color: abstracts.$white;
 
 	.p-account-my-profile__general-info-header,
 	.p-account-my-profile__general-info-items {
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			display: grid;
 			grid-auto-flow: column;
 			grid-template-columns: 3fr 1fr;
@@ -18,7 +18,7 @@
 		row-gap: 1.2rem;
 		margin: 0;
 
-		@media (max-width: $breakpoint-sm) {
+		@media (max-width: abstracts.$breakpoint-sm) {
 			grid-template-columns: 15rem 1fr;
 		}
 	}
@@ -31,7 +31,7 @@
 	.c-button {
 		margin-top: 1.2rem;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			margin-top: -1.2rem;
 		}
 	}
@@ -42,7 +42,7 @@
 }
 
 .p-account-my-profile__general-info-alert {
-	background-color: $silver;
+	background-color: abstracts.$silver;
 	display: flex;
 
 	.c-Alert__icon {
@@ -51,7 +51,7 @@
 	}
 
 	.c-Alert__title {
-		font-weight: $font-weight-bold;
+		font-weight: abstracts.$font-weight-bold;
 		margin-bottom: 0.4rem;
 	}
 }

@@ -77,7 +77,7 @@ $controls-margin-bottom: abstracts.$spacer-sm;
 		background-color: abstracts.$graphite;
 		justify-content: center;
 		align-items: center;
-		height: calc(#{abstracts.$view-height} - 10rem);
+		height: calc(abstracts.$view-height - 10rem);
 		padding-bottom: abstracts.$spacer-1xl * 4;
 
 		@media (max-width: abstracts.$breakpoint-lg) {
@@ -235,7 +235,7 @@ $controls-margin-bottom: abstracts.$spacer-sm;
 	max-height: calc(100% - $navigator-margin-top) !important;
 	display: flex;
 	flex-direction: column;
-	width: calc(10rem + #{abstracts.$spacer-sm});
+	width: calc(10rem + abstracts.$spacer-sm);
 	overflow-y: auto;
 	padding-right: abstracts.$spacer-sm;
 	padding-bottom: 0.5rem;

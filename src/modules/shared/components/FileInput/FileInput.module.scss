@@ -1,9 +1,9 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-file-input {
 	&:focus-within {
 		border-color: transparent;
-		outline: 2px solid $teal;
+		outline: 2px solid abstracts.$teal;
 	}
 
 	input[type="file"] {

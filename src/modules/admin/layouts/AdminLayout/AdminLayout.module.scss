@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 
 :global(.l-container).c-admin__header,
@@ -6,9 +6,9 @@
 	display: flex;
 	flex-direction: row;
 	padding-top: 6.4rem;
-	padding-bottom: $spacer-1xl;
+	padding-bottom: abstracts.$spacer-1xl;
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		flex-direction: column;
 	}
 }
@@ -22,14 +22,14 @@
 		text-overflow: ellipsis;
 	}
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		font-size: 2.8rem;
 	}
 }
 
 .c-admin__actions {
-	@media (max-width: $breakpoint-md) {
-		margin-top: $spacer-md;
+	@media (max-width: abstracts.$breakpoint-md) {
+		margin-top: abstracts.$spacer-md;
 	}
 
 	> :not(:last-child) {

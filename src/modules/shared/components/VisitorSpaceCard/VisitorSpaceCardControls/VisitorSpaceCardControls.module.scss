@@ -1,18 +1,16 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-visitor-space-card-controls";
-
-.#{$component} {
+.c-visitor-space-card-controls {
 	align-items: center;
-	color: $black;
+	color: abstracts.$black;
 	display: flex;
 	flex-wrap: nowrap;
 	justify-content: space-between;
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		flex-wrap: wrap;
-		row-gap: $spacer-xs;
+		row-gap: abstracts.$spacer-xs;
 	}
 
 	&__label {
@@ -20,26 +18,26 @@ $component: "c-visitor-space-card-controls";
 		align-items: center;
 		flex: 0 0 auto;
 		max-width: 100%;
-		margin-right: $spacer-xs;
+		margin-right: abstracts.$spacer-xs;
 
 		&-icon {
-			font-size: $font-size-1xl;
+			font-size: abstracts.$font-size-1xl;
 
-			@media (min-width: $breakpoint-md) {
-				font-size: $font-size-lg;
+			@media (min-width: abstracts.$breakpoint-md) {
+				font-size: abstracts.$font-size-lg;
 			}
 
 			// Account for ellipsis wrapper
-			+ div .#{$component}__label-text {
-				margin-left: $spacer-xs;
+			+ div .c-visitor-space-card-controls__label-text {
+				margin-left: abstracts.$spacer-xs;
 			}
 		}
 
 		&-text {
-			font-size: $font-size-xs;
-			line-height: $line-height-lg;
+			font-size: abstracts.$font-size-xs;
+			line-height: abstracts.$line-height-lg;
 
-			@media (min-width: $breakpoint-md) {
+			@media (min-width: abstracts.$breakpoint-md) {
 				max-width: 170px;
 			}
 		}
@@ -51,46 +49,46 @@ $component: "c-visitor-space-card-controls";
 
 	&__contact-item {
 		display: flex;
-		padding-left: $spacer-sm;
-		padding-right: $spacer-sm;
+		padding-left: abstracts.$spacer-sm;
+		padding-right: abstracts.$spacer-sm;
 		justify-content: space-between;
 		align-items: center;
 
 		p {
-			padding: $spacer-sm $spacer-xs;
+			padding: abstracts.$spacer-sm abstracts.$spacer-xs;
 		}
 	}
 
 	&--near {
-		margin-top: $spacer-sm;
+		margin-top: abstracts.$spacer-sm;
 
-		@media (min-width: $breakpoint-md) {
-			margin-top: $spacer-md;
+		@media (min-width: abstracts.$breakpoint-md) {
+			margin-top: abstracts.$spacer-md;
 		}
 	}
 
 	&--far {
-		margin-top: math.div($spacer-md, 2);
+		margin-top: math.div(abstracts.$spacer-md, 2);
 
-		@media (min-width: $breakpoint-md) {
-			margin-top: $spacer-lg;
+		@media (min-width: abstracts.$breakpoint-md) {
+			margin-top: abstracts.$spacer-lg;
 		}
 	}
 
 	&--light {
-		color: $white;
+		color: abstracts.$white;
 
-		.#{$component} {
+		.c-visitor-space-card-controls {
 			&__label {
 				&-text {
-					font-size: $font-size-sm;
-					line-height: $line-height-3xl;
+					font-size: abstracts.$font-size-sm;
+					line-height: abstracts.$line-height-3xl;
 					max-width: 130px;
 				}
 
 				&-icon {
-					+ .#{$component}__label-text {
-						margin-left: $spacer-xs;
+					+ .c-visitor-space-card-controls__label-text {
+						margin-left: abstracts.$spacer-xs;
 					}
 				}
 			}
@@ -98,14 +96,14 @@ $component: "c-visitor-space-card-controls";
 	}
 
 	&--neutral {
-		color: $neutral;
+		color: abstracts.$neutral;
 	}
 
 	&--thinner {
-		.#{$component} {
+		.c-visitor-space-card-controls {
 			&__label-text {
-				font-size: $font-size-sm;
-				line-height: $line-height-3xl;
+				font-size: abstracts.$font-size-sm;
+				line-height: abstracts.$line-height-3xl;
 				max-width: 130px;
 			}
 		}
@@ -114,29 +112,29 @@ $component: "c-visitor-space-card-controls";
 	&--flat {
 		justify-content: space-between;
 
-		@media (min-width: $breakpoint-md) {
-			margin-left: $spacer-md;
-			margin-right: $spacer-xs;
-			margin-top: $spacer-sm;
+		@media (min-width: abstracts.$breakpoint-md) {
+			margin-left: abstracts.$spacer-md;
+			margin-right: abstracts.$spacer-xs;
+			margin-top: abstracts.$spacer-sm;
 			min-width: 28.5rem;
 		}
 
-		@media (min-width: $breakpoint-lg) {
+		@media (min-width: abstracts.$breakpoint-lg) {
 			min-width: 32rem;
 		}
 
-		.#{$component} {
+		.c-visitor-space-card-controls {
 			&__label {
 				&-text {
-					font-size: $font-size-sm;
-					line-height: math.div($font-size-md, 9) * 10; // 2rem;
+					font-size: abstracts.$font-size-sm;
+					line-height: math.div(abstracts.$font-size-md, 9) * 10; // 2rem;
 				}
 
 				&-icon {
-					font-size: $font-size-md;
+					font-size: abstracts.$font-size-md;
 
-					+ .#{$component}__label-text {
-						margin-left: math.div($spacer-md, 2);
+					+ .c-visitor-space-card-controls__label-text {
+						margin-left: math.div(abstracts.$spacer-md, 2);
 					}
 				}
 			}
@@ -144,7 +142,7 @@ $component: "c-visitor-space-card-controls";
 	}
 
 	&--wrap {
-		@media (max-width: $breakpoint-sm) {
+		@media (max-width: abstracts.$breakpoint-sm) {
 			flex-direction: column;
 			align-items: unset;
 		}
@@ -153,15 +151,15 @@ $component: "c-visitor-space-card-controls";
 		button,
 		div {
 			&:not(:last-child) {
-				@media (max-width: $breakpoint-sm) {
-					margin-bottom: $spacer-xs;
+				@media (max-width: abstracts.$breakpoint-sm) {
+					margin-bottom: abstracts.$spacer-xs;
 				}
 			}
 		}
 
 		:global(.c-button) {
-			@media (max-width: $breakpoint-sm) {
-				@include generate-button-small;
+			@media (max-width: abstracts.$breakpoint-sm) {
+				@include abstracts.generate-button-small;
 
 				padding: 0.9rem 1rem;
 			}
@@ -170,7 +168,7 @@ $component: "c-visitor-space-card-controls";
 
 	button {
 		&:not(:last-child) {
-			margin-right: $spacer-xs;
+			margin-right: abstracts.$spacer-xs;
 		}
 	}
 

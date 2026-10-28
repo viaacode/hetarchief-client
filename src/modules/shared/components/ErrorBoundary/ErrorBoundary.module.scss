@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 // TODO replace with message: https://xd.adobe.com/view/86b0be3f-d968-4a98-7784-d5d00cd42f98-f081/screen/c880aa07-7f8c-49f3-8038-f3d8990fdb0b/
 .p-error-boundary__message {
@@ -6,11 +6,11 @@
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: calc($view-height - #{$c-navigation-height-md});
+	height: calc(abstracts.$view-height - abstracts.$c-navigation-height-md);
 	text-align: center;
 	line-height: 3rem;
 
-	@media (min-width: $breakpoint-md) {
-		height: calc($view-height - #{$c-navigation-height});
+	@media (min-width: abstracts.$breakpoint-md) {
+		height: calc(abstracts.$view-height - abstracts.$c-navigation-height);
 	}
 }

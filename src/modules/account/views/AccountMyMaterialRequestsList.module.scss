@@ -1,40 +1,40 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$container-height: calc($view-height - $top-navigation-bar-height);
+$container-height: calc(abstracts.$view-height - abstracts.$top-navigation-bar-height);
 $header-height: 17rem;
 
 .p-my-application-list {
 	display: flex;
 	flex-direction: row;
 
-	@media (max-width: $breakpoint-lg) {
+	@media (max-width: abstracts.$breakpoint-lg) {
 		flex-direction: column;
 	}
 
 	> :first-child{
-		width: calc(100% - $blade-max-width);
-		padding: 0 $spacer-3xl;
+		width: calc(100% - abstracts.$blade-max-width);
+		padding: 0 abstracts.$spacer-3xl;
 
-		@media (max-width: $breakpoint-xxl) {
-			padding: 0 $spacer-1xl;
+		@media (max-width: abstracts.$breakpoint-xxl) {
+			padding: 0 abstracts.$spacer-1xl;
 		}
 
-		@media (max-width: $breakpoint-xl) {
-			padding: 0 $spacer-md;
+		@media (max-width: abstracts.$breakpoint-xl) {
+			padding: 0 abstracts.$spacer-md;
 		}
 
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			width: 100%;
 		}
 	}
 
 	> :nth-child(2) {
-		@media (max-width: $breakpoint-lg) {
-			width: calc(100% - $spacer-md - $spacer-md);
+		@media (max-width: abstracts.$breakpoint-lg) {
+			width: calc(100% - abstracts.$spacer-md - abstracts.$spacer-md);
 			max-width: unset;
-			margin: 0 $spacer-md;
-			border: 1px solid $silver;
-			margin-bottom: $spacer-lg;
+			margin: 0 abstracts.$spacer-md;
+			border: 1px solid abstracts.$silver;
+			margin-bottom: abstracts.$spacer-lg;
 		}
 	}
 
@@ -43,17 +43,17 @@ $header-height: 17rem;
 		max-height: calc($container-height - $header-height);
 		overflow: auto;
 
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			min-height: unset;
 			max-height: unset;
 		}
 	}
 
 	&__requests-wrapper {
-		padding-bottom: $spacer-lg;
+		padding-bottom: abstracts.$spacer-lg;
 		display: flex;
 		flex-direction: column;
-		gap: $spacer-md;
+		gap: abstracts.$spacer-md;
 	}
 
 	&__header {
@@ -61,9 +61,9 @@ $header-height: 17rem;
 		height: $header-height;
 		max-height: $header-height;
 		padding-top: 6.4rem;
-		padding-bottom: $spacer-1xl;
+		padding-bottom: abstracts.$spacer-1xl;
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: abstracts.$breakpoint-md) {
 			height: unset;
 			max-height:unset;
 		}
@@ -78,19 +78,19 @@ $header-height: 17rem;
 			text-overflow: ellipsis;
 		}
 
-		@media (max-width: $breakpoint-lg) {
-			font-size: $font-size-2xl;
+		@media (max-width: abstracts.$breakpoint-lg) {
+			font-size: abstracts.$font-size-2xl;
 		}
 
-		@media (max-width: $breakpoint-md) {
-			font-size: $font-size-xl;
+		@media (max-width: abstracts.$breakpoint-md) {
+			font-size: abstracts.$font-size-xl;
 		}
 	}
 
 	&__request {
 		&-container {
-			border: 1px solid $silver;
-			background-color: $white;
+			border: 1px solid abstracts.$silver;
+			background-color: abstracts.$white;
 		}
 
 		&-caption{
@@ -104,20 +104,20 @@ $header-height: 17rem;
 			}
 
 			:last-child {
-				color: $black;
+				color: abstracts.$black;
 			}
 		}
 
 		&-divider {
-			margin: $spacer-sm $spacer-sm $spacer-lg;
+			margin: abstracts.$spacer-sm abstracts.$spacer-sm abstracts.$spacer-lg;
 			opacity: .3;
 		}
 
 		&-row{
 			display: grid;
 			grid-template-columns: 1fr 4fr;
-			font-size: $font-size-sm;
-			margin: $spacer-sm;
+			font-size: abstracts.$font-size-sm;
+			margin: abstracts.$spacer-sm;
 
 			&-label {
 				grid-column: 1;
@@ -125,19 +125,19 @@ $header-height: 17rem;
 
 			&-value {
 				grid-column: 2;
-				color: $neutral;
+				color: abstracts.$neutral;
 
-				@media (max-width: $breakpoint-md) {
+				@media (max-width: abstracts.$breakpoint-md) {
 					margin-inline-start: 0;
-					margin-top: $spacer-xs;
+					margin-top: abstracts.$spacer-xs;
 				}
 			}
 
-			@media (max-width: $breakpoint-xl) {
+			@media (max-width: abstracts.$breakpoint-xl) {
 				grid-template-columns: 2fr 4fr;
 			}
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: abstracts.$breakpoint-md) {
 				display: flex;
 				flex-direction: column;
 			}

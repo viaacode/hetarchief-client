@@ -1,17 +1,15 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-visitor-space-card-list";
-
-.#{$component} {
+.c-visitor-space-card-list {
 	display: grid;
 	list-style: none;
 	grid-template-columns: minmax(0, 1fr);
 	margin: 0;
 	padding: 0;
-	row-gap: $spacer-md;
+	row-gap: abstracts.$spacer-md;
 
-	@media (min-width: $breakpoint-md) {
-		gap: $spacer-lg * 2 $spacer-lg;
+	@media (min-width: abstracts.$breakpoint-md) {
+		gap: abstracts.$spacer-lg * 2 abstracts.$spacer-lg;
 		grid-template-columns: repeat(3, 1fr);
 		grid-template-rows: max-content;
 	}

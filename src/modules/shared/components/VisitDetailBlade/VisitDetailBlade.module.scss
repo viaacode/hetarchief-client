@@ -1,5 +1,5 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
 .c-visit-detail-blade {
-	@include blade-text-styling;
+	@include abstracts.blade-text-styling;
 }

@@ -1,12 +1,11 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
-$component: "c-radiobutton-accordion";
-$c-accordion-border: $zinc !default;
+$c-accordion-border: abstracts.$zinc !default;
 
-.#{$component} {
+.c-radiobutton-accordion {
 	:global(.c-form-control){
 		:global(.c-form-control__label){
-			margin-bottom: $spacer-xs;
+			margin-bottom: abstracts.$spacer-xs;
 			font-weight: normal;
 		}
 	}
@@ -22,9 +21,9 @@ $c-accordion-border: $zinc !default;
 			display: block;
 			border-top: .5px solid $c-accordion-border;
 			margin-left: 5rem;
-			font-size: $font-size-sm;
+			font-size: abstracts.$font-size-sm;
 			line-height: 2rem;
-			padding: $spacer-xs $spacer-sm $spacer-xs 0;
+			padding: abstracts.$spacer-xs abstracts.$spacer-sm abstracts.$spacer-xs 0;
 
 			&:has(.c-radiobutton-accordion){
 				padding: 0;
@@ -49,7 +48,7 @@ $c-accordion-border: $zinc !default;
 		}
 
 		&-selected {
-			background-color: $platinum;
+			background-color: abstracts.$platinum;
 		}
 
 		&-header {
@@ -69,7 +68,7 @@ $c-accordion-border: $zinc !default;
 		}
 
 		&-icon {
-			color: $grey;
+			color: abstracts.$grey;
 			flex-shrink: 0;
 		}
 	}

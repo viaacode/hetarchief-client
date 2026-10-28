@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .p-admin-navigation,
 .p-admin-navigation__detail {
@@ -10,46 +10,46 @@
 			height: 3.6rem;
 			padding: 0;
 			border-radius: 1.8rem;
-			background-color: $silver;
-			color: $black;
+			background-color: abstracts.$silver;
+			color: abstracts.$black;
 			border: none;
 
 			path {
-				fill: $black;
+				fill: abstracts.$black;
 			}
 
 			&:hover {
-				background-color: $shade;
-				border-color: $shade;
-				color: $white;
+				background-color: abstracts.$shade;
+				border-color: abstracts.$shade;
+				color: abstracts.$white;
 
 				path {
-					fill: $white;
+					fill: abstracts.$white;
 				}
 			}
 
 			&:active {
-				background-color: $teal-dark;
-				border-color: $teal-dark;
-				color: $white;
+				background-color: abstracts.$teal-dark;
+				border-color: abstracts.$teal-dark;
+				color: abstracts.$white;
 
 				path {
-					fill: $white;
+					fill: abstracts.$white;
 				}
 			}
 
 			&:focus,
 			.focus-visible:focus:not(:focus-visible) {
-				outline: 2px solid $teal;
+				outline: 2px solid abstracts.$teal;
 			}
 
 			&:disabled {
 				border: none;
-				background-color: $silver;
-				color: $zinc;
+				background-color: abstracts.$silver;
+				color: abstracts.$zinc;
 
 				path {
-					fill: $zinc;
+					fill: abstracts.$zinc;
 				}
 			}
 		}
@@ -63,38 +63,38 @@
 				height: 3.6rem;
 				padding: 0;
 				border-radius: 1.8rem;
-				background-color: $silver;
-				color: $black;
+				background-color: abstracts.$silver;
+				color: abstracts.$black;
 				border: none;
 
 				&:hover {
-					background-color: $shade;
-					border-color: $shade;
-					color: $white;
+					background-color: abstracts.$shade;
+					border-color: abstracts.$shade;
+					color: abstracts.$white;
 				}
 
 				&:active {
-					background-color: $teal-dark;
-					border-color: $teal-dark;
-					color: $white;
+					background-color: abstracts.$teal-dark;
+					border-color: abstracts.$teal-dark;
+					color: abstracts.$white;
 				}
 
 				&:focus,
 				.focus-visible:focus:not(:focus-visible) {
-					outline: 2px solid $teal;
+					outline: 2px solid abstracts.$teal;
 				}
 
 				&:disabled {
 					border: none;
-					background-color: $silver;
-					color: $zinc;
+					background-color: abstracts.$silver;
+					color: abstracts.$zinc;
 				}
 			}
 		}
 
 		.c-button-group {
 			display: flex;
-			gap: $spacer-xs;
+			gap: abstracts.$spacer-xs;
 		}
 	}
 }
@@ -128,10 +128,10 @@
 	.o-form-group__controls {
 		div[class*="control"] {
 			height: 5.6rem;
-			border-radius: $input-border-radius;
+			border-radius: abstracts.$input-border-radius;
 
 			div[class*="placeholder"] {
-				color: $zinc;
+				color: abstracts.$zinc;
 			}
 		}
 	}

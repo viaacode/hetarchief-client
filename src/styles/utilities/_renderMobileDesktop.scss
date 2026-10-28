@@ -1,17 +1,17 @@
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 @use "sass:map";
 
 .u-hide {
-	// Hide the element when the viewport is at least $breakpoint-md, bigger than mobile
+	// Hide the element when the viewport is at least abstracts.$breakpoint-md, bigger than mobile
 	&-gte-bp2 {
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			display: none;
 		}
 	}
 
-	// Hide the element when the viewport is less than $breakpoint-md, smaller than desktop
+	// Hide the element when the viewport is less than abstracts.$breakpoint-md, smaller than desktop
 	&-lt-bp2 {
-		@media (max-width: ($breakpoint-md - 1px)) {
+		@media (max-width: (abstracts.$breakpoint-md - 1px)) {
 			display: none;
 		}
 	}

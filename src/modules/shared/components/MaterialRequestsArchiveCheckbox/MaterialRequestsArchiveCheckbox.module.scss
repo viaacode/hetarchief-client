@@ -1,17 +1,17 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-material-requests-archive-checkbox-wrapper {
 	display: flex;
 	align-items: center;
-	padding: 0 $spacer-md;
-	background-color: $white;
-	border: 1px solid $silver;
-	border-radius: $border-radius;
-	height: $button-height;
+	padding: 0 abstracts.$spacer-md;
+	background-color: abstracts.$white;
+	border: 1px solid abstracts.$silver;
+	border-radius: abstracts.$border-radius;
+	height: abstracts.$button-height;
 	cursor: pointer;
 
 	&:hover {
-		border-color: $zinc;
+		border-color: abstracts.$zinc;
 	}
 
 	&__checkbox {

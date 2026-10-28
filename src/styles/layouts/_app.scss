@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $layout: "l-app";
 
@@ -6,11 +6,11 @@ $layout: "l-app";
 	overflow-x: hidden;
 	display: flex;
 	flex-direction: column;
-	min-height: $view-height;
+	min-height: abstracts.$view-height;
 
 	&--sticky { // fallback for browsers that do not support custom css properties
-		height: $view-height; // '$view-height' for mobile excludes browser ui. Custom --vh prop is set in use-window-size.ts
-		min-height: $view-height;
+		height: abstracts.$view-height; // 'abstracts.$view-height' for mobile excludes browser ui. Custom --vh prop is set in use-window-size.ts
+		min-height: abstracts.$view-height;
 		overflow: hidden;
 
 		.#{$layout}__main {
@@ -30,12 +30,12 @@ $layout: "l-app";
 	}
 
 	&__alerts-overlay {
-		z-index: get-z-layer("alerts");
+		z-index: abstracts.get-z-layer("alerts");
 		position: absolute;
-		top: $spacer-lg;
+		top: abstracts.$spacer-lg;
 		align-self: center;
 		display: grid;
-		row-gap: $spacer-sm;
+		row-gap: abstracts.$spacer-sm;
 	}
 }
 

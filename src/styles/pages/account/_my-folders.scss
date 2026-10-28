@@ -1,29 +1,27 @@
-@use "../../abstracts" as *;
+@use "../../abstracts" as abstracts;
 
-$component: "p-account-my-folders";
-
-.#{$component} {
+.p-account-my-folders {
 	&__export--label {
-		@media (max-width: $breakpoint-xl) {
+		@media (max-width: abstracts.$breakpoint-xl) {
 			display: none;
 		}
 	}
 
 	&__export--icon {
-		@media (min-width: $breakpoint-xl) {
+		@media (min-width: abstracts.$breakpoint-xl) {
 			display: none;
 		}
 	}
 
 	&__toggle {
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: abstracts.$breakpoint-md) {
 			display: none;
 		}
 	}
 
 	&__search {
 		&.c-tag-search-bar.c-tags-input.c-tag-search-bar--light .c-tags-input__control {
-			border-color: $zinc-66;
+			border-color: abstracts.$zinc-66;
 		}
 	}
 
@@ -38,7 +36,7 @@ $component: "p-account-my-folders";
 		}
 
 		&__description {
-			color: $grey;
+			color: abstracts.$grey;
 		}
 
 		&__buttons {
@@ -49,21 +47,21 @@ $component: "p-account-my-folders";
 
 	&__card-description {
 		p {
-			font-size: $font-size-xs;
-			line-height: $line-height-4xl;
+			font-size: abstracts.$font-size-xs;
+			line-height: abstracts.$line-height-4xl;
 		}
 
 		&-access {
 			display: inline-flex;
 			justify-content: space-between;
 			align-items: center;
-			color: $black;
-			background-color: $lila;
-			padding: 0 $spacer-xs;
-			font-weight: $font-weight-bold;
+			color: abstracts.$black;
+			background-color: abstracts.$lila;
+			padding: 0 abstracts.$spacer-xs;
+			font-weight: abstracts.$font-weight-bold;
 			line-height: 2rem;
 			border-radius: 2.5rem;
-			margin-top: $spacer-xs;
+			margin-top: abstracts.$spacer-xs;
 		}
 	}
 
@@ -73,9 +71,9 @@ $component: "p-account-my-folders";
 			justify-content: center;
 			width: 100%;
 			height: 100%;
-			padding: $spacer-xs;
-			margin: $spacer-lg 0;
-			background-color: $lila;
+			padding: abstracts.$spacer-xs;
+			margin: abstracts.$spacer-lg 0;
+			background-color: abstracts.$lila;
 		}
 	}
 
@@ -93,10 +91,10 @@ $component: "p-account-my-folders";
 			font-size: x-large;
 		}
 
-		@media (max-width: $breakpoint-md) {
-			background-color: $platinum;
-			color: $black;
-			font-weight: $font-weight-normal;
+		@media (max-width: abstracts.$breakpoint-md) {
+			background-color: abstracts.$platinum;
+			color: abstracts.$black;
+			font-weight: abstracts.$font-weight-normal;
 			display: flex;
 			align-items: center;
 			justify-content: space-between;
@@ -107,7 +105,7 @@ $component: "p-account-my-folders";
 		}
 	}
 
-	@media (max-width: $breakpoint-lg) {
+	@media (max-width: abstracts.$breakpoint-lg) {
 		// Hide top-level sidebar a bit earlier
 		// > :global(.l-sidebar__navigation) {
 		> div:first-child {

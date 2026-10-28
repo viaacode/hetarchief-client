@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-content-page-overview-block__header {
 	opacity: 0;
@@ -19,7 +19,7 @@
 		}
 
 		.c-content-block-preview {
-			z-index: get-z-layer("foreground");
+			z-index: abstracts.get-z-layer("foreground");
 
 			> .o-container {
 				h1,
@@ -37,7 +37,7 @@
 }
 
 .c-content-page-preview .c-content-block > div {
-	z-index: get-z-layer("foreground"); // Below mobile hamburger menu
+	z-index: abstracts.get-z-layer("foreground"); // Below mobile hamburger menu
 }
 
 .c-content-block-preview--dark {

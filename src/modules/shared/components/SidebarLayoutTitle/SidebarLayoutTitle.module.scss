@@ -1,16 +1,14 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 @use "sass:math";
 
-$component: "c-sidebar-layout-title";
-
-.#{$component} {
+.c-sidebar-layout-title {
 	font-size: 2.8rem;
-	line-height: $line-height-md;
+	line-height: abstracts.$line-height-md;
 	margin-bottom: 2.4rem;
 
-	@media (min-width: $breakpoint-md) {
-		font-size: $font-size-3xl;
-		line-height: $font-size-3xl * (math.div(56, 48));
+	@media (min-width: abstracts.$breakpoint-md) {
+		font-size: abstracts.$font-size-3xl;
+		line-height: abstracts.$font-size-3xl * (math.div(56, 48));
 		margin-bottom: 4.8rem;
 	}
 }

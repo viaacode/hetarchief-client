@@ -1,4 +1,4 @@
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
 /**
  * Visibility
@@ -12,7 +12,7 @@
 	visibility: visible;
 }
 
-@media (min-width: $breakpoint-md) {
+@media (min-width: abstracts.$breakpoint-md) {
 	.u-visibility-hidden-md {
 		visibility: hidden;
 	}
@@ -22,7 +22,7 @@
 	}
 }
 
-@media (min-width: $breakpoint-xxl) {
+@media (min-width: abstracts.$breakpoint-xxl) {
 	.u-visibility-xxl-hidden {
 		visibility: hidden;
 	}
@@ -48,7 +48,7 @@
 	display: inline-block;
 }
 
-@media (min-width: $breakpoint-md) {
+@media (min-width: abstracts.$breakpoint-md) {
 	.u-display-none-md {
 		display: none;
 	}
@@ -62,7 +62,7 @@
 	}
 }
 
-@media (min-width: $breakpoint-lg) {
+@media (min-width: abstracts.$breakpoint-lg) {
 	.u-display-lg-none {
 		display: none;
 	}
@@ -76,7 +76,7 @@
 	}
 }
 
-@media (min-width: $breakpoint-xxl) {
+@media (min-width: abstracts.$breakpoint-xxl) {
 	.u-display-xxl-none {
 		display: none;
 	}

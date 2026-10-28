@@ -1,18 +1,18 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .p-newsletter {
 	height: 100%;
 	width: 100%;
 	overflow-y: auto;
-	max-height: calc(100vh - $top-navigation-bar-height);
+	max-height: calc(100vh - abstracts.$top-navigation-bar-height);
 
 	&__wrapper {
 		display: grid;
 		grid-template-columns: repeat(2, 1fr);
-		column-gap: $spacer-3xl;
+		column-gap: abstracts.$spacer-3xl;
 		margin-top: 14.4rem;
 
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			display: block;
 			margin-top: calc(50vw + 4.7rem);
 			padding: 0;
@@ -22,26 +22,26 @@
 	&__content {
 		grid-column: 2;
 		background-color: white;
-		padding: $spacer-lg;
+		padding: abstracts.$spacer-lg;
 	}
 
 	&__header {
-		margin-bottom: $spacer-lg;
+		margin-bottom: abstracts.$spacer-lg;
 	}
 
 	&__title {
-		font-size: $font-size-2xl;
-		line-height: $line-height-md;
-		margin-bottom: $spacer-xs;
+		font-size: abstracts.$font-size-2xl;
+		line-height: abstracts.$line-height-md;
+		margin-bottom: abstracts.$spacer-xs;
 	}
 
 	&__text {
-		font-size: $font-size-sm;
-		color: $grey;
+		font-size: abstracts.$font-size-sm;
+		color: abstracts.$grey;
 	}
 
 	&__form-button {
-		margin-top: $spacer-1xl;
+		margin-top: abstracts.$spacer-1xl;
 	}
 
 	&--wallpaper {
@@ -52,7 +52,7 @@
 		overflow-y: auto;
 		padding-bottom: 10rem;
 
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			background-position: left top;
 			background-size: 100% auto;
 			background-image: url("/images/bg-newsletter-mobile.jpg");

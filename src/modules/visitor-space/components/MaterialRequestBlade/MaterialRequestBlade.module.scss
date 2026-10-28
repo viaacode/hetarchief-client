@@ -1,18 +1,18 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
 .c-request-material {
 	&__material {
-		color: $black;
+		color: abstracts.$black;
 
 		&:focus,
 		&:focus-within {
-			outline: 0.2rem solid $teal;
+			outline: 0.2rem solid abstracts.$teal;
 			outline-offset: -0.2rem;
 		}
 }
 
 	&__content {
-		color: $black;
+		color: abstracts.$black;
 
 		dl {
 			margin-top: 0;
@@ -20,15 +20,15 @@
 		}
 
 		&-label {
-			font-weight: $font-weight-bold;
-			margin-bottom: $spacer-sm;
+			font-weight: abstracts.$font-weight-bold;
+			margin-bottom: abstracts.$spacer-sm;
 		}
 
 		&-value {
 			margin-left: 0;
 
 			&:not(:last-child) {
-				margin-bottom: $spacer-md;
+				margin-bottom: abstracts.$spacer-md;
 			}
 		}
 	}
@@ -39,7 +39,7 @@
 	}
 
 	&__radio-button {
-		margin-bottom: $spacer-sm;
+		margin-bottom: abstracts.$spacer-sm;
 	}
 
 	&__reason-input {
@@ -50,16 +50,16 @@
 	}
 
 	:global(.c-Alert) {
-		background-color: $light-blue;
+		background-color: abstracts.$light-blue;
 	}
 
 	&__alert {
 		p {
-			padding-bottom: $spacer-xs;
+			padding-bottom: abstracts.$spacer-xs;
 		}
 	}
 
 	&__alert + &__alert {
-		margin-top: $spacer-md;
+		margin-top: abstracts.$spacer-md;
 	}
 }

@@ -1,8 +1,8 @@
-@use 'src/styles/abstracts' as *;
+@use 'src/styles/abstracts' as abstracts;
 
 .c-material-request-evaluate-conditions-blade {
 	&__description {
-		margin-bottom: $spacer-sm;
+		margin-bottom: abstracts.$spacer-sm;
 	}
 
 	&__conditions {
@@ -11,14 +11,14 @@
 	}
 
 	&__condition {
-		padding: $spacer-sm $spacer-sm $spacer-sm 0;
+		padding: abstracts.$spacer-sm abstracts.$spacer-sm abstracts.$spacer-sm 0;
 	}
 
 	&__condition-title {
-		margin-bottom: $spacer-sm;
+		margin-bottom: abstracts.$spacer-sm;
 	}
 
 	&__condition-text {
-		margin-top: $spacer-xs;
+		margin-top: abstracts.$spacer-xs;
 	}
 }

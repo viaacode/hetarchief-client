@@ -1,15 +1,14 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-block-three-clickable-tiles";
 $img-size: 33%;
 
-.#{$component} {
+.c-block-three-clickable-tiles {
 	display: grid;
 	width: 100%;
 	grid-template-columns: repeat(3, 1fr);
 	gap: 3.3rem;
 
-	@media (max-width: $breakpoint-sm) {
+	@media (max-width: abstracts.$breakpoint-sm) {
 		grid-template-columns: 1fr;
 	}
 
@@ -18,9 +17,9 @@ $img-size: 33%;
 
 		&:hover,
 		&:focus {
-			.#{$component} {
+			.c-block-three-clickable-tiles {
 				&__icon {
-					border-color: $teal;
+					border-color: abstracts.$teal;
 				}
 			}
 		}
@@ -34,27 +33,27 @@ $img-size: 33%;
 	&__content {
 		margin-top: 2.2rem;
 		display: grid;
-		grid-template-columns: auto $spacer-lg;
-		column-gap: $spacer-md;
+		grid-template-columns: auto abstracts.$spacer-lg;
+		column-gap: abstracts.$spacer-md;
 	}
 
 	&__title {
-		font-weight: $font-weight-bold;
-		font-size: $font-size-md !important;
+		font-weight: abstracts.$font-weight-bold;
+		font-size: abstracts.$font-size-md !important;
 	}
 
 	&__icon {
-		width: $spacer-lg;
-		height: $spacer-lg;
-		border-radius: $spacer-lg;
+		width: abstracts.$spacer-lg;
+		height: abstracts.$spacer-lg;
+		border-radius: abstracts.$spacer-lg;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		background-color: $silver;
+		background-color: abstracts.$silver;
 		font-size: 2rem;
 		line-height: 0;
 		border: 0.2rem solid transparent;
-		transition: $animate-default;
+		transition: abstracts.$animate-default;
 		grid-column: 2;
 	}
 

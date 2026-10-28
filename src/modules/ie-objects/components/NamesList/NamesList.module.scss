@@ -1,5 +1,5 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $names-list-scrollable-height: 29.5rem;
 
@@ -9,12 +9,12 @@ $names-list-scrollable-height: 29.5rem;
 
 	&__search {
 		input {
-			background-color: $silver;
+			background-color: abstracts.$silver;
 			border: 0;
-			border-radius: $button-radius;
-			height: $button-height;
-			margin-top: $spacer-sm;
-			margin-bottom: $spacer-sm;
+			border-radius: abstracts.$button-radius;
+			height: abstracts.$button-height;
+			margin-top: abstracts.$spacer-sm;
+			margin-bottom: abstracts.$spacer-sm;
 		}
 
 		:global(.c-input__icon) {
@@ -27,10 +27,10 @@ $names-list-scrollable-height: 29.5rem;
 		overflow-y: auto;
 		max-height: $names-list-scrollable-height;
 		min-height: $names-list-scrollable-height;
-		padding-right: $spacer-sm;
+		padding-right: abstracts.$spacer-sm;
 
 		&__no-results {
-			margin-top: $spacer-sm;
+			margin-top: abstracts.$spacer-sm;
 		}
 	}
 
@@ -38,28 +38,28 @@ $names-list-scrollable-height: 29.5rem;
 		display: flex;
 		flex-direction: row;
 		align-items: center;
-		border-top: 1px solid $silver;
-		padding: $spacer-sm 0;
+		border-top: 1px solid abstracts.$silver;
+		padding: abstracts.$spacer-sm 0;
 
 		&:first-child {
 			border-top: 0;
 		}
 
 		&__confidence-indicator {
-			margin-right: $spacer-sm;
+			margin-right: abstracts.$spacer-sm;
 		}
 
 		&__info {
 			&__name {
-				color: $black;
-				font-size: $font-size-md;
-				margin-bottom: $spacer-xxs;
+				color: abstracts.$black;
+				font-size: abstracts.$font-size-md;
+				margin-bottom: abstracts.$spacer-xxs;
 			}
 
 			&__dates-and-locations {
-				font-size: $font-size-base;
+				font-size: abstracts.$font-size-base;
 
-				@container names-list (max-width: #{$breakpoint-md}) {
+				@container names-list (max-width: #{abstracts.$breakpoint-md}) {
 					span {
 						display: block;
 					}
@@ -73,8 +73,8 @@ $names-list-scrollable-height: 29.5rem;
 	}
 
 	:global(.c-button__icon) span {
-		font-size: $font-size-1xl;
-		color: $neutral;
+		font-size: abstracts.$font-size-1xl;
+		color: abstracts.$neutral;
 	}
 
 	:global(.ps__rail-x),

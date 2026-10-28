@@ -1,8 +1,6 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-sorting-icon";
-
-.#{$component} {
-	font-size: $font-size-base;
+.c-sorting-icon {
+	font-size: abstracts.$font-size-base;
 	position: absolute; // takes care of alignment and maintains inline behaviour
 }

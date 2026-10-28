@@ -1,11 +1,10 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-media-card";
 $c-media-card-no-video-intended-spacing: 0.9rem;
 $media-card-list-view-height: 13rem;
 
-.#{$component} {
+.c-media-card {
 	a {
 		text-decoration: none;
 	}
@@ -16,10 +15,10 @@ $media-card-list-view-height: 13rem;
 
 	&:global(.c-media-card--no-link) {
 		cursor: default !important;
-		background-color: $silver;
+		background-color: abstracts.$silver;
 
 		:global(.c-card__title-wrapper) {
-			color: $grey;
+			color: abstracts.$grey;
 		}
 	}
 
@@ -28,16 +27,16 @@ $media-card-list-view-height: 13rem;
 	}
 
 	&--key-user {
-		border: 1px solid $mustard !important;
+		border: 1px solid abstracts.$mustard !important;
 	}
 
 	&__locally-available-container {
-		margin-top: $spacer-sm;
+		margin-top: abstracts.$spacer-sm;
 		display: flex;
 		flex-direction: row;
-		gap: $spacer-sm;
+		gap: abstracts.$spacer-sm;
 
-		@media (max-width: $breakpoint-xxl) {
+		@media (max-width: abstracts.$breakpoint-xxl) {
 			flex-direction: column;
 		}
 	}
@@ -45,14 +44,14 @@ $media-card-list-view-height: 13rem;
 	&__info-button {
 		display: flex !important;
 		justify-content: center !important;
-		font-size: $font-size-sm !important;
+		font-size: abstracts.$font-size-sm !important;
 		height: 3.7rem;
 	}
 
 	&__visit-button {
 		display: flex !important;
 		justify-content: center !important;
-		font-size: $font-size-sm !important;
+		font-size: abstracts.$font-size-sm !important;
 		height: 3.7rem;
 	}
 
@@ -60,7 +59,7 @@ $media-card-list-view-height: 13rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		margin: $spacer-1xl;
+		margin: abstracts.$spacer-1xl;
 	}
 
 	&__close-button {
@@ -71,14 +70,14 @@ $media-card-list-view-height: 13rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		color: $neutral;
+		color: abstracts.$neutral;
 	}
 
 	&__locally-available-pill {
 		position: absolute;
-		right: $spacer-xs;
-		top: $spacer-xs;
-		font-weight: $font-weight-normal;
+		right: abstracts.$spacer-xs;
+		top: abstracts.$spacer-xs;
+		font-weight: abstracts.$font-weight-normal;
 	}
 
 	&__link {
@@ -89,10 +88,10 @@ $media-card-list-view-height: 13rem;
 	&__header {
 		max-height: 18rem;
 		overflow: hidden;
-		font-variation-settings: $line-height-md * 2rem;
+		font-variation-settings: abstracts.$line-height-md * 2rem;
 		align-items: center;
-		background-color: $platinum;
-		color: $zinc;
+		background-color: abstracts.$platinum;
+		color: abstracts.$zinc;
 		display: flex;
 		min-height: 16rem;
 		place-content: center;
@@ -118,7 +117,7 @@ $media-card-list-view-height: 13rem;
 				min-height: unset !important;
 			}
 
-			@media (min-width: $breakpoint-md) {
+			@media (min-width: abstracts.$breakpoint-md) {
 				min-width: 248px;
 			}
 		}
@@ -131,46 +130,46 @@ $media-card-list-view-height: 13rem;
 				min-height: unset !important;
 			}
 
-			@media (min-width: $breakpoint-xs) {
+			@media (min-width: abstracts.$breakpoint-xs) {
 				min-width: 124px;
 			}
 		}
 
 		&__badges {
 			position: absolute;
-			right: $spacer-xxs;
-			top: $spacer-xxs;
+			right: abstracts.$spacer-xxs;
+			top: abstracts.$spacer-xxs;
 			display: flex;
 			align-items: center;
-			gap: $spacer-xxs;
+			gap: abstracts.$spacer-xxs;
 		}
 
 		&__children,
 		&__parent {
-			background-color: $black;
-			border-radius: $spacer-sm;
+			background-color: abstracts.$black;
+			border-radius: abstracts.$spacer-sm;
 			display: inline-flex;
 			align-items: center;
-			color: $white;
+			color: abstracts.$white;
 		}
 
 		&__children {
-			font-size: $font-size-xs;
-			padding: $spacer-xxs $spacer-xs;
+			font-size: abstracts.$font-size-xs;
+			padding: abstracts.$spacer-xxs abstracts.$spacer-xs;
 		}
 
 		&__parent {
-			padding: 0.1rem $spacer-xs;
+			padding: 0.1rem abstracts.$spacer-xs;
 
 			span {
 				display: inline-flex;
-				font-size: $font-size-md;
+				font-size: abstracts.$font-size-md;
 				transform: rotate(45deg);
 			}
 		}
 
 		&--no-content {
-			min-height: $spacer-lg;
+			min-height: abstracts.$spacer-lg;
 			place-content: initial;
 			justify-content: space-between;
 			background-color: transparent;
@@ -181,7 +180,7 @@ $media-card-list-view-height: 13rem;
 
 			&.c-media-card__header--list,
 			&.c-media-card__header--blade {
-				background-color: $silver;
+				background-color: abstracts.$silver;
 				min-height: $media-card-list-view-height;
 				display: flex;
 				place-content: center;
@@ -205,32 +204,32 @@ $media-card-list-view-height: 13rem;
 		left: 0;
 		font-size: 2.2rem;
 		line-height: 0;
-		color: $blue;
+		color: abstracts.$blue;
 		padding: 0.25rem 0.5rem 0.5rem 0.25rem;
-		background-color: $white;
+		background-color: abstracts.$white;
 	}
 
 	&__header-duration {
 		position: absolute;
 		bottom: 0;
 		right: 0;
-		font-size: $font-size-sm;
-		background-color: $white;
-		color: $grey;
+		font-size: abstracts.$font-size-sm;
+		background-color: abstracts.$white;
+		color: abstracts.$grey;
 		padding: 0.5rem 0.75rem;
 	}
 
 	:global(.c-card__subtitle-wrapper),
 	:global(.c-card__children-wrapper) {
-		line-height: $line-height-md * 2rem;
+		line-height: abstracts.$line-height-md * 2rem;
 		text-overflow: ellipsis;
 		overflow: hidden;
 	}
 
 	&__icon {
-		font-size: $font-size-lg * math.div(11, 12);
-		line-height: $line-height-lg;
-		color: $blue !important;
+		font-size: abstracts.$font-size-lg * math.div(11, 12);
+		line-height: abstracts.$line-height-lg;
+		color: abstracts.$blue !important;
 	}
 
 	&__toolbar {
@@ -238,11 +237,11 @@ $media-card-list-view-height: 13rem;
 		flex-direction: row;
 		flex-shrink: 0;
 		position: absolute;
-		right: $spacer-sm;
-		top: $spacer-sm;
+		right: abstracts.$spacer-sm;
+		top: abstracts.$spacer-sm;
 
 		:global(.c-dropdown__content-open) {
-			box-shadow: $shadow-24-black-12;
+			box-shadow: abstracts.$shadow-24-black-12;
 
 			:global(.c-menu) {
 				display: flex;
@@ -253,7 +252,7 @@ $media-card-list-view-height: 13rem;
 					border-radius: 0;
 
 					&:not(:last-child) {
-						border-bottom: 1px solid $silver;
+						border-bottom: 1px solid abstracts.$silver;
 					}
 				}
 			}
@@ -263,7 +262,7 @@ $media-card-list-view-height: 13rem;
 	&:global(.c-media-card--video),
 	&:global(.c-media-card--audio) {
 		// https://meemoo.atlassian.net/browse/ARC-2546
-		@include module-class-selector-global("MediaCard", "c-media-card__header") {
+		@include abstracts.module-class-selector-global("MediaCard", "c-media-card__header") {
 			img {
 				object-fit: cover;
 				object-position: top;
@@ -275,7 +274,7 @@ $media-card-list-view-height: 13rem;
 
 	&:global(.c-media-card--newspaper) {
 		// https://meemoo.atlassian.net/browse/ARC-2546
-		@include module-class-selector-global("MediaCard", "c-media-card__header") {
+		@include abstracts.module-class-selector-global("MediaCard", "c-media-card__header") {
 			background-color: #f8f8f8;
 
 			&:global([class*="c-media-card__header--no-content"]) {
@@ -284,7 +283,7 @@ $media-card-list-view-height: 13rem;
 				&:global([class*="c-media-card__header--list"]),
 				&:global([class*="c-media-card__header--blade"]) {
 					// Keep the same grey placeholder as video/audio when there is no thumbnail
-					background-color: $silver;
+					background-color: abstracts.$silver;
 				}
 			}
 

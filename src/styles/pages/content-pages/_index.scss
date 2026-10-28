@@ -1,18 +1,18 @@
 @use "button" as *;
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-rich-text-editor__content {
 	white-space: initial;
 
 	h5 {
-		font-size: $font-size-lg;
+		font-size: abstracts.$font-size-lg;
 		line-height: 2.6rem;
 	}
 
 	p {
 		margin: 1.5rem 0;
 		min-height: 1em;
-		font-size: $font-size-md;
+		font-size: abstracts.$font-size-md;
 		line-height: 2.8rem;
 	}
 
@@ -32,7 +32,7 @@
 			float: left;
 			width: 30%;
 			clear: left;
-			font-weight: $font-weight-normal;
+			font-weight: abstracts.$font-weight-normal;
 		}
 
 		dd {
@@ -92,7 +92,7 @@
 
 	table th {
 		border-bottom: 0.2rem solid #9cafbd;
-		font-weight: $font-weight-normal;
+		font-weight: abstracts.$font-weight-normal;
 		text-align: left;
 	}
 
@@ -105,7 +105,7 @@
 	}
 
 	strong {
-		font-weight: $font-weight-bold;
+		font-weight: abstracts.$font-weight-bold;
 	}
 
 	em {
@@ -127,7 +127,7 @@
 		color: #666;
 		font-family: monospace;
 		font-size: 14px;
-		font-weight: $font-weight-normal;
+		font-weight: abstracts.$font-weight-normal;
 		line-height: 16px;
 		word-wrap: break-word;
 		white-space: pre-wrap;
