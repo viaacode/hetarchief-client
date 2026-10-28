@@ -1,3 +1,5 @@
+@use "src/styles/abstracts" as abstracts;
+
 .c-metadata-search-link {
 	// https://meemoo.atlassian.net/browse/ARC-2879
 	a {
@@ -6,6 +8,6 @@
 
 	:global(.c-tag--medium) {
 		height: auto !important;
-		font-size: 1.4rem;
+		font-size: abstracts.$font-size-sm;
 	}
 }

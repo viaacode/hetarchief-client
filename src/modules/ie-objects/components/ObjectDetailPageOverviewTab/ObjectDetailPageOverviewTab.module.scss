@@ -59,6 +59,8 @@
 }
 
 .p-object-detail-overview-tab__keywords {
+	padding-bottom: 0 !important;
+
 	:global(.c-tag--medium) {
 		font-size: abstracts.$font-size-sm;
 	}
