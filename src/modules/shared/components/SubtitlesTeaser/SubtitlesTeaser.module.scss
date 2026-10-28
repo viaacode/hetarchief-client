@@ -23,8 +23,8 @@ $arrow-edge-inset: $teaser-padding-x + 1.7rem;
 	--subtitles-teaser-width: min(#{$teaser-width}, calc(var(--subtitles-teaser-player-width) - #{2 * $edge-margin}));
 	--subtitles-teaser-left: clamp(
 		#{$edge-margin},
-		calc(var(--subtitles-teaser-anchor-x) + $arrow-offset-from-right - var(--subtitles-teaser-width)),
-		calc(var(--subtitles-teaser-player-width) - $edge-margin - var(--subtitles-teaser-width))
+		calc(var(--subtitles-teaser-anchor-x) + #{$arrow-offset-from-right} - var(--subtitles-teaser-width)),
+		calc(var(--subtitles-teaser-player-width) - #{$edge-margin} - var(--subtitles-teaser-width))
 	);
 
 	position: absolute;
