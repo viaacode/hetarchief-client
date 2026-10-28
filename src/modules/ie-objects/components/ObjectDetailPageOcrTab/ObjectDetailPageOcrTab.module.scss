@@ -51,8 +51,6 @@ $sticky-overlap-search: 3px;
 
 		&-content {
 			display: flex;
-
-			// Design: disclaimer text is 14px
 			font-size: abstracts.$font-size-sm;
 			flex-direction: row;
 			gap: abstracts.$spacer-xs;
