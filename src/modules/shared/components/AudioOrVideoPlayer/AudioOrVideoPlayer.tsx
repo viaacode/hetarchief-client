@@ -199,7 +199,7 @@ export const AudioOrVideoPlayer: FC<AudioOrVideoPlayerProps> = ({
 		showTitleOverlay: true,
 		peakColorActive: Color.Jade,
 		peakColorInactive: Color.White,
-		colors: { ...FLOWPLAYER_CUSTOM_CONTROL_COLORS_HET_ARCHIEF(), volumeColor: Color.Jade },
+		colors: FLOWPLAYER_CUSTOM_CONTROL_COLORS_HET_ARCHIEF(),
 	};
 	const shared: Partial<FlowPlayerProps> = {
 		className,
