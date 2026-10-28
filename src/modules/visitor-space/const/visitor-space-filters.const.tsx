@@ -40,6 +40,16 @@ const AUDIO_VIDEO_TABS: SearchPageMediaType[] = [
 const NEWSPAPER_TABS: SearchPageMediaType[] = [SearchPageMediaType.Newspaper];
 
 /**
+ * The "Alles" tab offers every advanced filter of the other tabs in its fly-out, so the newspaper
+ * filters show up there as well, just not in its main panel.
+ * https://meemoo.atlassian.net/browse/ARC-4146
+ */
+const NEWSPAPER_AND_ALL_TABS: SearchPageMediaType[] = [
+	SearchPageMediaType.All,
+	SearchPageMediaType.Newspaper,
+];
+
+/**
  * Every filter of the search page, main panel and advanced fly-out alike.
  *
  * `modalType` follows the "Allocatie per filter" table of the ARC-3806 FA. `inMainPanelByDefault`
@@ -189,8 +199,8 @@ export const SEARCH_PAGE_FILTERS = (
 			type: FilterMenuType.Modal,
 			modalType: FilterModalType.Checkbox,
 			field: IeObjectsSearchFilterField.LOCATION_CREATED,
-			inMainPanelByDefault: true,
-			tabs: NEWSPAPER_TABS,
+			inMainPanelByDefault: activeTab === SearchPageMediaType.Newspaper,
+			tabs: NEWSPAPER_AND_ALL_TABS,
 		},
 		{
 			id: SearchFilterId.Medium,
@@ -217,8 +227,8 @@ export const SEARCH_PAGE_FILTERS = (
 			type: FilterMenuType.Modal,
 			modalType: FilterModalType.Autocomplete,
 			field: IeObjectsSearchFilterField.MENTIONS,
-			inMainPanelByDefault: true,
-			tabs: NEWSPAPER_TABS,
+			inMainPanelByDefault: activeTab === SearchPageMediaType.Newspaper,
+			tabs: NEWSPAPER_AND_ALL_TABS,
 		},
 		autoCompleteFilter(SearchFilterId.MentionPerson, IeObjectsSearchFilterField.MENTION_PERSON),
 		autoCompleteFilter(SearchFilterId.MentionPlace, IeObjectsSearchFilterField.MENTION_PLACE),
@@ -243,9 +253,6 @@ export const SEARCH_PAGE_FILTERS = (
 			field: IeObjectsSearchFilterField.RIGHTS,
 			inMainPanelByDefault: false,
 			tabs: ALL_TABS,
-			isDisabled: () => {
-				return !ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY && !isKeyUser;
-			},
 		},
 		{
 			id: SearchFilterId.Theme,

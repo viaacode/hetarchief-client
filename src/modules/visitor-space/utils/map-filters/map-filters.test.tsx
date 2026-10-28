@@ -67,6 +67,13 @@ const THEME_FILTER = filter(
 	IeObjectsSearchFilterField.THEME
 );
 
+const RIGHTS_FILTER = filter(
+	SearchFilterId.Rights,
+	FilterModalType.Checkbox,
+	'Rechten',
+	IeObjectsSearchFilterField.RIGHTS
+);
+
 const CONSULTABLE_MEDIA_FILTER: FilterMenuFilterOption = {
 	...filter(
 		SearchFilterId.ConsultableMedia,
@@ -134,6 +141,17 @@ describe('Utils', () => {
 			expect(tags).toHaveLength(1);
 			// Only the slug travels through the url, so the same url can be labelled in either language
 			expect(asText(tags[0].label)).toContain('Onderwijs en leren');
+		});
+
+		it('should label the rights filter with the rights label instead of its url', () => {
+			const tags = toTags(
+				{ [SearchFilterId.Rights]: ['https://rightsstatements.org/page/InC/1.0/'] },
+				[RIGHTS_FILTER]
+			);
+
+			expect(tags).toHaveLength(1);
+			expect(asText(tags[0].label)).toContain('auteursrechtelijk beschermd');
+			expect(asText(tags[0].label)).not.toContain('rightsstatements.org');
 		});
 
 		it('should label a theme filter of an url from before ARC-3806', () => {
