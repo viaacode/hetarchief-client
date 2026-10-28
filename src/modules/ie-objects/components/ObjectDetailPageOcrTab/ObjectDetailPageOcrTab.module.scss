@@ -51,6 +51,7 @@ $sticky-overlap-search: 3px;
 
 		&-content {
 			display: flex;
+			font-size: abstracts.$font-size-sm;
 			flex-direction: row;
 			gap: abstracts.$spacer-xs;
 			justify-content: space-between;
