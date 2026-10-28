@@ -27,7 +27,7 @@ import { SearchFilterId, type VisitorSpaceInfo } from '@visitor-space/types';
 import clsx from 'clsx';
 import { groupBy, intersection, isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
-import { parseUrl, stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import type { MouseEventHandler, ReactNode } from 'react';
 
 const linkCls = (...classNames: string[]) => {
@@ -143,7 +143,7 @@ const getSearchDropdown = (
 
 	// currentPath is router.asPath, so compare the parsed format param instead of the raw string:
 	// the query can hold other params (zoekterm, aanbieder, ...) in any order
-	const { url: currentPathname, query: currentQuery } = parseUrl(currentPath);
+	const { url: currentPathname, query: currentQuery } = queryString.parseUrl(currentPath);
 	const activeMediaType =
 		currentPathname === searchPath
 			? ((currentQuery[SearchFilterId.Format] as SearchPageMediaType) ?? SearchPageMediaType.All)
@@ -223,7 +223,7 @@ const getSearchDropdown = (
 				isDivider: 'md',
 			},
 			...mediaTypeItems.map(({ id, label, mediaType, iconName }): NavigationItem => {
-				const searchRouteForMediaType = stringifyUrl({
+				const searchRouteForMediaType = queryString.stringifyUrl({
 					url: searchPath,
 					query: { [SearchFilterId.Format]: mediaType },
 				});
@@ -474,6 +474,24 @@ const getCpAdminManagementDropdown = (
 							},
 						]
 					: []),
+				...(permissions.includes(Permission.MANAGE_ORGANISATION_FOLDERS)
+					? [
+							{
+								node: renderLink(
+									tText('modules/navigation/components/navigation/navigation___organisatiemappen'),
+									ROUTES_BY_LOCALE[locale].cpAdminOrganisationFolders,
+									{
+										className: dropdownCls(),
+									}
+								),
+								id: 'nav__beheer--organisatiemappen',
+								path: currentPath,
+								activeMobile: currentPath.startsWith(
+									ROUTES_BY_LOCALE[locale].cpAdminOrganisationFolders
+								),
+							},
+						]
+					: []),
 				...(permissions.includes(Permission.VIEW_ANY_MATERIAL_REQUESTS)
 					? [
 							{
@@ -532,7 +550,7 @@ const getCpAdminManagementDropdown = (
 									tText(
 										'modules/navigation/components/navigation/navigation___naar-mijn-bezoekerstool'
 									),
-									stringifyUrl({
+									queryString.stringifyUrl({
 										url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 										query: {
 											[SearchFilterId.Maintainer]: maintainerSlug,

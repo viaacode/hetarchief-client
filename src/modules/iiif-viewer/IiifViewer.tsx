@@ -34,7 +34,7 @@ import { clamp, compact, debounce, isNil, round } from 'es-toolkit/compat';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import type { TiledImageOptions, TileSource, Viewer } from 'openseadragon';
-import { parseUrl } from 'query-string';
+import queryString from 'query-string';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PerfectScrollbar from 'react-perfect-scrollbar';
 import styles from './IiifViewer.module.scss';
@@ -531,7 +531,7 @@ export const IiifViewer = ({
 			const centerPoint = openSeadragonViewerTemp.viewport.getCenter();
 			// Use window to parse query params, since this native event listener doesn't have access to the update-to-date router.query query params
 			// We also include ...router.query since route params (eg: slug and ieObjectId) are also part of the router.query object
-			const parsedUrl = parseUrl(window.location.href);
+			const parsedUrl = queryString.parseUrl(window.location.href);
 
 			const oldZoomLevel = parsedUrl.query.zoomLevel;
 			const oldFocusX = parsedUrl.query.focusX;
@@ -586,7 +586,7 @@ export const IiifViewer = ({
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: Do not rerun this function when the queryParams change, since we only want apply the zoom and pan from the query params once to the iiif viewer
 	const initIiifViewer = useCallback(async () => {
-		if (!!iiifViewerId && isBrowser()) {
+		if (iiifViewerId && isBrowser()) {
 			const iiifContainer = document.getElementById(iiifViewerId);
 			if (!iiifContainer) {
 				return;

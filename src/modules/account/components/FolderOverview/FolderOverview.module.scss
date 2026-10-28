@@ -1,0 +1,13 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-folder-overview {
+	&__folder-edit {
+		@media (max-width: abstracts.$breakpoint-md) {
+			display: none;
+		}
+	}
+
+	&__empty {
+		max-width: 64rem;
+	}
+}

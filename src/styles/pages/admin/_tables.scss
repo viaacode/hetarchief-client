@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-admin__content {
 	.c-table--bordered {
@@ -19,7 +19,7 @@
 		}
 
 		.c-button:last-child {
-			border: 1px solid $zinc !important;
+			border: 1px solid abstracts.$zinc !important;
 			border-width: 0 0 0 1px !important;
 			border-radius: 0 50% 50% 0;
 		}

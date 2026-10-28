@@ -1,38 +1,36 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-error-page";
-
-.#{$component} {
+.c-error-page {
 	height: 100%;
 	display: grid;
 
 	&__title {
-		z-index: get-z-layer("foreground");
+		z-index: abstracts.get-z-layer("foreground");
 		max-width: 63rem;
 		grid-row: 3;
 		color: white;
 		text-align: center;
 		margin: 0 auto;
-		padding: 0 $spacer-sm;
+		padding: 0 abstracts.$spacer-sm;
 		align-self: center;
-		font-size: $font-size-1xl;
-		line-height: $line-height-2xl;
+		font-size: abstracts.$font-size-1xl;
+		line-height: abstracts.$line-height-2xl;
 
-		@media (min-width: $breakpoint-md) {
-			font-size: $font-size-4xl;
+		@media (min-width: abstracts.$breakpoint-md) {
+			font-size: abstracts.$font-size-4xl;
 		}
 	}
 
 	&__image-background {
-		background-color: $black;
+		background-color: abstracts.$black;
 		grid-row: 1;
 		grid-column: 1 / 4;
 		display: grid;
 		grid-template-rows: 1fr 8rem 2fr;
 		justify-content: center;
-		padding-bottom: $spacer-2xl;
+		padding-bottom: abstracts.$spacer-2xl;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			grid-template-rows: 1fr 15rem 2fr;
 		}
 	}
@@ -53,10 +51,10 @@ $component: "c-error-page";
 		grid-column: 2;
 		display: grid;
 		justify-items: center;
-		row-gap: $spacer-md;
-		padding: $spacer-sm 0;
+		row-gap: abstracts.$spacer-md;
+		padding: abstracts.$spacer-sm 0;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			grid-template-rows: 1fr auto auto 2fr;
 		}
 	}
@@ -64,23 +62,23 @@ $component: "c-error-page";
 	&__description {
 		text-align: center;
 		align-self: flex-end;
-		color: $neutral;
-		line-height: $line-height-4xl;
+		color: abstracts.$neutral;
+		line-height: abstracts.$line-height-4xl;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			grid-row: 2;
 			max-width: 53rem;
 		}
 	}
 
 	&__button-component {
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			grid-row: 3;
 		}
 	}
 
 	&__button {
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			grid-row: 4;
 		}
 	}

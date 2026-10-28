@@ -1,28 +1,28 @@
 @use "sass:map";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-toast {
-	max-width: $toast-max-width;
+	max-width: abstracts.$toast-max-width;
 	display: grid;
 
 	// Long unbroken content (e.g. an appended json payload) must wrap instead of overflowing
 	overflow-wrap: anywhere;
 	grid-template-columns: 1fr auto;
-	gap: $spacer-xs $spacer-sm;
+	gap: abstracts.$spacer-xs abstracts.$spacer-sm;
 	padding: 2rem;
-	background-color: $black;
+	background-color: abstracts.$black;
 	color: white;
 
 	&__title {
-		font-weight: $font-weight-bold;
-		font-size: $font-size-md;
-		line-height: $line-height-2xl;
+		font-weight: abstracts.$font-weight-bold;
+		font-size: abstracts.$font-size-md;
+		line-height: abstracts.$line-height-2xl;
 	}
 
 	&__description {
-		font-size: $font-size-sm;
+		font-size: abstracts.$font-size-sm;
 		align-self: center;
-		line-height: $line-height-2xl;
+		line-height: abstracts.$line-height-2xl;
 	}
 
 	&__button-wrapper {
@@ -31,7 +31,7 @@
 	}
 
 	&__action-button {
-		margin-top: $spacer-xs;
+		margin-top: abstracts.$spacer-xs;
 		margin-left: auto;
 		grid-column: span 2;
 	}

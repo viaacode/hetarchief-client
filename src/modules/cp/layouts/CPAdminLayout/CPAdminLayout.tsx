@@ -18,7 +18,7 @@ import clsx from 'clsx';
 import { isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import { type FC, useCallback, useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -56,7 +56,7 @@ const CPAdminLayout: FC<CPAdminLayoutProps> = ({ children, className, pageTitle 
 				const url =
 					id !== CP_ADMIN_SEARCH_VISITOR_SPACE_KEY
 						? href
-						: stringifyUrl({
+						: queryString.stringifyUrl({
 								url: href,
 								query: {
 									[SearchFilterId.Maintainer]: user?.visitorSpaceSlug,

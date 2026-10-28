@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-navigation {
 	&__logo {
@@ -18,8 +18,8 @@
 			cursor: pointer;
 			margin: 1rem 6rem 1rem 0;
 
-			@media (max-width: $breakpoint-xxl) {
-				margin: 3.5rem 0 3.5rem $spacer-md;
+			@media (max-width: abstracts.$breakpoint-xxl) {
+				margin: 3.5rem 0 3.5rem abstracts.$spacer-md;
 			}
 		}
 	}
@@ -27,12 +27,12 @@
 	&__auth {
 		border-radius: 0;
 
-		@media (max-width: $breakpoint-xxl) {
+		@media (max-width: abstracts.$breakpoint-xxl) {
 			padding: 0;
 			margin: 0;
 
 			.c-button__content {
-				font-size: $font-size-sm;
+				font-size: abstracts.$font-size-sm;
 				padding: 0;
 				margin: 0;
 				text-align: right;
@@ -57,13 +57,13 @@
 
 			&--white {
 				&::after {
-					background-color: $white;
+					background-color: abstracts.$white;
 				}
 			}
 
 			&--teal {
 				&::after {
-					background-color: $teal;
+					background-color: abstracts.$teal;
 				}
 			}
 		}

@@ -1,7 +1,7 @@
 import { FoldersService } from '@account/services/folders';
 import type { FolderIeObject } from '@account/types';
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { QUERY_KEYS } from '@shared/const/query-keys';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import { type UseQueryResult, useQuery } from '@tanstack/react-query';
 
 export function useGetFolderMedia(
@@ -11,7 +11,7 @@ export function useGetFolderMedia(
 	size: number
 ): UseQueryResult<IPagination<FolderIeObject> | undefined> {
 	return useQuery({
-		queryKey: [QUERY_KEYS.getCollectionMedia, searchInput, page, size],
+		queryKey: [QUERY_KEYS.getCollectionMedia, id, searchInput, page, size],
 		queryFn: () => {
 			if (id) {
 				return FoldersService.getById(id, searchInput, page, size);

@@ -1,16 +1,16 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c--account-admin__header {
 	display: flex;
 	align-items: center;
 	padding-top: 6.4rem;
-	padding-bottom: $spacer-1xl;
+	padding-bottom: abstracts.$spacer-1xl;
 }
 
 .c-account-admin__page-title {
 	flex-grow: 1;
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		font-size: 2.8rem;
 	}
 }

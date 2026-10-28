@@ -20,7 +20,6 @@ import React, {
 	useState,
 } from 'react';
 import useDetectKeyboardOpen from 'use-detect-keyboard-open';
-import { v4 as uuid } from 'uuid';
 import styles from './MaterialRequestConversationInput.module.scss';
 import { MessageFileUpload } from './MessageFileUpload';
 
@@ -34,7 +33,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 		const locale = useLocale();
 
 		const fileListRef = useRef<HTMLDivElement>(null);
-		const [editorKey, setEditorKey] = useState(uuid()); // To force rich text editor to rerender
+		const [editorKey, setEditorKey] = useState(crypto.randomUUID()); // To force rich text editor to rerender
 		const editorId = `material-request-conversation--${editorKey}`;
 		const isKeyboardOpen = useDetectKeyboardOpen();
 		const [currentMessage, setCurrentMessage] = useState<string>('');
@@ -71,7 +70,7 @@ export const MaterialRequestConversationInput: FC<MaterialRequestConversationInp
 					onSuccess: () => {
 						setCurrentMessage('');
 						setSelectedFiles([]);
-						setEditorKey(uuid()); // Force rerender of rich text editor
+						setEditorKey(crypto.randomUUID()); // Force rerender of rich text editor
 					},
 					onError: (err) => {
 						console.error(err);

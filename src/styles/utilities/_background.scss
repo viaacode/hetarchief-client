@@ -1,33 +1,33 @@
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
 /**
  * Color
  */
 
 .u-bg-black {
-	background-color: $black;
+	background-color: abstracts.$black;
 }
 
 .u-bg-platinum {
-	background-color: $platinum;
+	background-color: abstracts.$platinum;
 }
 
 .u-bg-white {
-	background-color: $white;
+	background-color: abstracts.$white;
 }
 
 .u-bg-silver {
-	background-color: $silver;
+	background-color: abstracts.$silver;
 }
 
 .u-bg-mustard {
-	background-color: $mustard;
+	background-color: abstracts.$mustard;
 }
 
 .u-bg-lila {
-	background-color: $lila;
+	background-color: abstracts.$lila;
 }
 
 .u-bg-shade {
-	background-color: $shade;
+	background-color: abstracts.$shade;
 }

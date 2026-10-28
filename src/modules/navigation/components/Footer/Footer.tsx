@@ -15,10 +15,10 @@ const Footer: FC<FooterProps> = ({ linkSections }) => {
 	const renderLinks = (links: ComponentLink[], key: string) => {
 		return (
 			<div className={styles['c-footer__links__section']} key={key}>
-				{links.map((link, index) => {
+				{links.map((link) => {
 					return (
 						<Link
-							key={`${link.to}-${index}`}
+							key={`${link.to}-${link.label}`}
 							href={link.to}
 							className={styles['c-footer__link']}
 							target={link.external ? '_blank' : '_self'}

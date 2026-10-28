@@ -1,14 +1,14 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-loading--fullscreen {
 	width: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	height: calc($view-height - #{$c-navigation-height-md});
+	height: calc(abstracts.$view-height - abstracts.$c-navigation-height-md);
 
-	@media (min-width: $breakpoint-md) {
-		height: calc($view-height - #{$c-navigation-height});
+	@media (min-width: abstracts.$breakpoint-md) {
+		height: calc(abstracts.$view-height - abstracts.$c-navigation-height);
 	}
 }
 
@@ -21,5 +21,5 @@
 
 
 .c-loading--light {
-	color: $white;
+	color: abstracts.$white;
 }

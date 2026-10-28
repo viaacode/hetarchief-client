@@ -1,18 +1,18 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
 .p-material-request-detail-evaluator-options {
 	display: flex;
 	flex-direction: column;
-	padding: $spacer-sm;
-	background-color: $white;
-	gap: $spacer-sm;
+	padding: abstracts.$spacer-sm;
+	background-color: abstracts.$white;
+	gap: abstracts.$spacer-sm;
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		padding: 0;
 	}
 
 	&__title {
-		font-weight: $font-weight-bold;
+		font-weight: abstracts.$font-weight-bold;
 		display: block;
 	}
 
@@ -22,27 +22,27 @@
 
 	&__button {
 		display: flex;
-		background-color: $white;
-		border: 1px solid $silver;
-		border-left: $spacer-xs solid $silver;
-		padding: $spacer-sm;
-		font-size: $font-size-base;
-		font-weight: $font-weight-normal;
+		background-color: abstracts.$white;
+		border: 1px solid abstracts.$silver;
+		border-left: abstracts.$spacer-xs solid abstracts.$silver;
+		padding: abstracts.$spacer-sm;
+		font-size: abstracts.$font-size-base;
+		font-weight: abstracts.$font-weight-normal;
 		text-align: left;
 		border-radius: .65rem;
-		color: $neutral;
+		color: abstracts.$neutral;
 		outline: none;
 
 		&::after{
-			font-size: $font-size-lg;
+			font-size: abstracts.$font-size-lg;
 			content: "angle-right";
 			align-self: center;
-			padding-left: $spacer-xs;
+			padding-left: abstracts.$spacer-xs;
 			margin-left: auto;
 
 			// Safari only
 			@supports (background: -webkit-named-image(i)) {
-				padding-right: $spacer-md;
+				padding-right: abstracts.$spacer-md;
 			}
 
 			// Enable Ligatures
@@ -53,8 +53,8 @@
 			// Better Font Rendering
 			-webkit-font-smoothing: antialiased;
 			-moz-osx-font-smoothing: grayscale;
-			font-family: $font-family-icons-light;
-			color: $black;
+			font-family: abstracts.$font-family-icons-light;
+			color: abstracts.$black;
 		}
 
 		:global(.c-button__content) {
@@ -64,11 +64,11 @@
 		&-title {
 			display: block;
 			align-items: center;
-			padding-bottom: $spacer-xxs;
+			padding-bottom: abstracts.$spacer-xxs;
 			white-space: normal;
-			font-size: $font-size-base;
-			line-height: $font-size-lg;
-			color: $black;
+			font-size: abstracts.$font-size-base;
+			line-height: abstracts.$font-size-lg;
+			color: abstracts.$black;
 		}
 
 		&-icon {
@@ -77,30 +77,30 @@
 			color: white;
 			width: fit-content;
 			height: fit-content;
-			margin-right: $spacer-xs;
+			margin-right: abstracts.$spacer-xs;
 		}
 
 		&-description {
 			display: block;
 			font-style: italic;
 			white-space: normal;
-			font-size: $font-size-base;
-			line-height: $font-size-2xm;
-			color: $shade;
+			font-size: abstracts.$font-size-base;
+			line-height: abstracts.$font-size-2xm;
+			color: abstracts.$shade;
 		}
 
 		&:global(:hover:not(:disabled)) {
-			color: $black;
+			color: abstracts.$black;
 
 			.p-material-request-detail-evaluator-options__button {
 				&-title {
-					font-weight: $font-weight-bold;
+					font-weight: abstracts.$font-weight-bold;
 				}
 			}
 		}
 
 		&:global(:hover) {
-			background-color: $white;
+			background-color: abstracts.$white;
 		}
 
 		&:global(:disabled) {
@@ -108,38 +108,38 @@
 		}
 
 		&-approve {
-			border-left-color: $seagreen;
+			border-left-color: abstracts.$seagreen;
 
 			.p-material-request-detail-evaluator-options__button-icon{
-				background-color: $seagreen;
+				background-color: abstracts.$seagreen;
 			}
 
 			&:global(:hover) {
-				border-color: $seagreen;
+				border-color: abstracts.$seagreen;
 			}
 		}
 
 		&-additional-conditions {
-			border-left-color: $mustard;
+			border-left-color: abstracts.$mustard;
 
 			.p-material-request-detail-evaluator-options__button-icon{
-				background-color: $mustard;
+				background-color: abstracts.$mustard;
 			}
 
 			&:global(:hover) {
-				border-color: $mustard;
+				border-color: abstracts.$mustard;
 			}
 		}
 
 		&-deny {
-			border-left-color: $cherry-light;
+			border-left-color: abstracts.$cherry-light;
 
 			.p-material-request-detail-evaluator-options__button-icon{
-				background-color: $cherry-light;
+				background-color: abstracts.$cherry-light;
 			}
 
 			&:global(:hover) {
-				border-color: $cherry-light;
+				border-color: abstracts.$cherry-light;
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $page: "p-cp-visitor-spaces";
 
@@ -10,7 +10,7 @@ $page: "p-cp-visitor-spaces";
 		height: 5.6rem;
 		display: flex;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			display: flex;
 			flex-flow: row-reverse nowrap;
 
@@ -22,23 +22,23 @@ $page: "p-cp-visitor-spaces";
 	}
 
 	&__search {
-		margin-bottom: $spacer-md;
+		margin-bottom: abstracts.$spacer-md;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			flex-basis: 34.1rem;
 			margin-bottom: 0;
-			margin-left: $spacer-sm;
+			margin-left: abstracts.$spacer-sm;
 		}
 	}
 
 	&__actions {
 		cursor: pointer;
-		font-size: $font-size-lg;
+		font-size: abstracts.$font-size-lg;
 		transform: translateY(0.2rem); // shift if to center on single-line
 	}
 
 	tr {
-		@media (max-width: $breakpoint-lg) {
+		@media (max-width: abstracts.$breakpoint-lg) {
 			td,
 			th {
 				&:nth-child(2),
@@ -58,7 +58,7 @@ $page: "p-cp-visitor-spaces";
 
 		td:nth-last-child(2) {
 			padding-right: 0;
-			border-left: 1px solid $silver;
+			border-left: 1px solid abstracts.$silver;
 		}
 	}
 

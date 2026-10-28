@@ -1,10 +1,9 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-add-to-folder-blade";
-$add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
+$add-to-collection-checkbox-padding: abstracts.$spacer-xs + abstracts.$spacer-xxs;
 
-.#{$component} {
+.c-add-to-folder-blade {
 	&__list {
 		@extend %reset-list;
 
@@ -16,11 +15,20 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			}
 
 			:global(.c-content-input) {
-				padding-top: $spacer-xs;
+				padding-bottom: 0;
 
-				@media (min-width: $breakpoint-md) {
-					padding-top: $spacer-sm;
+				@media (min-width: abstracts.$breakpoint-md) {
+					padding-bottom: abstracts.$spacer-xs;
 				}
+			}
+
+			// Keep the typed name away from the focus outline,
+			// the negative margin keeps the text aligned with the folder names and the "new folder" label
+			// The label (before opening) and the input (after opening) get the same box, so their focus outlines do not jump
+			:global(.c-content-input__field),
+			:global(.c-content-input__value) {
+				padding-left: abstracts.$spacer-xs;
+				margin-left: 0 - abstracts.$spacer-xs;
 			}
 
 			// break rule of 8 for visual alignment
@@ -55,11 +63,37 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			&__label {
 				flex-grow: 1;
 				flex-shrink: 1;
-				padding: $spacer-sm;
+				padding: abstracts.$spacer-sm;
 
-				@media (min-width: $breakpoint-md) {
-					padding-top: $spacer-md;
-					padding-bottom: $spacer-md;
+				@media (min-width: abstracts.$breakpoint-md) {
+					padding-top: abstracts.$spacer-md;
+					padding-bottom: abstracts.$spacer-md;
+				}
+			}
+
+			// All hints of a folder share one grid cell, so the tallest one determines the height
+			&__hints {
+				display: grid;
+				margin-top: abstracts.$spacer-xxs;
+			}
+
+			// Explains the indeterminate state or how many objects will be added or removed
+			&__hint {
+				grid-area: 1 / 1;
+				font-size: abstracts.$font-size-sm;
+				color: abstracts.$shade;
+
+				// Same color as the primary save button
+				&--add {
+					color: abstracts.$teal-dark;
+				}
+
+				&--remove {
+					color: abstracts.$cherry;
+				}
+
+				&--hidden {
+					visibility: hidden;
 				}
 			}
 
@@ -71,8 +105,48 @@ $add-to-collection-checkbox-padding: $spacer-xs + $spacer-xxs;
 			}
 
 			&:not(:last-child) {
-				border-bottom: 1px solid $black-20;
+				border-bottom: 1px solid abstracts.$black-20;
 			}
 		}
 	}
+
+	&__list-empty {
+		padding: abstracts.$spacer-sm 0;
+		color: abstracts.$shade;
+	}
+
+	&__error {
+		padding: abstracts.$spacer-sm 0;
+		color: abstracts.$cherry;
+	}
+
+	&__section {
+		margin-bottom: abstracts.$spacer-sm;
+	}
+
+	&__section-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		width: 100%;
+		padding: abstracts.$spacer-sm abstracts.$spacer-md;
+		border: 1px solid abstracts.$black;
+		background-color: abstracts.$white;
+		color: abstracts.$black;
+		font-family: abstracts.$font-family-primary;
+		font-size: abstracts.$font-size-base;
+		font-weight: abstracts.$font-weight-bold;
+		text-align: left;
+		cursor: pointer;
+
+		:global(.c-icon) {
+			font-size: abstracts.$font-size-lg;
+		}
+
+		&:focus-visible {
+			outline: 2px solid abstracts.$teal-dark;
+			outline-offset: 2px;
+		}
+	}
+
 }

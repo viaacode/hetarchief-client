@@ -1,8 +1,6 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-checkbox-list";
-
-.#{$component} {
+.c-checkbox-list {
 	@extend %reset-list;
 
 	&__item {
@@ -10,19 +8,19 @@ $component: "c-checkbox-list";
 		flex-flow: row nowrap;
 		align-items: center;
 		cursor: pointer;
-		outline-color: $teal;
+		outline-color: abstracts.$teal;
 		user-select: none;
 
 		.c-checkbox {
-			padding: $spacer-xs;
+			padding: abstracts.$spacer-xs;
 			box-sizing: content-box;
-			margin-right: $spacer-xs;
+			margin-right: abstracts.$spacer-xs;
 			pointer-events: none;
 		}
 
 		.c-checkbox__check-icon {
 			top: 0;
-			margin: $spacer-xs;
+			margin: abstracts.$spacer-xs;
 		}
 	}
 }

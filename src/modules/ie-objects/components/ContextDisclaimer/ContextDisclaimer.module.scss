@@ -71,7 +71,7 @@ $context-disclaimer-offset: abstracts.$spacer-sm;
 
 	@media (max-width: abstracts.$breakpoint-md) {
 		&--active {
-			max-width: calc(100% - #{$context-disclaimer-offset} * 2);
+			max-width: calc(100% - $context-disclaimer-offset * 2);
 		}
 	}
 }

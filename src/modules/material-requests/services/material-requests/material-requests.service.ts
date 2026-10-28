@@ -12,10 +12,10 @@ import {
 	type MaterialRequestUnreadSummary,
 	type MaterialRequestUpdate,
 } from '@material-requests/types';
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { ApiService } from '@shared/services/api-service';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import { isNil } from 'es-toolkit/compat';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import { MATERIAL_REQUESTS_SERVICE_BASE_URL } from './material-requests.service.const';
 import type { GetMaterialRequestsProps } from './material-requests.service.types';
 
@@ -54,7 +54,7 @@ export abstract class MaterialRequestsService {
 		};
 		const result = await ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url,
 					query,
 				})
@@ -70,7 +70,7 @@ export abstract class MaterialRequestsService {
 		}
 		return ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${id}`,
 					query: { resolveThumbnailUrl: true },
 				})
@@ -185,7 +185,7 @@ export abstract class MaterialRequestsService {
 	): Promise<IPagination<MaterialRequestAttachment>> {
 		return ApiService.getApi()
 			.get(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/attachments`,
 					query: {
 						...(orderProp && { orderProp }),
@@ -203,7 +203,7 @@ export abstract class MaterialRequestsService {
 		page: number,
 		size: number
 	): Promise<IPagination<MaterialRequestMessage>> {
-		const url = stringifyUrl({
+		const url = queryString.stringifyUrl({
 			url: `${MATERIAL_REQUESTS_SERVICE_BASE_URL}/${materialRequestId}/messages`,
 			query: {
 				page,

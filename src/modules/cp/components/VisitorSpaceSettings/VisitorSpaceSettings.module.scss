@@ -141,7 +141,7 @@
 		background-color: abstracts.$silver;
 		border: 1px solid abstracts.$zinc;
 		border-bottom: none;
-		padding: calc(#{abstracts.$spacer-xs} + 2px);
+		padding: calc(abstracts.$spacer-xs + 2px);
 		border-radius: 0;
 		font-weight: abstracts.$font-weight-normal;
 

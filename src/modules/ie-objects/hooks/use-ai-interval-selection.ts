@@ -11,8 +11,9 @@ import {
 import { getPlayerVideoElement, seekPlayerVideo } from '@ie-objects/utils/seek-player-video';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { noop } from 'es-toolkit/compat';
-import { parseUrl } from 'query-string';
+import queryString from 'query-string';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useQueryParams } from 'use-query-params';
 
 // undefined removes a query param
 const NO_AI_INTERVAL_QUERY = {
@@ -29,8 +30,7 @@ interface UseAiIntervalSelectionProps {
 	updateActiveTab: (
 		tab: ObjectDetailTabs | null,
 		extraQuery?: Record<string, string | undefined>
-	) => Promise<void>;
-	updateQueryParams: (patch: Record<string, string | undefined>) => Promise<void>;
+	) => void;
 }
 
 /**
@@ -43,8 +43,9 @@ export const useAiIntervalSelection = ({
 	isMobile,
 	activeTab,
 	updateActiveTab,
-	updateQueryParams,
 }: UseAiIntervalSelectionProps) => {
+	const [, setQueryParams] = useQueryParams({});
+
 	// A seek asked for while the player isn't rendered yet (mobile, on another tab; or a restore
 	// on load) waits here until the player reports it is ready
 	const pendingSeekSecondsRef = useRef<number | null>(null);
@@ -65,9 +66,9 @@ export const useAiIntervalSelection = ({
 		requestedSeekSecondsRef.current = null;
 		// Not on load (no previous file): the url still has to be restored from
 		if (previousFileId && previousFileId !== currentPlayableFileId) {
-			const { query } = parseUrl(window.location.href);
+			const { query } = queryString.parseUrl(window.location.href);
 			if (query[QUERY_PARAM_KEY.ACTIVE_AI_ENTITY] || query[QUERY_PARAM_KEY.ACTIVE_AI_INTERVAL]) {
-				updateQueryParams(NO_AI_INTERVAL_QUERY).then(noop);
+				setQueryParams(NO_AI_INTERVAL_QUERY, 'replaceIn');
 			}
 		}
 	}, [currentPlayableFileId]);
@@ -113,7 +114,7 @@ export const useAiIntervalSelection = ({
 			return;
 		}
 		hasRestoredAiIntervalRef.current = true;
-		const { query } = parseUrl(window.location.href);
+		const { query } = queryString.parseUrl(window.location.href);
 		const entityId = query[QUERY_PARAM_KEY.ACTIVE_AI_ENTITY];
 		const intervalIndex = Number(query[QUERY_PARAM_KEY.ACTIVE_AI_INTERVAL]);
 		const entity = [
@@ -140,20 +141,20 @@ export const useAiIntervalSelection = ({
 			};
 			if (isMobile && activeTab !== ObjectDetailTabs.Media) {
 				// On mobile the player is on the Media tab, so show it
-				updateActiveTab(ObjectDetailTabs.Media, aiIntervalQuery).then(noop);
+				updateActiveTab(ObjectDetailTabs.Media, aiIntervalQuery);
 			} else {
-				updateQueryParams(aiIntervalQuery).then(noop);
+				setQueryParams(aiIntervalQuery, 'replaceIn');
 			}
 		},
-		[seekPlayer, isMobile, activeTab, updateActiveTab, updateQueryParams]
+		[seekPlayer, isMobile, activeTab, updateActiveTab, setQueryParams]
 	);
 
 	const clearAiInterval = useCallback(() => {
 		setActiveAiInterval(null);
 		pendingSeekSecondsRef.current = null;
 		requestedSeekSecondsRef.current = null;
-		updateQueryParams(NO_AI_INTERVAL_QUERY).then(noop);
-	}, [updateQueryParams]);
+		setQueryParams(NO_AI_INTERVAL_QUERY, 'replaceIn');
+	}, [setQueryParams]);
 
 	return { activeAiInterval, selectAiInterval, clearAiInterval, onPlayerReady };
 };

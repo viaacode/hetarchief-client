@@ -7,7 +7,7 @@ import { Locale } from '@shared/utils/i18n';
 import { keepPreviousData, useQueries } from '@tanstack/react-query';
 import type { AvoCorePickerItem, HetArchiefIeObject } from '@viaa/avo2-types';
 import { compact } from 'es-toolkit/compat';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import { stripHtml } from 'string-strip-html';
 import type { MappedElement } from '../BlockContentEnclose.types';
 import type {
@@ -39,7 +39,7 @@ export const useGetContentBlockEncloseContent = (
 				return null;
 			}
 			return fetchWithLogoutJson<ContentPage[]>(
-				stringifyUrl({
+				queryString.stringifyUrl({
 					url: `${publicRuntimeConfig.PROXY_URL}/admin/content-pages/by-language-and-path`,
 					query: {
 						language: AdminConfigManager.getConfig().locale || Locale.nl,

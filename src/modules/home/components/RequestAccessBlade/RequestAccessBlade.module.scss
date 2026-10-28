@@ -1,14 +1,14 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-request-access-blade {
 	:global(.c-input--textarea .c-input__field) {
-		@media (max-width: $breakpoint-sm) {
+		@media (max-width: abstracts.$breakpoint-sm) {
 			min-height: 10rem;
 		}
 	}
 
 	&__checkbox {
-		margin-bottom: $spacer-xs;
+		margin-bottom: abstracts.$spacer-xs;
 	}
 }

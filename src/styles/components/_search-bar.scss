@@ -1,5 +1,5 @@
 @use "sass:math";
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
 /**
 * Elements
@@ -7,21 +7,21 @@
 
 .c-tag-search-bar.c-tags-input {
 	.c-tags-input__control {
-		border-radius: $button-radius;
-		background-color: $silver;
-		border-color: $silver;
+		border-radius: abstracts.$button-radius;
+		background-color: abstracts.$silver;
+		border-color: abstracts.$silver;
 
 		&.c-tags-input__control--is-focused,
 		&.c-tags-input__control--is-focused:hover {
-			border-color: $teal;
+			border-color: abstracts.$teal;
 			border-width: 0.2rem;
 			box-shadow: none;
-			transition: border $animate-default;
+			transition: border abstracts.$animate-default;
 		}
 	}
 
 	.c-tags-input__value-container {
-		padding-left: $spacer-md;
+		padding-left: abstracts.$spacer-md;
 	}
 
 	.c-tags-input__indicators {
@@ -30,15 +30,15 @@
 
 	// The pill of one applied filter value. See the "Redesign pills" section of the FA of ARC-3806.
 	.c-tag {
-		background-color: $teal-40;
-		border-radius: $border-radius-sm;
-		gap: $spacer-xxs;
-		padding: $filter-pill-padding;
+		background-color: abstracts.$teal-40;
+		border-radius: abstracts.$border-radius-sm;
+		gap: abstracts.$spacer-xxs;
+		padding: abstracts.$filter-pill-padding;
 	}
 
 	.c-tag__label {
-		font-size: $font-size-sm;
-		font-weight: $font-weight-medium;
+		font-size: abstracts.$font-size-sm;
+		font-weight: abstracts.$font-weight-medium;
 		line-height: 2rem;
 	}
 
@@ -46,7 +46,7 @@
 	// space in front of it
 	.c-tag__close {
 		align-items: center;
-		font-size: $font-size-base;
+		font-size: abstracts.$font-size-base;
 		height: 2.4rem;
 		margin: 0;
 		padding: 0;
@@ -58,59 +58,59 @@
 
 	&.c-tag-search-bar--md {
 		.c-tags-input__control {
-			@include tabs-border-radius;
+			@include abstracts.tabs-border-radius;
 
 			height: 100%;
 			min-height: 0;
 		}
 
 		.c-tags-input__value-container {
-			padding-left: $tabs-rounded-size;
+			padding-left: abstracts.$tabs-rounded-size;
 		}
 	}
 
 	&.c-tag-search-bar--lg {
 		.c-tags-input__control {
-			min-height: $button-height;
-			border-radius: $button-radius;
+			min-height: abstracts.$button-height;
+			border-radius: abstracts.$button-radius;
 
-			@media (min-width: $breakpoint-md) {
+			@media (min-width: abstracts.$breakpoint-md) {
 				min-height: 6.4rem;
 				border-radius: 3.2rem;
 			}
 		}
 
 		.c-tags-input__value-container {
-			padding-left: $spacer-sm;
+			padding-left: abstracts.$spacer-sm;
 
-			@media (min-width: $breakpoint-md) {
+			@media (min-width: abstracts.$breakpoint-md) {
 				padding-left: 1.2rem;
 			}
 
 			&--is-multi.c-tags-input__value-container--has-value {
-				@media (max-width: $breakpoint-md) {
-					padding-left: $spacer-xs;
+				@media (max-width: abstracts.$breakpoint-md) {
+					padding-left: abstracts.$spacer-xs;
 				}
 			}
 		}
 
 		.c-tags-input__indicators {
-			padding-right: math.div($spacer-md, 2);
+			padding-right: math.div(abstracts.$spacer-md, 2);
 
-			@media (min-width: $breakpoint-md) {
-				padding-right: $spacer-md;
+			@media (min-width: abstracts.$breakpoint-md) {
+				padding-right: abstracts.$spacer-md;
 			}
 		}
 	}
 
 	&.c-tag-search-bar--light {
 		.c-tags-input__control {
-			background-color: $white;
-			border-color: $silver;
+			background-color: abstracts.$white;
+			border-color: abstracts.$silver;
 
 			&--is-focused,
 			&--is-focused:hover {
-				border-color: $black;
+				border-color: abstracts.$black;
 			}
 		}
 	}
@@ -121,7 +121,7 @@
 			min-height: 6.4rem;
 			border-radius: 0 0 2.4rem 2.4rem;
 
-			@media (min-width: $breakpoint-md) {
+			@media (min-width: abstracts.$breakpoint-md) {
 				border-radius: 0 4.6rem 4.6rem 0;
 				border-right: none;
 			}
@@ -130,10 +130,10 @@
 }
 
 .c-tag-search-bar__value-placeholder {
-	color: $neutral;
+	color: abstracts.$neutral;
 	margin-right: 1.4rem;
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		display: none;
 	}
 }

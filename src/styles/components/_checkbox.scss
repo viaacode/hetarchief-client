@@ -1,9 +1,9 @@
 @use "sass:color";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$checkbox-size: $spacer-sm;
+$checkbox-size: abstracts.$spacer-sm;
 
-@include generate-checkbox-radio-styling("checkbox");
+@include abstracts.generate-checkbox-radio-styling("checkbox");
 
 .c-checkbox {
 	.c-spinner {
@@ -19,10 +19,10 @@ $checkbox-size: $spacer-sm;
 // Variants
 .c-checkbox--light {
 	&.c-checkbox {
-		&:focus-within {
+		&:has(.c-checkbox__input:focus-visible) {
 			.c-checkbox__check-icon {
 				&::before {
-					background-color: color.adjust($white, $alpha: -0.71);
+					background-color: color.adjust(abstracts.$white, $alpha: -0.71);
 				}
 			}
 		}
@@ -30,7 +30,7 @@ $checkbox-size: $spacer-sm;
 		&:hover {
 			.c-checkbox__check-icon {
 				&::before {
-					background-color: color.adjust($white, $alpha: -0.86);
+					background-color: color.adjust(abstracts.$white, $alpha: -0.86);
 					transform: translate(-50%, -50%) scale(3.25);
 				}
 			}
@@ -39,27 +39,28 @@ $checkbox-size: $spacer-sm;
 		&:active {
 			.c-checkbox__check-icon {
 				&::before {
-					background-color: color.adjust($teal, $alpha: -0.6);
+					background-color: color.adjust(abstracts.$teal, $alpha: -0.6);
 				}
 			}
 		}
 	}
 
 	.c-checkbox__check-icon {
-		border-color: $white;
-		background-color: $shade;
-		color: $black;
+		border-color: abstracts.$white;
+		background-color: abstracts.$shade;
+		color: abstracts.$black;
 
 		&::after {
-			background-color: $white;
-			color: $white;
+			background-color: abstracts.$white;
+			color: abstracts.$white;
 		}
 	}
 
-	&.c-checkbox--checked {
+	&.c-checkbox--checked,
+	&.c-checkbox--indeterminate {
 		.c-checkbox__check-icon {
-			border-color: $teal;
-			background-color: $teal;
+			border-color: abstracts.$teal;
+			background-color: abstracts.$teal;
 
 			&::after,
 			> span {
@@ -70,12 +71,13 @@ $checkbox-size: $spacer-sm;
 
 	&.c-checkbox--disabled {
 		.c-checkbox__check-icon {
-			border-color: $zinc;
+			border-color: abstracts.$zinc;
 		}
 
-		&.c-checkbox--checked {
+		&.c-checkbox--checked,
+		&.c-checkbox--indeterminate {
 			.c-checkbox__check-icon {
-				background-color: $zinc;
+				background-color: abstracts.$zinc;
 			}
 		}
 	}

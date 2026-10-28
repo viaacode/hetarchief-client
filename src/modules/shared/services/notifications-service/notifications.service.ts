@@ -1,3 +1,4 @@
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { QUERY_KEYS } from '@shared/const/query-keys';
 import { tText } from '@shared/helpers/translate';
@@ -6,10 +7,9 @@ import { toastService } from '@shared/services/toast-service';
 import { TranslationService } from '@shared/services/translation-service/translation.service';
 import { asDate } from '@shared/utils/dates';
 import { isMobileSize } from '@shared/utils/is-mobile';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import type { QueryClient } from '@tanstack/react-query';
 import type { NextRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 
 import {
 	GET_DESCRIPTION_FROM_NOTIFICATION,
@@ -93,7 +93,7 @@ export abstract class NotificationsService {
 		const firstUnread = asDate(unreadNotifications?.[0]?.createdAt);
 
 		if (
-			!!NotificationsService.lastNotifications && // Do not show notifications if this is the first time we check since loading the site
+			NotificationsService.lastNotifications && // Do not show notifications if this is the first time we check since loading the site
 			firstUnread && // There is at least one unread notification
 			(!mostRecent || lastCheckNotificationTime < firstUnread.getTime()) // The most recent unread notification was added since the last time we checked
 		) {
@@ -194,7 +194,7 @@ export abstract class NotificationsService {
 		size: number
 	): Promise<IPagination<Notification>> {
 		return await ApiService.getApi()
-			.get(stringifyUrl({ url: 'notifications', query: { page, size } }))
+			.get(queryString.stringifyUrl({ url: 'notifications', query: { page, size } }))
 			.json();
 	}
 

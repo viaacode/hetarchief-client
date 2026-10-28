@@ -6,7 +6,7 @@ import type { Locale } from '@shared/utils/i18n';
 import { SearchFilterId } from '@visitor-space/types';
 import { capitalize, isArray, isEmpty, isString, lowerCase, uniq } from 'es-toolkit/compat';
 import type { NextRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import type { ReactNode } from 'react';
 
 export const mapKeywordsToTags = (keywords: string[]): TagOption[] => {
@@ -30,7 +30,7 @@ export const renderKeywordsAsTags = (
 			tags={mapKeywordsToTags(keywords)}
 			onTagClicked={(keyword: string | number) => {
 				router.push(
-					stringifyUrl({
+					queryString.stringifyUrl({
 						url: `/${ROUTE_PARTS_BY_LOCALE[locale].search}`,
 						query: {
 							[SearchFilterId.Maintainer]: slug,

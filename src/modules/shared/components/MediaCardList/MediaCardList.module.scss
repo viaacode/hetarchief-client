@@ -1,18 +1,16 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
-
-$component: "c-media-card-list";
+@use "src/styles/abstracts" as abstracts;
 
 // Sidebar
-$media-card-list-two-columns-gutter: $spacer-md;
-$media-card-list-two-columns-gutter-md: $spacer-sm;
+$media-card-list-two-columns-gutter: abstracts.$spacer-md;
+$media-card-list-two-columns-gutter-md: abstracts.$spacer-sm;
 
 // Masonry
 $media-card-list-masonry-gutter: $media-card-list-two-columns-gutter;
-$media-card-list-masonry-gutter-md: $spacer-lg;
+$media-card-list-masonry-gutter-md: abstracts.$spacer-lg;
 
 @mixin media-card-list-gutters($gutter) {
-	.#{$component} {
+	.c-media-card-list {
 		&__column {
 			& > div,
 			article {
@@ -22,7 +20,7 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 	}
 }
 
-.#{$component} {
+.c-media-card-list {
 	a:focus-visible {
 		outline-style: auto;
 	}
@@ -49,7 +47,7 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 
 		margin-bottom: $media-card-list-two-columns-gutter;
 
-		.#{$component} {
+		.c-media-card-list {
 			&__sidebar {
 				margin-bottom: $media-card-list-two-columns-gutter;
 			}
@@ -63,7 +61,7 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 			}
 		}
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			@include media-card-list-gutters($media-card-list-two-columns-gutter-md);
 
 			margin-bottom: $media-card-list-two-columns-gutter-md;
@@ -83,7 +81,7 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 
 		margin: 0 (0 - math.div($media-card-list-masonry-gutter, 2));
 
-		.#{$component} {
+		.c-media-card-list {
 			&__column {
 				padding: 0 math.div($media-card-list-masonry-gutter, 2);
 			}
@@ -92,16 +90,16 @@ $media-card-list-masonry-gutter-md: $spacer-lg;
 		:global(.c-card--padded-content),
 		:global(.c-card--padded-both) {
 			:global(.c-card__header-wrapper) {
-				margin-bottom: $spacer-xxs;
+				margin-bottom: abstracts.$spacer-xxs;
 			}
 		}
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			@include media-card-list-gutters($media-card-list-masonry-gutter-md);
 
 			margin: 0 (0 - math.div($media-card-list-masonry-gutter-md, 2));
 
-			.#{$component} {
+			.c-media-card-list {
 				&__column {
 					padding: 0 math.div($media-card-list-masonry-gutter-md, 2);
 				}

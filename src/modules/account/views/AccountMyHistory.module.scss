@@ -5,7 +5,7 @@
 		padding: 0 !important;
 
 		:global(button) {
-			max-width: calc(100% - #{abstracts.$spacer-sm});
+			max-width: calc(100% - abstracts.$spacer-sm);
 
 			:global(:focus-within) {
 				outline: 1px solid abstracts.$teal;

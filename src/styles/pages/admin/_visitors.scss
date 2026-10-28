@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $page: "p-admin-visitors";
 
@@ -9,7 +9,7 @@ $page: "p-admin-visitors";
 		height: 5.6rem;
 		display: flex;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			display: flex;
 			flex-flow: row-reverse nowrap;
 
@@ -21,9 +21,9 @@ $page: "p-admin-visitors";
 	}
 
 	&__search {
-		margin-bottom: $spacer-md;
+		margin-bottom: abstracts.$spacer-md;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			flex-basis: 34.1rem;
 			margin-bottom: 0;
 		}
@@ -31,7 +31,7 @@ $page: "p-admin-visitors";
 
 	&__actions {
 		cursor: pointer;
-		font-size: $font-size-lg;
+		font-size: abstracts.$font-size-lg;
 		transform: translateY(0.2rem); // shift if to center on single-line
 	}
 

@@ -1,25 +1,25 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-tag-search-bar-info {
 	position: absolute;
-	right: $spacer-lg;
+	right: abstracts.$spacer-lg;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: $font-size-lg;
+	font-size: abstracts.$font-size-lg;
 	margin-left: 0;
-	color: $neutral;
+	color: abstracts.$neutral;
 	cursor: pointer;
 
-	@media (min-width: $breakpoint-md) {
+	@media (min-width: abstracts.$breakpoint-md) {
 		position: relative;
 		right: unset;
-		color: $white;
+		color: abstracts.$white;
 		margin-left: 0.8rem;
 	}
 
 	&__button {
-		border: 0.1rem solid $shade;
+		border: 0.1rem solid abstracts.$shade;
 		padding: 0.6rem;
 		width: 4rem !important;
 		height: 4rem !important;
@@ -36,15 +36,15 @@
 		top: 100%;
 		right: 0;
 		width: 75vw;
-		font-size: $font-size-sm;
-		color: $black;
-		padding: $spacer-sm;
-		background-color: $white;
-		box-shadow: $shadow-24-black-12;
-		z-index: get-z-layer("foreground");
-		transition: opacity $animate-default;
+		font-size: abstracts.$font-size-sm;
+		color: abstracts.$black;
+		padding: abstracts.$spacer-sm;
+		background-color: abstracts.$white;
+		box-shadow: abstracts.$shadow-24-black-12;
+		z-index: abstracts.get-z-layer("foreground");
+		transition: opacity abstracts.$animate-default;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			width: 38.4rem;
 		}
 	}

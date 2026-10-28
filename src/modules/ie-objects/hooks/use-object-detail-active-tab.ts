@@ -1,10 +1,10 @@
 import { ObjectDetailTabs } from '@ie-objects/ie-objects.types';
-import { updateQueryParamsShallow } from '@ie-objects/utils/update-query-params-shallow';
 import { QUERY_PARAM_KEY } from '@shared/const/query-param-keys';
 import { SearchFilterId } from '@visitor-space/types';
 import { useRouter } from 'next/router';
-import { parseUrl } from 'query-string';
+import queryString from 'query-string';
 import { useCallback, useEffect, useState } from 'react';
+import { useQueryParams } from 'use-query-params';
 
 interface UseObjectDetailActiveTabProps {
 	/** Changing this (navigating to another object) re-applies the default tab */
@@ -38,24 +38,19 @@ export const useObjectDetailActiveTab = ({
 			parseObjectDetailTab(router.query[QUERY_PARAM_KEY.ACTIVE_TAB]) ?? ObjectDetailTabs.Overview
 	);
 
-	// Query params to change; undefined removes one
-	const replaceQuery = useCallback(
-		(patch: Record<string, string | undefined>) => updateQueryParamsShallow(router, patch),
-		[router]
-	);
+	const [, setQueryParams] = useQueryParams({});
 
-	// Changes the tab and, in the same URL update, other query params: two updates in a row would
-	// each start from the URL as it was and undo each other
+	// Changes the tab and, in the same URL update, other query params
 	const updateActiveTab = useCallback(
-		async (
+		(
 			newActiveTab: ObjectDetailTabs | null,
 			extraQuery: Record<string, string | undefined> = {}
 		) => {
 			const tab = newActiveTab || ObjectDetailTabs.Overview;
 			setActiveTab(tab);
-			await replaceQuery({ ...extraQuery, [QUERY_PARAM_KEY.ACTIVE_TAB]: tab });
+			setQueryParams({ ...extraQuery, [QUERY_PARAM_KEY.ACTIVE_TAB]: tab }, 'replaceIn');
 		},
-		[replaceQuery]
+		[setQueryParams]
 	);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: only reset the tab when the object changes, not on every refetch
@@ -63,8 +58,8 @@ export const useObjectDetailActiveTab = ({
 		if (!objectId) {
 			return;
 		}
-		// Read from window.location, not useQueryParam (see updateActiveTab), on every object change.
-		const { query } = parseUrl(window.location.href);
+		// Read the url once per object change, so later url updates don't re-apply the default tab
+		const { query } = queryString.parseUrl(window.location.href);
 		// An explicit tab in the URL (deep link / bookmark / link to another object) wins
 		const activeTabFromUrl = parseObjectDetailTab(query[QUERY_PARAM_KEY.ACTIVE_TAB]);
 		if (activeTabFromUrl) {
@@ -86,7 +81,6 @@ export const useObjectDetailActiveTab = ({
 		// State only, for tab changes that follow from the url itself (eg: search terms on page load):
 		// writing those back would change the url right after loading, a client side redirect for search engines
 		setActiveTabWithoutUrlUpdate: setActiveTab,
-		updateQueryParams: replaceQuery,
 	};
 };
 
@@ -97,7 +91,7 @@ interface UseResetUnavailableTabProps {
 	/** False while the data the tabs depend on is still loading */
 	isReady: boolean;
 	/** Also writes to the URL, so a reset tab never leaves a stale tab id behind in the address bar */
-	updateActiveTab: (tab: ObjectDetailTabs) => Promise<void>;
+	updateActiveTab: (tab: ObjectDetailTabs) => void;
 }
 
 /**

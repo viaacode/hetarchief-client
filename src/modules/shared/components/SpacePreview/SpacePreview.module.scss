@@ -1,13 +1,11 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-space-preview";
-
-.#{$component} {
+.c-space-preview {
 	&__summary {
 		display: grid;
 		grid-template-columns: 7.2rem auto;
 		align-items: center;
-		min-height: $button-height;
+		min-height: abstracts.$button-height;
 
 		> div {
 			height: 100%;

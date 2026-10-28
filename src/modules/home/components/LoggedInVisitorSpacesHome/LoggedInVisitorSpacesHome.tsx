@@ -131,7 +131,7 @@ const LoggedInVisitorSpacesHome: FC = () => {
 
 	useEffect(() => {
 		if (
-			!!query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] &&
+			query[QUERY_PARAM_KEY.VISITOR_SPACE_SLUG_QUERY_KEY] &&
 			(isErrorGetVisitorSpace || visitorSpaceInfo?.status === VisitorSpaceStatus.Inactive)
 		) {
 			setIsVisitorSpaceNotAvailable(true);

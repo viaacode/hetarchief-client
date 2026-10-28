@@ -1,14 +1,12 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-request-status-badge";
-
-.#{$component} {
+.c-request-status-badge {
 	display: flex;
 	flex-flow: row nowrap;
 	align-items: center;
-	min-height: $spacer-md;
+	min-height: abstracts.$spacer-md;
 
 	:global(.c-badge) {
-		margin-right: $spacer-xs;
+		margin-right: abstracts.$spacer-xs;
 	}
 }

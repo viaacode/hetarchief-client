@@ -1,5 +1,5 @@
 import type { IeObjectSearchAggregations } from '@ie-objects/ie-objects.types';
-import type { IPagination } from '@studiohyperdrive/pagination';
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import type { HetArchiefIeObject } from '@viaa/avo2-types';
 
 interface ElasticsearchAggregations {

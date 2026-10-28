@@ -1,6 +1,6 @@
+import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { QUERY_KEYS } from '@shared/const';
 import { type GetThemesProps, type Theme, ThemesService } from '@shared/services/themes-service';
-import type { IPagination } from '@studiohyperdrive/pagination';
 import {
 	keepPreviousData,
 	type QueryClient,

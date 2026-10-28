@@ -1,8 +1,6 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-related-object";
-
-.#{$component} {
+.c-related-object {
 	height: 9.6rem;
 	overflow: hidden;
 
@@ -13,16 +11,16 @@ $component: "c-related-object";
 	}
 
 	// Stands in for the image of an object the user may see but that has none.
-	// $neutral only reaches 3.85:1 on $silver, so the icon uses $black-pale to stay well clear of
+	// abstracts.$neutral only reaches 3.85:1 on abstracts.$silver, so the icon uses abstracts.$black-pale to stay well clear of
 	// the 4.5:1 contrast threshold.
 	&__type-icon {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		height: 100%;
-		background-color: $silver;
-		color: $black-pale;
-		font-size: $font-size-2xl;
+		background-color: abstracts.$silver;
+		color: abstracts.$black-pale;
+		font-size: abstracts.$font-size-2xl;
 	}
 
 	:global(.c-card__header-wrapper) {
@@ -30,28 +28,28 @@ $component: "c-related-object";
 	}
 
 	:global(.c-card__title-wrapper) {
-		@include text-ellipsis;
+		@include abstracts.text-ellipsis;
 
-		color: $black;
-		font-size: $font-size-base;
-		line-height: $line-height-1xl;
+		color: abstracts.$black;
+		font-size: abstracts.$font-size-base;
+		line-height: abstracts.$line-height-1xl;
 		position: relative;
-		padding-left: $spacer-md;
+		padding-left: abstracts.$spacer-md;
 
 		& > span:first-child {
 			position: absolute;
 			left: 0;
-			font-size: $font-size-md;
+			font-size: abstracts.$font-size-md;
 		}
 	}
 
 	:global(.c-card__subtitle-wrapper),
 	:global(.c-card__children-wrapper) {
-		@include text-ellipsis;
+		@include abstracts.text-ellipsis;
 
-		color: $neutral;
-		font-weight: $font-weight-normal;
-		font-size: $font-size-sm;
-		line-height: $line-height-4xl;
+		color: abstracts.$neutral;
+		font-weight: abstracts.$font-weight-normal;
+		font-size: abstracts.$font-size-sm;
+		line-height: abstracts.$line-height-4xl;
 	}
 }

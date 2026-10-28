@@ -1,13 +1,13 @@
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
 :root {
 	font-size: 62.5%;
 }
 
 body {
-	font-family: $font-family-primary;
-	font-size: $font-size-base;
-	line-height: $line-height-lg;
+	font-family: abstracts.$font-family-primary;
+	font-size: abstracts.$font-size-base;
+	line-height: abstracts.$line-height-lg;
 	margin: 0;
 	position: relative;
 	top: 0;

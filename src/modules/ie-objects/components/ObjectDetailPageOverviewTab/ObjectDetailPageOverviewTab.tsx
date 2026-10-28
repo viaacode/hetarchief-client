@@ -43,7 +43,7 @@ import { FILTER_LABEL_VALUE_DELIMITER, SearchFilterId } from '@visitor-space/typ
 import { isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { stringifyUrl } from 'query-string';
+import queryString from 'query-string';
 import { type FC, type ReactNode, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { ArrayParam, useQueryParam } from 'use-query-params';
@@ -127,7 +127,7 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 		maintainerLogo,
 		maintainerId,
 	}: HetArchiefIeObject): ReactNode => {
-		const maintainerSearchLink = stringifyUrl({
+		const maintainerSearchLink = queryString.stringifyUrl({
 			url: ROUTES_BY_LOCALE[locale].search,
 			query: {
 				[SearchFilterId.Maintainers]: [
@@ -498,7 +498,7 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 					<Metadata
 						title={tHtml('pages/bezoekersruimte/visitor-space-slug/object-id/index___trefwoorden')}
 						key="metadata-keywords"
-						className="u-pb-0"
+						className={styles['p-object-detail-overview-tab__keywords']}
 					>
 						{renderKeywordsAsTags(
 							mediaInfo.keywords,

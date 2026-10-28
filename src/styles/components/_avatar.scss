@@ -1,19 +1,17 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstract;
 
-$component: "c-avatar";
-
-.#{$component} {
+.c-avatar {
 	&__image {
-		background: $teal;
-		color: $white;
+		background: abstract.$teal;
+		color: abstract.$white;
 		min-width: 3rem !important;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 
-		@media (min-width: $breakpoint-md) {
-			margin-right: math.div($font-size-lg, 2);
+		@media (min-width: abstract.$breakpoint-md) {
+			margin-right: math.div(abstract.$font-size-lg, 2);
 		}
 
 		// Assume icon
@@ -22,23 +20,23 @@ $component: "c-avatar";
 			margin: 0.6rem;
 			font-size: 2rem;
 
-			@media (min-width: $breakpoint-md) {
-				margin: $spacer-xs;
-				font-size: $font-size-lg;
+			@media (min-width: abstract.$breakpoint-md) {
+				margin: abstract.$spacer-xs;
+				font-size: abstract.$font-size-lg;
 			}
 		}
 	}
 
 	&__text {
-		font-size: $font-size-base;
-		line-height: $line-height-1xl;
+		font-size: abstract.$font-size-base;
+		line-height: abstract.$line-height-1xl;
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: abstract.$breakpoint-md) {
 			display: none;
 		}
 	}
 
 	&--padded-y {
-		padding: $spacer-sm 0;
+		padding: abstract.$spacer-sm 0;
 	}
 }

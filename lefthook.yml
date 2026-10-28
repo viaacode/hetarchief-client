@@ -1,20 +1,36 @@
 pre-commit:
-    parallel: true
-    jobs:
-      - name: stylelint
-        glob: "*.{css,scss}"
-        run: npx stylelint --fix {staged_files}
-        stage_fixed: true
+  parallel: true
+  jobs:
+    - name: stylelint
+      glob: "*.{css,scss}"
+      run: npx stylelint --fix {staged_files}
+      stage_fixed: true
 
-      - name: biome
-        glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
-        run: npx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
-        stage_fixed: true
+    - name: biome
+      glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx,json,jsonc}"
+      run: npx @biomejs/biome check --write --no-errors-on-unmatched --files-ignore-unknown=true --colors=off {staged_files}
+      stage_fixed: true
 
-      - name: typescript
-        glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx}"
-        run: npx tsc --noEmit --skipLibCheck --pretty --jsx preserve --project ./tsconfig.json
+    - name: typescript
+      glob: "*.{js,ts,cjs,mjs,d.cts,d.mts,jsx,tsx}"
+      run: npx tsc --noEmit --skipLibCheck --pretty --jsx preserve --project ./tsconfig.json
 
-      - name: no-translations-in-mocks
-        glob: "*.{ts,tsx}"
-        run: node scripts/check-no-translations-in-mocks.js {staged_files}
+    - name: no-local-file-dependencies
+      glob: "{package.json,package-lock.json}"
+      run: |
+        if grep -lE '"(file:\.\./|resolved": "\.\./)' {staged_files}; then
+          echo 'package.json / package-lock.json should not contain locally linked packages, eg: "@meemoo/react-components": "file:../../react-components"'
+          exit 1
+        fi
+
+    - name: aikido-secrets
+      run: |
+        if [ -x "$HOME/.local/bin/aikido-local-scanner" ]; then
+          "$HOME/.local/bin/aikido-local-scanner" pre-commit-scan "$(git rev-parse --show-toplevel)"
+        else
+          echo "Aikido local scanner not installed, skipping secrets scan: https://help.aikido.dev/code-scanning/local-code-scanning/aikido-secrets-pre-commit-hook"
+        fi
+
+    - name: no-translations-in-mocks
+      glob: "*.{ts,tsx}"
+      run: node scripts/check-no-translations-in-mocks.js {staged_files}

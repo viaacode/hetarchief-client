@@ -12,7 +12,6 @@ import clsx from 'clsx';
 import { type FC, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useQueryParams } from 'use-query-params';
-import { v4 as uuidV4 } from 'uuid';
 
 /**
  * The date and duration filters the FA of ARC-3806 leaves as they are: one operator dropdown plus
@@ -28,7 +27,7 @@ export const SinglePropertyFilterForm: FC<GenericFilterFormProps> = ({
 	const initialValue = (query[filter.id] as AdvancedFilter[] | undefined)?.[0];
 
 	const [filterValue, setFilterValue] = useState<IdentityAdvancedFilter>(() => ({
-		renderKey: TEMP_FILTER_KEY_PREFIX + uuidV4(),
+		renderKey: TEMP_FILTER_KEY_PREFIX + crypto.randomUUID(),
 		id: getRandomId(),
 		prop: filter.id,
 		op: initialValue?.op || getDefaultOperator(filter.id),
@@ -56,7 +55,7 @@ export const SinglePropertyFilterForm: FC<GenericFilterFormProps> = ({
 				reset: () => {
 					reset();
 					setFilterValue({
-						renderKey: TEMP_FILTER_KEY_PREFIX + uuidV4(),
+						renderKey: TEMP_FILTER_KEY_PREFIX + crypto.randomUUID(),
 						id: getRandomId(),
 						prop: filter.id,
 						op: getDefaultOperator(filter.id),

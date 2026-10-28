@@ -111,7 +111,16 @@ export const VisitorSpaceNavigation: FC<VisitorSpaceNavigationProps> = ({
 			<Navigation.Center title={title} />
 
 			<Navigation.Right placement="right">
-				{!isNil(accessEndDate) && <span className="u-py-8 u-text-right">{accessEndDate}</span>}
+				{!isNil(accessEndDate) && (
+					<span
+						className={clsx(
+							'u-py-8 u-text-right',
+							styles['c-visitor-space-navigation__access-end-date']
+						)}
+					>
+						{accessEndDate}
+					</span>
+				)}
 				{showContactInfo && renderContact()}
 			</Navigation.Right>
 		</Navigation>
