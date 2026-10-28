@@ -91,8 +91,8 @@ export async function makeServerSideRequestGetIeObjects(queryClient: QueryClient
 		page: 1,
 		size: SEARCH_RESULTS_PAGE_SIZE,
 		sort: {
-			orderProp: SearchSortProp.Relevance,
-			orderDirection: AvoSearchOrderDirection.DESC,
+			orderProp: SearchSortProp.Date,
+			orderDirection: AvoSearchOrderDirection.ASC,
 		},
 	};
 	await Promise.all([
