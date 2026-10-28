@@ -1,11 +1,9 @@
 @use "sass:map";
 @use "sass:math";
 @use "sass:color";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-visitor-space-card";
-
-.#{$component} {
+.c-visitor-space-card {
 	&__wrapper {
 		display: flex;
 		flex-direction: column;
@@ -16,7 +14,7 @@ $component: "c-visitor-space-card";
 			height: initial;
 			justify-content: initial;
 
-			@media (min-width: $breakpoint-md) {
+			@media (min-width: abstracts.$breakpoint-md) {
 				flex-direction: row;
 			}
 		}
@@ -28,47 +26,47 @@ $component: "c-visitor-space-card";
 			min-width: 0;
 			position: relative;
 
-			@media (min-width: $breakpoint-md) {
-				padding-right: $spacer-md;
+			@media (min-width: abstracts.$breakpoint-md) {
+				padding-right: abstracts.$spacer-md;
 
 				&::after {
-					background-color: color.adjust($black, $alpha: -0.8);
+					background-color: color.adjust(abstracts.$black, $alpha: -0.8);
 					bottom: 0;
 					content: "";
 					display: block;
 					position: absolute;
 					right: 0;
-					top: $spacer-sm;
+					top: abstracts.$spacer-sm;
 					width: 1px;
 				}
 			}
 
-			@media (min-width: $breakpoint-lg) {
-				padding-right: $spacer-2xl;
+			@media (min-width: abstracts.$breakpoint-lg) {
+				padding-right: abstracts.$spacer-2xl;
 			}
 		}
 	}
 
 	&__title {
-		@include text-ellipsis(true);
+		@include abstracts.text-ellipsis(true);
 
-		font-size: $font-size-md;
-		line-height: math.div($font-size-md, 9) * 10; // 2rem
+		font-size: abstracts.$font-size-md;
+		line-height: math.div(abstracts.$font-size-md, 9) * 10; // 2rem
 
 		&--large {
-			font-size: $font-size-base;
+			font-size: abstracts.$font-size-base;
 
-			@media (min-width: $breakpoint-md) {
-				font-size: $font-size-1xl;
-				line-height: $line-height-lg;
+			@media (min-width: abstracts.$breakpoint-md) {
+				font-size: abstracts.$font-size-1xl;
+				line-height: abstracts.$line-height-lg;
 			}
 		}
 
 		&--flat {
-			color: $black;
-			font-size: $font-size-base;
-			margin-bottom: $spacer-xxs;
-			margin-top: $spacer-sm;
+			color: abstracts.$black;
+			font-size: abstracts.$font-size-base;
+			margin-bottom: abstracts.$spacer-xxs;
+			margin-top: abstracts.$spacer-sm;
 		}
 	}
 
@@ -102,12 +100,12 @@ $component: "c-visitor-space-card";
 			}
 		}
 
-		font-size: $font-size-xs;
-		line-height: $line-height-lg;
+		font-size: abstracts.$font-size-xs;
+		line-height: abstracts.$line-height-lg;
 
-		@media (min-width: $breakpoint-md) {
-			font-size: $font-size-sm;
-			line-height: math.div($font-size-md, 9) * 10; // 2rem;
+		@media (min-width: abstracts.$breakpoint-md) {
+			font-size: abstracts.$font-size-sm;
+			line-height: math.div(abstracts.$font-size-md, 9) * 10; // 2rem;
 
 			// Force text to singleline despite truncate to 2 lines
 			&--flat {
@@ -119,8 +117,8 @@ $component: "c-visitor-space-card";
 	}
 
 	&__control-icon {
-		font-size: $font-size-lg;
-		margin-right: $spacer-xs;
+		font-size: abstracts.$font-size-lg;
+		margin-right: abstracts.$spacer-xs;
 	}
 
 	/**
@@ -130,10 +128,10 @@ $component: "c-visitor-space-card";
 	&--granted {
 		:global(.c-card__title-wrapper),
 		:global(.c-card__children-wrapper) {
-			@media (min-width: $breakpoint-md) {
+			@media (min-width: abstracts.$breakpoint-md) {
 				// Overwrite card styles
 				margin-left: 0 !important;
-				margin-right: $spacer-md !important;
+				margin-right: abstracts.$spacer-md !important;
 			}
 		}
 	}

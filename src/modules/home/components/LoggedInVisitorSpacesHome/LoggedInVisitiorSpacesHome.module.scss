@@ -1,56 +1,56 @@
 @use "sass:map";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $c-hero-access-card-min-width: 57.2rem;
 
 .c-hero {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
-	grid-template-rows: $spacer-2xl clamp(calc(54rem - #{$spacer-2xl}), 40vw, calc(70rem - #{$spacer-2xl}));
-	padding: 0 calc(#{$spacer-1xl} * 3);
-	color: $white;
-	background-color: $black;
+	grid-template-rows: abstracts.$spacer-2xl clamp(calc(54rem - abstracts.$spacer-2xl), 40vw, calc(70rem - abstracts.$spacer-2xl));
+	padding: 0 calc(abstracts.$spacer-1xl * 3);
+	color: abstracts.$white;
+	background-color: abstracts.$black;
 
 	&__header {
 		display: grid;
 		grid-template-columns: 1fr;
-		column-gap: $spacer-lg;
+		column-gap: abstracts.$spacer-lg;
 		align-items: center;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			grid-template-columns: repeat(2, 1fr);
 		}
 	}
 
 	&__title {
 		max-width: 32rem;
-		padding-bottom: $spacer-1xl;
-		line-height: $line-height-md;
+		padding-bottom: abstracts.$spacer-1xl;
+		line-height: abstracts.$line-height-md;
 	}
 
 	&__description {
 		max-width: 48.8rem;
-		color: $neutral;
-		line-height: $line-height-1xl;
+		color: abstracts.$neutral;
+		line-height: abstracts.$line-height-1xl;
 	}
 
 	&__section {
 		&-title {
-			@media (max-width: $breakpoint-md) {
-				font-size: $font-size-sm;
+			@media (max-width: abstracts.$breakpoint-md) {
+				font-size: abstracts.$font-size-sm;
 			}
 		}
 
 		&:not(:last-child) {
-			margin-bottom: $spacer-lg;
+			margin-bottom: abstracts.$spacer-lg;
 		}
 
 		&--access {
 			&:not(:last-child) {
-				margin-bottom: $spacer-lg;
+				margin-bottom: abstracts.$spacer-lg;
 
-				@media (min-width: $breakpoint-md) {
-					margin-bottom: $spacer-lg * 2;
+				@media (min-width: abstracts.$breakpoint-md) {
+					margin-bottom: abstracts.$spacer-lg * 2;
 				}
 			}
 		}
@@ -59,53 +59,53 @@ $c-hero-access-card-min-width: 57.2rem;
 	&__access-cards {
 		display: grid;
 		grid-template-columns: 1fr;
-		grid-gap: $spacer-md $spacer-lg;
+		grid-gap: abstracts.$spacer-md abstracts.$spacer-lg;
 
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			grid-template-columns: repeat(auto-fill, minmax($c-hero-access-card-min-width, 1fr));
 		}
 	}
 
 	&__requests {
 		> *:not(:last-child) {
-			margin-bottom: $spacer-xxs;
+			margin-bottom: abstracts.$spacer-xxs;
 		}
 
 		:global(.c-card:hover) {
-			background-color: $platinum;
+			background-color: abstracts.$platinum;
 		}
 	}
 
-	@media (max-width: $breakpoint-xl) {
-		padding: 0 $spacer-2xl;
+	@media (max-width: abstracts.$breakpoint-xl) {
+		padding: 0 abstracts.$spacer-2xl;
 
 		&__content {
-			padding-left: $spacer-2xl;
+			padding-left: abstracts.$spacer-2xl;
 		}
 
 		&__title {
-			font-size: $font-size-3xl;
+			font-size: abstracts.$font-size-3xl;
 			max-width: 25rem;
 		}
 	}
 
-	@media (max-width: $breakpoint-lg) {
-		grid-template-rows: $spacer-lg calc(54rem - #{$spacer-lg});
-		padding: 0 $spacer-lg;
+	@media (max-width: abstracts.$breakpoint-lg) {
+		grid-template-rows: abstracts.$spacer-lg calc(54rem - abstracts.$spacer-lg);
+		padding: 0 abstracts.$spacer-lg;
 
 		&__content {
-			padding-left: $spacer-lg;
+			padding-left: abstracts.$spacer-lg;
 		}
 
 		&__title {
-			padding-bottom: $spacer-sm;
+			padding-bottom: abstracts.$spacer-sm;
 		}
 	}
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		grid-template-columns: auto;
 		grid-template-rows: 2fr 1fr 1fr;
-		padding: $spacer-lg $spacer-md;
+		padding: abstracts.$spacer-lg abstracts.$spacer-md;
 
 		&__content {
 			grid-column: 1 / 2;
@@ -130,28 +130,28 @@ $c-hero-access-card-min-width: 57.2rem;
 	&--logged-in {
 		display: flex;
 		flex-direction: column;
-		padding: $spacer-1xl 0 $spacer-lg;
-		background-color: $platinum;
-		color: $black;
+		padding: abstracts.$spacer-1xl 0 abstracts.$spacer-lg;
+		background-color: abstracts.$platinum;
+		color: abstracts.$black;
 
-		@media (min-width: $breakpoint-md) {
-			padding: $spacer-2xl 0;
+		@media (min-width: abstracts.$breakpoint-md) {
+			padding: abstracts.$spacer-2xl 0;
 		}
 
 		.c-hero__title {
 			max-width: none;
 			padding-bottom: 0;
-			padding-right: $spacer-md;
+			padding-right: abstracts.$spacer-md;
 
-			@media (max-width: $breakpoint-md) {
-				margin-bottom: $spacer-md;
-				font-size: $font-size-3xl;
+			@media (max-width: abstracts.$breakpoint-md) {
+				margin-bottom: abstracts.$spacer-md;
+				font-size: abstracts.$font-size-3xl;
 				text-align: left;
 			}
 		}
 
 		.c-hero__description {
-			@media (min-width: $breakpoint-md) {
+			@media (min-width: abstracts.$breakpoint-md) {
 				max-width: 48.8rem;
 			}
 		}

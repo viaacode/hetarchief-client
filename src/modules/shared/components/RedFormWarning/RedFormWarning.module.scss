@@ -1,9 +1,9 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-red-form-warning {
 	display: flex;
-	gap: $spacer-xs;
+	gap: abstracts.$spacer-xs;
 	align-items: center;
-	color: $cherry;
+	color: abstracts.$cherry;
 	margin-bottom: 1rem;
 }

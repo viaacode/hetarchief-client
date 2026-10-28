@@ -1,13 +1,12 @@
 @use "sass:color";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-filter-menu";
 $c-filter-menu-flyout-top-padding: 6.4rem;
-$c-filter-menu-border-color: color.adjust($shade, $alpha: -0.6);
-$checkbox-size: $spacer-sm;
+$c-filter-menu-border-color: color.adjust(abstracts.$shade, $alpha: -0.6);
+$checkbox-size: abstracts.$spacer-sm;
 
-.#{$component} {
-	background-color: $black;
+.c-filter-menu {
+	background-color: abstracts.$black;
 
 	&__header {
 		display: flex;
@@ -37,12 +36,12 @@ $checkbox-size: $spacer-sm;
 			top: 0;
 			bottom: 0;
 			left: 0;
-			background-color: $teal;
+			background-color: abstracts.$teal;
 			width: 0.8rem;
 			transform: scaleX(0);
 			transform-origin: left;
-			transition: transform $animate-default;
-			z-index: get-z-layer("foreground");
+			transition: transform abstracts.$animate-default;
+			z-index: abstracts.get-z-layer("foreground");
 		}
 
 		&--operative {
@@ -59,7 +58,7 @@ $checkbox-size: $spacer-sm;
 		&:focus,
 		&:focus-visible,
 		&:focus-within {
-			z-index: get-z-layer("filter");
+			z-index: abstracts.get-z-layer("filter");
 		}
 
 		:global(.c-button__content) {
@@ -84,27 +83,27 @@ $checkbox-size: $spacer-sm;
 			&:focus,
 			&:focus-visible,
 			&:focus-within {
-				outline: 2px solid $teal;
+				outline: 2px solid abstracts.$teal;
 			}
 		}
 
-		@media (max-width: $breakpoint-md) {
-			font-size: $font-size-md;
+		@media (max-width: abstracts.$breakpoint-md) {
+			font-size: abstracts.$font-size-md;
 		}
 	}
 
 	&__button:global(.c-button) {
 		position: relative;
-		padding-right: $spacer-sm;
-		font-weight: $font-weight-normal;
+		padding-right: abstracts.$spacer-sm;
+		font-weight: abstracts.$font-weight-normal;
 		border-bottom: 0.1rem solid $c-filter-menu-border-color;
 
 		&:active {
-			border-color: $black;
+			border-color: abstracts.$black;
 		}
 
 		&:global(.c-button__icon) {
-			font-size: $font-size-lg;
+			font-size: abstracts.$font-size-lg;
 		}
 	}
 
@@ -113,8 +112,8 @@ $checkbox-size: $spacer-sm;
 	}
 
 	&__button--sort-header {
-		background-color: $shade;
-		border-bottom-color: $shade !important;
+		background-color: abstracts.$shade;
+		border-bottom-color: abstracts.$shade !important;
 
 		:global(.c-button__label) {
 			text-overflow: ellipsis;
@@ -123,14 +122,14 @@ $checkbox-size: $spacer-sm;
 	}
 
 	&__button--active:global(.c-button) {
-		z-index: get-z-layer("filter");
-		background-color: $white;
-		border-color: $white;
-		color: $black;
+		z-index: abstracts.get-z-layer("filter");
+		background-color: abstracts.$white;
+		border-color: abstracts.$white;
+		color: abstracts.$black;
 
 		&:hover {
-			background-color: $white;
-			border-color: $white;
+			background-color: abstracts.$white;
+			border-color: abstracts.$white;
 		}
 	}
 
@@ -140,15 +139,15 @@ $checkbox-size: $spacer-sm;
 		}
 
 		&:global(.c-dropdown__content-open) {
-			z-index: get-z-layer("filter");
+			z-index: abstracts.get-z-layer("filter");
 		}
 
 		&--filter {
-			max-width: $blade-max-width;
+			max-width: abstracts.$blade-max-width;
 
 			// Overwrite popper styles
-			min-width: $blade-max-width !important;
-			max-height: $view-height;
+			min-width: abstracts.$blade-max-width !important;
+			max-height: abstracts.$view-height;
 
 			&:global(.c-menu) {
 				padding: $c-filter-menu-flyout-top-padding 0 0;
@@ -158,7 +157,7 @@ $checkbox-size: $spacer-sm;
 		&-close {
 			position: absolute;
 			inset: 1.2rem 1.2rem auto auto;
-			z-index: get-z-layer("filter");
+			z-index: abstracts.get-z-layer("filter");
 		}
 	}
 
@@ -171,7 +170,7 @@ $checkbox-size: $spacer-sm;
 
 		// A modal may fill the window edge to edge in a short window, and its own content scrolls
 		max-height: 100vh;
-		background-color: $white;
+		background-color: abstracts.$white;
 		z-index: 5;
 
 		// The list of advanced filters is narrower than a filter modal
@@ -186,17 +185,17 @@ $checkbox-size: $spacer-sm;
 	}
 
 	&__overlay {
-		z-index: get-z-layer("filter-overlay");
+		z-index: abstracts.get-z-layer("filter-overlay");
 	}
 
 	:global(.c-dropdown__trigger:first-child + .c-dropdown__content-open) {
 		:global(.c-menu) {
 			margin-top: -1px;
 			padding: 0;
-			margin-left: $spacer-sm;
+			margin-left: abstracts.$spacer-sm;
 
 			:global(.c-button--text) {
-				padding-left: $spacer-sm !important;
+				padding-left: abstracts.$spacer-sm !important;
 			}
 		}
 	}

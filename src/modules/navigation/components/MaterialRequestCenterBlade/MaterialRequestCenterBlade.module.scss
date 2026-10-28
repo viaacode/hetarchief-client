@@ -1,27 +1,27 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
 .c-material-request-center-blade {
-	margin-top: $c-navigation-height-md;
+	margin-top: abstracts.$c-navigation-height-md;
 
-	@media (min-width: $breakpoint-md) {
-		margin-top: $c-navigation-height;
+	@media (min-width: abstracts.$breakpoint-md) {
+		margin-top: abstracts.$c-navigation-height;
 	}
 
 	&__loading {
 		display: flex;
 		justify-content: center;
-		color: $black;
+		color: abstracts.$black;
 	}
 
 	&__material-container {
 		display: flex;
-		border: 0.1rem solid $silver;
+		border: 0.1rem solid abstracts.$silver;
 
 		& + & {
-			margin-top: $spacer-md;
+			margin-top: abstracts.$spacer-md;
 
-			@media (max-width: $breakpoint-md) {
-				margin-top: $spacer-sm;
+			@media (max-width: abstracts.$breakpoint-md) {
+				margin-top: abstracts.$spacer-sm;
 			}
 		}
 	}
@@ -31,37 +31,37 @@
 
 		&:focus,
 		&:focus-within {
-			outline: 0.2rem solid $teal;
+			outline: 0.2rem solid abstracts.$teal;
 			outline-offset: -0.2rem;
 		}
 
 		&-label {
-			color: $black;
-			font-weight: $font-weight-bold;
-			margin-bottom: $spacer-xxs;
+			color: abstracts.$black;
+			font-weight: abstracts.$font-weight-bold;
+			margin-bottom: abstracts.$spacer-xxs;
 			word-break: break-word;
 
 			:global(.c-card__children-wrapper) {
-				@include text-ellipsis;
+				@include abstracts.text-ellipsis;
 
-				color: $black;
-				font-weight: $font-weight-normal;
+				color: abstracts.$black;
+				font-weight: abstracts.$font-weight-normal;
 				margin-bottom: 0 !important;
-				padding-top: $spacer-xs;
+				padding-top: abstracts.$spacer-xs;
 			}
 		}
 
 		&-actions {
 			display: flex;
 			flex-direction: row;
-			padding: $spacer-md ;
+			padding: abstracts.$spacer-md ;
 			padding-top: 5rem;
 
 			&-button {
-				margin-right: $spacer-xs;
+				margin-right: abstracts.$spacer-xs;
 
 				&-icon {
-					font-size: $font-size-md !important;
+					font-size: abstracts.$font-size-md !important;
 				}
 			}
 		}
@@ -70,6 +70,6 @@
 	&__no-content {
 		display: flex;
 		justify-content: center;
-		color: $black;
+		color: abstracts.$black;
 	}
 }

@@ -1,15 +1,15 @@
 @use "sass:color";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$c-toggle-black-32: color.adjust($black, $alpha: -0.68);
-$c-toggle-white-40: color.adjust($white, $alpha: -0.6);
-$c-toggle-zinc: $zinc-66;
+$c-toggle-black-32: color.adjust(abstracts.$black, $alpha: -0.68);
+$c-toggle-white-40: color.adjust(abstracts.$white, $alpha: -0.6);
+$c-toggle-zinc: abstracts.$zinc-66;
 
 /* stylelint-disable no-descending-specificity */
 .c-toggle {
 	display: inline-flex;
 	align-items: center;
-	height: $button-height;
+	height: abstracts.$button-height;
 	padding: 0 1.2rem;
 
 	.c-toggle {
@@ -30,17 +30,17 @@ $c-toggle-zinc: $zinc-66;
 
 	&--bordered {
 		border: 1px solid $c-toggle-zinc;
-		border-radius: $button-radius;
+		border-radius: abstracts.$button-radius;
 	}
 
 	&--dark {
-		background-color: $black;
+		background-color: abstracts.$black;
 
 		.c-toggle__option {
-			color: $white;
+			color: abstracts.$white;
 
 			&:hover {
-				color: $zinc;
+				color: abstracts.$zinc;
 			}
 
 			&--active {

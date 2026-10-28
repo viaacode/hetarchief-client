@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .p-admin-alerts {
 	.c-admin__header {
@@ -8,29 +8,29 @@
 
 	.c-icon-picker .react-select__control {
 		border-radius: 0;
-		color: $black;
+		color: abstracts.$black;
 		transition:
 			outline-color 200ms cubic-bezier(0.4, 0, 0.2, 1),
 			border-color 200ms cubic-bezier(0.4, 0, 0.2, 1);
 		background-color: #fff;
-		border: 1px solid $zinc;
+		border: 1px solid abstracts.$zinc;
 		font-size: 1.6rem;
-		height: $button-height;
+		height: abstracts.$button-height;
 		outline: 0.1rem solid transparent;
 
 		&:hover {
 			box-shadow: none;
-			border-color: $zinc;
-			outline-color: $zinc;
+			border-color: abstracts.$zinc;
+			outline-color: abstracts.$zinc;
 		}
 
 		&:focus {
-			border-color: $teal;
+			border-color: abstracts.$teal;
 		}
 	}
 
 	.c-form-control {
-		margin-bottom: $spacer-md;
+		margin-bottom: abstracts.$spacer-md;
 	}
 
 	.react-select__indicator-separator {
@@ -38,7 +38,7 @@
 	}
 
 	.react-select__single-value {
-		color: $black;
+		color: abstracts.$black;
 		font-size: 1.6rem;
 
 		span {
@@ -48,13 +48,13 @@
 
 	.c-multi-select__dropdown {
 		.c-button {
-			padding-right: $spacer-xs;
+			padding-right: abstracts.$spacer-xs;
 		}
 	}
 
 	.c-input--date-time {
 		.c-form-control__input {
-			@media (min-width: $breakpoint-lg) {
+			@media (min-width: abstracts.$breakpoint-lg) {
 				display: flex;
 				flex-flow: row nowrap;
 			}
@@ -62,19 +62,19 @@
 
 		.react-datepicker-wrapper.c-datepicker {
 			&:not(.c-datepicker--time) {
-				@media (max-width: $breakpoint-lg) {
-					margin-bottom: $spacer-sm;
+				@media (max-width: abstracts.$breakpoint-lg) {
+					margin-bottom: abstracts.$spacer-sm;
 				}
 
-				@media (min-width: $breakpoint-lg) {
-					margin-right: $spacer-md;
+				@media (min-width: abstracts.$breakpoint-lg) {
+					margin-right: abstracts.$spacer-md;
 					flex-grow: 1;
 				}
 			}
 		}
 
 		.react-datepicker-wrapper.c-datepicker--time {
-			@media (min-width: $breakpoint-lg) {
+			@media (min-width: abstracts.$breakpoint-lg) {
 				flex: 0 0 14rem;
 			}
 		}
@@ -89,6 +89,6 @@
 	}
 
 	.react-select__indicator {
-		color: $black;
+		color: abstracts.$black;
 	}
 }

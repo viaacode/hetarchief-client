@@ -215,7 +215,9 @@ export const ObjectDetailPageMetadataTab: FC<ObjectDetailPageMetadataTabProps> =
 				}
 				className="u-bt-0"
 			>
-				<span>{rightsAttributionText}</span>
+				<span className={styles['p-object-detail__source-attribution-text']}>
+					{rightsAttributionText}
+				</span>
 			</Metadata>
 		);
 	};

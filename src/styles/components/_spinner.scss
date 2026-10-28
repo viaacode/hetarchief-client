@@ -1,5 +1,5 @@
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
 .c-spinner__circle-svg {
-	stroke: $teal !important;
+	stroke: abstracts.$teal !important;
 }

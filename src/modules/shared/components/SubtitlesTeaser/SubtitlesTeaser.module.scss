@@ -53,7 +53,7 @@ $arrow-edge-inset: $teaser-padding-x + 1.7rem;
 	transition: bottom abstracts.$timing-default;
 
 	&--above-button {
-		bottom: calc(var(--subtitles-teaser-button-offset) + #{$button-gap});
+		bottom: calc(var(--subtitles-teaser-button-offset) + $button-gap);
 	}
 
 	// The player's own focus outline is teal, which disappears on the teal pill

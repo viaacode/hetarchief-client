@@ -1,14 +1,14 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-confidence-indicator {
 	display: flex;
 	flex-direction: row;
 	align-items: center;
 	width: 6.8rem;
-	border: 1px solid $silver;
-	border-radius: $button-radius-sm;
-	padding: $spacer-xxs $spacer-xs;
-	gap: $spacer-xs;
+	border: 1px solid abstracts.$silver;
+	border-radius: abstracts.$button-radius-sm;
+	padding: abstracts.$spacer-xxs abstracts.$spacer-xs;
+	gap: abstracts.$spacer-xs;
 	cursor: default;
 
 	&__bars-container {
@@ -20,11 +20,11 @@
 			display: block;
 			width: 0.8rem;
 			height: 0.3rem;
-			background-color: $silver;
+			background-color: abstracts.$silver;
 			border-radius: 2px;
 
 			&:global(.active) {
-				background-color: $teal-dark;
+				background-color: abstracts.$teal-dark;
 			}
 		}
 	}

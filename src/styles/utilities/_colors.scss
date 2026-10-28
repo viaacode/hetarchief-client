@@ -1,83 +1,83 @@
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
 /**
  * Color
  */
 
 .u-color-black {
-	color: $black;
+	color: abstracts.$black;
 }
 
 .u-color-white {
-	color: $white;
+	color: abstracts.$white;
 }
 
 .u-color-neutral {
-	color: $neutral;
+	color: abstracts.$neutral;
 }
 
 .u-color-teal {
-	color: $teal;
+	color: abstracts.$teal;
 }
 
 .u-color-zinc {
-	color: $neutral;
+	color: abstracts.$neutral;
 }
 
 .u-color-silver {
-	color: $neutral;
+	color: abstracts.$neutral;
 }
 
-@media (min-width: $breakpoint-md) {
+@media (min-width: abstracts.$breakpoint-md) {
 	.u-color-black-md {
-		color: $black;
+		color: abstracts.$black;
 	}
 
 	.u-color-white-md {
-		color: $white;
+		color: abstracts.$white;
 	}
 
 	.u-color-neutral-md {
-		color: $neutral;
+		color: abstracts.$neutral;
 	}
 
 	.u-color-teal-md {
-		color: $teal;
+		color: abstracts.$teal;
 	}
 }
 
-@media (min-width: $breakpoint-lg) {
+@media (min-width: abstracts.$breakpoint-lg) {
 	.u-color-black-lg {
-		color: $black;
+		color: abstracts.$black;
 	}
 
 	.u-color-white-lg {
-		color: $white;
+		color: abstracts.$white;
 	}
 
 	.u-color-neutral-lg {
-		color: $neutral;
+		color: abstracts.$neutral;
 	}
 
 	.u-color-teal-lg {
-		color: $teal;
+		color: abstracts.$teal;
 	}
 }
 
-@media (min-width: $breakpoint-xxl) {
+@media (min-width: abstracts.$breakpoint-xxl) {
 	.u-color-black-xxl {
-		color: $black;
+		color: abstracts.$black;
 	}
 
 	.u-color-white-xxl {
-		color: $white;
+		color: abstracts.$white;
 	}
 
 	.u-color-neutral-xxl {
-		color: $neutral;
+		color: abstracts.$neutral;
 	}
 
 	.u-color-teal-xxl {
-		color: $teal;
+		color: abstracts.$teal;
 	}
 }

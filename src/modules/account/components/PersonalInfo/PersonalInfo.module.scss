@@ -1,4 +1,4 @@
-@use "../../../../styles/abstracts" as *;
+@use "../../../../styles/abstracts" as abstracts;
 
 .c-personal-info {
 	display: flex;
@@ -6,25 +6,25 @@
 
 	&__terms-agreement,
 	&__edit-user-data {
-		margin-top: $spacer-sm;
-		color: $neutral;
-		font-size: $font-size-sm;
+		margin-top: abstracts.$spacer-sm;
+		color: abstracts.$neutral;
+		font-size: abstracts.$font-size-sm;
 		cursor: pointer;
 	}
 
 	&__content {
 		overflow: auto;
 		flex-grow: 1;
-		padding: $spacer-md $spacer-lg $spacer-lg;
+		padding: abstracts.$spacer-md abstracts.$spacer-lg abstracts.$spacer-lg;
 
 		&-group {
-			padding: $spacer-md 0;
+			padding: abstracts.$spacer-md 0;
 			display: flex;
 			flex-direction: column;
-			gap: $spacer-xxs;
-			border-bottom: 1px solid $silver;
+			gap: abstracts.$spacer-xxs;
+			border-bottom: 1px solid abstracts.$silver;
 
-			@include blade-text-styling;
+			@include abstracts.blade-text-styling;
 
 			p {
 				margin-bottom: 0
@@ -40,17 +40,17 @@
 			}
 
 			&-subtitle, &-value {
-				color: $black;
-				font-size: $font-size-base;
-				line-height: $font-size-2xm;
+				color: abstracts.$black;
+				font-size: abstracts.$font-size-base;
+				line-height: abstracts.$font-size-2xm;
 			}
 
 			&-value {
-				color: $grey;
+				color: abstracts.$grey;
 			}
 
 			:global(.c-tooltip-component-trigger){
-				margin-top: $spacer-sm;
+				margin-top: abstracts.$spacer-sm;
 				display: flex !important;
 			}
 
@@ -61,14 +61,14 @@
 			&-radio-button-group {
 				display: flex;
 				flex-direction: column;
-				margin-top: $spacer-xs;
+				margin-top: abstracts.$spacer-xs;
 			}
 
 			&-radio-button {
-				margin-left: $spacer-xs;
+				margin-left: abstracts.$spacer-xs;
 
 				&:not(:last-child) {
-					margin-bottom: $spacer-sm;
+					margin-bottom: abstracts.$spacer-sm;
 				}
 			}
 		}
@@ -76,7 +76,7 @@
 
 	&__checkbox {
 		&:not(:last-child) {
-			margin-bottom: $spacer-sm;
+			margin-bottom: abstracts.$spacer-sm;
 		}
 
 		&-hyperlink {

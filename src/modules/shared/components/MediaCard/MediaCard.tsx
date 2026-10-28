@@ -11,7 +11,10 @@ import { Badge, Button, Card } from '@meemoo/react-components';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { TRUNCATED_TEXT_LENGTH } from '@shared/components/MediaCard';
+import {
+	TRUNCATED_TEXT_LENGTH_GRID,
+	TRUNCATED_TEXT_LENGTH_LIST,
+} from '@shared/components/MediaCard';
 import { Modal } from '@shared/components/Modal';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
@@ -190,7 +193,7 @@ const MediaCard: FC<MediaCardProps> = ({
 			const truncatedText = extractSnippetBySearchTerm(
 				description,
 				keywords,
-				TRUNCATED_TEXT_LENGTH
+				view === 'grid' ? TRUNCATED_TEXT_LENGTH_GRID : TRUNCATED_TEXT_LENGTH_LIST
 			);
 			return (
 				<HighlightSearchTerms

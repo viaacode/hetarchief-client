@@ -1,5 +1,5 @@
 /* stylelint-disable no-descending-specificity */
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-content-page-preview,
 .c-block-buttons {
@@ -9,30 +9,30 @@
 	button[class*="c-button"][class*="c-button--link"] {
 		max-height: 5.6rem;
 		display: inline-block;
-		padding: 1.4rem $button-horizontal-whitespace;
-		border: 1px solid $teal-dark;
-		font-family: $font-family-primary;
-		font-size: $font-size-base;
+		padding: 1.4rem abstracts.$button-horizontal-whitespace;
+		border: 1px solid abstracts.$teal-dark;
+		font-family: abstracts.$font-family-primary;
+		font-size: abstracts.$font-size-base;
 		line-height: 1.125;
 		text-align: center;
-		background-color: $teal-dark;
+		background-color: abstracts.$teal-dark;
 		border-radius: 4rem;
-		color: $white;
+		color: abstracts.$white;
 		cursor: pointer;
 		outline: 2px solid transparent;
 		transition:
-			color $animate-default,
-			background-color $animate-default,
-			border-color $animate-default;
+			color abstracts.$animate-default,
+			background-color abstracts.$animate-default,
+			border-color abstracts.$animate-default;
 
 		&:hover {
-			background-color: $shade;
-			border-color: $shade;
+			background-color: abstracts.$shade;
+			border-color: abstracts.$shade;
 		}
 
 		&:active {
-			background-color: $teal-dark;
-			border-color: $teal-dark;
+			background-color: abstracts.$teal-dark;
+			border-color: abstracts.$teal-dark;
 		}
 
 		/**
@@ -42,7 +42,7 @@
 */
 		&:focus,
 		.focus-visible:focus:not(:focus-visible) {
-			outline: 2px solid $black;
+			outline: 2px solid abstracts.$black;
 		}
 
 		/**
@@ -68,7 +68,7 @@
 
 	.c-button__icon {
 		display: inline-flex;
-		font-size: $font-size-md;
+		font-size: abstracts.$font-size-md;
 
 		&--start {
 			margin-right: 4px;
@@ -85,20 +85,20 @@
 
 	// Silver
 	button[class*="c-button"][class*="c-button--secondary"][class*="skins-module_c-button--secondary"] {
-		background-color: $silver;
-		border-color: $silver;
-		color: $black;
+		background-color: abstracts.$silver;
+		border-color: abstracts.$silver;
+		color: abstracts.$black;
 
 		&:hover {
-			background-color: $shade;
-			border-color: $shade;
-			color: $white;
+			background-color: abstracts.$shade;
+			border-color: abstracts.$shade;
+			color: abstracts.$white;
 		}
 
 		&:active {
-			background-color: $teal-dark;
-			border-color: $teal-dark;
-			color: $white;
+			background-color: abstracts.$teal-dark;
+			border-color: abstracts.$teal-dark;
+			color: abstracts.$white;
 		}
 
 		/**
@@ -108,7 +108,7 @@
 */
 		&:focus,
 		.focus-visible:focus:not(:focus-visible) {
-			outline: 2px solid $teal;
+			outline: 2px solid abstracts.$teal;
 		}
 	}
 }
@@ -120,18 +120,18 @@
 // Outline
 
 button[class*="c-button"][class*="c-button--tertiary"] {
-	background-color: $white;
-	border-color: $black;
-	color: $black;
+	background-color: abstracts.$white;
+	border-color: abstracts.$black;
+	color: abstracts.$black;
 
 	&:hover {
-		background-color: $silver;
+		background-color: abstracts.$silver;
 	}
 
 	&:active {
-		background-color: $teal-dark;
-		border-color: $teal-dark;
-		color: $white;
+		background-color: abstracts.$teal-dark;
+		border-color: abstracts.$teal-dark;
+		color: abstracts.$white;
 	}
 
 	/**
@@ -142,30 +142,30 @@ button[class*="c-button"][class*="c-button--tertiary"] {
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
 		border-color: transparent;
-		outline: 2px solid $teal;
+		outline: 2px solid abstracts.$teal;
 	}
 
 	&:focus:not(:focus-visible) {
-		border-color: $black;
+		border-color: abstracts.$black;
 	}
 }
 
 // Link
 
 button[class*="c-button"][class*="c-button--link"][class*="skins-module_c-button--link"] {
-	font-weight: $font-weight-normal;
+	font-weight: abstracts.$font-weight-normal;
 	background-color: transparent;
 	border-color: transparent;
-	color: $black;
+	color: abstracts.$black;
 
 	&:hover {
 		background-color: transparent;
 		border-color: transparent;
-		color: $neutral;
+		color: abstracts.$neutral;
 	}
 
 	&:active {
-		color: $teal-dark;
+		color: abstracts.$teal-dark;
 		background-color: transparent;
 		border-color: transparent;
 	}
@@ -177,19 +177,19 @@ button[class*="c-button"][class*="c-button--link"][class*="skins-module_c-button
 */
 	&:focus,
 	.focus-visible:focus:not(:focus-visible) {
-		outline: 2px solid $teal;
+		outline: 2px solid abstracts.$teal;
 	}
 
 	&.c-button--neutral {
-		font-size: $font-size-sm;
-		color: $neutral;
+		font-size: abstracts.$font-size-sm;
+		color: abstracts.$neutral;
 
 		&:hover {
-			color: $shade;
+			color: abstracts.$shade;
 		}
 
 		&:active {
-			color: $teal;
+			color: abstracts.$teal;
 		}
 	}
 
@@ -198,6 +198,6 @@ button[class*="c-button"][class*="c-button--link"][class*="skins-module_c-button
 	}
 
 	&.c-button--white {
-		color: $white;
+		color: abstracts.$white;
 	}
 }

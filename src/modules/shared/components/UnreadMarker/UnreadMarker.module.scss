@@ -1,8 +1,8 @@
 @use "sass:map";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-unread-marker {
-	background-color: $zinc;
+	background-color: abstracts.$zinc;
 	width: 8px;
 	height: 8px;
 	min-width: 8px;
@@ -10,6 +10,6 @@
 	border-radius: 50%;
 
 	&__active {
-		background-color: $teal;
+		background-color: abstracts.$teal;
 	}
 }

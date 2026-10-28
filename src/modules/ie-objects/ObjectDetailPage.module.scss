@@ -91,8 +91,8 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		grid-template-rows: minmax(0, max-content) max-content 1fr minmax(0, max-content);
 		grid-template-columns: $back-to-global-search-button-width-desktop 16fr 10fr;
 		width: 100vw;
-		min-height: calc(#{abstracts.$view-height} - #{abstracts.$top-navigation-bar-height});
-		max-height: calc(#{abstracts.$view-height} - #{abstracts.$top-navigation-bar-height});
+		min-height: calc(abstracts.$view-height - abstracts.$top-navigation-bar-height);
+		max-height: calc(abstracts.$view-height - abstracts.$top-navigation-bar-height);
 		place-items: stretch stretch;
 		align-content: stretch;
 		transition: 100ms ease-out;
@@ -180,24 +180,6 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			grid-column: 1 / 2;
 			width: 100vw;
 		}
-
-		&::after {
-			content: "";
-			position: absolute;
-			z-index: abstracts.get-z-layer("foreground");
-			visibility: visible;
-			bottom: 0;
-			left: 2rem;
-			right: 2rem;
-			height: 1px;
-			background-color: abstracts.$shade;
-			opacity: 0.64;
-			width: 100vw;
-
-			@media (min-width: abstracts.$breakpoint-lg) {
-				visibility: hidden;
-			}
-		}
 	}
 
 	&__visitor-space-navigation-bar--visible {
@@ -253,10 +235,10 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 		// The back button floats over the media's top-left corner here, unlike the smaller
 		// arrow shown when the visitor space navigation bar is visible
 		.p-object-detail__context-disclaimer {
-			top: calc(#{$metadata-media-ocr-tabs-height-desktop} + #{abstracts.$spacer-sm});
+			top: calc($metadata-media-ocr-tabs-height-desktop + abstracts.$spacer-sm);
 
 			@media (max-width: abstracts.$breakpoint-lg) {
-				top: calc(#{$metadata-media-ocr-tabs-height-mobile} + #{abstracts.$spacer-sm});
+				top: calc($metadata-media-ocr-tabs-height-mobile + abstracts.$spacer-sm);
 			}
 		}
 
@@ -312,7 +294,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			display: flex;
 			align-items: center;
 			justify-content: center;
-			height: calc(#{$metadata-media-ocr-tabs-height-desktop} + 1px);
+			height: calc($metadata-media-ocr-tabs-height-desktop + 1px);
 			padding: 0 abstracts.$spacer-lg; // 32px
 			gap: abstracts.$spacer-xs; // 8px
 			background-color: abstracts.$black;
@@ -419,7 +401,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 
 		& :global(.is-hovered) :global(.p-object-detail__flowplayer-fullscreen-button--exit),
 		& :global(.is-paused) :global(.p-object-detail__flowplayer-fullscreen-button--exit) {
-			bottom: calc(#{abstracts.$spacer-lg} + 5.8rem); // Add height of controls bar
+			bottom: calc(abstracts.$spacer-lg + 5.8rem); // Add height of controls bar
 		}
 	}
 
@@ -456,7 +438,7 @@ $zendesk-feedback-button-margin-bottom-mobile: 3.5rem;
 			grid-column: 1/3;
 
 			@media (max-width: abstracts.$breakpoint-lg) {
-				height: calc(#{abstracts.$view-height} - #{abstracts.$top-navigation-bar-height} - #{$metadata-media-ocr-tabs-height-mobile});
+				height: calc(abstracts.$view-height - abstracts.$top-navigation-bar-height - $metadata-media-ocr-tabs-height-mobile);
 			}
 		}
 	}

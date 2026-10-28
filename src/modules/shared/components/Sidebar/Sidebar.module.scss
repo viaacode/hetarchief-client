@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-sidebar {
 	display: grid;
@@ -12,10 +12,10 @@
 	overflow: hidden;
 
 	&__title {
-		padding: $spacer-lg;
-		padding-top: $spacer-2xl;
-		color: $zinc;
-		font-size: $font-size-1xl;
+		padding: abstracts.$spacer-lg;
+		padding-top: abstracts.$spacer-2xl;
+		color: abstracts.$zinc;
+		font-size: abstracts.$font-size-1xl;
 
 		&--in-header {
 			min-width: 0;
@@ -26,15 +26,15 @@
 	}
 
 	&__header {
-		padding: $spacer-lg;
-		padding-top: $spacer-2xl;
+		padding: abstracts.$spacer-lg;
+		padding-top: abstracts.$spacer-2xl;
 	}
 
 	&__header-row {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		gap: $spacer-xs;
+		gap: abstracts.$spacer-xs;
 
 		> :last-child:not(h2) {
 			flex-shrink: 0;
@@ -42,6 +42,6 @@
 	}
 
 	&__subtitle {
-		margin-top: $spacer-xs;
+		margin-top: abstracts.$spacer-xs;
 	}
 }

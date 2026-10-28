@@ -1,16 +1,14 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-create-folder-button";
-
-.#{$component} {
-	padding-top: $spacer-xs;
+.c-create-folder-button {
+	padding-top: abstracts.$spacer-xs;
 
 	:global(.c-form-control__errors) {
-		font-size: $font-size-sm;
+		font-size: abstracts.$font-size-sm;
 	}
 
 	&__organisation-checkbox {
-		margin-top: $spacer-sm;
-		font-size: $font-size-sm;
+		margin-top: abstracts.$spacer-sm;
+		font-size: abstracts.$font-size-sm;
 	}
 }

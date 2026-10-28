@@ -11,7 +11,7 @@
 
 	// Desktop
 	&__message-wrapper {
-		height: calc(100% - #{editorVariables.$rich-text-editor-height-desktop});
+		height: calc(100% - editorVariables.$rich-text-editor-height-desktop);
 		overflow-y: scroll;
 		padding: abstracts.$spacer-md;
 	}
@@ -19,7 +19,7 @@
 	// Mobile
 	@media (max-width: abstracts.$breakpoint-md) {
 		&__message-wrapper {
-			height: calc(100% - #{editorVariables.$rich-text-editor-height-desktop});
+			height: calc(100% - editorVariables.$rich-text-editor-height-desktop);
 			overflow-y: scroll;
 			padding: abstracts.$spacer-sm;
 		}
