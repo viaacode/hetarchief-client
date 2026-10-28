@@ -1,9 +1,8 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-datepicker--time";
 $item-selector: ".react-datepicker__time-container .react-datepicker__time .react-datepicker__time-box ul.react-datepicker__time-list li.react-datepicker__time-list-item";
 
-.#{$component} {
+.c-datepicker--time {
 	.react-datepicker {
 		&__header {
 			&--time--only {
@@ -12,20 +11,20 @@ $item-selector: ".react-datepicker__time-container .react-datepicker__time .reac
 		}
 
 		#{$item-selector} {
-			outline-color: $seagreen;
+			outline-color: abstracts.$seagreen;
 
 			&--disabled {
 				cursor: not-allowed;
-				color: $zinc;
+				color: abstracts.$zinc;
 			}
 
 			&--selected {
-				background-color: $seagreen;
-				font-weight: $font-weight-normal;
+				background-color: abstracts.$seagreen;
+				font-weight: abstracts.$font-weight-normal;
 			}
 
 			&:not(.react-datepicker__time-list-item):hover {
-				background-color: $silver;
+				background-color: abstracts.$silver;
 			}
 		}
 	}

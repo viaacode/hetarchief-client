@@ -1,8 +1,10 @@
 import { GroupName, Permission } from '@account/const';
 import { useGetFolders } from '@account/hooks/get-folders';
+import { FoldersService } from '@account/services/folders';
 import { selectIsLoggedIn, selectUser } from '@auth/store/user/user.select';
 import { useGetIeObjectFormatCounts } from '@ie-objects/hooks/use-get-ie-object-format-counts';
 import { useGetIeObjects } from '@ie-objects/hooks/use-get-ie-objects';
+import { IeObjectsService } from '@ie-objects/services';
 import { isInAFolder } from '@ie-objects/utils/folders';
 import { isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import {
@@ -16,7 +18,7 @@ import {
 import { Callout } from '@shared/components/Callout';
 import { ErrorNoAccess } from '@shared/components/ErrorNoAccess';
 import { Icon } from '@shared/components/Icon';
-import { IconNamesLight, IconNamesSolid } from '@shared/components/Icon/Icon.enums';
+import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { Loading } from '@shared/components/Loading';
 import {
 	getIconFromObjectType,
@@ -56,6 +58,7 @@ import { useIsKeyUser } from '@shared/hooks/is-key-user';
 import { useLocale } from '@shared/hooks/use-locale/use-locale';
 import { useLocalStorage } from '@shared/hooks/use-localStorage/use-local-storage';
 import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
+import { toastService } from '@shared/services/toast-service';
 import {
 	selectLastScrollPosition,
 	setBreadcrumbs,
@@ -78,7 +81,7 @@ import {
 import { useGetActiveVisitRequestForUserAndSpace } from '@visit-requests/hooks/get-active-visit-request-for-user-and-space';
 import { useGetVisitRequests } from '@visit-requests/hooks/get-visit-requests';
 import { VisitTimeframe } from '@visit-requests/types';
-import { AddToFolderBlade } from '@visitor-space/components/AddToFolderBlade';
+import { AddToFolderBlade, type FolderChanges } from '@visitor-space/components/AddToFolderBlade';
 import type { ConsultableMediaFilterFormState } from '@visitor-space/components/ConsultableMediaFilterForm/ConsultableMediaFilterForm.types';
 import type { ConsultableOnlyOnLocationFilterFormState } from '@visitor-space/components/ConsultableOnlyOnLocationFilterForm/ConsultableOnlyOnLocationFilterForm.types';
 import FilterMenu from '@visitor-space/components/FilterMenu/FilterMenu';
@@ -109,15 +112,29 @@ import { getQueryForRemainingTags, mapFiltersToTags } from '@visitor-space/utils
 import { migrateLegacyAdvancedFilters } from '@visitor-space/utils/migrate-legacy-advanced-filters';
 import clsx from 'clsx';
 import { addYears, isAfter } from 'date-fns';
-import { intersection, isEmpty, isNil, sortBy, sum } from 'es-toolkit/compat';
+import { compact, intersection, isEmpty, isNil, sortBy, sum } from 'es-toolkit/compat';
 import type { HTTPError } from 'ky';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import queryString from 'query-string';
-import React, { type FC, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, {
+	type FC,
+	type ReactNode,
+	type RefObject,
+	useCallback,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import type { MultiValue } from 'react-select';
 import { useQueryParams } from 'use-query-params';
+import { MAX_SELECT_ALL_RESULTS, MultiselectActionBar } from './components/MultiselectActionBar';
+import { MultiselectErrorBanner } from './components/MultiselectErrorBanner';
+import { ResultCardBookmarkSlot } from './components/ResultCardBookmarkSlot';
+import { SelectableMediaCard } from './components/SelectableMediaCard';
+import { useMultiselect } from './hooks/use-multiselect';
 import { omitEmptyFilters } from './omit-empty-filters';
 import styles from './SearchPage.module.scss';
 
@@ -139,7 +156,7 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const dispatch = useDispatch();
 	const locale = useLocale();
 
-	const { data: folders } = useGetFolders();
+	const { data: folders, refetch: refetchFolders } = useGetFolders();
 	// Theme slugs are what live in the url, the names shown in the pills come from this lookup
 	const { labelsBySlug: themeLabelsBySlug } = useGetThemeFilterOptions();
 	const canManageFolders: boolean | null = useHasAllPermission(Permission.MANAGE_FOLDERS);
@@ -169,6 +186,23 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 
 	const [searchBarInputValue, setSearchBarInputValue] = useState<string>();
 	const [query, setQuery] = useQueryParams(SEARCH_PAGE_QUERY_PARAM_CONFIG);
+
+	// Select multiple search results to add them to folders at once
+	// Changing the search, filters, tab, sort or page silently ends the multiselect mode
+	// Only opening a filter panel ("filter" query param) does not change the results
+	const { filter: _openFilterPanel, ...searchQueryWithoutOpenFilterPanel } = query;
+	const multiselect = useMultiselect(JSON.stringify(searchQueryWithoutOpenFilterPanel));
+	// Folder changes that could not be saved, so the user can retry
+	const [failedMultiselectChanges, setFailedMultiselectChanges] = useState<FolderChanges | null>(
+		null
+	);
+	const [isSavingMultiselect, setIsSavingMultiselect] = useState(false);
+	// Titles of the results of all pages, fetched when the user selects all results of the search
+	const [allResultTitles, setAllResultTitles] = useState<Record<string, string>>({});
+	const [isSelectingResults, setIsSelectingResults] = useState(false);
+	// The card that started the multiselect mode, to move the focus to its checkbox and back again
+	const [multiselectStartId, setMultiselectStartId] = useState<string | null>(null);
+	const multiselectSaveButtonRef = useRef<HTMLButtonElement>(null) as RefObject<HTMLButtonElement>;
 
 	// Keep defaults only in code, not in the query params in the url
 	const page = query.page || VISITOR_SPACE_QUERY_PARAM_INIT.page;
@@ -290,8 +324,11 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	}, [dispatch, locale]);
 
 	useEffect(() => {
-		dispatch(setShowZendesk(!isKioskUser && !query[SearchFilterId.Maintainer]));
-	}, [dispatch, isKioskUser, query]);
+		// The feedback button would overlap the multiselect action bar at the bottom of the screen
+		dispatch(
+			setShowZendesk(!isKioskUser && !query[SearchFilterId.Maintainer] && !multiselect.isActive)
+		);
+	}, [dispatch, isKioskUser, query, multiselect.isActive]);
 
 	useEffect(() => {
 		// Ward: wait until items are rendered on the screen before scrolling
@@ -326,6 +363,12 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	useEffect(() => {
 		dispatch(setLastSearchParams(searchParams.toString()));
 	}, [searchParams, dispatch]);
+
+	useEffect(() => {
+		if (!multiselect.isActive) {
+			setFailedMultiselectChanges(null);
+		}
+	}, [multiselect.isActive]);
 
 	/**
 	 * Display
@@ -676,6 +719,234 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 		mentionOrganisationFilter,
 	]);
 
+	// Selecting multiple objects only makes sense when there is more than one result
+	// Kiosk users and anonymous users cannot manage folders, so they never get the multiselect
+	const isMultiselectAvailable = !!canManageFolders && searchResultCardData.length >= 2;
+
+	// The selected objects can be on other pages when all results of the search were selected
+	const selectedMultiselectObjects = useMemo(
+		() =>
+			compact(
+				multiselect.selectedIds.map((schemaIdentifier) => {
+					const title =
+						searchResultCardData.find((card) => card.schemaIdentifier === schemaIdentifier)?.name ??
+						allResultTitles[schemaIdentifier];
+					return isNil(title) ? null : { schemaIdentifier, title };
+				})
+			),
+		[multiselect.selectedIds, searchResultCardData, allResultTitles]
+	);
+
+	const objectsToAddToFolder = useMemo(() => {
+		if (multiselect.isActive) {
+			return selectedMultiselectObjects;
+		}
+		if (selectedCard) {
+			return [{ schemaIdentifier: selectedCard.schemaIdentifier, title: selectedCard.name }];
+		}
+		return [];
+	}, [multiselect.isActive, selectedMultiselectObjects, selectedCard]);
+
+	const focusMultiselectStartCard = () => {
+		const startId = multiselectStartId;
+		if (!startId) {
+			return;
+		}
+		// Wait for the bookmark button to be rendered again
+		setTimeout(() => {
+			document
+				.querySelector<HTMLElement>(
+					`[data-selectable-id="${CSS.escape(startId)}"] [data-bookmark-slot] button`
+				)
+				?.focus();
+		}, 0);
+	};
+
+	const startMultiselect = (card: IdentifiableMediaCard) => {
+		setMultiselectStartId(card.schemaIdentifier);
+		multiselect.open([card.schemaIdentifier]);
+	};
+
+	/**
+	 * Fetches search results that are not on the current page and adds them to the selection
+	 * @param pages the pages of search results to fetch, eg: [{ page: 1, size: 70 }] for all results
+	 * @param errorDescription shown in a toast when fetching the results fails
+	 * @param replaceSelection replace the current selection instead of adding to it
+	 * @param currentPageIds results of the current page that are selected together with the fetched results
+	 */
+	const selectResultsOfPages = async (
+		pages: { page: number; size: number }[],
+		errorDescription: string,
+		replaceSelection = false,
+		currentPageIds: string[] = []
+	) => {
+		setIsSelectingResults(true);
+		try {
+			const responses = await Promise.all(
+				pages.map(({ page, size }) =>
+					IeObjectsService.getSearchResults(searchQueryFilters, page, size, activeSort, [])
+				)
+			);
+			const items = responses.flatMap((response) => response.items);
+			setAllResultTitles((titles) => ({
+				...titles,
+				...Object.fromEntries(items.map((item) => [item.schemaIdentifier, item.name])),
+			}));
+			const ids = [...currentPageIds, ...items.map((item) => item.schemaIdentifier)];
+			if (replaceSelection) {
+				multiselect.selectOnly(ids);
+			} else {
+				multiselect.selectMany(ids);
+			}
+		} catch (err) {
+			console.error(err);
+			toastService.notify({
+				maxLines: 3,
+				title: tText('modules/search/search-page___er-ging-iets-mis'),
+				description: errorDescription,
+			});
+		}
+		setIsSelectingResults(false);
+	};
+
+	const selectAllResults = async () => {
+		// Large searches only select the first results, up to the maximum
+		const count = Math.min(getItemCounts(format), MAX_SELECT_ALL_RESULTS);
+		await selectResultsOfPages(
+			[{ page: 1, size: count }],
+			tText('modules/search/search-page___het-selecteren-van-alle-resultaten-is-mislukt'),
+			true
+		);
+	};
+
+	const closeMultiselect = () => {
+		multiselect.close();
+		focusMultiselectStartCard();
+	};
+
+	const onCloseAddToFolderBlade = () => {
+		setShowAddToFolderBlade(false);
+		setSelectedCard(null);
+		if (multiselect.isActive) {
+			multiselectSaveButtonRef.current?.focus();
+		}
+	};
+
+	const saveMultiselectToFolders = async (changes: FolderChanges) => {
+		const { addToFolderIds, removeFromFolderIds } = changes;
+		const objectSchemaIdentifiers = [...multiselect.selectedIds];
+		if (
+			(!addToFolderIds.length && !removeFromFolderIds.length) ||
+			!objectSchemaIdentifiers.length
+		) {
+			return;
+		}
+		setIsSavingMultiselect(true);
+		setFailedMultiselectChanges(null);
+		try {
+			const response = await FoldersService.updateManyInFolders(
+				addToFolderIds,
+				removeFromFolderIds,
+				objectSchemaIdentifiers
+			);
+			const savedCount = response.objectSchemaIdentifiers.length;
+			const notFoundCount = response.notFoundSchemaIdentifiers?.length || 0;
+
+			const getFolderNames = (folderIds: string[]) =>
+				compact(
+					folderIds.map((folderId) => folders?.find((folder) => folder.id === folderId)?.name)
+				).join(', ');
+			const getAddedDescription = () => {
+				const variables = { count: savedCount, folders: getFolderNames(addToFolderIds) };
+				if (savedCount === 1) {
+					return addToFolderIds.length === 1
+						? tHtml(
+								'modules/search/search-page___1-object-is-toegevoegd-aan-de-map-folders',
+								variables
+							)
+						: tHtml(
+								'modules/search/search-page___1-object-is-toegevoegd-aan-de-mappen-folders',
+								variables
+							);
+				}
+				return addToFolderIds.length === 1
+					? tHtml(
+							'modules/search/search-page___count-objecten-zijn-toegevoegd-aan-de-map-folders',
+							variables
+						)
+					: tHtml(
+							'modules/search/search-page___count-objecten-zijn-toegevoegd-aan-de-mappen-folders',
+							variables
+						);
+			};
+			const getRemovedDescription = () => {
+				const variables = { count: savedCount, folders: getFolderNames(removeFromFolderIds) };
+				if (savedCount === 1) {
+					return removeFromFolderIds.length === 1
+						? tHtml(
+								'modules/search/search-page___1-object-is-verwijderd-uit-de-map-folders',
+								variables
+							)
+						: tHtml(
+								'modules/search/search-page___1-object-is-verwijderd-uit-de-mappen-folders',
+								variables
+							);
+				}
+				return removeFromFolderIds.length === 1
+					? tHtml(
+							'modules/search/search-page___count-objecten-zijn-verwijderd-uit-de-map-folders',
+							variables
+						)
+					: tHtml(
+							'modules/search/search-page___count-objecten-zijn-verwijderd-uit-de-mappen-folders',
+							variables
+						);
+			};
+			toastService.notify({
+				maxLines: addToFolderIds.length && removeFromFolderIds.length ? 5 : 3,
+				title: removeFromFolderIds.length
+					? tHtml('modules/search/search-page___mappen-aangepast')
+					: tHtml('modules/search/search-page___objecten-bewaard'),
+				description: (
+					<>
+						{addToFolderIds.length > 0 && getAddedDescription()}
+						{addToFolderIds.length > 0 && removeFromFolderIds.length > 0 && ' '}
+						{removeFromFolderIds.length > 0 && getRemovedDescription()}
+					</>
+				),
+			});
+			if (notFoundCount > 0) {
+				// Objects that no longer exist in the database are skipped by the server
+				toastService.notify({
+					maxLines: 3,
+					title: tHtml('modules/search/search-page___niet-alle-objecten-werden-bewaard'),
+					description:
+						notFoundCount === 1
+							? tHtml(
+									'modules/search/search-page___1-object-bestaat-niet-meer-of-is-niet-meer-beschikbaar-en-werd-overgeslagen'
+								)
+							: tHtml(
+									'modules/search/search-page___count-objecten-bestaan-niet-meer-of-zijn-niet-meer-beschikbaar-en-werden-overgeslagen',
+									{ count: notFoundCount }
+								),
+				});
+			}
+
+			closeMultiselect();
+			// Fill the bookmark icons of the saved objects
+			await refetchFolders();
+		} catch (err) {
+			console.error('Failed to save the selected objects to the folders', err, {
+				addToFolderIds,
+				removeFromFolderIds,
+				objectSchemaIdentifiers,
+			});
+			// Keep the selection, so the user can retry
+			setFailedMultiselectChanges(changes);
+		}
+		setIsSavingMultiselect(false);
+	};
+
 	const openAndScrollToAdvancedFilters = () => {
 		setFilterMenuOpen(true);
 		setMobileFilterMenuOpen(true);
@@ -784,25 +1055,87 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 			return null;
 		}
 
-		const itemIsInAFolder = isInAFolder(folders, (item as IdentifiableMediaCard).schemaIdentifier);
+		const card = item as IdentifiableMediaCard;
+		const itemIsInAFolder = isInAFolder(folders, card.schemaIdentifier);
 
 		return (
-			<Button
-				onClick={() => {
-					setSelectedCard(item as IdentifiableMediaCard);
-					setShowAddToFolderBlade(true);
-				}}
-				icon={
-					<Icon
-						name={itemIsInAFolder ? IconNamesSolid.Bookmark : IconNamesLight.Bookmark}
-						aria-hidden
+			<span data-bookmark-slot>
+				<ResultCardBookmarkSlot
+					title={card.name || card.schemaIdentifier}
+					isInFolder={itemIsInAFolder}
+					isMultiselectActive={multiselect.isActive}
+					isSelected={multiselect.isSelected(card.schemaIdentifier)}
+					autoFocus={multiselectStartId === card.schemaIdentifier}
+					onBookmarkClick={() => {
+						if (isMultiselectAvailable) {
+							startMultiselect(card);
+							return;
+						}
+						setSelectedCard(card);
+						setShowAddToFolderBlade(true);
+					}}
+					onToggleSelected={() => multiselect.toggle(card.schemaIdentifier)}
+				/>
+			</span>
+		);
+	};
+
+	const renderSelectableCard = (cardNode: ReactNode, item: MediaCardProps): ReactNode => {
+		const card = item as IdentifiableMediaCard;
+		return (
+			<div
+				key={`selectable-media-card--${card.schemaIdentifier}`}
+				data-selectable-id={card.schemaIdentifier}
+			>
+				<SelectableMediaCard
+					isMultiselectActive={multiselect.isActive}
+					isSelected={multiselect.isSelected(card.schemaIdentifier)}
+					onToggleSelected={() => multiselect.toggle(card.schemaIdentifier)}
+				>
+					{cardNode}
+				</SelectableMediaCard>
+			</div>
+		);
+	};
+
+	const renderMultiselect = () => {
+		if (!multiselect.isActive) {
+			return null;
+		}
+		return (
+			<>
+				<MultiselectActionBar
+					selectedCount={multiselect.selectedIds.length}
+					pageCount={searchResultCardData.length}
+					totalCount={getItemCounts(format)}
+					isAllResultsSelected={
+						multiselect.selectedIds.length >=
+						Math.min(getItemCounts(format), MAX_SELECT_ALL_RESULTS)
+					}
+					isPageSelected={searchResultCardData.every((card) =>
+						multiselect.isSelected(card.schemaIdentifier)
+					)}
+					isSelectingResults={isSelectingResults}
+					isSaving={isSavingMultiselect}
+					saveButtonRef={multiselectSaveButtonRef}
+					onSelectAllOnPage={() =>
+						multiselect.selectOnly(searchResultCardData.map((card) => card.schemaIdentifier))
+					}
+					onSelectAllResults={selectAllResults}
+					onSave={() => {
+						setSelectedCard(null);
+						setShowAddToFolderBlade(true);
+					}}
+					onClose={closeMultiselect}
+				/>
+				{failedMultiselectChanges && (
+					<MultiselectErrorBanner
+						objectCount={multiselect.selectedIds.length}
+						isRetrying={isSavingMultiselect}
+						onRetry={() => saveMultiselectToFolders(failedMultiselectChanges)}
 					/>
-				}
-				variants={['text', 'xxs']}
-				title={tText(
-					'modules/visitor-space/components/visitor-space-search-page/visitor-space-search-page___sla-dit-item-op'
 				)}
-			/>
+			</>
 		);
 	};
 
@@ -878,12 +1211,14 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const renderResults = () => {
 		return (
 			<>
+				{renderMultiselect()}
 				<MediaCardList
 					items={searchResultCardData}
 					keywords={searchResults?.searchTerms}
 					sidebar={renderFilterMenu()}
 					view={viewMode === 'grid' ? 'grid' : 'list'}
 					renderButtons={renderCardButtons}
+					renderWrapper={canManageFolders ? renderSelectableCard : undefined}
 					className="p-media-card-list"
 					showManyResultsTile={showManyResultsTile}
 				/>
@@ -1018,21 +1353,18 @@ const SearchPage: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 				{!searchResultsLoading && (
 					<AddToFolderBlade
 						isOpen={isAddToFolderBladeOpen}
-						objectToAdd={
-							selectedCard
-								? {
-										schemaIdentifier: selectedCard.schemaIdentifier,
-										title: selectedCard.name,
-									}
-								: undefined
-						}
-						onClose={() => {
-							setShowAddToFolderBlade(false);
-							setSelectedCard(null);
-						}}
+						objectsToAdd={objectsToAddToFolder}
+						onSaveMultipleObjects={saveMultiselectToFolders}
+						onClose={onCloseAddToFolderBlade}
 						onSubmit={async () => {
+							// Only called when one object was added, multiple objects are saved by saveMultiselectToFolders
 							setShowAddToFolderBlade(false);
 							setSelectedCard(null);
+							if (multiselect.isActive) {
+								closeMultiselect();
+							}
+							// Update the bookmark icons of the search results
+							await refetchFolders();
 						}}
 						id="search-page__add-to-folder-blade"
 						ariaLabel={tText(

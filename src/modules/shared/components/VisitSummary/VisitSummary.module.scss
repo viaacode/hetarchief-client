@@ -1,5 +1,5 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-visit-summary {
-	@include blade-text-styling;
+	@include abstracts.blade-text-styling;
 }

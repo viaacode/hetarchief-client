@@ -1,4 +1,9 @@
-import type { Folder, FolderIeObject, SharedFolderResponse } from '@account/types';
+import type {
+	Folder,
+	FolderIeObject,
+	SharedFolderResponse,
+	UpdateObjectsInFoldersResponse,
+} from '@account/types';
 import type { IPagination } from '@meemoo/admin-core-ui/client';
 import { ApiService } from '@shared/services/api-service';
 import queryString from 'query-string';
@@ -31,7 +36,13 @@ export abstract class FoldersService {
 			.json();
 	}
 
-	public static async create(json: Partial<Pick<Folder, 'name'>>): Promise<Folder> {
+	/**
+	 * Create a personal folder, or an organisation folder when isOrganisation is true
+	 * Organisation folders require the MANAGE_ORGANISATION_FOLDERS permission
+	 */
+	public static async create(
+		json: Partial<Pick<Folder, 'name' | 'description'>> & { isOrganisation?: boolean }
+	): Promise<Folder> {
 		return await ApiService.getApi().post(`${FOLDERS_SERVICE_BASE_URL}`, { json }).json();
 	}
 
@@ -56,6 +67,26 @@ export abstract class FoldersService {
 			.post(
 				`${FOLDERS_SERVICE_BASE_URL}/${folderUuid}/${FOLDERS_SERVICE_OBJECTS_URL}/${objectSchemaIdentifier}`
 			)
+			.json();
+	}
+
+	/**
+	 * Add multiple objects to some folders and remove them from other folders in one request
+	 * Objects that are already in a folder are skipped, so a failed request can safely be retried
+	 */
+	public static async updateManyInFolders(
+		addToFolderUuids: string[],
+		removeFromFolderUuids: string[],
+		objectSchemaIdentifiers: string[]
+	): Promise<UpdateObjectsInFoldersResponse> {
+		return await ApiService.getApi()
+			.patch(`${FOLDERS_SERVICE_BASE_URL}/${FOLDERS_SERVICE_OBJECTS_URL}`, {
+				json: {
+					addToFolderIds: addToFolderUuids,
+					removeFromFolderIds: removeFromFolderUuids,
+					objectSchemaIdentifiers,
+				},
+			})
 			.json();
 	}
 

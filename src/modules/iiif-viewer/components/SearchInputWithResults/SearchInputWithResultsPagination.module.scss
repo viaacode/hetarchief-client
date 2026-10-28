@@ -1,10 +1,10 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-search-with-results-pagination {
 	display: flex;
 	flex-direction: row;
-	background-color: $silver;
-	border-radius: $button-radius;
+	background-color: abstracts.$silver;
+	border-radius: abstracts.$button-radius;
 	align-items: center;
 
 	:global(.c-input) {
@@ -13,42 +13,42 @@
 
 		:global(.c-input__field) {
 			background-color: transparent;
-			height: $button-height-sm;
-			padding: 0 $spacer-sm;
+			height: abstracts.$button-height-sm;
+			padding: 0 abstracts.$spacer-sm;
 			border: 0;
 			outline: 0;
 		}
 	}
 
 	> span {
-		font-size: $font-size-sm;
+		font-size: abstracts.$font-size-sm;
 		white-space: nowrap;
 	}
 
 	:global(.c-button) {
-		width: $button-height-sm;
-		height: $button-height;
-		border-radius: $button-radius;
-		padding: $spacer-sm $spacer-xxs;
+		width: abstracts.$button-height-sm;
+		height: abstracts.$button-height;
+		border-radius: abstracts.$button-radius;
+		padding: abstracts.$spacer-sm abstracts.$spacer-xxs;
 	}
 
 	&__sm {
 		:global(.c-input) {
 			:global(.c-input__field) {
-				height: $button-height-xs;
-				padding: 0 $spacer-xxs * 3;
+				height: abstracts.$button-height-xs;
+				padding: 0 abstracts.$spacer-xxs * 3;
 			}
 		}
 
 		> span {
-			font-size: $font-size-sm;
+			font-size: abstracts.$font-size-sm;
 		}
 
 		:global(.c-button--sm) {
-			width: $button-height-sm;
-			height: $button-height-xs;
-			border-radius: $button-radius-xs;
-			padding: $spacer-xxs $spacer-xxs;
+			width: abstracts.$button-height-sm;
+			height: abstracts.$button-height-xs;
+			border-radius: abstracts.$button-radius-xs;
+			padding: abstracts.$spacer-xxs abstracts.$spacer-xxs;
 		}
 	}
 }

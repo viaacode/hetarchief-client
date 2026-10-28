@@ -11,7 +11,10 @@ import { Badge, Button, Card } from '@meemoo/react-components';
 import { DropdownMenu } from '@shared/components/DropdownMenu';
 import HighlightSearchTerms from '@shared/components/HighlightedMetadata/HighlightSearchTerms';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
-import { TRUNCATED_TEXT_LENGTH } from '@shared/components/MediaCard';
+import {
+	TRUNCATED_TEXT_LENGTH_GRID,
+	TRUNCATED_TEXT_LENGTH_LIST,
+} from '@shared/components/MediaCard';
 import { Modal } from '@shared/components/Modal';
 import NextLinkWrapper from '@shared/components/NextLinkWrapper/NextLinkWrapper';
 import { Pill } from '@shared/components/Pill';
@@ -147,12 +150,23 @@ const MediaCard: FC<MediaCardProps> = ({
 			</DropdownMenu>
 		) : null;
 
+	// When the card has buttons, they take the place of the type icon in the top left corner
+	// and the type icon moves next to the title
+	const hasButtons = !isNil(buttons);
+
 	const renderToolbar = () => (
 		<div className={styles['c-media-card__toolbar']}>
-			{buttons}
+			{hasButtons && renderIcon()}
 			{renderDropdown()}
 		</div>
 	);
+
+	const renderButtons = () => {
+		if (!hasButtons) {
+			return null;
+		}
+		return <div className={styles['c-media-card__buttons']}>{buttons}</div>;
+	};
 
 	const renderTitle = (): ReactNode => {
 		if (typeof title === 'string') {
@@ -179,7 +193,7 @@ const MediaCard: FC<MediaCardProps> = ({
 			const truncatedText = extractSnippetBySearchTerm(
 				description,
 				keywords,
-				TRUNCATED_TEXT_LENGTH
+				view === 'grid' ? TRUNCATED_TEXT_LENGTH_GRID : TRUNCATED_TEXT_LENGTH_LIST
 			);
 			return (
 				<HighlightSearchTerms
@@ -318,7 +332,7 @@ const MediaCard: FC<MediaCardProps> = ({
 						styles['c-media-card__header--no-content']
 					)}
 				>
-					{renderIcon()}
+					{!hasButtons && renderIcon()}
 					{renderHeaderBadges()}
 					{renderLocallyAvailablePill()}
 				</div>
@@ -357,7 +371,9 @@ const MediaCard: FC<MediaCardProps> = ({
 				/>
 				{!isNil(icon) && (
 					<>
-						<div className={clsx(styles['c-media-card__header-icon'])}>{renderIcon()}</div>
+						{!hasButtons && (
+							<div className={clsx(styles['c-media-card__header-icon'])}>{renderIcon()}</div>
+						)}
 						{renderLocallyAvailablePill()}
 					</>
 				)}
@@ -456,8 +472,10 @@ const MediaCard: FC<MediaCardProps> = ({
 	};
 
 	return (
-		<div id={id} className={className}>
+		<div id={id} className={clsx(className, hasButtons && styles['c-media-card__wrapper'])}>
 			{renderCard()}
+			{/* Outside of the card, since buttons can not be nested inside the card's link */}
+			{renderButtons()}
 			<Modal
 				title={tText(
 					'modules/shared/components/media-card/media-card___waarom-kan-ik-dit-object-niet-bekijken'

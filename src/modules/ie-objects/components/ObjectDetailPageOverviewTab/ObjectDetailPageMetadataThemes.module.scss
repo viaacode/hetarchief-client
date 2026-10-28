@@ -18,7 +18,7 @@
 	// list's grid, instead of being sized as their own independent row.
 	&__item {
 		display: contents;
-		font-size: abstracts.$font-size-base;
+		font-size: abstracts.$font-size-sm;
 		line-height: abstracts.$line-height-1xl;
 	}
 

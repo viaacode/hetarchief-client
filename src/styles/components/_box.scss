@@ -1,6 +1,6 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-box {
-	box-shadow: $shadow-24-black-08;
+	box-shadow: abstracts.$shadow-24-black-08;
 	background-color: white !important;
 }

@@ -26,14 +26,7 @@
 		color: abstracts.$black;
 		cursor: pointer;
 
-		&:focus {
-			outline: 0;
-		}
-
-		&:focus-visible {
-			outline: 0.2rem solid abstracts.$teal;
-			outline-offset: 0.2rem;
-		}
+		@include abstracts.focus-outline;
 
 		// Drawn over the picture: a black ring with a white hairline inside, per design
 		&--selected::after {
@@ -67,14 +60,7 @@
 		line-height: 2rem;
 		cursor: pointer;
 
-		&:focus {
-			outline: 0;
-		}
-
-		&:focus-visible {
-			outline: 0.2rem solid abstracts.$teal;
-			outline-offset: 0.2rem;
-		}
+		@include abstracts.focus-outline;
 	}
 
 	&__less {
@@ -93,13 +79,6 @@
 			text-decoration: underline;
 		}
 
-		&:focus {
-			outline: 0;
-		}
-
-		&:focus-visible {
-			outline: 0.2rem solid abstracts.$teal;
-			outline-offset: 0.2rem;
-		}
+		@include abstracts.focus-outline;
 	}
 }

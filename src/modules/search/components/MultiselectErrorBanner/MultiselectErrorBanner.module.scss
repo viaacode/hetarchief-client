@@ -1,0 +1,40 @@
+@use "sass:color";
+@use "src/styles/abstracts" as abstracts;
+
+.c-multiselect-error-banner {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: abstracts.$spacer-sm;
+	margin-bottom: abstracts.$spacer-md;
+	padding: abstracts.$spacer-sm abstracts.$spacer-md;
+	border-left: 4px solid abstracts.$cherry;
+	background-color: color.adjust(abstracts.$cherry, $alpha: -0.9);
+	color: abstracts.$black;
+
+	&__icon {
+		align-self: flex-start;
+		color: abstracts.$cherry;
+		font-size: abstracts.$font-size-lg;
+	}
+
+	&__message {
+		flex: 1 1 30rem;
+
+		p {
+			margin: 0;
+		}
+	}
+
+	&__title {
+		font-weight: abstracts.$font-weight-bold;
+		margin-bottom: abstracts.$spacer-xxs !important;
+	}
+
+	&__retry:global(.c-button--outline) {
+		border-color: abstracts.$cherry-pale;
+		border-radius: 0;
+		background-color: abstracts.$white;
+		color: abstracts.$cherry-pale;
+	}
+}

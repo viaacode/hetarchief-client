@@ -1,31 +1,29 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-block-tags-with-link";
-
-.#{$component} {
+.c-block-tags-with-link {
 	width: 100%;
 	display: flex;
 	flex-flow: row wrap;
-	gap: $spacer-sm;
+	gap: abstracts.$spacer-sm;
 
 	&__term {
 		display: inline-block;
 		width: max-content;
-		padding: $spacer-xs $spacer-sm;
-		background-color: $teal-24;
-		border-radius: $spacer-md;
+		padding: abstracts.$spacer-xs abstracts.$spacer-sm;
+		background-color: abstracts.$teal-24;
+		border-radius: abstracts.$spacer-md;
 		text-decoration: none;
-		font-weight: $font-weight-bold;
+		font-weight: abstracts.$font-weight-bold;
 	}
 
 	&__link {
-		transition: background-color $animate-default;
+		transition: background-color abstracts.$animate-default;
 
 		&:hover,
 		&:focus {
 			cursor: pointer;
-			background-color: $teal-66;
+			background-color: abstracts.$teal-66;
 		}
 	}
 }

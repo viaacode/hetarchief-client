@@ -1,4 +1,4 @@
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
 .u-list-reset {
 	@extend %reset-list;

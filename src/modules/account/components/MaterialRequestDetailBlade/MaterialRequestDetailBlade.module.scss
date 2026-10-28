@@ -5,8 +5,8 @@
 		box-shadow: 0 0 abstracts.$spacer-xs 0 abstracts.$cherry;
 
 		@media (max-width: abstracts.$breakpoint-md) {
-			margin-left: calc(#{abstracts.$spacer-xs} * -1);
-			margin-top: calc(#{abstracts.$spacer-xxs} * -1);
+			margin-left: calc(abstracts.$spacer-xs * -1);
+			margin-top: calc(abstracts.$spacer-xxs * -1);
 		}
 	}
 
@@ -32,7 +32,7 @@
 				border-bottom: 3px solid transparent;
 				white-space: nowrap;
 
-				@include abstracts.focus-outline;
+				@include abstracts.focus-outline("inside");
 
 				&:global(.c-tab--active) {
 					color: abstracts.$black;
@@ -58,7 +58,7 @@
 			}
 
 			:global(.c-tab){
-				@include abstracts.focus-outline;
+				@include abstracts.focus-outline("inside");
 
 				display: flex;
 				justify-content: center;

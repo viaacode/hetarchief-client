@@ -268,11 +268,16 @@ const mapFilterToTags = (
 			const values = (isString(value) ? [value] : (value as (string | null)[])).filter(
 				Boolean
 			) as string[];
-			return mapValuesToOneTag(
+			let labelledValues = values;
+			if (filter.id === SearchFilterId.Theme) {
 				// The theme filter stores slugs, so its pill is labelled in the language of the UI. ARC-3797
-				filter.id === SearchFilterId.Theme
-					? values.map((slug) => options.themeLabelsBySlug?.[slug] || slug)
-					: values,
+				labelledValues = values.map((slug) => options.themeLabelsBySlug?.[slug] || slug);
+			} else if (filter.id === SearchFilterId.Rights) {
+				// The rights filter stores the rights statement url. ARC-4146
+				labelledValues = values.map((url) => getRightsLabel(url) || url);
+			}
+			return mapValuesToOneTag(
+				labelledValues,
 				filter.label,
 				// Only the autocomplete filters carry "is". ARC-3806
 				filter.modalType === FilterModalType.Checkbox

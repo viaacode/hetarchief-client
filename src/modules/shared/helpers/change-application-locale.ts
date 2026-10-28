@@ -58,16 +58,22 @@ export const changeApplicationLocale = async (
 
 	// exception for content pages
 	if (isRootSlugRoute(router.route)) {
+		// Strip query params (eg: ?preview=true) before looking up the content page by path
+		const [contentPagePath, queryString] = newFullPath.split('?');
+		const isPreview = new URLSearchParams(queryString).get('preview') === 'true';
 		const contentPage = await ContentPageService.getContentPageByLanguageAndPath(
 			// biome-ignore lint/suspicious/noExplicitAny: mismatch between admin-core locale and hetarchief locale
 			oldLocale as any,
-			newFullPath
+			contentPagePath
 		);
 		const translatedContentPageInfo = (contentPage?.translatedPages || []).find(
 			(translatedPage) =>
-				(translatedPage.language as unknown as Locale) === newLocale && translatedPage.isPublic
+				(translatedPage.language as unknown as Locale) === newLocale &&
+				(isPreview || translatedPage.isPublic)
 		);
-		newFullPath = translatedContentPageInfo?.path || ROUTES_BY_LOCALE[newLocale].home;
+		newFullPath = translatedContentPageInfo?.path
+			? `${translatedContentPageInfo.path}${queryString ? `?${queryString}` : ''}`
+			: ROUTES_BY_LOCALE[newLocale].home;
 	}
 	// Redirect to new path
 	await router.replace(newFullPath, newFullPath, { locale: newLocale, shallow: false });

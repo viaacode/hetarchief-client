@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .l-app {
 	> :global(.c-navigation) {
@@ -14,7 +14,7 @@
 
 .c-navigation--logged-in {
 	:global(.c-navigation__hamburger__language-switcher) {
-		@media (max-width: $breakpoint-xxl) {
+		@media (max-width: abstracts.$breakpoint-xxl) {
 			display: none;
 		}
 	}
@@ -22,7 +22,7 @@
 
 .c-navigation--logged-out {
 	:global(.c-navigation__section-right__language-switcher) {
-		@media (max-width: $breakpoint-xxl) {
+		@media (max-width: abstracts.$breakpoint-xxl) {
 			display: none;
 		}
 	}

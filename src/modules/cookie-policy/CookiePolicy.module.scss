@@ -1,7 +1,7 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .p-cookie-policy__wrapper {
 	max-width: 900px;
 	margin: 0 auto;
-	padding: $spacer-md * 2;
+	padding: abstracts.$spacer-md * 2;
 }

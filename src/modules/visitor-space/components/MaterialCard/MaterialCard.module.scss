@@ -1,5 +1,5 @@
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $c-material-card-no-video-intended-spacing: 0.9rem;
 $material-card-list-view-height: 10rem;
@@ -16,10 +16,10 @@ $material-card-list-view-height: 10rem;
 
 	&:global(.c-material-card--no-link) {
 		cursor: default !important;
-		background-color: $silver;
+		background-color: abstracts.$silver;
 
 		:global(.c-card__title-wrapper) {
-			color: $grey;
+			color: abstracts.$grey;
 		}
 	}
 
@@ -39,14 +39,14 @@ $material-card-list-view-height: 10rem;
 	&__header {
 		max-height: 10rem;
 		overflow: hidden;
-		font-variation-settings: $line-height-md * 2rem;
+		font-variation-settings: abstracts.$line-height-md * 2rem;
 		align-items: center;
-		color: $zinc;
+		color: abstracts.$zinc;
 		display: flex;
 		min-height: $material-card-list-view-height;
 		place-content: center;
 		position: relative;
-		margin: $spacer-sm;
+		margin: abstracts.$spacer-sm;
 
 		img {
 			max-height: unset !important;
@@ -56,19 +56,19 @@ $material-card-list-view-height: 10rem;
 			object-position: center;
 		}
 
-		@media (min-width: $breakpoint-xs) {
+		@media (min-width: abstracts.$breakpoint-xs) {
 			min-width: 124px;
 		}
 
 		&__children {
 			position: absolute;
-			right: $spacer-xxs;
-			top: $spacer-xxs;
-			background-color: $black;
-			border-radius: $spacer-sm;
+			right: abstracts.$spacer-xxs;
+			top: abstracts.$spacer-xxs;
+			background-color: abstracts.$black;
+			border-radius: abstracts.$spacer-sm;
 			display: inline-block;
-			font-size: $font-size-xs;
-			padding: $spacer-xxs $spacer-xs;
+			font-size: abstracts.$font-size-xs;
+			padding: abstracts.$spacer-xxs abstracts.$spacer-xs;
 		}
 
 		&--no-content {
@@ -98,7 +98,7 @@ $material-card-list-view-height: 10rem;
 
 	:global(.c-card__bottom-wrapper) {
 		position: relative;
-		padding-bottom: $spacer-sm;
+		padding-bottom: abstracts.$spacer-sm;
 	}
 
 	&__header-icon {
@@ -107,29 +107,29 @@ $material-card-list-view-height: 10rem;
 		left: 0;
 		font-size: 2.2rem !important;
 		line-height: 0;
-		color: $blue;
+		color: abstracts.$blue;
 		padding: 0.5rem;
-		background-color: $white;
+		background-color: abstracts.$white;
 	}
 
 	:global(.c-card__subtitle-wrapper) {
-		font-size: $font-size-sm;
-		line-height: $line-height-base * 2rem;
-		font-weight: $font-weight-normal;
+		font-size: abstracts.$font-size-sm;
+		line-height: abstracts.$line-height-base * 2rem;
+		font-weight: abstracts.$font-weight-normal;
 		text-overflow: ellipsis;
 		overflow: hidden;
-		color: $grey;
+		color: abstracts.$grey;
 	}
 
 	&__icon {
-		font-size: $font-size-lg * math.div(11, 12) !important;
-		line-height: $line-height-lg;
-		color: $blue !important;
+		font-size: abstracts.$font-size-lg * math.div(11, 12) !important;
+		line-height: abstracts.$line-height-lg;
+		color: abstracts.$blue !important;
 	}
 
 	&:global(.c-material-card--newspaper) {
 		// https://meemoo.atlassian.net/browse/ARC-2546
-		@include module-class-selector-global("MaterialCard", "c-material-card__header") {
+		@include abstracts.module-class-selector-global("MaterialCard", "c-material-card__header") {
 			background-color: #f8f8f8;
 			position: relative;
 

@@ -1,16 +1,15 @@
 @use "sass:math";
 @use "sass:color";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-datepicker";
 $vendor-c: "react-datepicker";
-$datepicker-day-size: $spacer-lg;
-$datepicker-edge-spacing: $spacer-sm * 0.75;
-$datepicker-border-color: $zinc;
+$datepicker-day-size: abstracts.$spacer-lg;
+$datepicker-edge-spacing: abstracts.$spacer-sm * 0.75;
+$datepicker-border-color: abstracts.$zinc;
 
 %datepicker-select-background {
 	appearance: none;
-	background-position-x: calc(100% - #{$spacer-xs});
+	background-position-x: calc(100% - abstracts.$spacer-xs);
 	background-position-y: center;
 	background-repeat: no-repeat;
 	background-size: 1.25em;
@@ -20,7 +19,7 @@ $datepicker-border-color: $zinc;
 	width: 100%;
 }
 
-.#{$component} {
+.c-datepicker {
 	.#{$vendor-c}__current-month {
 		&.#{$vendor-c}__current-month--hasYearDropdown.#{$vendor-c}__current-month--hasMonthDropdown,
 		&.#{$vendor-c}__current-month--hasMonthYearDropdown {
@@ -44,9 +43,9 @@ $datepicker-border-color: $zinc;
 		border-color: $datepicker-border-color;
 		border-radius: 0;
 		border-top: none;
-		font-family: $font-family-primary;
-		font-size: $font-size-base;
-		line-height: $line-height-lg;
+		font-family: abstracts.$font-family-primary;
+		font-size: abstracts.$font-size-base;
+		line-height: abstracts.$line-height-lg;
 
 		&-popper {
 			border-top: 1px solid $datepicker-border-color;
@@ -83,7 +82,7 @@ $datepicker-border-color: $zinc;
 		}
 
 		&__day {
-			font-weight: $font-weight-bold;
+			font-weight: abstracts.$font-weight-bold;
 		}
 
 		&__day,
@@ -91,7 +90,7 @@ $datepicker-border-color: $zinc;
 			border-radius: math.div($datepicker-day-size, 2);
 			line-height: $datepicker-day-size;
 			margin: 0;
-			outline-color: $neutral;
+			outline-color: abstracts.$neutral;
 			width: $datepicker-day-size;
 
 			&:not(:last-of-type) {
@@ -101,8 +100,8 @@ $datepicker-border-color: $zinc;
 
 		&__day--selected,
 		&__day--keyboard-selected {
-			background-color: $seagreen;
-			font-weight: $font-weight-normal;
+			background-color: abstracts.$seagreen;
+			font-weight: abstracts.$font-weight-normal;
 			color: white;
 		}
 
@@ -115,13 +114,13 @@ $datepicker-border-color: $zinc;
 		}
 
 		&__day-names {
-			font-size: $font-size-sm;
-			line-height: $line-height-3xl;
-			margin-top: $spacer-xs;
+			font-size: abstracts.$font-size-sm;
+			line-height: abstracts.$line-height-3xl;
+			margin-top: abstracts.$spacer-xs;
 		}
 
 		&__day-name {
-			color: color.adjust($neutral, $alpha: -0.41);
+			color: color.adjust(abstracts.$neutral, $alpha: -0.41);
 		}
 
 		&__month-dropdown-container,
@@ -130,30 +129,30 @@ $datepicker-border-color: $zinc;
 
 			select {
 				@extend %datepicker-select-background;
-				@include chevron-down-background($zinc);
+				@include abstracts.chevron-down-background(abstracts.$zinc);
 
-				border: 1px solid $zinc;
+				border: 1px solid abstracts.$zinc;
 				cursor: pointer;
 				font-family: inherit;
-				outline-color: $seagreen;
-				padding: $spacer-xxs $spacer-xs;
+				outline-color: abstracts.$seagreen;
+				padding: abstracts.$spacer-xxs abstracts.$spacer-xs;
 				width: 100%;
 
 				&:active,
 				&:focus,
 				&:hover {
 					@extend %datepicker-select-background;
-					@include chevron-down-background($seagreen);
+					@include abstracts.chevron-down-background(abstracts.$seagreen);
 
-					border-color: $seagreen;
+					border-color: abstracts.$seagreen;
 				}
 			}
 		}
 
 		&__month-dropdown-container {
 			flex-grow: 4;
-			margin-left: $spacer-xxs;
-			margin-right: $spacer-xs;
+			margin-left: abstracts.$spacer-xxs;
+			margin-right: abstracts.$spacer-xs;
 
 			// Note: this does not align with the nlBE locale used by react-datepicker
 			select {
@@ -163,8 +162,8 @@ $datepicker-border-color: $zinc;
 
 		&__year-dropdown-container {
 			flex-grow: 3;
-			margin-left: $spacer-xs;
-			margin-right: $spacer-xxs;
+			margin-left: abstracts.$spacer-xs;
+			margin-right: abstracts.$spacer-xxs;
 		}
 	}
 }

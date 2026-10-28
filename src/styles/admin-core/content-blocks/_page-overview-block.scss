@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-content-page-overview-block {
 	/**
@@ -23,17 +23,17 @@
 
 		// --bg-text-hyperlink is set on the header from its background color (ARC-3848)
 		.c-tab-item {
-			color: var(--bg-text-hyperlink, $black);
+			color: var(--bg-text-hyperlink, abstracts.$black);
 
 			&:hover {
-				color: var(--bg-text-hyperlink, $teal-light);
+				color: var(--bg-text-hyperlink, abstracts.$teal-light);
 				text-decoration: underline;
 			}
 
 			&.c-tab-item__active {
-				box-shadow: inset 0 -.2rem $teal;
+				box-shadow: inset 0 -.2rem abstracts.$teal;
 				margin-bottom: -.1rem;
-				color: var(--bg-text-hyperlink, $black);
+				color: var(--bg-text-hyperlink, abstracts.$black);
 				font-weight: 500;
 				position: relative;
 				z-index: 10;
@@ -42,23 +42,23 @@
 
 		.c-tag {
 			background-color: #fff;
-			border: 1px solid $silver;
+			border: 1px solid abstracts.$silver;
 			border-radius: 2.4rem;
 			display: flex;
 			align-items: center;
-			color: $black;
+			color: abstracts.$black;
 			text-decoration: none;
 			font-weight: 800;
-			font-size: $font-size-base;
+			font-size: abstracts.$font-size-base;
 			padding: 0.8rem 1.6rem;
 
 			&:hover {
-				background-color: $silver;
+				background-color: abstracts.$silver;
 			}
 
 			&.c-tag__active {
-				background-color: $teal-medium;
-				color: $black;
+				background-color: abstracts.$teal-medium;
+				color: abstracts.$black;
 			}
 		}
 
@@ -85,7 +85,7 @@
 		gap: 1.6rem;
 		flex-wrap: wrap;
 
-		@media (max-width: $breakpoint-md) {
+		@media (max-width: abstracts.$breakpoint-md) {
 			max-width: 100%;
 			gap: 6.4rem;
 		}
@@ -96,7 +96,7 @@
 			margin: 0;
 			padding: 0;
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: abstracts.$breakpoint-md) {
 				max-width: 100%;
 				width: 100% !important;
 
@@ -113,8 +113,8 @@
 
 			h3 strong {
 				font-weight: 800;
-				font-size: $font-size-md;
-				color: $black;
+				font-size: abstracts.$font-size-md;
+				color: abstracts.$black;
 				margin-top: 1.6rem;
 				margin-bottom: 1.6rem;
 			}
@@ -132,7 +132,7 @@
 		.o-grid-col-bp2-7 {
 			width: 47% !important;
 
-			@media (max-width: $breakpoint-md) {
+			@media (max-width: abstracts.$breakpoint-md) {
 				width: 100% !important;
 			}
 
@@ -145,14 +145,14 @@
 
 		.o-grid-col-bp2-7 {
 			a {
-				color: $black !important;
+				color: abstracts.$black !important;
 				text-decoration: none !important;
 				position: relative;
 
 				h2, h3 {
-					font-size: $font-size-lg;
-					color: $black !important;
-					font-weight: $font-weight-bold !important;
+					font-size: abstracts.$font-size-lg;
+					color: abstracts.$black !important;
+					font-weight: abstracts.$font-weight-bold !important;
 					display: inline-block;
 					z-index: 2;
 					position: relative;
@@ -166,7 +166,7 @@
 						left: 0;
 						width: 100%;
 						height: 0.8rem;
-						background-color: $teal-medium;
+						background-color: abstracts.$teal-medium;
 						z-index: -1; // Behind the text
 						opacity: 0;
 					}
@@ -182,8 +182,8 @@
 			}
 
 			.a-subtitle {
-				font-size: $font-size-sm !important;
-				color: $neutral !important;
+				font-size: abstracts.$font-size-sm !important;
+				color: abstracts.$neutral !important;
 
 				.c-content-page__label {
 					text-decoration: underline !important;
@@ -191,15 +191,15 @@
 			}
 
 			.a-content-page__description {
-				font-size: $font-size-base !important;
-				color: $neutral !important;
+				font-size: abstracts.$font-size-base !important;
+				color: abstracts.$neutral !important;
 			}
 
 			// read more
 			.a-content-page__description + .u-spacer-top a {
 				.c-button {
-					background-color: $black !important;
-					color: $white !important;
+					background-color: abstracts.$black !important;
+					color: abstracts.$white !important;
 					padding: 0.4rem 3.6rem 0.4rem 1.8rem !important;
 					border: 0 !important;
 
@@ -207,7 +207,7 @@
 					background-image: url('data:image/svg+xml,%3Csvg%20width%3D%2213%22%20height%3D%2212%22%20viewBox%3D%220%200%2013%2012%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M0.716797%206.75586L9.41797%206.75586L5.44531%2010.7109L6.5%2011.7832L12.2832%206L6.5%200.216796L5.44531%201.28906L9.41797%205.24414L0.716797%205.24414L0.716797%206.75586Z%22%20fill%3D%22white%22%2F%3E%3C%2Fsvg%3E');
 					background-repeat: no-repeat;
 					background-position: 88% center;
-					font-size: $font-size-sm;
+					font-size: abstracts.$font-size-sm;
 
 				}
 			}
@@ -216,18 +216,18 @@
 
 	.c-content-page-overview-block__accordion--first-level {
 		.c-accordion__header {
-			background-color: $seagreen;
-			color: $white;
+			background-color: abstracts.$seagreen;
+			color: abstracts.$white;
 			padding: 2.2rem;
 
 			.c-accordion__header-title {
-				color: $white;
+				color: abstracts.$white;
 			}
 		}
 
 		&.c-accordion--closed {
 			.c-accordion__header {
-				background-color: $black;
+				background-color: abstracts.$black;
 			}
 		}
 
@@ -239,12 +239,12 @@
 			margin-top: 0;
 
 			.c-accordion__header {
-				background-color: $white;
-				color: $black;
+				background-color: abstracts.$white;
+				color: abstracts.$black;
 				padding: 2.2rem;
 
 				.c-accordion__header-title {
-					color: $black;
+					color: abstracts.$black;
 				}
 
 				.c-accordion__icon {

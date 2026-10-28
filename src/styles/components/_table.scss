@@ -1,11 +1,10 @@
 @use "sass:map";
 @use "sass:math";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-table";
-$c-table-border: 1px solid $silver;
+$c-table-border: 1px solid abstracts.$silver;
 
-.#{$component} {
+.c-table {
 	width: 100%;
 	max-width: 100%;
 	border-spacing: 0;
@@ -18,19 +17,19 @@ $c-table-border: 1px solid $silver;
 		overflow-x: scroll;
 
 		// Note: desktop resolutions will rarely need to hide overflow, disable to allow the shadow
-		@media (min-width: $breakpoint-lg) {
+		@media (min-width: abstracts.$breakpoint-lg) {
 			overflow: initial;
 		}
 	}
 
 	&__wrapper {
 		&--body {
-			background-color: $white;
+			background-color: abstracts.$white;
 			border-bottom: $c-table-border;
 			border-top: $c-table-border;
 
-			@media (min-width: $breakpoint-lg) {
-				box-shadow: $shadow-24-black-08;
+			@media (min-width: abstracts.$breakpoint-lg) {
+				box-shadow: abstracts.$shadow-24-black-08;
 			}
 		}
 	}
@@ -40,46 +39,46 @@ $c-table-border: 1px solid $silver;
 	}
 
 	&__footer {
-		padding-right: $spacer-xs;
-		padding-left: $spacer-md;
+		padding-right: abstracts.$spacer-xs;
+		padding-left: abstracts.$spacer-md;
 	}
 
 	&__cell {
 		text-align: left;
-		padding: $spacer-sm $spacer-md;
+		padding: abstracts.$spacer-sm abstracts.$spacer-md;
 		max-width: 12rem;
 		overflow: hidden;
 		text-overflow: ellipsis;
 
 		&:last-child {
 			text-align: right;
-			padding-right: $spacer-xs;
+			padding-right: abstracts.$spacer-xs;
 		}
 
 		&--body {
-			font-size: $font-size-sm;
-			line-height: $line-height-lg;
+			font-size: abstracts.$font-size-sm;
+			line-height: abstracts.$line-height-lg;
 		}
 
 		&--header {
-			@include text-ellipsis;
+			@include abstracts.text-ellipsis;
 
 			position: relative;
-			font-weight: $font-weight-bold;
-			font-size: $font-size-xs;
-			line-height: $line-height-2xl;
-			color: $neutral;
+			font-weight: abstracts.$font-weight-bold;
+			font-size: abstracts.$font-size-xs;
+			line-height: abstracts.$line-height-2xl;
+			color: abstracts.$neutral;
 			user-select: none;
 
-			&.#{$component} {
+			&.c-table {
 				&__cell--active {
-					color: $black;
+					color: abstracts.$black;
 				}
 			}
 
-			.#{$component} {
+			.c-table {
 				&__icon {
-					font-size: $font-size-base;
+					font-size: abstracts.$font-size-base;
 					position: absolute; // This is enough to correctly position it
 				}
 			}
@@ -87,24 +86,24 @@ $c-table-border: 1px solid $silver;
 	}
 
 	&__focus-cell {
-		min-width: $focus-cell-width;
-		max-width: $focus-cell-width;
-		width: $focus-cell-width;
+		min-width: abstracts.$focus-cell-width;
+		max-width: abstracts.$focus-cell-width;
+		width: abstracts.$focus-cell-width;
 		padding: 0 !important;
 
 		&--active {
-			background-color: $teal;
+			background-color: abstracts.$teal;
 		}
 	}
 
 	&__copy {
-		color: $neutral;
+		color: abstracts.$neutral;
 
 		&:hover,
 		&:active,
 		&:focus,
 		&:focus-within {
-			color: $teal !important;
+			color: abstracts.$teal !important;
 		}
 	}
 }

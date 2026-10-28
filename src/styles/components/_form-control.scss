@@ -1,34 +1,32 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-form-control";
-
-.#{$component} {
+.c-form-control {
 	&__label {
 		display: block;
-		font-size: $font-size-base;
-		font-weight: $font-weight-bold;
-		line-height: $line-height-1xl;
-		margin-bottom: $spacer-sm;
+		font-size: abstracts.$font-size-base;
+		font-weight: abstracts.$font-weight-bold;
+		line-height: abstracts.$line-height-1xl;
+		margin-bottom: abstracts.$spacer-sm;
 	}
 
 	&__errors {
 		@extend %reset-list;
 
-		margin-top: $spacer-sm;
-		color: $cherry;
+		margin-top: abstracts.$spacer-sm;
+		color: abstracts.$cherry;
 	}
 
 	&--disabled {
-		.#{$component} {
+		.c-form-control {
 			&__label {
-				color: $neutral;
+				color: abstracts.$neutral;
 				cursor: not-allowed;
 			}
 		}
 	}
 
 	&--label-hidden {
-		.#{$component} {
+		.c-form-control {
 			&__label {
 				display: none;
 			}

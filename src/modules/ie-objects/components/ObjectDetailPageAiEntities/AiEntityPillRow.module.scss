@@ -43,14 +43,7 @@
 			background-color: abstracts.$zinc;
 		}
 
-		&:focus {
-			outline: 0;
-		}
-
-		&:focus-visible {
-			outline: 0.2rem solid abstracts.$teal;
-			outline-offset: 0.2rem;
-		}
+		@include abstracts.focus-outline;
 
 		&--selected,
 		&--selected:hover {
@@ -74,13 +67,6 @@
 			text-decoration: underline;
 		}
 
-		&:focus {
-			outline: 0;
-		}
-
-		&:focus-visible {
-			outline: 0.2rem solid abstracts.$teal;
-			outline-offset: 0.2rem;
-		}
+		@include abstracts.focus-outline;
 	}
 }

@@ -1,11 +1,11 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-newspaper-titles {
 	&__heading {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		margin-bottom: $spacer-sm;
+		margin-bottom: abstracts.$spacer-sm;
 	}
 
 	input {
@@ -19,17 +19,17 @@
 
 	&__list {
 		padding: 0;
-		margin: $spacer-sm 0 0 0;
+		margin: abstracts.$spacer-sm 0 0 0;
 		list-style: none;
 
 		&__item {
 			&:hover {
-				background-color: $silver;
+				background-color: abstracts.$silver;
 				border-radius: 100px;
 			}
 
 			a {
-				padding: $spacer-xs $spacer-sm;
+				padding: abstracts.$spacer-xs abstracts.$spacer-sm;
 				display: block;
 				text-decoration: none;
 

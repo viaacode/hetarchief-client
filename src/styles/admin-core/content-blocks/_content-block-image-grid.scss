@@ -1,8 +1,6 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-content-block__image-grid";
-
-.#{$component} {
+.c-content-block__image-grid {
 	.c-block-grid {
 		gap: 8rem 3.4rem;
 		justify-content: center;
@@ -11,16 +9,16 @@ $component: "c-content-block__image-grid";
 			margin: 0 !important;
 
 			.u-spacer-top-s {
-				margin-top: $font-size-lg !important;
+				margin-top: abstracts.$font-size-lg !important;
 			}
 
 			h3 {
-				font-size: $font-size-md !important;
+				font-size: abstracts.$font-size-md !important;
 			}
 		}
 	}
 
-	@media (max-width: $breakpoint-lg) {
+	@media (max-width: abstracts.$breakpoint-lg) {
 		.c-block-grid--flex-3 {
 			flex-direction: column;
 

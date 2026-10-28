@@ -12,13 +12,15 @@
 	width: fit-content;
 	height: fit-content;
 
-	&:focus-visible {
-		outline: 0.2rem solid abstracts.$teal;
-		outline-offset: 0.2rem;
-	}
+	@include abstracts.focus-outline;
 }
 
-.c-object-detail-page-metadata-disclaimer-tooltip__content {
+.c-object-detail-page-metadata-disclaimer-tooltip__content.c-object-detail-page-metadata-disclaimer-tooltip__content {
+	// Doubled selector: beats the site-wide .c-tooltip-component font-size (same element, 1.3rem)
+	// Design: the whole disclaimer (text and link) is 12px
+	font-size: abstracts.$font-size-xs;
+	line-height: 1.6rem;
+
 	// Overrides the site-wide tooltip's default link styling for this tooltip only, per design.
 	a {
 		color: abstracts.$teal;

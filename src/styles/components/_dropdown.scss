@@ -1,16 +1,13 @@
 @use "src/styles/abstracts" as abstracts;
 
 .c-menu {
-	padding: calc(#{abstracts.$spacer-md} / 2) 0;
+	padding: calc(abstracts.$spacer-md / 2) 0;
 	margin: 0;
 	background-color: abstracts.$white;
 }
 
 .c-dropdown {
-	&:focus-visible {
-		outline: 0.1rem solid abstracts.$teal;
-		outline-offset: 0.2rem;
-	}
+	@include abstracts.focus-outline;
 }
 
 .c-dropdown__content-open {
@@ -130,12 +127,12 @@
 .c-dropdown-menu {
 	&__divider {
 		height: 0.1rem;
-		margin: calc(#{abstracts.$spacer-md} / 2) 0;
+		margin: calc(abstracts.$spacer-md / 2) 0;
 		background-color: abstracts.$silver;
 	}
 
 	&__item {
-		padding: calc(#{abstracts.$spacer-md} / 2) abstracts.$spacer-md;
+		padding: calc(abstracts.$spacer-md / 2) abstracts.$spacer-md;
 		font-size: abstracts.$font-size-sm;
 		cursor: pointer;
 

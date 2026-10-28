@@ -1,17 +1,17 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .c-icon {
 	display: inline-block;
 	width: 1em;
 	height: 1em;
 	color: inherit;
-	font-family: $font-family-icons-light;
+	font-family: abstracts.$font-family-icons-light;
 	font-size: inherit;
 	font-style: normal;
-	font-weight: $font-weight-normal;
+	font-weight: abstracts.$font-weight-normal;
 	font-variant: normal;
 	text-transform: none;
-	line-height: $line-height-base;
+	line-height: abstracts.$line-height-base;
 	white-space: nowrap;
 
 	// Fix icon rendering on safari
@@ -33,5 +33,5 @@
  */
 
 .c-icon--solid {
-	font-family: $font-family-icons-solid;
+	font-family: abstracts.$font-family-icons-solid;
 }

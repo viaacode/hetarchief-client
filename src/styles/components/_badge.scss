@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $badge-font-size-sm: 1.2rem;
 $badge-font-size: 1.4rem;
@@ -10,7 +10,7 @@ $badge-font-size: 1.4rem;
 }
 
 @mixin icon-font-size($font-size) {
-	font-size: calc(#{$font-size} + 0.6rem);
+	font-size: calc($font-size + 0.6rem);
 }
 
 /* Component
@@ -23,23 +23,23 @@ $badge-font-size: 1.4rem;
 	height: 2.4rem;
 	min-width: 3.2rem;
 	font-size: $badge-font-size;
-	font-weight: $font-weight-bold;
+	font-weight: abstracts.$font-weight-bold;
 	border-radius: 1.2rem;
 
 	&--default {
-		@include badge-variant($teal, $black, $spacer-xs);
+		@include badge-variant(abstracts.$teal, abstracts.$black, abstracts.$spacer-xs);
 	}
 
 	&--success {
-		@include badge-variant($seagreen, $white, 0.6rem);
+		@include badge-variant(abstracts.$seagreen, abstracts.$white, 0.6rem);
 	}
 
 	&--error {
-		@include badge-variant($cherry, $white, 0.6rem);
+		@include badge-variant(abstracts.$cherry, abstracts.$white, 0.6rem);
 	}
 
 	&--dark {
-		@include badge-variant($black, $white, 0.6rem);
+		@include badge-variant(abstracts.$black, abstracts.$white, 0.6rem);
 	}
 
 	&--icon {
@@ -47,11 +47,11 @@ $badge-font-size: 1.4rem;
 	}
 
 	&--grey {
-		@include badge-variant($grey, $white, 0.6rem);
+		@include badge-variant(abstracts.$grey, abstracts.$white, 0.6rem);
 	}
 
 	&--small {
-		@include badge-variant($black, $white, $spacer-xs);
+		@include badge-variant(abstracts.$black, abstracts.$white, abstracts.$spacer-xs);
 
 		height: 1.6rem;
 		min-width: 2.6rem;
@@ -66,6 +66,6 @@ $badge-font-size: 1.4rem;
 	}
 
 	&--small.c-badge--error {
-		@include badge-variant($cherry, $white, 0.6rem);
+		@include badge-variant(abstracts.$cherry, abstracts.$white, 0.6rem);
 	}
 }

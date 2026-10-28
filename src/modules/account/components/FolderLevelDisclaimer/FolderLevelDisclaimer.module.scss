@@ -1,0 +1,12 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-folder-level-disclaimer {
+	color: abstracts.$shade;
+	font-size: abstracts.$font-size-sm;
+	line-height: 1.4;
+
+	a {
+		color: abstracts.$black;
+		text-decoration: underline;
+	}
+}

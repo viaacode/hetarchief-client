@@ -1,9 +1,0 @@
-@use "src/styles/abstracts" as *;
-
-.p-my-folders {
-	&__folder-edit {
-		@media (max-width: $breakpoint-md) {
-			display: none;
-		}
-	}
-}

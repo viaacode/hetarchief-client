@@ -1773,13 +1773,15 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 			{canManageFolders && (
 				<AddToFolderBlade
 					isOpen={activeBlade === MediaActions.Bookmark}
-					objectToAdd={
+					objectsToAdd={
 						mediaInfo
-							? {
-									schemaIdentifier: mediaInfo.schemaIdentifier,
-									title: mediaInfo.name,
-								}
-							: undefined
+							? [
+									{
+										schemaIdentifier: mediaInfo.schemaIdentifier,
+										title: mediaInfo.name,
+									},
+								]
+							: []
 					}
 					onClose={onCloseBlade}
 					onSubmit={async () => onCloseBlade()}

@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 .p-error-no-access-to-object {
 	&__buttons-container {
@@ -8,6 +8,6 @@
 	}
 
 	&__button {
-		margin-top: $spacer-sm;
+		margin-top: abstracts.$spacer-sm;
 	}
 }

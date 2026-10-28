@@ -1,0 +1,19 @@
+@use "src/styles/abstracts" as abstracts;
+
+.c-selectable-media-card {
+	position: relative;
+
+	&--active {
+		:global(.c-card) {
+			cursor: pointer;
+		}
+	}
+
+	&--selected {
+		:global(.c-card) {
+			// Outline instead of border, so the size of the card does not change
+			outline: 2px solid abstracts.$black;
+			outline-offset: -2px;
+		}
+	}
+}

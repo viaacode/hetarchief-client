@@ -1,29 +1,27 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-notification-center";
+.c-notification-center {
+	margin-top: abstracts.$c-navigation-height-md;
 
-.#{$component} {
-	margin-top: $c-navigation-height-md;
-
-	@media (min-width: $breakpoint-md) {
-		margin-top: $c-navigation-height;
+	@media (min-width: abstracts.$breakpoint-md) {
+		margin-top: abstracts.$c-navigation-height;
 	}
 
 	&__empty {
 		text-align: center;
-		color: $neutral;
+		color: abstracts.$neutral;
 	}
 
 	&__unread + &__read {
-		margin-top: $spacer-md;
-		padding-top: $spacer-md;
-		border-top: 1px solid $silver;
+		margin-top: abstracts.$spacer-md;
+		padding-top: abstracts.$spacer-md;
+		border-top: 1px solid abstracts.$silver;
 	}
 
 	&__header {
-		margin-bottom: $spacer-md;
-		font-size: $font-size-base;
-		line-height: $line-height-1xl;
+		margin-bottom: abstracts.$spacer-md;
+		font-size: abstracts.$font-size-base;
+		line-height: abstracts.$line-height-1xl;
 		text-align: left;
 	}
 
@@ -31,36 +29,36 @@ $component: "c-notification-center";
 		position: relative;
 		align-items: center;
 		display: grid;
-		font-size: $font-size-xs;
-		line-height: $line-height-2xl;
-		grid-template-columns: auto $button-height-sm;
+		font-size: abstracts.$font-size-xs;
+		line-height: abstracts.$line-height-2xl;
+		grid-template-columns: auto abstracts.$button-height-sm;
 
 		&:not(:last-child) {
-			padding-bottom: $spacer-md;
+			padding-bottom: abstracts.$spacer-md;
 
 			&::after {
 				content: "";
 				display: block;
 				height: 1px;
 				width: 100%;
-				background: $silver;
+				background: abstracts.$silver;
 				bottom: 0;
 				position: absolute;
 			}
 		}
 
 		&:not(:nth-child(2)) {
-			padding-top: $spacer-md;
+			padding-top: abstracts.$spacer-md;
 		}
 
 		&-title {
-			margin-bottom: $spacer-xs;
-			font-size: $font-size-sm;
-			line-height: $line-height-4xl;
+			margin-bottom: abstracts.$spacer-xs;
+			font-size: abstracts.$font-size-sm;
+			line-height: abstracts.$line-height-4xl;
 		}
 
 		:global(.u-font-size-12 p) {
-			font-size: $font-size-xs;
+			font-size: abstracts.$font-size-xs;
 		}
 
 		&-marker {
@@ -68,14 +66,14 @@ $component: "c-notification-center";
 		}
 	}
 
-	button.#{$component}__button {
+	button.c-notification-center__button {
 		border-radius: 0;
 		text-align: left;
-		height: $spacer-md * 3;
+		height: abstracts.$spacer-md * 3;
 
 		:global(.c-button__icon) {
-			font-size: $spacer-md;
-			margin-right: $spacer-xs;
+			font-size: abstracts.$spacer-md;
+			margin-right: abstracts.$spacer-xs;
 		}
 	}
 }

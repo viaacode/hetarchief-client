@@ -1,9 +1,7 @@
 @use "sass:math";
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 
-$component: "c-tabs";
-
-.#{$component} {
+.c-tabs {
 	display: flex;
 
 	button {
@@ -18,34 +16,34 @@ $component: "c-tabs";
 	*/
 
 	&--dark {
-		background-color: $black;
+		background-color: abstracts.$black;
 	}
 
 	&--light {
-		background-color: $white;
+		background-color: abstracts.$white;
 	}
 
 	&--rounded {
-		@include tabs-border-radius;
+		@include abstracts.tabs-border-radius;
 
-		padding: 0 $tabs-rounded-size;
+		padding: 0 abstracts.$tabs-rounded-size;
 
-		@media (min-width: $breakpoint-md) {
-			padding: 0 $tabs-rounded-size-md;
+		@media (min-width: abstracts.$breakpoint-md) {
+			padding: 0 abstracts.$tabs-rounded-size-md;
 		}
 
-		&.#{$component} {
+		&.c-tabs {
 			&--medium {
-				padding: 0 math.div($tab-min-height-medium, 2);
+				padding: 0 math.div(abstracts.$tab-min-height-medium, 2);
 
-				@media (max-width: $breakpoint-md) {
-					border-radius: math.div($tab-min-height-medium, 2);
+				@media (max-width: abstracts.$breakpoint-md) {
+					border-radius: math.div(abstracts.$tab-min-height-medium, 2);
 				}
 			}
 		}
 	}
 
 	&--bordered {
-		border: $tabs-border-width solid $zinc;
+		border: abstracts.$tabs-border-width solid abstracts.$zinc;
 	}
 }

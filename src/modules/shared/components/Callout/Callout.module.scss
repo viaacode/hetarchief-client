@@ -1,13 +1,11 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
-$component: "c-callout";
-
-.#{$component} {
+.c-callout {
 	display: flex;
-	column-gap: $spacer-xxs;
-	color: $neutral;
-	font-size: $font-size-sm;
-	line-height: $line-height-3xl;
+	column-gap: abstracts.$spacer-xxs;
+	color: abstracts.$neutral;
+	font-size: abstracts.$font-size-sm;
+	line-height: abstracts.$line-height-3xl;
 
 	&__icon {
 		transform: translateY(0.2rem); // Account for default icon offset

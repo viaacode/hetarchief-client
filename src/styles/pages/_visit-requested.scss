@@ -1,8 +1,8 @@
-@use "../abstracts" as *;
+@use "../abstracts" as abstracts;
 @use "sass:math";
 
 $page: "p-visit-requested";
-$page-padding: $spacer-md + $spacer-lg;
+$page-padding: abstracts.$spacer-md + abstracts.$spacer-lg;
 $image-size: 16rem;
 $image-size-md: 56.1rem;
 
@@ -31,18 +31,18 @@ $image-size-md: 56.1rem;
 			inset: 0 0 0 - $page-padding 0;
 			transform-origin: top;
 			transform: scale(5);
-			background: $platinum;
+			background: abstracts.$platinum;
 			z-index: -1;
 		}
 	}
 
 	&__description {
-		@media (min-width: $breakpoint-md) {
+		@media (min-width: abstracts.$breakpoint-md) {
 			min-height: 23rem; // magic value; minimum height required for __image to reach its max-height;
 		}
 	}
 
-	@media (max-width: $breakpoint-md) {
+	@media (max-width: abstracts.$breakpoint-md) {
 		&__grid {
 			grid-template-rows: minmax($page-padding, auto) min-content min-content min-content minmax($page-padding, auto);
 			grid-template-columns: 1fr;
@@ -50,12 +50,12 @@ $image-size-md: 56.1rem;
 
 		&__top {
 			grid-row: 2;
-			margin-bottom: $spacer-1xl;
+			margin-bottom: abstracts.$spacer-1xl;
 		}
 
 		&__image {
 			grid-row: 3;
-			z-index: get-z-layer("foreground");
+			z-index: abstracts.get-z-layer("foreground");
 
 			> div {
 				height: $image-size;
@@ -64,14 +64,14 @@ $image-size-md: 56.1rem;
 		}
 
 		&__bottom {
-			padding-top: math.div($image-size, 2) + $spacer-1xl;
+			padding-top: math.div($image-size, 2) + abstracts.$spacer-1xl;
 			grid-row: 4;
 
-			// get-z-layer("base");
+			// abstracts.get-z-layer("base");
 		}
 	}
 
-	@media (min-width: $breakpoint-md) {
+	@media (min-width: abstracts.$breakpoint-md) {
 		&__grid {
 			grid-template-rows: minmax($page-padding, auto) min-content auto minmax($page-padding, auto);
 			grid-template-columns: 38.4rem 1fr;
@@ -79,8 +79,8 @@ $image-size-md: 56.1rem;
 
 		&__top,
 		&__bottom {
-			padding-left: $spacer-lg * 2;
-			padding-right: $spacer-lg * 2;
+			padding-left: abstracts.$spacer-lg * 2;
+			padding-right: abstracts.$spacer-lg * 2;
 		}
 
 		&__image {
@@ -107,36 +107,36 @@ $image-size-md: 56.1rem;
 	// Typography
 
 	&__title {
-		font-size: $font-size-1xl;
-		line-height: $line-height-lg;
+		font-size: abstracts.$font-size-1xl;
+		line-height: abstracts.$line-height-lg;
 		text-align: center;
 
-		@media (min-width: $breakpoint-md) {
-			font-size: $font-size-3xl;
-			line-height: $line-height-lg;
+		@media (min-width: abstracts.$breakpoint-md) {
+			font-size: abstracts.$font-size-3xl;
+			line-height: abstracts.$line-height-lg;
 			text-align: initial;
 		}
 	}
 
 	&__instructions {
-		font-size: $font-size-sm;
-		line-height: $line-height-3xl;
+		font-size: abstracts.$font-size-sm;
+		line-height: abstracts.$line-height-3xl;
 		text-align: center;
 
-		@media (min-width: $breakpoint-md) {
-			font-size: $font-size-base;
-			line-height: $line-height-1xl;
+		@media (min-width: abstracts.$breakpoint-md) {
+			font-size: abstracts.$font-size-base;
+			line-height: abstracts.$line-height-1xl;
 			text-align: initial;
 		}
 	}
 
 	&__info {
-		font-size: $font-size-base;
-		line-height: $line-height-3xl;
+		font-size: abstracts.$font-size-base;
+		line-height: abstracts.$line-height-3xl;
 
-		@media (min-width: $breakpoint-md) {
-			font-size: $font-size-md;
-			line-height: $line-height-md;
+		@media (min-width: abstracts.$breakpoint-md) {
+			font-size: abstracts.$font-size-md;
+			line-height: abstracts.$line-height-md;
 		}
 	}
 }

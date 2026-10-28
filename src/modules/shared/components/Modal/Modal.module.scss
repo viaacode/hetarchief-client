@@ -1,9 +1,9 @@
 @use "sass:map";
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 // Use `hetarchief` prefix to avoid naming conflicts with avo2-components
 .c-hetarchief-modal {
-	background-color: $white;
+	background-color: abstracts.$white;
 	display: flex;
 	flex-direction: column;
 	max-height: 100%;
@@ -20,7 +20,7 @@
 
 	&__overlay {
 		position: fixed;
-		z-index: get-z-layer("modal");
+		z-index: abstracts.get-z-layer("modal");
 		align-items: center;
 		background-color: rgb(0 0 0 / 64%);
 		display: flex;
@@ -55,12 +55,12 @@
 		&-wrapper {
 			display: flex;
 			flex-grow: 1;
-			margin-left: $modal-title-margin-left;
+			margin-left: abstracts.$modal-title-margin-left;
 			margin-right: 0;
 			overflow: hidden;
 
-			@media (min-width: $breakpoint-md) {
-				margin-left: $modal-title-margin-left-md;
+			@media (min-width: abstracts.$breakpoint-md) {
+				margin-left: abstracts.$modal-title-margin-left-md;
 			}
 		}
 	}
@@ -69,24 +69,24 @@
 		border: 0 solid transparent;
 		cursor: pointer;
 		display: block;
-		height: $modal-close-size;
-		max-height: $modal-close-size;
-		margin: $modal-close-margin;
-		width: $modal-close-size;
-		max-width: $modal-close-size;
+		height: abstracts.$modal-close-size;
+		max-height: abstracts.$modal-close-size;
+		margin: abstracts.$modal-close-margin;
+		width: abstracts.$modal-close-size;
+		max-width: abstracts.$modal-close-size;
 
-		@media (min-width: $breakpoint-md) {
-			margin: $modal-close-margin-md;
+		@media (min-width: abstracts.$breakpoint-md) {
+			margin: abstracts.$modal-close-margin-md;
 		}
 
 		&-wrapper {
 			display: flex;
 			flex-grow: 1;
 			margin-left: 0;
-			max-width: $modal-title-margin-left;
+			max-width: abstracts.$modal-title-margin-left;
 
-			@media (min-width: $breakpoint-md) {
-				max-width: $modal-title-margin-left-md;
+			@media (min-width: abstracts.$breakpoint-md) {
+				max-width: abstracts.$modal-title-margin-left-md;
 			}
 		}
 	}

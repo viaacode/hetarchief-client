@@ -82,7 +82,7 @@
 }
 
 .c-filter-menu-mobile__form {
-	height: calc(100% - #{abstracts.$c-navigation-height-md});
+	height: calc(100% - abstracts.$c-navigation-height-md);
 }
 
 .c-filter-menu-mobile__option {

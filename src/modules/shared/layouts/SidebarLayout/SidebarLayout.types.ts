@@ -6,6 +6,8 @@ import type { ReactNode } from 'react';
 export interface SidebarLayoutProps extends DefaultComponentProps {
 	children?: ReactNode;
 	sidebarTitle: string | ReactNode;
+	sidebarTitleActions?: ReactNode;
+	sidebarSubtitle?: ReactNode;
 	sidebarLinks?: ListNavigationItem[];
 	color?: SidebarColor;
 	responsiveTo?: Breakpoints;

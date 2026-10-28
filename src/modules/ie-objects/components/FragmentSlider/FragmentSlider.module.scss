@@ -1,4 +1,4 @@
-@use "src/styles/abstracts" as *;
+@use "src/styles/abstracts" as abstracts;
 
 $fragment-width: 16rem;
 $fragment-spacing: 2.5rem;
@@ -28,7 +28,7 @@ $button-size: 3.6rem;
 
 		display: flex;
 		column-gap: $fragment-spacing;
-		transition: transform $animate-default;
+		transition: transform abstracts.$animate-default;
 
 		&--centered {
 			justify-self: center;
@@ -50,18 +50,18 @@ $button-size: 3.6rem;
 		}
 
 		&--active {
-			outline: 0.4rem solid $black;
+			outline: 0.4rem solid abstracts.$black;
 			outline-offset: 0.2rem;
 		}
 
 		&:focus-visible {
-			outline: 0.4rem solid $teal;
+			outline: 0.4rem solid abstracts.$teal;
 			outline-offset: 0.2rem;
 		}
 	}
 
 	&__nav-button {
-		z-index: get-z-layer("foreground");
+		z-index: abstracts.get-z-layer("foreground");
 		width: $button-size;
 		height: $button-size;
 		grid-row-start: 1;

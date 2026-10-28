@@ -23,12 +23,13 @@ vi.mock('@visitor-space/components/DateFilterForm', () => ({
 vi.mock('@visitor-space/components/SinglePropertyFilterForm/SinglePropertyFilterForm', () => ({
 	SinglePropertyFilterForm: () => null,
 }));
+const { publicRuntimeConfig } = vi.hoisted(() => ({
+	publicRuntimeConfig: {
+		ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY: 'true',
+	},
+}));
 vi.mock('@shared/config/public-runtime-config', () => ({
-	default: () => ({
-		publicRuntimeConfig: {
-			ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY: 'true',
-		},
-	}),
+	default: () => ({ publicRuntimeConfig }),
 }));
 
 import {
@@ -161,6 +162,49 @@ describe('SEARCH_PAGE_FILTERS', () => {
 		expect(newspaperIds).toContain(SearchFilterId.LocationCreated);
 		expect(newspaperIds).toContain(SearchFilterId.Mentions);
 		expect(newspaperIds).not.toContain(SearchFilterId.Creator);
+	});
+
+	// https://meemoo.atlassian.net/browse/ARC-4146
+	describe('the advanced fly-out for a basic user', () => {
+		const flyoutIds = (tab: SearchPageMediaType) =>
+			getAdvancedFlyoutFilters(
+				getAvailableSearchPageFilters(true, false, false, tab),
+				Locale.nl
+			).map(({ id }) => id);
+
+		it('offers the rights filter on every tab, also without the rights feature flag', () => {
+			publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY = 'false';
+			try {
+				for (const tab of ALL_TABS) {
+					expect(flyoutIds(tab)).toContain(SearchFilterId.Rights);
+				}
+			} finally {
+				publicRuntimeConfig.ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY = 'true';
+			}
+		});
+
+		it('offers the newspaper filters on the "Alles" and newspaper tabs', () => {
+			for (const tab of [SearchPageMediaType.All, SearchPageMediaType.Newspaper]) {
+				expect(flyoutIds(tab)).toContain(SearchFilterId.Mentions);
+				expect(flyoutIds(tab)).toContain(SearchFilterId.LocationCreated);
+			}
+			for (const tab of [SearchPageMediaType.Video, SearchPageMediaType.Audio]) {
+				expect(flyoutIds(tab)).not.toContain(SearchFilterId.Mentions);
+				expect(flyoutIds(tab)).not.toContain(SearchFilterId.LocationCreated);
+			}
+		});
+
+		it('only puts the newspaper filters in the main panel of the newspaper tab', () => {
+			const panelIds = (tab: SearchPageMediaType) =>
+				getVisiblePanelFilters(getAvailableSearchPageFilters(true, false, false, tab), {}).map(
+					({ id }) => id
+				);
+
+			expect(panelIds(SearchPageMediaType.All)).not.toContain(SearchFilterId.Mentions);
+			expect(panelIds(SearchPageMediaType.All)).not.toContain(SearchFilterId.LocationCreated);
+			expect(panelIds(SearchPageMediaType.Newspaper)).toContain(SearchFilterId.Mentions);
+			expect(panelIds(SearchPageMediaType.Newspaper)).toContain(SearchFilterId.LocationCreated);
+		});
 	});
 
 	// The theme filter predates ARC-3806 and is not in its allocation table. Its own rules come
@@ -359,10 +403,13 @@ describe('getVisiblePanelFilters', () => {
 	it('leaves out a filter that does not belong to this tab', () => {
 		const newspaperOnly = getVisiblePanelFilters(
 			getAvailableSearchPageFilters(true, false, true, SearchPageMediaType.All),
-			{ [SearchFilterId.Mentions]: ['Abel Joseph Riviere'], filter: SearchFilterId.Mentions }
+			{
+				[SearchFilterId.NewspaperSeriesName]: ['Het Laatste Nieuws'],
+				filter: SearchFilterId.NewspaperSeriesName,
+			}
 		).map(({ id }) => id);
 
-		expect(newspaperOnly).not.toContain(SearchFilterId.Mentions);
+		expect(newspaperOnly).not.toContain(SearchFilterId.NewspaperSeriesName);
 	});
 
 	describe('a filter of another tab that still holds a value', () => {

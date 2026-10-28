@@ -11,7 +11,7 @@ $c-navigation-dropdown-item-spacer: 1.2rem;
 $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI1MDAiIGhlaWdodD0iNTAwIiBmaWxsPSJub25lIiB2aWV3Qm94PSIwIDAgNTAwIDUwMCI+PHBhdGggZmlsbD0iIzAwMCIgZD0iTTAgMGg1MDB2NTAwSDB6Ii8+PGNpcmNsZSBjeD0iMjUwIiBjeT0iMjUwIiByPSIyNTAiIGZpbGw9IiMwMEM4QUEiLz48L3N2Zz4=");
 
 @mixin navigation-link-border-decoration($_offset1: 0, $_offset2: 0) {
-	$offset1-border: if($_offset1 == 0, 0, calc(#{$_offset1} + 0.1rem));
+	$offset1-border: if($_offset1 == 0, 0, calc($_offset1 + 0.1rem));
 
 	&::before,
 	&::after {
@@ -303,10 +303,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 		font-size: abstracts.$font-size-md;
 		line-height: 2rem;
 
-		&:focus-visible {
-			outline: 0.1rem solid abstracts.$teal;
-			outline-offset: 0.2rem;
-		}
+		@include abstracts.focus-outline;
 	}
 
 	&--icon {
@@ -487,7 +484,7 @@ $c-navigation-decoration: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDo
 
 	.c-navigation__section {
 		:global(.c-menu) {
-			max-height: calc(#{abstracts.$view-height} - #{abstracts.$c-navigation-height} - 10rem); // Extra margin for browser url bar on mobile safari
+			max-height: calc(abstracts.$view-height - abstracts.$c-navigation-height - 10rem); // Extra margin for browser url bar on mobile safari
 			overflow: hidden auto;
 		}
 
