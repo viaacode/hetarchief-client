@@ -9,6 +9,8 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import type { GetServerSidePropsContext, GetStaticPropsResult } from 'next/types';
 import { i18n } from 'next-i18next/pages';
 
+const STATIC_PAGE_REVALIDATE_SECONDS = 60 * 60; // 1 hour, same as the translation cache
+
 export async function getDefaultStaticProps(
 	context: GetServerSidePropsContext,
 	url: string,
@@ -86,6 +88,10 @@ export async function getDefaultStaticProps(
 	}
 
 	return {
+		// Pages using getStaticProps would otherwise keep the translations from build time forever
+		// getServerSideProps does not accept a revalidate key, and only it passes a request in the context
+		// https://meemoo.atlassian.net/browse/ARC-4157
+		...(context.req ? {} : { revalidate: STATIC_PAGE_REVALIDATE_SECONDS }),
 		props: {
 			url,
 			locale,

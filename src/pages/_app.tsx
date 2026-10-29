@@ -14,8 +14,8 @@ import { lowerCase, upperFirst } from 'es-toolkit/compat';
 import HttpApi from 'i18next-http-backend';
 import type { AppProps } from 'next/app';
 import Head from 'next/head';
-import { appWithTranslation } from 'next-i18next/pages';
-import React, { type ReactElement, useEffect, useState } from 'react';
+import { appWithTranslation, i18n } from 'next-i18next/pages';
+import React, { type ReactElement, useEffect, useMemo, useState } from 'react';
 import { Provider } from 'react-redux';
 
 import pkg from '../../package.json';
@@ -55,6 +55,24 @@ AdminConfigManager.setConfig(getAdminCoreConfig(null, Locale.nl, null));
 function MyApp({ Component, pageProps }: AppProps): ReactElement | null {
 	const { store, props } = wrapper.useWrappedStore(pageProps);
 	const [queryClient] = useState(makeQueryClient);
+
+	// next-i18next only adds the translations of the first page to the browser i18n instance,
+	// translations from later client side navigations are ignored if the namespace already exists.
+	// Overwrite them, so the browser doesn't keep the translations of the first page until a full reload.
+	// Done during render (not in an effect), so this page already renders with the new translations
+	// https://meemoo.atlassian.net/browse/ARC-4157
+	const initialI18nStore: Record<string, Record<string, Record<string, string>>> | undefined =
+		pageProps._nextI18Next?.initialI18nStore;
+	useMemo(() => {
+		if (isServerSideRendering() || !i18n || !initialI18nStore) {
+			return;
+		}
+		for (const [locale, namespaces] of Object.entries(initialI18nStore)) {
+			for (const [namespace, translations] of Object.entries(namespaces)) {
+				i18n.addResourceBundle(locale, namespace, translations, true, true);
+			}
+		}
+	}, [initialI18nStore]);
 
 	useEffect(() => {
 		console.log(`[PERFORMANCE] ${new Date().toISOString()} init hetarchief client`);
@@ -106,7 +124,9 @@ export default appWithTranslation(MyApp, {
 	},
 	backend: {
 		loadPath: `${publicRuntimeConfig.PROXY_URL}/admin/translations/{{lng}}.json`,
-		reloadInterval: 60 * 60 * 1000, // 1 hour (server-side i18next instance refresh)
+		// 1 hour, browser only: refreshes translations for tabs that stay open for a long time
+		// On the server a new i18n instance is created for every request, so an interval there would never be cleared
+		reloadInterval: isServerSideRendering() ? false : 60 * 60 * 1000,
 	},
 	use: [HttpApi],
 	ns: ['common'],
