@@ -33,7 +33,6 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { checkIeObjectPermissions } from '@ie-objects/utils/check-ie-object-permissions';
 import { isInAFolder } from '@ie-objects/utils/folders';
-import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { isNewspaperType } from '@meemoo/admin-core-ui/admin';
 import {
 	type Breadcrumb,
@@ -411,7 +410,6 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 			canRequestAccess: !!canRequestAccess,
 			canRequestMaterial: isAnonymous || canRequestMaterial,
 			canExport: canDownloadMetadata || canDownloadNewspaper || false,
-			externalFormUrl: getExternalMaterialRequestUrlIfAvailable(mediaInfo, isAnonymous, user),
 		});
 
 		// Sort, filter and tweak actions according to the given sort map
@@ -462,7 +460,6 @@ export const ObjectDetailPageHeader: React.FC<ObjectDetailPageHeaderProps> = ({
 		canRequestMaterial,
 		canDownloadMetadata,
 		canDownloadNewspaper,
-		user,
 		getActionButtonSortMapByUserType,
 		renderExportDropdown,
 	]);

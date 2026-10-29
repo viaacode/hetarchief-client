@@ -50,8 +50,8 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { isLessThanXlSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
 import {
+	canUserAccessComplexReuseFlow,
 	isComplexReuseFlowDisabledForMaintainer,
-	useIsComplexReuseFlowUser,
 } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'es-toolkit/compat';
@@ -89,7 +89,8 @@ export const CpAdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl 
 	);
 
 	const commonUser = useSelector(selectCommonUser);
-	const userHasAccessToComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
+
+	const userHasAccessToComplexReuseFlow = canUserAccessComplexReuseFlow(commonUser);
 	const maintainerHasComplexReuseFlowEnabled = !isComplexReuseFlowDisabledForMaintainer(
 		commonUser?.organisation?.or_id
 	);

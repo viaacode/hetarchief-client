@@ -51,7 +51,6 @@ import {
 } from '@ie-objects/services/ie-objects/ie-objects.service.const';
 import { filterAltoBySearchTerms } from '@ie-objects/utils/filter-alto-by-search-terms';
 import { findSearchTermsInTranscription } from '@ie-objects/utils/find-search-terms-in-transcription';
-import { getExternalMaterialRequestUrlIfAvailable } from '@ie-objects/utils/get-external-form-url';
 import { mapSimilarData } from '@ie-objects/utils/map-similar-data';
 import { normalizeText, parseSearchTerms } from '@ie-objects/utils/search-term.util';
 import { isSeekingPlayerVideo } from '@ie-objects/utils/seek-player-video';
@@ -399,6 +398,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				objectPublishedOrCreatedDate: mediaInfo.datePublished || mediaInfo.dateCreated || undefined,
 				objectAccessThrough: mediaInfo.accessThrough || [],
 				objectLicences: mediaInfo.licenses,
+				maintainerId: mediaInfo.maintainerId,
 				maintainerName: mediaInfo.maintainerName,
 				maintainerSlug: mediaInfo.maintainerSlug,
 				reuseForm: GET_BLANK_MATERIAL_REQUEST_REUSE_FORM(),
@@ -1103,27 +1103,14 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 				openRequestAccessBlade();
 				break;
 			case MediaActions.RequestMaterial:
-				await onRequestMaterialClick();
+				onRequestMaterialClick();
 				break;
 		}
 	};
 
-	const onRequestMaterialClick = async () => {
+	const onRequestMaterialClick = () => {
 		if (isAnonymous) {
 			dispatch(setShowAuthModal(true));
-			return;
-		}
-
-		const externalFormUrl = getExternalMaterialRequestUrlIfAvailable(mediaInfo, isAnonymous, user);
-		if (externalFormUrl) {
-			EventsService.triggerEvent(
-				LogEventType.ITEM_REQUEST,
-				window.location.href,
-				mapIeObjectToEventData()
-			).then(noop);
-
-			// The external url is opened with an actual link, so safari doesn't block the popup
-			window.open(externalFormUrl, '_blank');
 			return;
 		}
 

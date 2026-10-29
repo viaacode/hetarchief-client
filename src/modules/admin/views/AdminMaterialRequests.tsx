@@ -47,7 +47,7 @@ import { useWindowSizeContext } from '@shared/hooks/use-window-size-context';
 import type { DefaultSeoInfo } from '@shared/types/seo';
 import { isLessThanXlSize } from '@shared/utils/is-mobile';
 import { AvoSearchOrderDirection } from '@viaa/avo2-types';
-import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse-flow';
+import { canUserAccessComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import clsx from 'clsx';
 import { isEmpty, isNil, noop } from 'es-toolkit/compat';
 import React, {
@@ -67,7 +67,7 @@ export const AdminMaterialRequests: FC<DefaultSeoInfo> = ({ url, canonicalUrl })
 	const windowSize = useWindowSizeContext();
 	const isTabletPortrait = isLessThanXlSize(windowSize);
 	const commonUser = useSelector(selectCommonUser);
-	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
+	const isComplexReuseFlow = canUserAccessComplexReuseFlow(commonUser);
 
 	const [filters, setFilters] = useQueryParams(ADMIN_MATERIAL_REQUESTS_QUERY_PARAM_CONFIG);
 	const [selectedMaintainers, setSelectedMaintainers] = useState<string[]>(

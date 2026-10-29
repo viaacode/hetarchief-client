@@ -43,7 +43,7 @@ import type { DefaultSeoInfo } from '@shared/types/seo';
 import { Locale } from '@shared/utils/i18n';
 import { useQueryClient } from '@tanstack/react-query';
 import { VisitorLayout } from '@visitor-layout/index';
-import { useIsComplexReuseFlowUser } from '@visitor-space/hooks/is-complex-reuse-flow';
+import { canUserAccessComplexReuseFlow } from '@visitor-space/hooks/is-complex-reuse-flow';
 import { isNil } from 'es-toolkit/compat';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -77,7 +77,7 @@ export const AccountMyProfile: FC<DefaultSeoInfo> = ({ url, canonicalUrl }) => {
 	const canEditProfile: boolean = useHasAllPermission(Permission.CAN_EDIT_PROFILE_INFO);
 	const isKeyUser: boolean = useIsKeyUser();
 	const isEvaluator: boolean = useIsEvaluator();
-	const isComplexReuseFlow = useIsComplexReuseFlowUser(commonUser);
+	const isComplexReuseFlow = canUserAccessComplexReuseFlow(commonUser);
 	const { data: allLanguages } = useGetAllLanguages();
 	const { data: preferences } = useGetNewsletterPreferences(commonUser?.email);
 
