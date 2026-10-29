@@ -715,6 +715,13 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 		console.log(`[PERFORMANCE] ${new Date().toISOString()} detail page loading`);
 	}, []);
 
+	// Navigating to another object (eg: "also interesting") reuses this page, so reset the window scroll.
+	// The sidebar is keyed on the object id, so it remounts with its own scroll and header state reset.
+	// biome-ignore lint/correctness/useExhaustiveDependencies: only when navigating to another object
+	useEffect(() => {
+		window.scrollTo({ top: 0 });
+	}, [ieObjectId]);
+
 	useEffect(() => {
 		if (mediaInfo) {
 			console.log(`[PERFORMANCE] ${new Date().toISOString()} ie object loaded`);
@@ -1639,6 +1646,7 @@ export const ObjectDetailPage: FC<DefaultSeoInfo> = ({
 
 				{/* Sidebar */}
 				<ObjectDetailPageSidebar
+					key={ieObjectId}
 					mediaInfo={mediaInfo}
 					onClickAction={onClickAction}
 					hasAccessToVisitorSpaceOfObject={hasAccessToVisitorSpaceOfObject}
