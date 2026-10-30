@@ -22,6 +22,7 @@ import getConfig from '@shared/config/public-runtime-config';
 import { ADMIN_CORE_ROUTES_BY_LOCALE, ROUTES_BY_LOCALE } from '@shared/const';
 import { getIeObjectDetailPath } from '@shared/helpers/ie-object-urls';
 import { isContentPagePreview } from '@shared/helpers/is-content-page-preview';
+import { getOptimizedImageUrls } from '@shared/helpers/optimized-image-urls';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { ApiService } from '@shared/services/api-service';
 import {
@@ -307,6 +308,7 @@ export function getAdminCoreConfig(
 			getIeObjectDetailPath: (locale, maintainerSlug, schemaIdentifier, name) =>
 				getIeObjectDetailPath(locale as Locale, maintainerSlug, schemaIdentifier, name),
 			getThemeSearchPath: (locale, themeSlug) => getThemeSearchPath(locale as Locale, themeSlug),
+			getImageUrls: getOptimizedImageUrls,
 		},
 		database: {
 			proxyUrl: publicRuntimeConfig.PROXY_URL,

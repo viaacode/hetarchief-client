@@ -30,6 +30,7 @@ export const PUBLIC_ENV_KEYS = [
 	'ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY',
 	'AI_MEEMOO_FRAGMENT_URL',
 	'MAM_FRAGMENT_URL',
+	'ASSET_SERVER_IMAGE_CACHE_URL',
 ] as const;
 
 // Values are typed as `string` (not optional) to mirror the loose typing of the previous
