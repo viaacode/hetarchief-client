@@ -28,6 +28,7 @@ import { Icon } from '@shared/components/Icon';
 import { IconNamesLight } from '@shared/components/Icon/Icon.enums';
 import { ROUTES_BY_LOCALE } from '@shared/const';
 import { getSearchLink } from '@shared/helpers/get-search-link';
+import { getOptimizedImageUrl } from '@shared/helpers/optimized-image-urls';
 import { tHtml, tText } from '@shared/helpers/translate';
 import { useHasAnyGroup } from '@shared/hooks/has-group';
 import { useIsKeyUser } from '@shared/hooks/is-key-user';
@@ -48,6 +49,9 @@ import { type FC, type ReactNode, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import { ArrayParam, useQueryParam } from 'use-query-params';
 import styles from './ObjectDetailPageOverviewTab.module.scss';
+
+// Display width in css pixels (max-width 16rem)
+const MAINTAINER_LOGO_WIDTH = 320;
 
 export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> = ({
 	mediaInfo,
@@ -147,7 +151,9 @@ export const ObjectDetailPageOverviewTab: FC<ObjectDetailPageOverviewTabProps> =
 				{!isKiosk && maintainerLogo && (
 					<div
 						className={styles['p-object-detail-overview-tab__maintainer-logo']}
-						style={{ backgroundImage: `url(${maintainerLogo})` }}
+						style={{
+							backgroundImage: `url(${getOptimizedImageUrl(maintainerLogo, MAINTAINER_LOGO_WIDTH)})`,
+						}}
 						aria-hidden="true"
 					/>
 				)}

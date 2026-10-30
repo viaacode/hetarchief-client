@@ -21,6 +21,7 @@ declare global {
 			readonly ENABLE_RIGHTS_FILTERS_FOR_EVERYBODY: 'true' | 'false';
 			readonly AI_MEEMOO_FRAGMENT_URL: string;
 			readonly MAM_FRAGMENT_URL: string;
+			readonly ASSET_SERVER_IMAGE_CACHE_URL: string;
 		}
 	}
 
