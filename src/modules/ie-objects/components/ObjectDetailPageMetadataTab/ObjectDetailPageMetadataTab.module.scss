@@ -64,6 +64,11 @@
 	gap: abstracts.$spacer-xs;
 	justify-content: space-between;
 
+	// The global p rule sets $font-size-base, so inheriting from the wrapper isn't enough
+	p {
+		font-size: abstracts.$font-size-sm;
+	}
+
 	a {
 		color: abstracts.$teal-dark;
 	}
